@@ -15,6 +15,8 @@ It can highlight from a URL, a local file or Wordpress post text. Crayon makes i
 custom language elements with regular expressions.
 It also supports some neat features like mobile/touchscreen device detection, mouse interactions, toggled plain code, toggled line numbers, tab sizes, error logging and file extension detection just to name a few.
 
+Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
+
 <div style="text-align: center;"><img src="http://ak.net84.net/files/crayon.png" border="0" /></div>
 
 == Installation ==

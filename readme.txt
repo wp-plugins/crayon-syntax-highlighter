@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -14,6 +14,8 @@ A Syntax Highlighter built in PHP and jQuery that supports customizable language
 It can highlight from a URL, a local file or Wordpress post text. Crayon makes it easy to manage Language files and define
 custom language elements with regular expressions.
 It also supports some neat features like mobile/touchscreen device detection, mouse interactions, toggled plain code, toggled line numbers, tab sizes, error logging and file extension detection just to name a few.
+
+<div style="text-align: center;"><img src="http://ak.net84.net/files/crayon.png" border="0" /></div>
 
 == Installation ==
 
@@ -37,8 +39,6 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Screenshots ==
 
 1. Different themes and Live Preview under Settings > Crayon.
-
-Coming soon.
 
 == Changelog ==
 

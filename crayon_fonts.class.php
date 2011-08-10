@@ -3,7 +3,7 @@ require_once ('global.php');
 require_once (CRAYON_RESOURCE_PHP);
 
 /* Manages fonts once they are loaded. */
-class CrayonFonts extends CrayonResourceCollection {
+class CrayonFonts extends CrayonUsedResourceCollection {
 	// Properties and Constants ===============================================
 
 	const DEFAULT_FONT = 'theme-font';

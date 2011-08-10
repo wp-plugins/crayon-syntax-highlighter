@@ -3,7 +3,7 @@ require_once ('global.php');
 require_once (CRAYON_RESOURCE_PHP);
 
 /* Manages themes once they are loaded. */
-class CrayonThemes extends CrayonResourceCollection {
+class CrayonThemes extends CrayonUsedResourceCollection {
 	// Properties and Constants ===============================================
 
 	const DEFAULT_THEME = 'classic';

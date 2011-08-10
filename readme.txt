@@ -36,12 +36,17 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Screenshots ==
 
+1. Different themes and Live Preview under Settings > Crayon.
+
 Coming soon.
 
 == Changelog ==
 
 = 1.0 =
 * Initial Release. Huzzah!
+
+= 1.0.1 =
+* Fixed a bug that caused Themes not to load for some Crayons due to Wordpress content formatting.
 
 == Upgrade Notice ==
 

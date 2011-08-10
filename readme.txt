@@ -38,8 +38,6 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 1. Different themes and Live Preview under Settings > Crayon.
 
-Coming soon.
-
 == Changelog ==
 
 = 1.0 =

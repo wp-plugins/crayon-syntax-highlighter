@@ -1,0 +1,6 @@
+==============================================================================
+Crayon Syntax Highlighter Log Entry
+==============================================================================
+10:41:38 AM - 10 Aug 2011
+string(106) "The provided URL ('/Users/Aram/Development/Web/crayon/fwfwewf') could not be accessed locally or remotely."
+------------------------------------------------------------------------------

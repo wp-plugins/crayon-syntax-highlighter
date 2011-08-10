@@ -15,6 +15,8 @@ class CrayonFormatter {
 
 	// Methods ================================================================
 	private function __construct() {}
+	
+	private static $test = 0;
 
 	/* Formats the code using the regex and stores the elements for later use. */
 	public static function format_code($code, $language, $highlight = TRUE, $hl = NULL) {

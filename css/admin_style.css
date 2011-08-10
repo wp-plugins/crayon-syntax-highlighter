@@ -64,7 +64,7 @@
 }
 
 .crayon-help {
-	height: 30px;
+	min-height: 30px;
 }
 
 .crayon-help .crayon-help-close,

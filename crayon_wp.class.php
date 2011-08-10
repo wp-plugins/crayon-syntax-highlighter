@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.0
+Version: 1.0.1
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -91,7 +91,6 @@ class CrayonWP {
 			$crayon->url($url);
 		}
 		if (!empty($content)) {
-
 			$crayon->code($content);
 		}
 		// Set attributes, should be set after URL to allow language auto detection
@@ -133,6 +132,7 @@ class CrayonWP {
 				$closed_atts = $matches[1];
 				$open_atts = $matches[2];
 				$contents = $matches[3];
+				
 				// Make sure we enqueue the styles/scripts
 				$enqueue = TRUE;
 				
@@ -175,17 +175,20 @@ class CrayonWP {
 		self::$included = TRUE;
 	}
 	
-	public static function the_content($the_content) {
+	public static function the_content($the_content) {		
 		global $post;
 		// Go through queued posts and find crayons		
 		$post_id = strval($post->ID);
 		// Find if this post has Crayons
 		if ( array_key_exists($post_id, self::$post_queue) ) {
+			// XXX We want the plain post content, no formatting
+			$the_content = $post->post_content;
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $p) {
 				$atts = $p[1];
-				$content = $p[2];
+				$content = $p[2]; // The formatted crayon we replace post content with
+				
 				// Remove '$' from $[crayon]...[/crayon]$ contained within [crayon] tag content
 				$content = self::crayon_remove_ignore($content);
 				// Apply shortcode to the content

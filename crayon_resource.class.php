@@ -151,7 +151,7 @@ class CrayonResourceCollection {
 
 	/* Override in subclasses */
 	public function resource_instance($id, $name = NULL) {
-		return new CrayonUsedResource($id, $name);
+		return new CrayonResource($id, $name);
 	}
 
 	public function add($name, $object) {
@@ -216,7 +216,6 @@ class CrayonResourceCollection {
 class CrayonUsedResourceCollection extends CrayonResourceCollection {
 
 	// Checks if any of the themes are being used
-
 	public function is_used($id = NULL) {
 		if ($id === NULL) {
 			foreach ($this->get() as $resource) {
@@ -234,12 +233,16 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 			}
 		}
 	}
+	
+	// XXX Override
+	public function resource_instance($id, $name = NULL) {
+		return new CrayonUsedResource($id, $name);
+	}
 }
 
 class CrayonResource {
 	private $id = '';
 	private $name = '';
-	private $used = FALSE;
 
 	function __construct($id, $name = NULL) {
 		CrayonUtil::str($this->id, $id);
@@ -257,14 +260,6 @@ class CrayonResource {
 	function name($name = NULL) {
 		if (!CrayonUtil::str($this->name, $name, FALSE)) {
 			return $this->name;
-		}
-	}
-
-	function used($used = NULL) {
-		if ($used === NULL) {
-			return $this->used;
-		} else {
-			$this->used = ($used ? TRUE : FALSE);
 		}
 	}
 }

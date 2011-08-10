@@ -8,7 +8,7 @@ define('CRAYON_DEBUG', FALSE); // Enable to show exceptions on screen
 
 $uid = CRAYON_DEBUG ? uniqid() : ''; // Prevent caching in debug mode
 
-define('CRAYON_VERSION', '1.0.0' . $uid);
+define('CRAYON_VERSION', '1.0.1' . $uid);
 define('CRAYON_DATE', '10th August, 2011');
 define('CRAYON_AUTHOR', 'Aram Kocharyan');
 // TODO These will be changed once I set up a site for docs

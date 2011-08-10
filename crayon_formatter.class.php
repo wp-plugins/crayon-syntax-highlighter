@@ -222,29 +222,10 @@ EOT;
 		}
 		$theme_id_dashed = CrayonUtil::clean_css_name($theme_id);
 		
-		//var_dump($theme_id); 
-		
-		//var_dump($theme->used());
-		
 		// Only load css once for each theme
 		if (!empty($theme_id) && $theme != NULL && !$theme->used()) {
 			// Record usage
-			//var_dump($theme->used());
 			$theme->used(TRUE);
-			
-			//self::$test++;
-			
-			//echo 'aram';
-			//$d = debug_backtrace();
-			
-			/*foreach ($d as $a) {
-				var_dump( $a['function'] );
-			}*/
-			
-			//var_dump(self::$test);
-			
-			//exit;
-			
 			// Add style
 			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . CRAYON_VERSION;
 			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;

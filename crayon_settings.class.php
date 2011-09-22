@@ -63,6 +63,7 @@ class CrayonSettings {
 	const ERROR_MSG_SHOW = 'error-msg-show';
 	const ERROR_MSG = 'error-msg';
 	const HIDE_HELP = 'hide-help';
+	const HIGHLIGHT = 'highlight';
 	
 	// The current settings, should be loaded with default if none exists
 	private $settings = array();
@@ -137,7 +138,8 @@ class CrayonSettings {
 			new CrayonSetting(self::ERROR_LOG_SYS, TRUE), 
 			new CrayonSetting(self::ERROR_MSG_SHOW, TRUE), 
 			new CrayonSetting(self::ERROR_MSG, 'An error has occurred. Please try again later.'),
-			new CrayonSetting(self::HIDE_HELP, FALSE)
+			new CrayonSetting(self::HIDE_HELP, FALSE),
+			new CrayonSetting(self::HIGHLIGHT, TRUE)
 		);
 		$this->set($settings);
 	}
@@ -196,6 +198,14 @@ class CrayonSettings {
 			}
 		}
 		return FALSE;
+	}
+	
+	function val($name = NULL) {
+		if (($setting = self::get($name)) != FALSE) {
+			return $setting->value();
+		} else {
+			return NULL;
+		}
 	}
 	
 	function get_array() {
@@ -415,12 +425,13 @@ class CrayonGlobalSettings {
 	}
 
 	public static function val($name = NULL) {
-		self::init();
+		/*self::init();
 		if (($setting = self::get($name)) != FALSE) {
 			return $setting->value();
 		} else {
 			return NULL;
-		}
+		}*/
+		return self::$global->val($name);
 	}
 
 	public static function set($name, $value = NULL, $replace = FALSE) {

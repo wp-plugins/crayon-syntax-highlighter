@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -48,6 +48,13 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.0.1 =
 * Fixed a bug that caused Themes not to load for some Crayons due to Wordpress content formatting.
 
+= 1.0.2 =
+* Minor bug fixes.
+
+= 1.0.3 =
+* Added highlight="false" attribute to temporarily disable highlighting.
+* Fixed default color of font for twilight font. 
+
 == Upgrade Notice ==
 
-None yet.
+No issues upgrading.

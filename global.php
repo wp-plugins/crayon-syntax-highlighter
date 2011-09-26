@@ -8,14 +8,14 @@ define('CRAYON_DEBUG', FALSE); // Enable to show exceptions on screen
 
 $uid = CRAYON_DEBUG ? uniqid() : ''; // Prevent caching in debug mode
 
-define('CRAYON_VERSION', '1.1.0' . $uid);
-define('CRAYON_DATE', '27rd September, 2011');
-define('CRAYON_AUTHOR', 'Aram Kocharyan');
-// TODO These will be changed once I set up a site for docs
-define('CRAYON_WEBSITE', 'http://ak.net84.net/?go=crayon');
-define('CRAYON_WEBSITE_DOCS', 'http://ak.net84.net/?go=crayondocs');
-define('CRAYON_EMAIL', 'crayon.syntax@gmail.com');
-define('CRAYON_TWITTER', 'http://twitter.com/crayonsyntax');
+// These are overriden by functions since v1.1.1
+$CRAYON_VERSION = '1.1.1' . $uid;
+$CRAYON_DATE = '27th September, 2011';
+$CRAYON_AUTHOR = 'Aram Kocharyan';
+$CRAYON_WEBSITE = 'http://ak.net84.net/?go=crayon';
+$CRAYON_WEBSITE_DOCS = 'http://ak.net84.net/?go=crayondocs';
+$CRAYON_EMAIL = 'crayon.syntax@gmail.com';
+$CRAYON_TWITTER = 'http://twitter.com/crayonsyntax';
 
 // XXX Used to name the class
 
@@ -47,6 +47,7 @@ define('CRAYON_LOG_FILE', CRAYON_ROOT_PATH . 'log.txt');
 define('CRAYON_TOUCH_FILE', CRAYON_UTIL_PATH . 'touch.txt');
 define('CRAYON_LOG_MAX_SIZE', 50000); // Bytes
 
+define('CRAYON_README_FILE', CRAYON_ROOT_PATH . 'readme.txt');
 define('CRAYON_LANG_EXT', CRAYON_LANG_PATH . 'extensions.txt');
 define('CRAYON_HELP_FILE', CRAYON_UTIL_PATH . 'help.htm');
 define('CRAYON_JQUERY', CRAYON_JS_DIR . 'jquery-1.5.min.js');
@@ -95,41 +96,33 @@ require_once (CRAYON_TIMER_PHP);
 require_once (CRAYON_LOG_PHP);
 
 // Turn on the error & exception handlers
-
 crayon_handler_on();
-// Check current version from given file, not used, realised I was losing my mind
 
-$crayon_version = NULL;
-
-function crayon_version($file = NULL) {
-	global $crayon_version, $uid;
-	if ($file == NULL) {
-		// Return current version
-
-		if ($crayon_version == NULL) {
-			// Fallback to unknown version
-
-			$crayon_version = 'X' . $uid;
-		}
-	} else if (is_string($file) && file_exists($file)) {
-		// Extract version from file
-
-		$contents = @file_get_contents($file);
-		if ($contents !== FALSE) {
-			$pattern = '#<\\?php\\s*\\/\\*.*Version:\\s*([^\\s]*)\\r?\\n#smi';
-			preg_match($pattern, $contents, $match);
-			if (count($match) > 1) {
-				$crayon_version = $match[1] . $uid;
-			}
-		}
+// Get/Set plugin information
+function set_crayon_info($info_array) {
+	global $CRAYON_VERSION, $CRAYON_DATE, $CRAYON_AUTHOR, $CRAYON_WEBSITE, $uid;
+	if (!is_array($info_array)) {
+		return;
 	}
-	return $crayon_version;
+	set_info('Version', $info_array, $CRAYON_VERSION);
+	$CRAYON_VERSION .= $uid;
+	if (($date = @filemtime(CRAYON_README_FILE)) !== FALSE) {
+		$CRAYON_DATE = date("jS F, Y", $date);
+	}
+	set_info('AuthorName', $info_array, $CRAYON_A);
+	set_info('PluginURI', $info_array, $CRAYON_WEBSITE);
+}
+
+function set_info($key, $array, &$info) {
+	if (array_key_exists($key, $array)) {
+		$info = $array[$key];
+	} else {
+		return FALSE;
+	}
 }
 
 // Check for forwardslash/backslash in folder path to structure paths
-
 $crayon_slash = NULL;
-
 function crayon_slash($url = '') {
 	global $crayon_slash;
 	if ($crayon_slash == NULL) {

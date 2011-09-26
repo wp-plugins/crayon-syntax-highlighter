@@ -85,8 +85,9 @@ class CrayonSettings {
 	// Methods ================================================================
 
 	private function init() {
+		global $CRAYON_VERSION;
 		$settings = array(
-			new CrayonSetting(self::VERSION, CRAYON_VERSION, NULL, TRUE),
+			new CrayonSetting(self::VERSION, $CRAYON_VERSION, NULL, TRUE),
 
 			new CrayonSetting(self::THEME, CrayonThemes::DEFAULT_THEME), 
 			new CrayonSetting(self::FONT, CrayonFonts::DEFAULT_FONT), 

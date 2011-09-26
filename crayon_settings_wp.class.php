@@ -43,13 +43,15 @@ class CrayonSettingsWP {
 	}
 
 	public static function admin_styles() {
-		wp_enqueue_style('crayon_admin_style', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), CRAYON_VERSION);
+		global $CRAYON_VERSION;
+		wp_enqueue_style('crayon_admin_style', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), $CRAYON_VERSION);
 	}
 
 	public static function admin_scripts() {
-		wp_enqueue_script('crayon_jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), CRAYON_VERSION);
-		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('crayon_jquery'), CRAYON_VERSION);
-		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('crayon_jquery'), CRAYON_VERSION);
+		global $CRAYON_VERSION;
+		wp_enqueue_script('crayon_jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
 	}
 
 	public static function settings() {
@@ -185,6 +187,7 @@ class CrayonSettingsWP {
 	// Validates all the settings passed from the form in $inputs
 
 	public static function settings_validate($inputs) {
+		global $CRAYON_EMAIL;
 		// When reset button is pressed, remove settings so default loads next time
 		if (array_key_exists('reset', $inputs)) {
 			// Hide the help so we don't annoy them
@@ -200,7 +203,7 @@ class CrayonSettingsWP {
 		}
 		// Send to developer
 		if (array_key_exists(self::LOG_EMAIL_DEV, $_POST)) {
-			CrayonLog::email(CRAYON_EMAIL);
+			CrayonLog::email($CRAYON_EMAIL);
 		}
 
 		// Validate inputs
@@ -295,11 +298,12 @@ class CrayonSettingsWP {
 
 	// General Fields =========================================================
 	public static function help() {
+		global $CRAYON_WEBSITE;
 		if (CrayonGlobalSettings::val(CrayonSettings::HIDE_HELP)) {
 			return;
 		}
 		$url = plugins_url(CRAYON_AJAX_PHP, __FILE__) . '?' . CrayonSettings::HIDE_HELP . '=1';
-		$web = CRAYON_WEBSITE;
+		$web = $CRAYON_WEBSITE;
 		echo <<<EOT
 <div id="crayon-help" class="updated settings-error crayon-help">
 	<span><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top-right to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="{$web}">here</a>.</span>
@@ -510,12 +514,13 @@ EOT;
 	// About Fields ===========================================================
 
 	public static function info() {
+		global $CRAYON_VERSION, $CRAYON_DATE, $CRAYON_AUTHOR, $CRAYON_TWITTER, $CRAYON_EMAIL;
 		echo '<a name="info"></a>';
-		$version = '<b>Version:</b> ' . CRAYON_VERSION . '<span class="crayon-span" style="width: 40px"></span>';
-		$date = '<b>Build Date:</b> ' . CRAYON_DATE;
-		$developer = '<b>Developer:</b> ' . CRAYON_AUTHOR;
-		$links = '<a id="twitter-icon" href="' . CRAYON_TWITTER . '" target="_blank"></a>
-        			<a id="gmail-icon" href="mailto:' . CRAYON_EMAIL . '" target="_blank"></a>';
+		$version = '<b>Version:</b> ' . $CRAYON_VERSION . '<span class="crayon-span" style="width: 40px"></span>';
+		$date = '<b>Build Date:</b> ' . $CRAYON_DATE;
+		$developer = '<b>Developer:</b> ' . $CRAYON_AUTHOR;
+		$links = '<a id="twitter-icon" href="' . $CRAYON_TWITTER . '" target="_blank"></a>
+        			<a id="gmail-icon" href="mailto:' . $CRAYON_EMAIL . '" target="_blank"></a>';
 		echo <<<EOT
 <table id="crayon-info" border="0">
   <tr>

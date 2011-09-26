@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -61,6 +61,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Attribute names can be given in any case in shortcodes  
 * Fixes settings bug regarding copy constructor for locked settings
 * Minor bug fixes and cleanups 
+
+= 1.1.1 =
+* Plugin version information is updated automatically
 
 == Upgrade Notice ==
 

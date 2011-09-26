@@ -5,7 +5,7 @@ $remove = CrayonUtil::path('wp-content/plugins/' . CRAYON_DIR, CRAYON_DIR);
 $wp_root_path = str_replace($remove, '', CRAYON_ROOT_PATH);
 require_once ($wp_root_path . 'wp-load.php');
 echo '<link rel="stylesheet" href="', plugins_url(CRAYON_STYLE, dirname(__FILE__)),
-	'?ver=', CRAYON_VERSION, '" type="text/css" media="all" />';
+	'?ver=', $CRAYON_VERSION, '" type="text/css" media="all" />';
 echo '<script type="text/javascript">init();</script>';
 echo '<div id="content">';
 CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded

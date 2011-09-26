@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.1
+Version: 1.1.1
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -24,6 +24,11 @@ License: GPL2
 require_once ('global.php');
 require_once (CRAYON_HIGHLIGHTER_PHP);
 require_once ('crayon_settings_wp.class.php');
+
+if (defined('ABSPATH')) {
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	set_crayon_info(get_plugin_data( __FILE__ ));
+}
 
 /* The plugin class that manages all other classes and integrates Crayon with WP */
 class CrayonWP {
@@ -183,9 +188,10 @@ class CrayonWP {
 	}
 	
 	private static function enqueue_resources() {
-		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), CRAYON_VERSION);
-		wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), CRAYON_VERSION);
-		wp_enqueue_script('crayon-js', plugins_url(CRAYON_JS, __FILE__), array('crayon-jquery'), CRAYON_VERSION);
+		global $CRAYON_VERSION;
+		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon-js', plugins_url(CRAYON_JS, __FILE__), array('crayon-jquery'), $CRAYON_VERSION);
 		self::$included = TRUE;
 	}
 	

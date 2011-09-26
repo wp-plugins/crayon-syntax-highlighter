@@ -64,6 +64,8 @@ class CrayonFormatter {
 			return;
 		}
 		
+		global $CRAYON_VERSION;
+		
 		// Generate the code lines and separate each line as a div
 		$print_code = '';
 		$print_nums = '';
@@ -230,7 +232,7 @@ EOT;
 			// Record usage
 			$theme->used(TRUE);
 			// Add style
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . CRAYON_VERSION;
+			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
 			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
 		}
 		
@@ -239,7 +241,7 @@ EOT;
 		$font_id_dashed = '';
 		$font = CrayonResources::fonts()->get($font_id);
 		if ($hl->setting_val(CrayonSettings::FONT) != CrayonFonts::DEFAULT_FONT && !empty($font_id) && $font != NULL && !$font->used()) {
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_FONT_DIR) . $font_id . '.css?ver' . CRAYON_VERSION;
+			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_FONT_DIR) . $font_id . '.css?ver' . $CRAYON_VERSION;
 			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
 			$font_id_dashed = ' crayon-font-' . CrayonUtil::clean_css_name($font_id);
 		}
@@ -357,7 +359,7 @@ EOT;
 		// Debugging stats
 		$runtime = $hl->runtime();
 		if (!$hl->setting_val(CrayonSettings::DISABLE_RUNTIME) && is_array($runtime) && !empty($runtime)) {
-			$output = CRAYON_NL . CRAYON_NL . '<!-- Crayon Syntax Highlighter v' . CRAYON_VERSION . ' -->'
+			$output = CRAYON_NL . CRAYON_NL . '<!-- Crayon Syntax Highlighter v' . $CRAYON_VERSION . ' -->'
 				. CRAYON_NL . $output . CRAYON_NL . '<!-- ';
 			foreach ($hl->runtime() as $type => $time) {
 				$output .= '[' . $type . ': ' . sprintf('%.4f seconds', $time) . '] ';

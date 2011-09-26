@@ -17,6 +17,8 @@ It also supports some neat features like mobile/touchscreen device detection, mo
 
 Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
 
+Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
+
 == Installation ==
 
 Download the .zip of the plugin and extract the contents. Upload it to the Wordpress plugin directory and activate the plugin.

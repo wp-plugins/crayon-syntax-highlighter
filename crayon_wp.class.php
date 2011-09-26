@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.0.2
+Version: 1.1
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -63,6 +63,15 @@ class CrayonWP {
 	private static function shortcode($atts, $content = NULL) {		
 		CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
 
+		// Lowercase attributes
+		$lower_atts = array();
+		foreach ($atts as $att=>$value) {
+			$lower_atts[trim(strip_tags(strtolower($att)))] = $value;
+		}
+		$atts = $lower_atts;
+		
+		//echo count($atts);
+		
 		// Load attributes from shortcode
 		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL);
 		$filtered_atts = shortcode_atts($allowed_atts, $atts);
@@ -97,13 +106,18 @@ class CrayonWP {
 		$crayon->language($lang);
 		$crayon->title($title);
 		$crayon->marked($mark);
-		return $crayon->output($highlight = true, $nums = true, $print = false);
+		
+		// Determine if we should highlight
+		$highlight = array_key_exists('highlight', $atts) ? CrayonUtil::str_to_bool($atts['highlight'], FALSE) : TRUE;
+		
+		return $crayon->output($highlight, $nums = true, $print = false);
 	}
 
 	/* Returns Crayon instance */
 	public static function instance($extra_attr = array()) {
 		// Create Crayon
 		$crayon = new CrayonHighlighter();
+		
 		/* Load settings and merge shortcode attributes which will override any existing.
 		 * Stores the other shortcode attributes as settings in the crayon. */
 		if (!empty($extra_attr)) {

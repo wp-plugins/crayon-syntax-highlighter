@@ -327,6 +327,25 @@ class CrayonUtil {
 	public static function bool_yn($bool) {
 		return $bool ? 'Yes' : 'No';
 	}
+	
+	// String to boolean, default decides what boolean value to look for 
+	public static function str_to_bool($str, $default = TRUE) {
+		$str = trim(strtolower($str));
+		if ($default) {
+			if ($str == 'true' || $str == 'yes' || $str == '1') {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			if ($str == 'false' || $str == 'no' || $str == '0') {
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+		
+	}
 
 	// Decodes WP html entities
 	public static function html_entity_decode_wp($str) {

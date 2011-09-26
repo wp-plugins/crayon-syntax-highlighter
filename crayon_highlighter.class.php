@@ -151,10 +151,6 @@ class CrayonHighlighter {
 	/* Sends the code to the formatter for printing. Apart from the getters and setters, this is
 	 the only other function accessible outside this class. $show_lines can also be a string. */
 	function output($highlight = TRUE, $show_lines = TRUE, $print = TRUE) {
-		if ( !$this->settings->val(CrayonSettings::HIGHLIGHT) ) {
-			// Disable highlight
-			$highlight = FALSE;
-		}
 		$this->process($highlight);
 		if (empty($this->error)) {
 			// If no errors have occured, print the formatted code
@@ -279,6 +275,7 @@ class CrayonHighlighter {
 			return $this->settings->get($mixed);
 		} else if (is_array($mixed)) {
 			$this->settings->set($mixed);
+			
 			return TRUE;
 		}
 		return FALSE;

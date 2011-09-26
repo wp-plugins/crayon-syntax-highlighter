@@ -63,7 +63,6 @@ class CrayonSettings {
 	const ERROR_MSG_SHOW = 'error-msg-show';
 	const ERROR_MSG = 'error-msg';
 	const HIDE_HELP = 'hide-help';
-	const HIGHLIGHT = 'highlight';
 	
 	// The current settings, should be loaded with default if none exists
 	private $settings = array();
@@ -138,9 +137,9 @@ class CrayonSettings {
 			new CrayonSetting(self::ERROR_LOG_SYS, TRUE), 
 			new CrayonSetting(self::ERROR_MSG_SHOW, TRUE), 
 			new CrayonSetting(self::ERROR_MSG, 'An error has occurred. Please try again later.'),
-			new CrayonSetting(self::HIDE_HELP, FALSE),
-			new CrayonSetting(self::HIGHLIGHT, TRUE)
+			new CrayonSetting(self::HIDE_HELP, FALSE)
 		);
+		
 		$this->set($settings);
 	}
 
@@ -267,6 +266,7 @@ class CrayonSettings {
 		if (!is_string($name)) {
 			return '';
 		}
+		
 		// Type-cast to correct value for known settings
 		if (($setting = CrayonGlobalSettings::get($name)) != FALSE) {
 			// Booleans settings that are sent as string are allowed to have "false" == false
@@ -425,12 +425,6 @@ class CrayonGlobalSettings {
 	}
 
 	public static function val($name = NULL) {
-		/*self::init();
-		if (($setting = self::get($name)) != FALSE) {
-			return $setting->value();
-		} else {
-			return NULL;
-		}*/
 		return self::$global->val($name);
 	}
 
@@ -498,7 +492,7 @@ class CrayonSetting {
 	}
 	
 	function copy() {
-		return new CrayonSetting($this->name, $this->default, $this->value);
+		return new CrayonSetting($this->name, $this->default, $this->value, $this->locked);
 	}
 
 	function name($name = NULL) {
@@ -540,7 +534,7 @@ class CrayonSetting {
 			} else {
 				return $this->default;
 			}
-		} else {
+		} else if ($this->locked === FALSE) {
 			if ($this->is_array) {
 				$this->index($value); // $value is index
 			} else {

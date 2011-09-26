@@ -38,8 +38,11 @@ class CrayonFormatter {
 				$error = 'An error occured when formatting: ' . $e->message();
 				$hl ? $hl->log($error) : CrayonLog::syslog($error);
 			}
+			
+			return $code;
+		} else {			
+			return self::clean_code($code);
 		}
-		return $code;
 	}
 
 	/* Performs a replace to format each match based on the captured element. */

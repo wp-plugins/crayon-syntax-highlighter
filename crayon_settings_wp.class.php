@@ -101,7 +101,7 @@ class CrayonSettingsWP {
 		
 		// Initialise default global settings and update them from db
 		CrayonGlobalSettings::set(self::$options);
-		
+				
 		// Load all available languages and themes
 		CrayonResources::langs()->load();
 		CrayonResources::themes()->load();

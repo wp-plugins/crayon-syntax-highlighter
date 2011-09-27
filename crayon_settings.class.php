@@ -160,7 +160,16 @@ class CrayonSettings {
 					$this->set($setting, NULL, $replace);
 				}
 			}
-		} else if ( get_class($name) == CRAYON_SETTING_CLASS ) {
+		} else if (is_string($name) && !empty($name) && $value !== NULL) {
+			$value = CrayonSettings::validate($name, $value);
+			if ($replace || !$this->is_setting($name)) {
+				// Replace/Create
+				$this->settings[$name] = new CrayonSetting($name, $value);
+			} else {
+				// Update
+				$this->settings[$name]->value($value);
+			}
+		} else if ( is_object($name) && get_class($name) == CRAYON_SETTING_CLASS ) {
 			$setting = $name; // Semantics
 			if ( $replace || !$this->is_setting($setting->name()) ) {
 				// Replace/Create
@@ -172,15 +181,6 @@ class CrayonSettings {
 				} else {
 					$this->settings[$setting->name()]->value($setting->value());
 				}
-			}
-		} else if (is_string($name) && !empty($name) && $value !== NULL) {
-			$value = CrayonSettings::validate($name, $value);
-			if ($replace || !$this->is_setting($name)) {
-				// Replace/Create
-				$this->settings[$name] = new CrayonSetting($name, $value);
-			} else {
-				// Update
-				$this->settings[$name]->value($value);
 			}
 		}
 	}

@@ -348,7 +348,7 @@ EOT;
 				</td>
 EOT;
 		}
-
+		
 $output .= <<<EOT
 				<td class="crayon-code"><div class="crayon-pre">{$print_code}</div></td>
 			</tr>

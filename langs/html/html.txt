@@ -3,14 +3,14 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                HTML
-    VERSION             1.0
+    VERSION             1.1
 
     COMMENT             \<!--.*?--\>
-    ATT_STR:STRING      (((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)'))(?=[^\<]*\>)
+    ATT_STR:STRING      (((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)'))
     NOTATION            <!.*?>
     
-    TAG_OPEN:KEYWORD    </?\s*\w+(?=[^\>\<]*\>)
-    TAG_CLOSE:KEYWORD   /?>
+    TAG:KEYWORD			</?\s*[^<\s>]+\s*>?
+
     ATTR:ENTITY         \w+(?=\s*=)(?=[^\<]*\>)
     TEXT:IDENTIFIER     (?<=\>)[^\<\>]*(?=\<)
     SYMBOL              (?default)

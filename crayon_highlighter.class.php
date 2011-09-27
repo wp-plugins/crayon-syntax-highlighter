@@ -51,30 +51,34 @@ class CrayonHighlighter {
 		$local = FALSE; // Whether to read locally
 		$site_http = CrayonGlobalSettings::site_http();
 		$site_path = CrayonGlobalSettings::site_path();
-
+		$scheme = parse_url($url, PHP_URL_SCHEME);
+		
 		// Try to replace the site URL with a path to force local loading
 		if (strpos($url, $site_http) !== FALSE || strpos($url, $site_path) !== FALSE ) {
 			$url = str_replace($site_http, $site_path, $url);
 			// Attempt to load locally
 			$local = TRUE;
+			$local_url = $url;
 		} else {
-			$scheme = parse_url($url, PHP_URL_SCHEME);
 			if (empty($scheme)) {
 				// No url scheme is given - path may be given as relative
-				$url = preg_replace('#^(\\/*)?#', $site_path . $this->setting_val(CrayonSettings::LOCAL_PATH), $url);
+				$local_url = preg_replace('#^(\/*)?#', $site_path . $this->setting_val(CrayonSettings::LOCAL_PATH), $url);
 				$local = TRUE;
 			}
 		}
 		// Try to find the file locally
-		if ($local == TRUE || strpos($url, $site_path) !== FALSE) {
-			if ( ($contents = CrayonUtil::file($url)) !== FALSE ) {
+		if ($local == TRUE) {
+			if ( ($contents = CrayonUtil::file($local_url)) !== FALSE ) {
 				$this->code($contents);
 			} else {
 				$local = FALSE;
 			}
 		}
 		// If reading the url locally produced an error or failed, attempt remote request
-		if ($local == FALSE/* || $this->code == FALSE*/) {
+		if ($local == FALSE) {
+			if (empty($scheme)) {
+				$url = 'http://' . $url;
+			}
 			$http_code = 0;
 			if (function_exists('wp_remote_get')) {
 				// If available, use the built in wp remote http get function, we don't need SSL

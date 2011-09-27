@@ -3,9 +3,9 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                        PHP
-    VERSION                     1.0
+    VERSION                     1.1
 
-    FADED                       (.+(?=<\?php|<\?))|((?<=\?>).+)
+    HTML:FADED 		            ((?<=\?>).*?(?=<\?(?:php)?))|((?<=\?>).*$)|(^.*?(?=<\?(?:php)?))
     
     COMMENT                     (?default)|(\#.*?$)
     STRING                      (?default)|(<<<EOT.*?^EOT)
@@ -16,7 +16,7 @@
     RESERVED                    (?default)
     TYPE                        (?default)
     MODIFIER                    (?default)
-    COMPILE:KEYWORD              \b(?alt:compile.txt)\b
+    COMPILE:KEYWORD             \b(?alt:compile.txt)\b
     
     RES_CONST:ENTITY            \b(?alt:reserved.txt)\b
     ENTITY                      (?default)|\b[a-z_]\w*::

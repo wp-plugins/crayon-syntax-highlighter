@@ -1,0 +1,78 @@
+<p><strong>Using the Shortcode</strong></p>
+<p>Just add your code between <code>[crayon attributes] ... [/crayon]</code> in HTML view when editing posts. You can optionally provide the following <code>attributes</code>:</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="crayon-table crayon-table-light">
+<tr class="crayon-table-header" >
+    <td width="20">Attribute</td>
+    <td width="60%">Description</td>
+    <td width="30%">Example</td>
+  </tr>
+  <tr>
+    <td width="20">lang</td>
+    <td width="60%">Specify a Language ID, these are the folders in the <code>langs</code> directory and appears in the list of <a href="#langs">Languages</a>.</td>
+    <td width="30%"><code>lang="java"</code></td>
+  </tr>
+  <tr>
+    <td width="20">url</td>
+    <td width="60%">Load a file from the web or a local path. You give a relative local path instead of absolute (see <a href="#files">Files</a>). You can use a closed tag when giving a url: <code>[crayon url="java/code.java" /]</code>. For languages with defined extensions (see <a href="#langs" onclick="show_langs('http://localhost/crayon/wp-content/plugins/crayon/util/list_langs.php');">Languages</a>) you don't even need to provide the <code>lang</code> attribute, as this will be detected if your file ends with it, as in the example.</td>
+    <td width="30%">
+    <code>url="http://example.com/code.java&quot;</code><br />
+	<code>url="java/code.java&quot;</code></td>
+  </tr>
+<tr>
+    <td width="20">title</td>
+    <td width="60%">Give a title for your code snippet. Appears in the toolbar.</td>
+    <td width="30%"><code>title="Sample"</code></td>
+  </tr>
+<tr>
+    <td width="20">mark</td>
+    <td width="60%">Mark some lines as important so they appear highlighted. You can specify single numbers, comma separted, a range, or a combination.</td>
+    <td width="30%"><code>mark="5-10,12"</code></td>
+  </tr>
+</table>
+<p>Crayon is versatile so you can override global settings for individual Crayons with attributes. Here are some examples:</p>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="crayon-table crayon-table-light">
+  <tr class="crayon-table-header" >
+    <td width="20">Setting</td>
+    <td width="60%">Description</td>
+    <td width="30%">Example</td>
+  </tr>
+  <tr>
+    <td width="20">theme</td>
+    <td width="60%">Specify a Theme ID, these are the folders in the '\themes' directory.</td>
+    <td width="30%"><code>theme=&quot;twilight&quot;</code></td>
+  </tr>
+  <tr>
+    <td width="20">height</td>
+    <td width="60%">Set the height just like a css property, using 'height', 'max-height' or 'min-height'. You can also specify pixels or percentage, otherwise it will use global settings.</td>
+    <td width="30%"><code>min-height=&quot;100px&quot;</code><br />
+    <code>width=&quot;50%&quot;</code></td>
+  </tr>
+  <tr>
+    <td width="20">toolbar-hide</td>
+    <td width="60%">Show/hide the toolbar and controls.</td>
+    <td width="30%"><code>toolbar-hide=&quot;true&quot;</code><br />
+<code>toolbar-hide=&quot;false&quot;</code></td>
+  </tr>
+  <tr>
+    <td width="20">nums</td>
+    <td width="60%">Show/hide line numbers.</td>
+    <td width="30%"><code>nums=&quot;false&quot;</code></td>
+  </tr>
+  <tr>
+    <td width="20">font-size</td>
+    <td width="60%">Set the font size in pixels.</td>
+    <td width="30%"><code>font-size=&quot;20&quot;</code></td>
+  </tr>
+</table>
+<p>Here's a simple example of attributes:</p>
+<p><code>
+[crayon lang="html" font-size="20" mark="1" width="200px"] &lt;strong&gt;This is great!&lt;/strong&gt; [/crayon] </code></p>
+<p>These are just a few examples. See the <a href="http://ak.net84.net/?go=crayondocs" target="_blank">online documentation</a> for the complete list and their uses. If you want to prevent the <code>[crayon]</code> shortcode from turning into a Crayon, use: <code>$[crayon]...[/crayon]$</code></p>
+<p><strong>Themes</strong></p>
+<p>Crayon comes with  built-in Themes to style your code.  You can learn how to create your own and download more from <a href="http://ak.net84.net/?go=crayonthemes" target="_blank">here</a>. Themes are structured <code>/themes/theme-name/theme-name.css</code>. If you know CSS, take a look at <code>/themes/default/default.css</code> to get an idea of how they work and how you can change/create them.</p>
+<p><strong>Languages</strong></p>
+<p>You can customize and create new languages and define how to capture each element (keywords, comments, strings, etc.) with regular expressions. Languages are structured <code>/langs/lang-name/lang-name.txt</code>. Take a look at <code>/langs/default/default.txt</code> and check out the neat regex of the default/generic language. I've also spent considerable time putting together a <a href="{PLUGIN}langs/readme.txt" target="_blank">quick guide</a>  in <code>/langs/readme.txt</code> that will be added to the online docs. If your language is missing, send me an <a href="#info" target="_blank">email</a>. There will be more languages added over time, of course.</p>
+<p><strong>Fonts</strong></p>
+<p>You can define fonts and font-sizes within Themes, but you can also override the theme's font with those inside <code>/fonts/</code> and also provide @font-face fonts just like in themes - it's just CSS after all.</p>
+<p><strong>Disabling Highlight</strong></p>
+<p>You can temporarily disable highlighting for a piece of code using the <code>highlight=&quot;false&quot;</code> attribute.</p>

@@ -38,7 +38,7 @@ class CrayonHighlighter {
 			$this->language($language);
 		}
 	}
-
+	
 	/* Tries to load the code locally, then attempts to load it remotely */
 	private function load() {
 		if (empty($this->url)) {
@@ -48,6 +48,7 @@ class CrayonHighlighter {
 		/*	Try to replace the URL with an absolute path if it is local, used to prevent scripts
 		 from executing when they are loaded. */
 		$url = $this->url;
+		$url = CrayonUtil::pathf($url);
 		$local = FALSE; // Whether to read locally
 		$site_http = CrayonGlobalSettings::site_http();
 		$site_path = CrayonGlobalSettings::site_path();
@@ -59,12 +60,10 @@ class CrayonHighlighter {
 			// Attempt to load locally
 			$local = TRUE;
 			$local_url = $url;
-		} else {
-			if (empty($scheme)) {
-				// No url scheme is given - path may be given as relative
-				$local_url = preg_replace('#^(\/*)?#', $site_path . $this->setting_val(CrayonSettings::LOCAL_PATH), $url);
-				$local = TRUE;
-			}
+		} else if (empty($scheme)) {
+			// No url scheme is given - path may be given as relative
+			$local_url = preg_replace('#^((\/|\\\\)*)?#', $site_path . $this->setting_val(CrayonSettings::LOCAL_PATH), $url);
+			$local = TRUE;
 		}
 		// Try to find the file locally
 		if ($local == TRUE) {
@@ -72,6 +71,7 @@ class CrayonHighlighter {
 				$this->code($contents);
 			} else {
 				$local = FALSE;
+				CrayonLog::log("Local url ($local_url) could not be loaded", '', FALSE);
 			}
 		}
 		// If reading the url locally produced an error or failed, attempt remote request
@@ -105,7 +105,7 @@ class CrayonHighlighter {
 			} else {
 				if (empty($this->code)) {
 					// If code is also given, just use that
-					$this->error("The provided URL ('$url') could not be accessed locally or remotely.");
+					$this->error("The provided URL ('$this->url') could not be accessed locally or remotely.");
 				}
 			}
 		}
@@ -197,7 +197,7 @@ class CrayonHighlighter {
 				$this->log("The language '$id' could not be loaded.");
 			}
 			$this->language = CrayonResources::langs()->detect($this->url, $this->setting_val(CrayonSettings::FALLBACK_LANG));
-		}		
+		}
 	}
 
 	function url($url = NULL) {

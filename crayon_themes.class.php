@@ -19,7 +19,7 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 	// XXX Override
 
 	public function path($id) {
-		return CRAYON_THEME_PATH . $id . crayon_slash () . "$id.css";
+		return CRAYON_THEME_PATH . $id . "/$id.css";
 	}
 }
 ?>

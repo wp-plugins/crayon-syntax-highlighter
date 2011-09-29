@@ -153,7 +153,7 @@ class CrayonParser {
 			if ( count($file) == 2 ) {
 				// Element 0 has full match, 1 has captured groups
 				for ($i = 0; $i < count($file[1]); $i++) {
-					$file_lines = CrayonUtil::lines(dirname($element->path()) . crayon_slash() . $file[1][$i], 'rcwh');
+					$file_lines = CrayonUtil::lines(dirname($element->path()) . crayon_s() . $file[1][$i], 'rcwh');
 					if ($file_lines !== FALSE) {
 						$file_lines = implode('|', $file_lines);
 						$regex = str_replace($file[0][$i], "(?:$file_lines)", $regex);

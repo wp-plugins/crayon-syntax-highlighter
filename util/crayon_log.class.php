@@ -7,7 +7,7 @@ class CrayonLog {
 
 	// Logs a variable value to a log file
 
-	public static function log($var = NULL, $title = '') {
+	public static function log($var = NULL, $title = '', $trim_url = TRUE) {
 		if ($var === NULL) {
 			// Return log
 
@@ -30,20 +30,21 @@ class CrayonLog {
 					}
 				}
 				// Capture variable dump
-
 				ob_start();
 				var_dump($var);
 				$buffer = trim(strip_tags(ob_get_clean()));
+				
 				// Remove stupid formatting from wampserver
-
 				$buffer = str_replace('&apos;', '"', $buffer);
 				$title = (!empty($title) && is_string($title) ? "[$title] " : '');
+
 				// Remove absolute path to plugin directory from buffer
-
-				$buffer = CrayonUtil::path_rel($buffer);
+				if ($trim_url) {
+					$buffer = CrayonUtil::path_rel($buffer);
+				}
 				$write = $title . date('g:i:s A - d M Y') . CRAYON_NL . $buffer . CRAYON_NL . CRAYON_LINE . CRAYON_NL;
+				
 				// If we exceed max file size, truncate file first
-
 				if (filesize(CRAYON_LOG_FILE) + strlen($write) > CRAYON_LOG_MAX_SIZE) {
 					ftruncate(self::$file, 0);
 					fwrite(self::$file, 'The log has been truncated since it exceeded ' . CRAYON_LOG_MAX_SIZE .
@@ -60,10 +61,10 @@ class CrayonLog {
 
 	// Logs system-wide only if global settings permit
 
-	public static function syslog($var = NULL, $title = '') {
+	public static function syslog($var = NULL, $title = '', $trim_url = TRUE) {
 		if (CrayonGlobalSettings::val(CrayonSettings::ERROR_LOG_SYS)) {
 			$title = (empty($title)) ? 'SYSTEM ERROR' : $title;
-			self::log($var, $title);
+			self::log($var, $title, $trim_url);
 		}
 	}
 

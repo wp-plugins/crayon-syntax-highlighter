@@ -12,6 +12,7 @@ class CrayonUtil {
 	 c - remove comments
 	 s - return as string */
 	public static function lines($path, $opts = NULL) {
+		$path = self::pathf($path);
 		if ( ($str = self::file($path)) === FALSE ) {
 			// Log failure, n = no log
 			if ( strpos($opts, 'n') === FALSE ) {
@@ -88,10 +89,10 @@ class CrayonUtil {
 		if (self::$touchscreen !== NULL) {
 			return self::$touchscreen;
 		}
-		if ( ($devices = CrayonUtil::lines(CRAYON_TOUCH_FILE, 'lw')) !== FALSE ) {
+		if ( ($devices = self::lines(CRAYON_TOUCH_FILE, 'lw')) !== FALSE ) {
 			// Create array of device strings from file
 			$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-			self::$touchscreen = (CrayonUtil::strposa($user_agent, $devices) !== FALSE);
+			self::$touchscreen = (self::strposa($user_agent, $devices) !== FALSE);
 			return self::$touchscreen;
 		} else {
 			CrayonLog::syslog('Error occurred when trying to identify touchscreen devices');
@@ -224,41 +225,52 @@ class CrayonUtil {
 	// Removes crayon plugin path from absolute path
 	public static function path_rel($url) {
 		if (is_string($url)) {
-			return str_replace(CRAYON_ROOT_PATH, crayon_slash(), $url);
+			return str_replace(CRAYON_ROOT_PATH, '/', $url);
 		}
 		return $url;
 	}
 
 	// Returns path according to detected use of forwardslash/backslash
+	// Depreciated from regular use after v.1.1.1
 	public static function path($path, $detect) {
-		if (strpos($detect, '\\')) {
-			// Windows
-			$slash = '\\';
-		} else {
-			// UNIX
-			$slash = '/';
-		}
+		$slash = self::detect_slash($detect);
 		return str_replace(array('\\', '/'), $slash, $path);
 	}
 
+	// Detect which kind of slash is being used in a path
+	public static function detect_slash($path) {
+		if (strpos($path, '\\')) {
+			// Windows
+			return $slash = '\\';
+		} else {
+			// UNIX
+			return $slash = '/';
+		}
+	}
+	
 	// Returns path using forward slashes
-	public static function path_f_slash($url) {
-		return str_replace('\\', '/', $url);
+	public static function pathf($url) {
+		return str_replace('\\', '/', trim(strval($url)));
+	}
+	
+	// Returns path using back slashes
+	public static function pathb($url) {
+		return str_replace('/', '\\', trim(strval($url)));
 	}
 
 	// Append either forward slash or backslash based on environment to paths
 	public static function path_slash($path) {
-		$path = strval($path);
-		if (!empty($path) && !preg_match('#\\\\|/$#', $path)) {
-			$path .= crayon_slash();
+		$path = self::pathf($path);
+		if (!empty($path) && !preg_match('#\/$#', $path)) {
+			$path .= '/';
 		}
 		return $path;
 	}
 
 	// Append a forward slash to a path if needed
 	public static function url_slash($url) {
-		$url = trim(strval($url));
-		if (!empty($url) && !preg_match('#(/|\\\\)$#', $url)) {
+		$url = self::pathf($url);
+		if (!empty($url) && !preg_match('#\/$#', $url)) {
 			$url .= '/';
 		}
 		return $url;
@@ -266,7 +278,7 @@ class CrayonUtil {
 
 	// Removes extension from file path
 	public static function path_rem_ext($path) {
-		$path = strval($path);
+		$path = self::pathf($path);
 		return preg_replace('#\.\w+$#m', '', $path);
 	}
 
@@ -275,7 +287,7 @@ class CrayonUtil {
 		if (is_array($needles)) {
 			foreach ($needles as $str) {
 				if (is_array($str)) {
-					$pos = CrayonUtil::strposa($haystack, $str);
+					$pos = self::strposa($haystack, $str);
 				} else {
 					$pos = strpos($haystack, $str);
 				}

@@ -21,7 +21,7 @@ class CrayonLangs extends CrayonResourceCollection {
 
 	// XXX Override
 	public function path($id) {
-		return CRAYON_LANG_PATH . $id . crayon_slash() . "$id.txt";
+		return CRAYON_LANG_PATH . $id . "/$id.txt";
 	}
 
 	// XXX Override

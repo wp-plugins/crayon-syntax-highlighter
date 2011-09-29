@@ -435,8 +435,10 @@ class CrayonGlobalSettings {
 	}
 
 	public static function site_http($site_http = NULL) {
-		if (!CrayonUtil::str(self::$site_http, CrayonUtil::url_slash($site_http))) {
+		if ($site_http === NULL) {
 			return self::$site_http;
+		} else {
+			self::$site_http = CrayonUtil::url_slash($site_http);
 		}
 	}
 
@@ -444,7 +446,7 @@ class CrayonGlobalSettings {
 		if ($site_path === NULL) {
 			return self::$site_path;
 		} else {
-			self::$site_path = CrayonUtil::url_slash($site_path);
+			self::$site_path = CrayonUtil::path_slash($site_path);
 		}
 	}
 
@@ -452,7 +454,7 @@ class CrayonGlobalSettings {
 		if ($plugin_path === NULL) {
 			return self::$plugin_path;
 		} else {
-			self::$plugin_path = CrayonUtil::url_slash($plugin_path);
+			self::$plugin_path = CrayonUtil::path_slash($plugin_path);
 		}
 	}
 }

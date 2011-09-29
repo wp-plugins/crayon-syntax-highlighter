@@ -25,17 +25,17 @@ define('CRAYON_SETTING_CLASS', 'CrayonSetting');
 
 // Directories
 
-define('CRAYON_DIR', basename(dirname(__FILE__)) . crayon_slash());
-define('CRAYON_LANG_DIR', crayon_slash('langs'));
-define('CRAYON_THEME_DIR', crayon_slash('themes'));
-define('CRAYON_FONT_DIR', crayon_slash('fonts'));
-define('CRAYON_UTIL_DIR', crayon_slash('util'));
-define('CRAYON_CSS_DIR', crayon_slash('css'));
-define('CRAYON_JS_DIR', crayon_slash('js'));
+define('CRAYON_DIR', crayon_pf(basename(dirname(__FILE__))));
+define('CRAYON_LANG_DIR', crayon_s('langs'));
+define('CRAYON_THEME_DIR', crayon_s('themes'));
+define('CRAYON_FONT_DIR', crayon_s('fonts'));
+define('CRAYON_UTIL_DIR', crayon_s('util'));
+define('CRAYON_CSS_DIR', crayon_s('css'));
+define('CRAYON_JS_DIR', crayon_s('js'));
 
 // Paths
 
-define('CRAYON_ROOT_PATH', dirname(__FILE__) . crayon_slash());
+define('CRAYON_ROOT_PATH', crayon_pf(dirname(__FILE__)));
 define('CRAYON_LANG_PATH', CRAYON_ROOT_PATH . CRAYON_LANG_DIR);
 define('CRAYON_THEME_PATH', CRAYON_ROOT_PATH . CRAYON_THEME_DIR);
 define('CRAYON_FONT_PATH', CRAYON_ROOT_PATH . CRAYON_FONT_DIR);
@@ -98,6 +98,30 @@ require_once (CRAYON_LOG_PHP);
 // Turn on the error & exception handlers
 crayon_handler_on();
 
+// GLOBAL FUNCTIONS
+
+// Check for forwardslash/backslash in folder path to structure paths
+function crayon_s($url = '') {
+	$url = strval($url);
+	if (!empty($url) && !preg_match('#(\\\\|/)$#', $url)) {
+		return $url . '/';
+	} else if ( empty($url) ) {
+		return '/';
+	} else {
+		return $url;
+	}
+}
+
+// Returns path using forward slashes
+function crayon_pf($url) {
+	return str_replace('\\', '/', crayon_s(trim(strval($url))));
+}
+	
+// Returns path using back slashes
+function crayon_pb($url) {
+	return str_replace('/', '\\', crayon_s(trim(strval($url))));
+}
+
 // Get/Set plugin information
 function set_crayon_info($info_array) {
 	global $CRAYON_VERSION, $CRAYON_DATE, $CRAYON_AUTHOR, $CRAYON_WEBSITE, $uid;
@@ -119,20 +143,6 @@ function set_info($key, $array, &$info) {
 	} else {
 		return FALSE;
 	}
-}
-
-// Check for forwardslash/backslash in folder path to structure paths
-$crayon_slash = NULL;
-function crayon_slash($url = '') {
-	global $crayon_slash;
-	if ($crayon_slash == NULL) {
-		if (strpos(dirname(__FILE__), '\\')) {
-			$crayon_slash = '\\';
-		} else {
-			$crayon_slash = '/';
-		}
-	}
-	return $url . $crayon_slash;
 }
 
 ?>

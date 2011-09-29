@@ -111,7 +111,7 @@ class CrayonSettingsWP {
 		// For local file loading
 		// This is used to decouple WP functions from internal Crayon classes
 		CrayonGlobalSettings::site_http(home_url());
-		CrayonGlobalSettings::site_path(ABSPATH);		
+		CrayonGlobalSettings::site_path(ABSPATH);
 		CrayonGlobalSettings::plugin_path(plugins_url('', __FILE__));
 		
 		// Ensure all missing settings in db are replaced by default values
@@ -306,7 +306,7 @@ class CrayonSettingsWP {
 		$web = $CRAYON_WEBSITE;
 		echo <<<EOT
 <div id="crayon-help" class="updated settings-error crayon-help">
-	<span><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top-right to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="{$web}">here</a>.</span>
+	<span><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top of this page to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="{$web}">here</a>.</span>
 	<a class="crayon-help-close" href="#" url="{$url}">X</a>
 </div>
 EOT;

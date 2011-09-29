@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -44,7 +44,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.0 =
 * Initial Release. Huzzah!
 
 = 1.0.1 =
@@ -57,7 +57,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added highlight="false" attribute to temporarily disable highlighting.
 * Fixed default color of font for twilight font.
 
-= 1.1 =
+= 1.1.0 =
 * Recommended upgrade for everyone running 1.0.3.
 * Fixes a bug that causes code become unhighlighted
 * Attribute names can be given in any case in shortcodes  
@@ -66,6 +66,14 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.1.1 =
 * Plugin version information is updated automatically
+
+= 1.2.0 =
+* Recommended upgrade for everyone.
+* Fixed crucial filesystem errors for Windows regarding filepaths and resource loading
+* Said Windows bug was causing Live Preview to fail, nevermore.
+* Fixed loading based on URL structure that caused wp_remote errors and local paths not being recognised
+* Removed redundant dependency on filesystem path slashes
+* PHP now fades surrounding HTML
 
 == Upgrade Notice ==
 

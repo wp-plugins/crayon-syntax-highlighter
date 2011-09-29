@@ -28,6 +28,7 @@ class CrayonFormatter {
 				// Match language regex
 				$elements = $language->elements();
 				$regex = $language->regex();
+				
 				if (!empty($regex) && !empty($elements)) {
 					// Get array of CrayonElements
 					self::$elements = array_values($elements);
@@ -232,7 +233,7 @@ EOT;
 			// Record usage
 			$theme->used(TRUE);
 			// Add style
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
+			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
 			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
 		}
 		
@@ -241,7 +242,7 @@ EOT;
 		$font_id_dashed = '';
 		$font = CrayonResources::fonts()->get($font_id);
 		if ($hl->setting_val(CrayonSettings::FONT) != CrayonFonts::DEFAULT_FONT && !empty($font_id) && $font != NULL && !$font->used()) {
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::path_f_slash(CRAYON_FONT_DIR) . $font_id . '.css?ver' . $CRAYON_VERSION;
+			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_FONT_DIR) . $font_id . '.css?ver' . $CRAYON_VERSION;
 			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
 			$font_id_dashed = ' crayon-font-' . CrayonUtil::clean_css_name($font_id);
 		}

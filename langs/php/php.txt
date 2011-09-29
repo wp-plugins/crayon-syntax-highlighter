@@ -5,8 +5,8 @@
     NAME                        PHP
     VERSION                     1.1
 
-    HTML:FADED 		            ((?<=\?>).*?(?=<\?(?:php)?))|((?<=\?>).*$)|(^.*?(?=<\?(?:php)?))
-    
+    HTML:FADED 		            ((?<=\?>).*?(?=<\?(?:php)?))|(\A.*?(?=<\?(?:php)?))|((?<=\?>).*\Z)
+  
     COMMENT                     (?default)|(\#.*?$)
     STRING                      (?default)|(<<<EOT.*?^EOT)
     

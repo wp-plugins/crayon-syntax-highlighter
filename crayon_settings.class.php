@@ -45,6 +45,7 @@ class CrayonSettings {
 	const SHOW_TITLE = 'show-title';
 	const STRIPED = 'striped';
 	const MARKING = 'marking';
+	const START_LINE = 'start-line';
 	const NUMS = 'nums';
 	const NUMS_TOGGLE = 'nums-toggle';
 	const TRIM_WHITESPACE = 'trim-whitespace';
@@ -120,6 +121,7 @@ class CrayonSettings {
 			new CrayonSetting(self::SHOW_TITLE, TRUE),
 			new CrayonSetting(self::STRIPED, TRUE), 
 			new CrayonSetting(self::MARKING, TRUE),
+			new CrayonSetting(self::START_LINE, 1),
 			new CrayonSetting(self::NUMS, TRUE), 
 			new CrayonSetting(self::NUMS_TOGGLE, TRUE),
 			new CrayonSetting(self::TRIM_WHITESPACE, TRUE), 

@@ -71,6 +71,9 @@ class CrayonFormatter {
 		$print_code = '';
 		$print_nums = '';
 		$hl->line_count(preg_match_all("|^.*$|m", $code, $code_lines));
+		
+		// The line number to start from
+		$start_line = $hl->setting_val(CrayonSettings::START_LINE);
 		for ($i = 1; $i <= $hl->line_count(); $i++) {
 			$code_line = $code_lines[0][$i - 1];
 			// Check if the current line has been selected
@@ -100,9 +103,10 @@ class CrayonFormatter {
 				$striped_num = $striped_line = '';
 			}
 			// Generate the lines
-			$print_code .= '<div class="crayon-line' . $marked_line . $striped_line . '" id="line-' . $i . '">' . $code_line . '</div>';
+			$line_num = $start_line + $i - 1;
+			$print_code .= '<div class="crayon-line' . $marked_line . $striped_line . '" id="line-' . $line_num . '">' . $code_line . '</div>';
 			if (!is_string($line_numbers)) {
-				$print_nums .= '<div class="crayon-num' . $marked_num . $striped_num . '">' . $i . '</div>';
+				$print_nums .= '<div class="crayon-num' . $marked_num . $striped_num . '">' . $line_num . '</div>';
 			}
 		}
 		// If $line_numbers is a string, display it

@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -74,6 +74,12 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed loading based on URL structure that caused wp_remote errors and local paths not being recognised
 * Removed redundant dependency on filesystem path slashes
 * PHP now fades surrounding HTML
+
+= 1.2.1 =
+* Added the feature to specify the starting line number both globally in settings and also using the attribute:
+** [crayon start-line="1234"]fun code[/crayon]
+* Thanks for the suggestion from travishill:
+** http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-add-the-ability-to-specify-starting-line-number?replies=2#post-2389518
 
 == Upgrade Notice ==
 

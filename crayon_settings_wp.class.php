@@ -374,6 +374,8 @@ EOT;
 		self::checkbox(array(CrayonSettings::MARKING, 'Enable line marking for important lines'));
 		self::checkbox(array(CrayonSettings::NUMS, 'Display line numbers by default'));
 		self::checkbox(array(CrayonSettings::NUMS_TOGGLE, 'Enable line number toggling'));
+		echo 'Start line numbers from: ';
+		self::textbox(array('name' => CrayonSettings::START_LINE, 'size' => 2, 'break' => TRUE));
 	}
 
 	public static function langs() {

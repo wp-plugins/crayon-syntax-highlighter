@@ -1,0 +1,16 @@
+volatile
+nonatomic
+register
+restrict
+default
+bycopy
+oneway
+atomic
+extern
+inline
+static
+const
+inout
+byref
+out
+in

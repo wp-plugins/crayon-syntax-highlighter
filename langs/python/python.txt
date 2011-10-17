@@ -5,10 +5,12 @@
     CASE_INSENSITIVE = ON
 
     NAME                Python
-    VERSION             1.0
+    VERSION             1.1
 
     COMMENT             (#[^\r\n]*)
-    STRING              (?default)
+    STRING              (?:(?<!\\)""".*?(?<!\\)""")|(?:(?<!\\)'''.*?(?<!\\)''')|((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
+    
+    #(?:(?<!\\)("+).*?(?<!\\)\1)|(?:(?<!\\)('+).*?(?<!\\)\2)
     
     FUNCTION:KEYWORD    \b(?alt:function.txt)\b
     MODULE:KEYWORD      \b(?alt:module.txt)\b

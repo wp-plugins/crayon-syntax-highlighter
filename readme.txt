@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -80,6 +80,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 ** [crayon start-line="1234"]fun code[/crayon]
 * Thanks for the suggestion from travishill:
 ** http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-add-the-ability-to-specify-starting-line-number?replies=2#post-2389518
+
+= 1.2.2 =
+* Fixed the regex for detecting python docstrings. It's a killer, but it works!
+(?:(?<!\\)""".*?(?<!\\)""")|(?:(?<!\\)'''.*?(?<!\\)''')|((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
 
 == Upgrade Notice ==
 

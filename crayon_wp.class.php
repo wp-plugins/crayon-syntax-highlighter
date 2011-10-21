@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.2.2
+Version: 1.2.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -36,6 +36,8 @@ class CrayonWP {
 
 	//	Associative array, keys are post IDs as strings and values are number of crayons parsed as ints
 	private static $post_queue = array();
+	// TODO Newer array, eventually will move all data here
+	private static $posts = array();
 	// Whether we have added styles and scripts
 	private static $included = FALSE;
 	
@@ -131,7 +133,7 @@ class CrayonWP {
 		return $crayon;
 	}
 
-	/* Enqueue styles and scripts only if shortcode is used */
+	/* Search for Crayons in posts and queue them for creation */
 	public static function the_posts($posts) {
 		if (empty($posts)) {
 			return $posts;
@@ -175,7 +177,7 @@ class CrayonWP {
 					}
 					
 					// Add array of atts and content to post queue with key as post ID
-					self::$post_queue[strval($post->ID)][] = array($post->ID, $atts_array, $contents[$i], $i);
+					self::$post_queue[strval($post->ID)][] = array('id'=>$post->ID, 'atts'=>$atts_array, 'contents'=>$contents[$i], 'index'=>$i);
 				}
 			}
 		}
@@ -195,6 +197,7 @@ class CrayonWP {
 		self::$included = TRUE;
 	}
 	
+	// Add Crayon into the_content
 	public static function the_content($the_content) {		
 		global $post;
 		// Go through queued posts and find crayons		
@@ -202,12 +205,15 @@ class CrayonWP {
 		// Find if this post has Crayons
 		if ( array_key_exists($post_id, self::$post_queue) ) {
 			// XXX We want the plain post content, no formatting
+			$the_content_original = $the_content;
 			$the_content = $post->post_content;
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $p) {
-				$atts = $p[1];
-				$content = $p[2]; // The formatted crayon we replace post content with
+				$atts = $p['atts'];
+				$content = $p['contents']; // The formatted crayon we replace post content with
+				
+				self::$posts[$post_id] = array('content_raw'=>$post->post_content, 'content'=>$the_content_original);
 				
 				// Remove '$' from $[crayon]...[/crayon]$ contained within [crayon] tag content
 				$content = self::crayon_remove_ignore($content);
@@ -219,7 +225,19 @@ class CrayonWP {
 		// Remove '$' from $[crayon]...[/crayon]$ in post body
 		// XXX Do this after applying shortcode to avoid matching
 		$the_content = self::crayon_remove_ignore($the_content);
+		self::$posts[$post_id]['content_crayon'] = $the_content; 
 		return $the_content;
+	}
+	
+	// Remove Crayons from the_excerpt
+	public static function the_excerpt($the_excerpt) {
+		global $post;
+		$post_id = strval($post->ID);
+		$post->post_content = self::$posts[$post_id]['content'];
+		$post->post_content = preg_replace(self::regex_no_capture(), '', $post->post_content);
+		$the_excerpt = wpautop(wp_trim_excerpt(''));
+		$post->post_content = self::$posts[$post_id]['content_raw'];
+		return $the_excerpt;
 	}
 	
 	// Check if the $[crayon]...[/crayon]$ notation has been used to ignore [crayon] tags within posts
@@ -243,9 +261,10 @@ class CrayonWP {
 if (defined('ABSPATH')) {
 	register_activation_hook(__FILE__, 'CrayonWP::install');
 	register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
+	
 	// Filters and Actions
-
 	add_filter('the_posts', 'CrayonWP::the_posts');
 	add_filter('the_content', 'CrayonWP::the_content');
+	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 }
 ?>

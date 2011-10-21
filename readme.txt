@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -84,6 +84,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.2.2 =
 * Fixed the regex for detecting python docstrings. It's a killer, but it works!
 (?:(?<!\\)""".*?(?<!\\)""")|(?:(?<!\\)'''.*?(?<!\\)''')|((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
+
+= 1.2.3 =
+* Prevented Crayons from appearing as plain text in excerpts
+http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-breaks-the-tag
 
 == Upgrade Notice ==
 

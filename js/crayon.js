@@ -31,7 +31,6 @@ var CRAYON_NUMS_CONTENT = '.crayon-nums-content';
 var CRAYON_NUMS_BUTTON = '.crayon-nums-button';
 
 jQuery(document).ready(function() {
-	//crayon_log('crayon loaded');
     init();
 });
 
@@ -264,6 +263,11 @@ function toggle_plain(uid, hover) {
 			hidden.scrollTop(crayon[uid].top);
 			hidden.scrollLeft(crayon[uid].left + 1);
 			hidden.scrollLeft(crayon[uid].left);
+			
+			// Give focus to plain code
+			if (hidden == plain) {
+				plain.focus();
+			}
 		});
     
 	// Restore scroll positions to hidden

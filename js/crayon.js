@@ -120,14 +120,17 @@ function init() {
         main.css('position', 'relative');
         main.css('z-index', 1);
         
-        // Used to hide info
-        main.click(function() { crayon_info(uid, '', false); });
-        info.click(function() { crayon_info(uid, '', false); });
-        plain.click(function() { crayon_info(uid, '', false); });
-
-        plain.css('opacity', 0);
         // Disable certain features for touchscreen devices
         touchscreen = (jQuery(this).filter('[settings~="touchscreen"]').length != 0);
+        
+        // Used to hide info
+        if (!touchscreen) {
+	        main.click(function() { crayon_info(uid, '', false); });
+        	plain.click(function() { crayon_info(uid, '', false); });
+        	info.click(function() { crayon_info(uid, '', false); });
+        }
+
+        plain.css('opacity', 0);
         crayon.toolbar_neg_height = '-' + toolbar.height() + 'px';
         // If a toolbar with mouseover was found
         if (toolbar.filter('[settings~="mouseover"]').length != 0 && !touchscreen) {

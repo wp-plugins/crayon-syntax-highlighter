@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.3
+Stable tag: 1.3.0
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -44,7 +44,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.3 =
+= 1.3.0 =
 * Recommended upgrade for everyone.
 * Major bug fix thanks to twitter.com/42dotno and twitter.com/eriras
 * Fixed a bug causing attributes using single quotes to be undetected

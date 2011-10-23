@@ -21,6 +21,7 @@ var UNPRESSED = '';
 
 var CRAYON_SYNTAX = 'div.crayon-syntax';
 var CRAYON_TOOLBAR = '.crayon-toolbar';
+var CRAYON_INFO = '.crayon-info';
 var CRAYON_PLAIN = '.crayon-plain';
 var CRAYON_PLAIN_BUTTON = '.crayon-plain-button';
 var CRAYON_MAIN = '.crayon-main';
@@ -43,6 +44,7 @@ function init() {
     jQuery(CRAYON_SYNTAX).each(function() {
         var uid = jQuery(this).attr('id');
         var toolbar = jQuery(this).find(CRAYON_TOOLBAR);
+        var info = jQuery(this).find(CRAYON_INFO);
         var plain = jQuery(this).find(CRAYON_PLAIN);
         var plain_button = jQuery(this).find(CRAYON_PLAIN_BUTTON);
         var main = jQuery(this).find(CRAYON_MAIN);
@@ -57,6 +59,7 @@ function init() {
         crayon[uid].toolbar = toolbar;
         crayon[uid].plain = plain;
         crayon[uid].plain_button = plain_button;
+        crayon[uid].info = info;
         crayon[uid].main = main;
         crayon[uid].table = table;
         crayon[uid].code = code;
@@ -66,7 +69,7 @@ function init() {
         crayon[uid].nums_visible = true;
         crayon[uid].plain_visible = false;
         
-        crayon[uid].toolbar_delay = false;
+        crayon[uid].toolbar_delay = 0;
         crayon[uid].time = 1;
         
         // Set plain
@@ -120,10 +123,11 @@ function init() {
         plain.css('opacity', 0);
         // Disable certain features for touchscreen devices
         touchscreen = (jQuery(this).filter('[settings~="touchscreen"]').length != 0);
+        crayon.toolbar_neg_height = '-' + toolbar.height() + 'px';
         // If a toolbar with mouseover was found
         if (toolbar.filter('[settings~="mouseover"]').length != 0 && !touchscreen) {
         	crayon[uid].toolbar_mouseover = true;
-            crayon.toolbar_neg_height = '-' + toolbar.height() + 'px';
+            
             toolbar.css('margin-top', crayon.toolbar_neg_height);
             toolbar.hide();
             // Overlay the toolbar if needed, only if doing so will not hide the
@@ -137,10 +141,12 @@ function init() {
                     main.click(function() { toolbar_toggle(uid, undefined, true); });
                     plain.click(function() { toolbar_toggle(uid, false, true); });
                 }
-            };
+            } else {
+            	toolbar.css('z-index', 4);
+            }
             // Enable delay on mouseout
             if (toolbar.filter('[settings~="delay"]').length != 0) {
-                crayon[uid].toolbar_delay = true;
+                crayon[uid].toolbar_delay = 500;
             }
             // Use .hover() for chrome, but in firefox mouseover/mouseout worked best
             jQuery(this).mouseenter(function() { toolbar_toggle(uid, true); })
@@ -173,19 +179,104 @@ function init() {
         if ( jQuery(this).filter('[settings~="disable-anim"]').length != 0 ) {
             crayon[uid].time = 0;
         }
+        
+        // Determine if Mac
+        crayon[uid].mac = (jQuery(this).filter('[crayon-os~="mac"]').length != 0); 
     });
 }
 
 function make_uid(uid) {
     if (typeof crayon[uid] == 'undefined') {
         crayon[uid] = jQuery('#'+uid);
-        //crayon_log('made ' + uid);
         return true;
     }
     return false;
 }
 
-function toggle_plain(uid, hover) {
+function copy_plain(uid, hover) {
+	if (typeof crayon[uid] == 'undefined') {
+	    return make_uid(uid);
+	}
+	
+	var plain = crayon[uid].plain;
+	
+	toggle_plain(uid, true, true);
+	toolbar_toggle(uid, true, true);
+	
+	key = crayon[uid].mac ? '\u2318' : 'CTRL';
+	text = 'Press ' + key + '+C to Copy, ' + key + '+P to Paste :)';
+	crayon_info(uid, text);
+}
+
+function crayon_info(uid, text) {
+	if (typeof crayon[uid] == 'undefined') {
+	    return make_uid(uid);
+	}
+	
+	var info = crayon[uid].info;
+	
+	if (typeof text == 'undefined') {
+		text = '';
+	}
+	
+	if (crayon_is_slide_hidden(info)) {
+		info.html('<div>' + text + '</div>');
+		info.css('margin-top', -info.height());
+		info.show();
+		crayon_slide(uid, info, true, false);
+		setTimeout(function() {
+			crayon_slide(uid, info, false, true);
+		}, 5000);
+	}
+
+}
+
+function crayon_is_slide_hidden(object) {
+	var object_neg_height = '-' + object.height() + 'px';	
+	if (object.css('margin-top') == object_neg_height || object.css('display') == 'none') {
+        return true;
+    } else {
+        return false;            
+    }
+}
+
+function crayon_slide(uid, object, show, instant, delay) {
+	var object_neg_height = '-' + object.height() + 'px';
+	
+	if (typeof show == 'undefined') {
+        if (crayon_is_slide_hidden(object)) {
+            show = true;
+        } else {
+            show = false;            
+        }
+    }
+    // Instant means no time delay for showing/hiding
+    if (typeof instant == 'undefined') {
+        instant = false;
+    }
+    if (typeof delay== 'undefined') {
+    	delay = 0;
+    }
+    object.stop(true);
+    if (show == true) {
+        object.show();
+        object.animate({
+            marginTop: 0
+        }, animt(100, uid));
+    } else if (show == false) {
+        // Delay if fully visible
+        if (instant == false && object.css('margin-top') == '0px' && delay) {
+             object.delay(delay);
+        }
+        object.animate({
+            marginTop: object_neg_height
+        }, animt(100, uid), function() {
+            object.hide();
+        });
+    }
+}
+
+function toggle_plain(uid, hover, select) {
 	if (typeof crayon[uid] == 'undefined') {
 	    return make_uid(uid);
 	}
@@ -266,7 +357,11 @@ function toggle_plain(uid, hover) {
 			
 			// Give focus to plain code
 			if (hidden == plain) {
-				plain.focus();
+				if (select) {
+					plain.select();
+				} else {
+					plain.focus();
+				}
 			}
 		});
     
@@ -391,34 +486,8 @@ function toolbar_toggle(uid, show, instant) {
     }
     var toolbar = crayon[uid].toolbar;
     var delay = crayon[uid].toolbar_delay;
-    if (typeof show == 'undefined') {
-        if (toolbar.css('margin-top') == crayon.toolbar_neg_height) {
-            show = true;
-        } else {
-            show = false;
-        }
-    }
-    // Instant means no time delay for showing/hiding
-    if (typeof instant == 'undefined') {
-        instant = false;
-    }
-    toolbar.stop(true);
-    if (show == true) {
-        toolbar.show();
-        toolbar.animate({
-            marginTop: 0
-        }, animt(100, uid));
-    } else if (show == false) {
-        // Delay if fully visible
-        if (instant == false && toolbar.css('margin-top') == '0px' && delay) {
-             toolbar.delay(500);
-        }
-        toolbar.animate({
-            marginTop: crayon.toolbar_neg_height
-        }, animt(100, uid), function() {
-            toolbar.hide();
-        });
-    }
+    
+    crayon_slide(uid, toolbar, show, instant, delay);
 }
 
 function toggle_scroll(uid, show) {

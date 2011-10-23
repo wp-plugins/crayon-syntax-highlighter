@@ -51,12 +51,12 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed a bug causing code with dollar signs followed by numbers to be detected as backreferences and replace itself!
 * Fixed a bug causing formatting to be totally disregarded.
 * Fixed the <!--more--> tag in post_content and the_excerpt by placing crayon detection after all other formatting has taken place
+* Added copy and paste, didn't use flash, selects text and asks user to copy (more elegant until they sort out clipboard access)
 * Added shell script to languages - use with lang='sh'
 * Removed certain usage of heredocs and replaced with string concatenation
 * Added 'then' to default statements
 * Cleaned up processing of post_queue used for Crayon detection and the_excerpt
-
-http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-breaks-the-tag
+* Added focus to plain text to allow easier copy-paste
 
 = 1.2.3 =
 * Prevented Crayons from appearing as plain text in excerpts

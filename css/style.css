@@ -29,6 +29,7 @@ coloring etc.
 
 .crayon-syntax .crayon-main,
 .crayon-syntax .crayon-toolbar,
+.crayon-syntax .crayon-info,
 .crayon-syntax .crayon-plain,
 .crayon-syntax .crayon-code {
     /* Dimensions of code */
@@ -81,11 +82,25 @@ coloring etc.
 }
 /* End Line Numbers ================ */
 
-/* Toolbar ========================= */
+/* Toolbar & Info ================== */
 .crayon-syntax .crayon-toolbar {
     position: relative;
     overflow: hidden;
 }
+.crayon-syntax .crayon-info {
+	position: absolute;
+	overflow: hidden;
+	display: none;
+	z-index: 3;
+	min-height: 20px;
+	padding: 0px;
+	line-height: 20px;
+}
+.crayon-syntax .crayon-info div {
+	padding: 4px !important;
+	text-align: center;
+}
+
 .crayon-syntax .crayon-toolbar,
 .crayon-syntax .crayon-toolbar * {
     height: 20px;
@@ -123,6 +138,20 @@ coloring etc.
 }
 .crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:active {
 	background-image: url('images/toolbar/plain_dark.png');
+}
+
+/* Copy Button */
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:link {
+	background-image: url('images/toolbar/copy_dark.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:hover,
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed {
+	background-image: url('images/toolbar/copy_light.png');
+}
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:active {
+	background-image: url('images/toolbar/copy_dark.png');
 }
 
 /* Nums Button */

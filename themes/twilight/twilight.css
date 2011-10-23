@@ -1,7 +1,7 @@
 /*
 Theme Name: Twilight
 Description: Dark and elegant. 
-Version: 1.0
+Version: 1.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 */
@@ -34,6 +34,8 @@ Author URI: http://ak.net84.net/
 .crayon-theme-twilight::selection,
 .crayon-theme-twilight .crayon-toolbar::selection,
 .crayon-theme-twilight .crayon-toolbar *::selection,
+.crayon-theme-twilight .crayon-info::selection,
+.crayon-theme-twilight .crayon-info *::selection,
 .crayon-theme-twilight .crayon-nums::selection,
 .crayon-theme-twilight .crayon-nums *::selection {
     background: transparent !important;
@@ -74,6 +76,13 @@ Author URI: http://ak.net84.net/
 .crayon-theme-twilight .crayon-marked-line.crayon-bottom,
 .crayon-theme-twilight .crayon-marked-num.crayon-bottom {
     border-bottom-style: solid !important;
+}
+
+/* Info */
+.crayon-theme-twilight .crayon-info {
+    background: #faf9d7 !important;
+    border-bottom: 1px #b1af5e solid !important;
+    color: #7e7d34;
 }
 
 /* Toolbar */

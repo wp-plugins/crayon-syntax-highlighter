@@ -370,6 +370,18 @@ class CrayonUtil {
 		$string = preg_replace('#(?<!\\\\)(\\$|\\\\)#', '\\\\$1', $string);
 		return $string;
 	}
+	
+	// Detect if on a Mac or PC
+	public static function is_mac($default = FALSE) {
+		$user = $_SERVER['HTTP_USER_AGENT'];
+		if (stripos($user, 'macintosh')) {
+			return TRUE;
+		} else if (stripos($user, 'windows') || stripos($user, 'linux')) {
+			return FALSE;
+		} else {
+			return $default===TRUE;
+		}
+	}
 
 	// Decodes WP html entities
 	public static function html_entity_decode_wp($str) {

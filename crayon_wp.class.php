@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.2.3
+Version: 1.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -36,8 +36,8 @@ class CrayonWP {
 
 	//	Associative array, keys are post IDs as strings and values are number of crayons parsed as ints
 	private static $post_queue = array();
-	// TODO Newer array, eventually will move all data here
-	private static $posts = array();
+	// Whether we are displaying an excerpt
+	private static $is_excerpt = FALSE;
 	// Whether we have added styles and scripts
 	private static $included = FALSE;
 	
@@ -67,7 +67,7 @@ class CrayonWP {
 	/**
 	 * Adds the actual Crayon instance, should only be called by add_shortcode()
 	 */
-	private static function shortcode($atts, $content = NULL) {		
+	private static function shortcode($atts, $content = NULL) {	
 		CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
 
 		// Lowercase attributes
@@ -76,8 +76,6 @@ class CrayonWP {
 			$lower_atts[trim(strip_tags(strtolower($att)))] = $value;
 		}
 		$atts = $lower_atts;
-		
-		//echo count($atts);
 		
 		// Load attributes from shortcode
 		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL);
@@ -167,7 +165,7 @@ class CrayonWP {
 					}
 					
 					// Capture attributes
-					preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')([^"]+)\2#', $atts, $att_matches);
+					preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')([^"]+?)\2#', $atts, $att_matches);
 					$atts_array = array();
 					
 					if ( count($att_matches[0]) != 0 ) {
@@ -177,9 +175,10 @@ class CrayonWP {
 					}
 					
 					// Add array of atts and content to post queue with key as post ID
-					self::$post_queue[strval($post->ID)][] = array('id'=>$post->ID, 'atts'=>$atts_array, 'contents'=>$contents[$i], 'index'=>$i);
+					self::$post_queue[strval($post->ID)][] = array('id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$contents[$i], 'index'=>$i);
 				}
 			}
+			
 		}
 		
 		if (!is_admin() && $enqueue && !self::$included) {
@@ -198,45 +197,43 @@ class CrayonWP {
 	}
 	
 	// Add Crayon into the_content
-	public static function the_content($the_content) {		
+	public static function the_content($the_content) {
 		global $post;
 		// Go through queued posts and find crayons		
 		$post_id = strval($post->ID);
+		
+		if (self::$is_excerpt) {
+			// Remove Crayon from content if we are displaying an excerpt
+			return preg_replace(self::regex_no_capture(), '', $the_content);
+		}
+		
 		// Find if this post has Crayons
 		if ( array_key_exists($post_id, self::$post_queue) ) {
 			// XXX We want the plain post content, no formatting
 			$the_content_original = $the_content;
-			$the_content = $post->post_content;
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $p) {
 				$atts = $p['atts'];
-				$content = $p['contents']; // The formatted crayon we replace post content with
-				
-				self::$posts[$post_id] = array('content_raw'=>$post->post_content, 'content'=>$the_content_original);
-				
+				$content = $p['code']; // The formatted crayon we replace post content with
 				// Remove '$' from $[crayon]...[/crayon]$ contained within [crayon] tag content
 				$content = self::crayon_remove_ignore($content);
 				// Apply shortcode to the content
 				$crayon = self::shortcode($atts, $content);
-				$the_content = preg_replace(self::regex_no_capture(), $crayon, $the_content, 1);
+				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_no_capture(), $crayon, $the_content, 1, $count);
 			}
 		}
 		// Remove '$' from $[crayon]...[/crayon]$ in post body
 		// XXX Do this after applying shortcode to avoid matching
 		$the_content = self::crayon_remove_ignore($the_content);
-		self::$posts[$post_id]['content_crayon'] = $the_content; 
 		return $the_content;
 	}
 	
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
-		global $post;
-		$post_id = strval($post->ID);
-		$post->post_content = self::$posts[$post_id]['content'];
-		$post->post_content = preg_replace(self::regex_no_capture(), '', $post->post_content);
+		self::$is_excerpt = TRUE;
 		$the_excerpt = wpautop(wp_trim_excerpt(''));
-		$post->post_content = self::$posts[$post_id]['content_raw'];
+		self::$is_excerpt = FALSE;
 		return $the_excerpt;
 	}
 	

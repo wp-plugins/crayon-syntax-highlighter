@@ -44,28 +44,33 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.0.0 =
-* Initial Release. Huzzah!
+= 1.3 =
+* Recommended upgrade for everyone.
+* Major bug fix thanks to twitter.com/42dotno and twitter.com/eriras
+* Fixed a bug causing attributes using single quotes to be undetected
+* Fixed a bug causing code with dollar signs followed by numbers to be detected as backreferences and replace itself!
+* Fixed a bug causing formatting to be totally disregarded.
+* Fixed the <!--more--> tag in post_content and the_excerpt by placing crayon detection after all other formatting has taken place
+* Added shell script to languages - use with lang='sh'
+* Removed certain usage of heredocs and replaced with string concatenation
+* Added 'then' to default statements
+* Cleaned up processing of post_queue used for Crayon detection and the_excerpt
 
-= 1.0.1 =
-* Fixed a bug that caused Themes not to load for some Crayons due to Wordpress content formatting.
+http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-breaks-the-tag
 
-= 1.0.2 =
-* Minor bug fixes.
+= 1.2.3 =
+* Prevented Crayons from appearing as plain text in excerpts
+http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-breaks-the-tag
 
-= 1.0.3 =
-* Added highlight="false" attribute to temporarily disable highlighting.
-* Fixed default color of font for twilight font.
+= 1.2.2 =
+* Fixed the regex for detecting python docstrings. It's a killer, but it works!
+(?:(?<!\\)""".*?(?<!\\)""")|(?:(?<!\\)'''.*?(?<!\\)''')|((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
 
-= 1.1.0 =
-* Recommended upgrade for everyone running 1.0.3.
-* Fixes a bug that causes code become unhighlighted
-* Attribute names can be given in any case in shortcodes  
-* Fixes settings bug regarding copy constructor for locked settings
-* Minor bug fixes and cleanups 
-
-= 1.1.1 =
-* Plugin version information is updated automatically
+= 1.2.1 =
+* Added the feature to specify the starting line number both globally in settings and also using the attribute:
+** [crayon start-line="1234"]fun code[/crayon]
+* Thanks for the suggestion from travishill:
+** http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-add-the-ability-to-specify-starting-line-number?replies=2#post-2389518
 
 = 1.2.0 =
 * Recommended upgrade for everyone.
@@ -75,19 +80,28 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Removed redundant dependency on filesystem path slashes
 * PHP now fades surrounding HTML
 
-= 1.2.1 =
-* Added the feature to specify the starting line number both globally in settings and also using the attribute:
-** [crayon start-line="1234"]fun code[/crayon]
-* Thanks for the suggestion from travishill:
-** http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-add-the-ability-to-specify-starting-line-number?replies=2#post-2389518
+= 1.1.1 =
+* Plugin version information is updated automatically
 
-= 1.2.2 =
-* Fixed the regex for detecting python docstrings. It's a killer, but it works!
-(?:(?<!\\)""".*?(?<!\\)""")|(?:(?<!\\)'''.*?(?<!\\)''')|((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
+= 1.1.0 =
+* Recommended upgrade for everyone running 1.0.3.
+* Fixes a bug that causes code become unhighlighted
+* Attribute names can be given in any case in shortcodes  
+* Fixes settings bug regarding copy constructor for locked settings
+* Minor bug fixes and cleanups
 
-= 1.2.3 =
-* Prevented Crayons from appearing as plain text in excerpts
-http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-breaks-the-tag
+= 1.0.3 =
+* Added highlight="false" attribute to temporarily disable highlighting.
+* Fixed default color of font for twilight font.
+
+= 1.0.2 =
+* Minor bug fixes.
+
+= 1.0.1 =
+* Fixed a bug that caused Themes not to load for some Crayons due to Wordpress content formatting.
+
+= 1.0.0 =
+* Initial Release. Huzzah!
 
 == Upgrade Notice ==
 

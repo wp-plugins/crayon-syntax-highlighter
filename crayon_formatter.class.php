@@ -197,17 +197,13 @@ class CrayonFormatter {
 			}
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
-			$toolbar = <<<EOT
-<div class="crayon-toolbar" settings="{$toolbar_settings}">
-{$print_title}
-<div class="crayon-tools">
-	{$print_nums_button}
-	{$print_plain_button}
-	{$print_lang}
-</div>
-</div>
-	{$print_plain}
-EOT;
+
+			$toolbar = '
+			<div class="crayon-toolbar" settings="'.$toolbar_settings.'">'.$print_title.'
+			<div class="crayon-tools">'.$print_nums_button.$print_plain_button.$print_lang.'</div>
+			</div><div>'.$print_plain.'</div>';
+
+
 		} else {
 			$toolbar = $plain_settings = '';
 		}
@@ -330,37 +326,30 @@ EOT;
 		
 		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
 			// Produce style for individual crayon
-			$output .= <<<EOT
-<style type="text/css">
-	{$font_style}
-</style>
-EOT;
+			$output .= '<style type="text/css">'.$font_style.'</style>';
 		}
 		
 		// Produce output
-		$output .= <<<EOT
-<div id="{$uid}" class="crayon-syntax crayon-theme-{$theme_id_dashed}{$font_id_dashed}" settings="{$code_settings}" style="{$code_style}">
-{$toolbar}
-	<div class="crayon-main" style="{$main_style}">
-		<table class="crayon-table" cellpadding="0" cellspacing="0">
-			<tr class="crayon-row">
-EOT;
+		$output .= '
+		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.$font_id_dashed.'" settings="'.$code_settings.'" style="'.$code_style.'">
+		'.$toolbar.'
+			<div class="crayon-main" style="'.$main_style.'">
+				<table class="crayon-table" cellpadding="0" cellspacing="0">
+					<tr class="crayon-row">';
 
 		if ($print_nums !== FALSE) {
-		$output .= <<<EOT
-				<td class="crayon-nums {$num_vis}" settings="{$num_settings}">
-					<div class="crayon-nums-content">{$print_nums}</div>
-				</td>
-EOT;
+		$output .= '
+				<td class="crayon-nums '.$num_vis.'" settings="'.$num_settings.'">
+					<div class="crayon-nums-content">'.$print_nums.'</div>
+				</td>';
 		}
-		
-$output .= <<<EOT
-				<td class="crayon-code"><div class="crayon-pre">{$print_code}</div></td>
-			</tr>
-		</table>
-	</div>
-</div>
-EOT;
+		// XXX
+		$output .= '
+						<td class="crayon-code"><div class="crayon-pre">'.$print_code.'</div></td>
+					</tr>
+				</table>
+			</div>
+		</div>';
 		// Debugging stats
 		$runtime = $hl->runtime();
 		if (!$hl->setting_val(CrayonSettings::DISABLE_RUNTIME) && is_array($runtime) && !empty($runtime)) {

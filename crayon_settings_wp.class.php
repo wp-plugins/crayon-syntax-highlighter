@@ -304,12 +304,12 @@ class CrayonSettingsWP {
 		}
 		$url = plugins_url(CRAYON_AJAX_PHP, __FILE__) . '?' . CrayonSettings::HIDE_HELP . '=1';
 		$web = $CRAYON_WEBSITE;
-		echo <<<EOT
+		echo '
 <div id="crayon-help" class="updated settings-error crayon-help">
-	<span><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top of this page to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="{$web}">here</a>.</span>
-	<a class="crayon-help-close" href="#" url="{$url}">X</a>
+	<span><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top of this page to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="'.$web,'">here</a>.</span>
+	<a class="crayon-help-close" href="#" url="'.$url.'">X</a>
 </div>
-EOT;
+';
 	}
 	
 	public static function cont_help($contextual_help, $screen_id, $screen) {
@@ -523,22 +523,20 @@ EOT;
 		$developer = '<b>Developer:</b> ' . $CRAYON_AUTHOR;
 		$links = '<a id="twitter-icon" href="' . $CRAYON_TWITTER . '" target="_blank"></a>
         			<a id="gmail-icon" href="mailto:' . $CRAYON_EMAIL . '" target="_blank"></a>';
-		echo <<<EOT
-<table id="crayon-info" border="0">
-  <tr>
-    <td>{$version}</td>
-    <td>{$date}</td>
-  </tr>
-  <tr>
-    <td>{$developer}</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td colspan="2" style="text-align: centera;">{$links}</td>
-  </tr>
-</table>		
-
-EOT;
+		echo '
+		<table id="crayon-info" border="0">
+		  <tr>
+		    <td>'.$version.'</td>
+		    <td>'.$date.'</td>
+		  </tr>
+		  <tr>
+		    <td>'.$developer.'</td>
+		    <td></td>
+		  </tr>
+		  <tr>
+		    <td colspan="2" style="text-align: centera;">'.$links.'</td>
+		  </tr>
+		</table>';
 	}
 }
 // Add the settings menus

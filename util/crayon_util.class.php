@@ -359,6 +359,18 @@ class CrayonUtil {
 		
 	}
 
+	// Escapes $ and \ from the replacement to avoid becoming a backreference
+	public static function preg_replace_escape_back($pattern, $replacement, $subject, $limit=-1, &$count=0) {
+		return preg_replace($pattern, self::preg_escape_back($replacement), $subject, $limit, $count);
+	}
+	
+	// Escape backreferences from string for use with regex
+	public static function preg_escape_back($string) {
+		// Replace $ with \$ and \ with \\
+		$string = preg_replace('#(?<!\\\\)(\\$|\\\\)#', '\\\\$1', $string);
+		return $string;
+	}
+
 	// Decodes WP html entities
 	public static function html_entity_decode_wp($str) {
 		if (!is_string($str) || empty($str)) {

@@ -29,7 +29,7 @@ $path = crayon_pf( dirname(__FILE__) . '/sample/' . $lang . '.txt' );
 if ($lang && @file_exists($path)) {
 	$crayon->url($path);
 } else {
-	$code = <<<EOT
+	$code = "
 // A sample class
 class Human {
 	private int age = 0;
@@ -38,7 +38,7 @@ class Human {
 		print('Happy Birthday!');
 	}
 }
-EOT;
+";
 	$crayon->code($code);
 }
 $crayon->title('Sample Code');

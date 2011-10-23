@@ -461,6 +461,9 @@ class CrayonSettingsWP {
 	public static function code() {
 		self::checkbox(array(CrayonSettings::PLAIN, 'Enable plain code view and display: '), FALSE);
 		self::dropdown(CrayonSettings::SHOW_PLAIN);
+		echo '<span id="crayon-copy-check">';
+		self::checkbox(array(CrayonSettings::COPY, 'Enable code copy/paste'));
+		echo '</span>';
 		echo 'Display scrollbars (when needed): ';
 		self::dropdown(CrayonSettings::SCROLL);
 		echo 'Tab size in spaces: ';

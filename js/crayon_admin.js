@@ -80,6 +80,17 @@ function admin_init() {
     toggle_toolbar();
     toolbar.change(function() { toggle_toolbar(); });
     
+    // Copy
+    plain = jQuery('#plain');
+    copy = jQuery('#crayon-copy-check');
+    plain.change(function() {
+    	if (plain.is(':checked')) {
+    		copy.show();
+    	} else {
+    		copy.hide();
+    	}
+	});
+    
     // Log
     var show_log = 'Show Log';
     var hide_log = 'Hide Log';

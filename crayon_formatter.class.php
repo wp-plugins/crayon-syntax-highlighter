@@ -188,7 +188,8 @@ class CrayonFormatter {
 				$readonly = $touch ? '' : 'readonly';
 				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . $hl->code() . '</textarea>';
 				$print_plain_button = '<a href="#" class="crayon-plain-button crayon-button" title="Toggle Plain Code" onclick="toggle_plain(\'' . $uid . '\'); return false;"></a>';
-				$print_copy_button = !$touch ? '<a href="#" class="crayon-copy-button crayon-button" title="Copy Plain Code" onclick="copy_plain(\'' . $uid . '\'); return false;"></a>' : '';
+				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
+					'<a href="#" class="crayon-copy-button crayon-button" title="Copy Plain Code" onclick="copy_plain(\'' . $uid . '\'); return false;"></a>' : '';
 			} else {
 				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = '';
 			}
@@ -203,7 +204,7 @@ class CrayonFormatter {
 			$toolbar = '
 			<div class="crayon-toolbar" settings="'.$toolbar_settings.'">'.$print_title.'
 			<div class="crayon-tools">'.$print_nums_button.$print_copy_button.$print_plain_button.$print_lang.'</div>
-			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info"><div>A noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA noteA note</div></div>';
+			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info"></div>';
 
 
 		} else {

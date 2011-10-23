@@ -41,6 +41,7 @@ class CrayonSettings {
 	const TOOLBAR_OVERLAY = 'toolbar-overlay';
 	const TOOLBAR_HIDE = 'toolbar-hide';
 	const TOOLBAR_DELAY = 'toolbar-delay';
+	const COPY = 'copy';
 	const SHOW_LANG = 'show-lang';
 	const SHOW_TITLE = 'show-title';
 	const STRIPED = 'striped';
@@ -116,7 +117,8 @@ class CrayonSettings {
 			new CrayonSetting(self::TOOLBAR, array('On MouseOver', 'Always', 'Never')), 
 			new CrayonSetting(self::TOOLBAR_OVERLAY, TRUE),
 			new CrayonSetting(self::TOOLBAR_HIDE, TRUE), 
-			new CrayonSetting(self::TOOLBAR_DELAY, TRUE), 
+			new CrayonSetting(self::TOOLBAR_DELAY, TRUE),
+			new CrayonSetting(self::COPY, TRUE), 
 			new CrayonSetting(self::SHOW_LANG, array('When Found', 'Always', 'Never')), 
 			new CrayonSetting(self::SHOW_TITLE, TRUE),
 			new CrayonSetting(self::STRIPED, TRUE), 

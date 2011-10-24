@@ -367,7 +367,7 @@ class CrayonUtil {
 	// Escape backreferences from string for use with regex
 	public static function preg_escape_back($string) {
 		// Replace $ with \$ and \ with \\
-		$string = preg_replace('#(?<!\\\\)(\\$|\\\\)#', '\\\\$1', $string);
+		$string = preg_replace('#(\\$|\\\\)#', '\\\\$1', $string);
 		return $string;
 	}
 	

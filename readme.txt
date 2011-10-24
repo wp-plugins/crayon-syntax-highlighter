@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -43,6 +43,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 1. Different themes and Live Preview under Settings > Crayon.
 
 == Changelog ==
+
+= 1.3.1 =
+* This fixes an issue that was not completely fixed in 1.3.0:
+* Removed the lookbehind condition for escaping $ and \ for backreference bug 
 
 = 1.3.0 =
 * Recommended upgrade for everyone.

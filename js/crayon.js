@@ -134,8 +134,8 @@ function init() {
     		top:75,
     		left:50,
     		scrollbars:1,
-    		windowURL:'http://www.google.com/',
-    		data:'THIS IS COOL', // Data overrides URL
+    		windowURL:'',
+    		data:'', // Data overrides URL
     	}, function() {
     		code_popup(uid);
     	}, function() {

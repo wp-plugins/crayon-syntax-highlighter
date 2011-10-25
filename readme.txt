@@ -44,6 +44,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.3.5 =
+* Removed some leftover code from popupWindow
+
 = 1.3.4 =
 * Added the ability to open the Crayon in an external window for Mobile devices, originally thought it wouldn't show popup  
 

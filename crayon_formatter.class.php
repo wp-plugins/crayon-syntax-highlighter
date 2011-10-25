@@ -190,7 +190,7 @@ class CrayonFormatter {
 				$print_plain_button = '<a href="#" class="crayon-plain-button crayon-button" title="Toggle Plain Code" onclick="toggle_plain(\'' . $uid . '\'); return false;"></a>';
 				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
 					'<a href="#" class="crayon-copy-button crayon-button" title="Copy Plain Code" onclick="copy_plain(\'' . $uid . '\'); return false;"></a>' : '';
-				$print_popup_button = !$touch && $hl->setting_val(CrayonSettings::POPUP) ?
+				$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
 					'<a href="#" class="crayon-popup-button crayon-button" title="Open Code in Window" onclick="return false;"></a>' : '';
 			} else {
 				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = $print_popup_button = '';

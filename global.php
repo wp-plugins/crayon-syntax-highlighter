@@ -51,6 +51,7 @@ define('CRAYON_README_FILE', CRAYON_ROOT_PATH . 'readme.txt');
 define('CRAYON_LANG_EXT', CRAYON_LANG_PATH . 'extensions.txt');
 define('CRAYON_HELP_FILE', CRAYON_UTIL_PATH . 'help.htm');
 define('CRAYON_JQUERY', CRAYON_JS_DIR . 'jquery-1.5.min.js');
+define('CRAYON_JQUERY_POPUP', CRAYON_JS_DIR . 'jquery.popup.js');
 define('CRAYON_JS', CRAYON_JS_DIR . 'crayon.js');
 define('CRAYON_JS_ADMIN', CRAYON_JS_DIR . 'crayon_admin.js');
 define('CRAYON_STYLE', CRAYON_CSS_DIR . 'style.css');

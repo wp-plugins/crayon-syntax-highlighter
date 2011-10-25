@@ -43,6 +43,11 @@ coloring etc.
     overflow: auto;
 }
 
+.crayon-popup .crayon-main {
+	width: 100% !important;
+	height: auto !important;
+}
+
 .crayon-syntax,
 .crayon-syntax .crayon-main,
 .crayon-syntax .crayon-plain,
@@ -152,6 +157,20 @@ coloring etc.
 }
 .crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:active {
 	background-image: url('images/toolbar/copy_dark.png');
+}
+
+/* Popup Button */
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:link {
+	background-image: url('images/toolbar/popup_dark.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:hover,
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed {
+	background-image: url('images/toolbar/popup_light.png');
+}
+.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:active {
+	background-image: url('images/toolbar/popup_dark.png');
 }
 
 /* Nums Button */

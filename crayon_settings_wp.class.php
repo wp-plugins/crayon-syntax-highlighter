@@ -464,6 +464,7 @@ class CrayonSettingsWP {
 		echo '<span id="crayon-copy-check">';
 		self::checkbox(array(CrayonSettings::COPY, 'Enable code copy/paste'));
 		echo '</span>';
+		self::checkbox(array(CrayonSettings::POPUP, 'Enable opening code in a window'));
 		echo 'Display scrollbars (when needed): ';
 		self::dropdown(CrayonSettings::SCROLL);
 		echo 'Tab size in spaces: ';

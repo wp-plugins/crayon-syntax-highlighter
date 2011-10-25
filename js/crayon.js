@@ -6,12 +6,6 @@ var ON = true;
 var OFF = false;
 var DEBUG = true;
 
-function crayon_log(string) {
-    if (typeof console != 'undefined' && DEBUG) {
-        console.log(string);
-    }
-}
-
 // jQuery
 
 jQuery.noConflict();
@@ -30,6 +24,7 @@ var CRAYON_CODE = '.crayon-code';
 var CRAYON_NUMS = '.crayon-nums';
 var CRAYON_NUMS_CONTENT = '.crayon-nums-content';
 var CRAYON_NUMS_BUTTON = '.crayon-nums-button';
+var CRAYON_POPUP_BUTTON = '.crayon-popup-button';
 
 jQuery(document).ready(function() {
     init();
@@ -53,6 +48,7 @@ function init() {
         var nums = jQuery(this).find(CRAYON_NUMS);
         var nums_content = jQuery(this).find(CRAYON_NUMS_CONTENT);
         var nums_button = jQuery(this).find(CRAYON_NUMS_BUTTON);
+        var popup_button = jQuery(this).find(CRAYON_POPUP_BUTTON);
         // Register the objects
         make_uid(uid);
         crayon[uid] = jQuery(this);
@@ -66,6 +62,7 @@ function init() {
         crayon[uid].nums = nums;
         crayon[uid].nums_content = nums_content;
         crayon[uid].nums_button = nums_button;
+        crayon[uid].popup_button = popup_button;
         crayon[uid].nums_visible = true;
         crayon[uid].plain_visible = false;
         
@@ -129,6 +126,20 @@ function init() {
         	plain.click(function() { crayon_info(uid, '', false); });
         	info.click(function() { crayon_info(uid, '', false); });
         }
+        
+        // Used for code popup
+        crayon[uid].popup_settings = popupWindow(popup_button, { 
+    		height:screen.height - 200, 
+    		width:screen.width - 100,
+    		top:75,
+    		left:50,
+    		windowURL:'http://www.google.com/',
+    		data:'THIS IS COOL', // Data overrides URL
+    	}, function() {
+    		code_popup(uid);
+    	}, function() {
+    		//alert('after');
+    	});
 
         plain.css('opacity', 0);
         crayon.toolbar_neg_height = '-' + toolbar.height() + 'px';
@@ -199,6 +210,31 @@ function make_uid(uid) {
         return true;
     }
     return false;
+}
+
+function code_popup(uid) {
+	if (typeof crayon[uid] == 'undefined') {
+	    return make_uid(uid);
+	}
+	var settings = crayon[uid].popup_settings;
+	settings.data = get_all_css() + '<div class="' + crayon[uid].attr('class') + ' crayon-popup">' + get_jquery_str(crayon[uid].main) + '</div>';
+	if (typeof settings == 'undefined') {
+		return;
+	}
+}
+
+function get_jquery_str(object) {
+	return jQuery('<div>').append(object.clone()).remove().html();
+}
+
+// Get all CSS on the page as a string
+function get_all_css() {
+	var css_str = ''
+	css = jQuery('link[rel="stylesheet"]').each(function() {
+		var string = get_jquery_str(jQuery(this));
+		css_str += string;
+	});
+	return css_str;
 }
 
 function copy_plain(uid, hover) {

@@ -43,6 +43,10 @@ coloring etc.
     overflow: auto;
 }
 
+.crayon-popup {
+	position: static !important;
+}
+
 .crayon-popup .crayon-main {
 	width: 100% !important;
 	height: auto !important;

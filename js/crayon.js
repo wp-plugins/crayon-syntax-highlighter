@@ -133,6 +133,7 @@ function init() {
     		width:screen.width - 100,
     		top:75,
     		left:50,
+    		scrollbars:1,
     		windowURL:'http://www.google.com/',
     		data:'THIS IS COOL', // Data overrides URL
     	}, function() {
@@ -217,7 +218,7 @@ function code_popup(uid) {
 	    return make_uid(uid);
 	}
 	var settings = crayon[uid].popup_settings;
-	settings.data = get_all_css() + '<div class="' + crayon[uid].attr('class') + ' crayon-popup">' + get_jquery_str(crayon[uid].main) + '</div>';
+	settings.data = get_all_css() + '<body style="padding:0; margin:0;"><div class="' + crayon[uid].attr('class') + ' crayon-popup">' + get_jquery_str(crayon[uid].main) + '</div></body>';
 	if (typeof settings == 'undefined') {
 		return;
 	}

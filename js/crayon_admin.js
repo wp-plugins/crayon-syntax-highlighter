@@ -24,7 +24,7 @@ function crayon_escape(string) {
 }
 
 jQuery(document).ready(function() {
-	crayon_log('admin loaded');
+	//crayon_log('admin loaded');
 	admin_init();
 });
 

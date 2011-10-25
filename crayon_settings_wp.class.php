@@ -50,6 +50,7 @@ class CrayonSettingsWP {
 	public static function admin_scripts() {
 		global $CRAYON_VERSION;
 		wp_enqueue_script('crayon_jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array(crayon_jquery), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
 	}

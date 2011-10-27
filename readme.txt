@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 

@@ -6,14 +6,51 @@ Requires at least: 3.0
 Tested up to: 3.3
 Stable tag: 1.4.0
 
-Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
+Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
 == Description ==
 
 A Syntax Highlighter built in PHP and jQuery that supports customizable languages and themes.
 It can highlight from a URL, a local file or Wordpress post text. Crayon makes it easy to manage Language files and define
 custom language elements with regular expressions.
-It also supports some neat features like mobile/touchscreen device detection, mouse interactions, toggled plain code, toggled line numbers, tab sizes, error logging and file extension detection just to name a few.
+It also supports some neat features like:
+
+* Mobile/touchscreen device detection
+* Mouse event interaction (showing plain code on double click, toolbar on mouseover)
+* Toggled plain code
+* Toggled line numbers
+* Copy/paste code
+* Open code in a new window
+* Tab sizes
+* Code title
+* Toggled toolbar
+* Striped lines
+* Line marking (for important lines)
+* Starting line number (default is 1)
+* Local directory to search for local files
+* File extension detection
+* Live Preview in settings
+* Dimensions, margins, alignment and CSS floating
+* Extensive error logging
+
+== Supported Languages ==
+
+Languages are defined in language files using Regular Expressions to capture elements.
+See http://ak.net84.net/projects/crayon-language-file-specification/
+
+* Default Langauge (one size fits all, highlights generic code)
+* C
+* C#
+* C++
+* CSS
+* HTML (XML/XHTML)
+* Java
+* JavaScript
+* Objective-C
+* PHP
+* Python
+* Shell (Unix)
+* Visual Basic
 
 Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
 

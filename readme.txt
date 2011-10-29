@@ -33,7 +33,7 @@ It also supports some neat features like:
 * Dimensions, margins, alignment and CSS floating
 * Extensive error logging
 
-== Supported Languages ==
+**Supported Languages**
 
 Languages are defined in language files using Regular Expressions to capture elements.
 See http://ak.net84.net/projects/crayon-language-file-specification/

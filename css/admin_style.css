@@ -157,7 +157,7 @@
 	margin: 0px;
 }
 
-#gmail-icon, #twitter-icon {
+#gmail-icon, #twitter-icon, #donate-icon {
 	width: 24px;
 	height: 24px;
 	display: inline-block;
@@ -171,3 +171,17 @@
 #gmail-icon {
 	background: url(images/google.png);
 }
+
+#donate-icon {
+	background: url(images/donate.png);
+	width: 75px;
+}
+
+#crayon-donate,
+#crayon-donate input {
+	margin: 0;
+	display: inline;
+	padding: 0;
+}
+
+

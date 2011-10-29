@@ -340,10 +340,10 @@ class CrayonUtil {
 		return $bool ? 'Yes' : 'No';
 	}
 	
-	// String to boolean, default decides what boolean value to look for 
+	// String to boolean, default decides what boolean value to return when not found
 	public static function str_to_bool($str, $default = TRUE) {
-		$str = trim(strtolower($str));
-		if ($default) {
+		$str = self::tlower($str);
+		if ($default === FALSE) {
 			if ($str == 'true' || $str == 'yes' || $str == '1') {
 				return TRUE;
 			} else {
@@ -357,6 +357,10 @@ class CrayonUtil {
 			}
 		}
 		
+	}
+	
+	public static function tlower($str) {
+		return trim(strtolower($str));
 	}
 
 	// Escapes $ and \ from the replacement to avoid becoming a backreference

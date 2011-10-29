@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.3.5
+Stable tag: 1.4.0
 
 Syntax Highlighter supporting multiple languages, themes, highlighting from a URL, local file or post text.
 
@@ -43,6 +43,17 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 1. Different themes and Live Preview under Settings > Crayon.
 
 == Changelog ==
+
+= 1.4.0 =
+* Added all other global settings for easy overriding: http://ak.net84.net/projects/crayon-settings/
+* Fixed issues with variables and entites in language regex
+* Added Epicgeeks theme made by Joe Newing of epicgeeks.net 
+* Help updated
+* Fixed notice on missing jQuery string in settings
+* Reduced number of setting reads
+* Setting name cleanup
+* Added a donate button, would appreciate any support offered and I hope you find Crayon useful
+* String to boolean in util fixed
 
 = 1.3.5 =
 * Removed some leftover code from popupWindow

@@ -29,50 +29,182 @@
     <td width="30%"><code>mark="5-10,12"</code></td>
   </tr>
 </table>
-<p>Crayon is versatile so you can override global settings for individual Crayons with attributes. Here are some examples:</p>
+<p>Crayon is versatile so you can override global settings for individual Crayons with attributes.</p>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="crayon-table crayon-table-light">
-  <tr class="crayon-table-header" >
-    <td width="20">Setting</td>
-    <td width="60%">Description</td>
-    <td width="30%">Example</td>
+  <tr class="crayon-table-header">
+    <td width="151"><strong>Setting</strong></td>
+    <td width="160"><strong>Allowed Value</strong></td>
+    <td width="65"><strong>Description</strong></td>
   </tr>
   <tr>
-    <td width="20">theme</td>
-    <td width="60%">Specify a Theme ID, these are the folders in the '\themes' directory.</td>
-    <td width="30%"><code>theme=&quot;twilight&quot;</code></td>
+    <td> theme</td>
+    <td>string</td>
+    <td>ID of the theme to use</td>
   </tr>
   <tr>
-    <td width="20">height</td>
-    <td width="60%">Set the height just like a css property, using 'height', 'max-height' or 'min-height'. You can also specify pixels or percentage, otherwise it will use global settings.</td>
-    <td width="30%"><code>min-height=&quot;100px&quot;</code><br />
-    <code>width=&quot;50%&quot;</code></td>
+    <td> font</td>
+    <td>string</td>
+    <td>ID of the font to use</td>
   </tr>
   <tr>
-    <td width="20">toolbar-hide</td>
-    <td width="60%">Show/hide the toolbar and controls.</td>
-    <td width="30%"><code>toolbar-hide=&quot;true&quot;</code><br />
-<code>toolbar-hide=&quot;false&quot;</code></td>
+    <td> font-size</td>
+    <td>number &gt; 0</td>
+    <td> Custom font size in pixels</td>
   </tr>
   <tr>
-    <td width="20">nums</td>
-    <td width="60%">Show/hide line numbers.</td>
-    <td width="30%"><code>nums=&quot;false&quot;</code></td>
+    <td> min-height/max-height</td>
+    <td>number &gt; 0 followed by px/%</td>
+    <td>Minimum/maximum height in units</td>
   </tr>
   <tr>
-    <td width="20">font-size</td>
-    <td width="60%">Set the font size in pixels.</td>
-    <td width="30%"><code>font-size=&quot;20&quot;</code></td>
+    <td>height</td>
+    <td>number &gt; 0 followed by px/%</td>
+    <td>Height in units</td>
   </tr>
   <tr>
-    <td width="20">start-line</td>
-    <td width="60%">Set the starting line number.</td>
-    <td width="30%"><code>start-line=&quot;184&quot;</code></td>
+    <td> min-width/max-width</td>
+    <td>number &gt; 0 followed by px/%</td>
+    <td>Minimum/maximum width in units</td>
+  </tr>
+  <tr>
+    <td>width</td>
+    <td>number &gt; 0 followed by px/%</td>
+    <td>Width in units</td>
+  </tr>
+  <tr>
+    <td>toolbar</td>
+    <td>true/false/&quot;always&quot;</td>
+    <td>Show or hide the toolbar. &quot;always&quot; shows always (without   mouseover).</td>
+  </tr>
+  <tr>
+    <td> top-margin</td>
+    <td>number &gt;= 0</td>
+    <td>Top margin in pixels</td>
+  </tr>
+  <tr>
+    <td> bottom-margin</td>
+    <td>number &gt;= 0</td>
+    <td>Bottom margin in pixels</td>
+  </tr>
+  <tr>
+    <td> left-margin</td>
+    <td>number &gt;= 0</td>
+    <td>Left margin in pixels</td>
+  </tr>
+  <tr>
+    <td> right-margin</td>
+    <td>number &gt;= 0</td>
+    <td>Right margin in pixels</td>
+  </tr>
+  <tr>
+    <td> h-align</td>
+    <td>&quot;none/left/right/center&quot;</td>
+    <td>Horizontal alignment</td>
+  </tr>
+  <tr>
+    <td> float-enable</td>
+    <td>true/false</td>
+    <td> Allow floating elements to surround Crayon</td>
+  </tr>
+  <tr>
+    <td>toolbar-overlay</td>
+    <td>true/false</td>
+    <td>Overlay the toolbar on code rather than push it down when possible</td>
+  </tr>
+  <tr>
+    <td>toolbar-hide</td>
+    <td>true/false</td>
+    <td>Toggle the toolbar on single click when it is overlayed</td>
+  </tr>
+  <tr>
+    <td>toolbar-delay</td>
+    <td>true/false</td>
+    <td>Delay hiding the toolbar on MouseOut</td>
+  </tr>
+  <tr>
+    <td>show-title</td>
+    <td>true/false</td>
+    <td>Display the title when provided</td>
+  </tr>
+  <tr>
+    <td>show-lang</td>
+    <td>&quot;found/always/never&quot;</td>
+    <td>When to display the language.</td>
+  </tr>
+  <tr>
+    <td>striped</td>
+    <td>true/false</td>
+    <td>Display striped code lines</td>
+  </tr>
+  <tr>
+    <td>marking</td>
+    <td>true/false</td>
+    <td>Enable line marking for important lines</td>
+  </tr>
+  <tr>
+    <td>nums</td>
+    <td>true/false</td>
+    <td>Display line numbers by default</td>
+  </tr>
+  <tr>
+    <td>nums-toggle</td>
+    <td>true/false</td>
+    <td>Enable line number toggling</td>
+  </tr>
+  <tr>
+    <td>start-line</td>
+    <td>number &gt;= 0</td>
+    <td>When to start line numbers from</td>
+  </tr>
+  <tr>
+    <td>fallback-lang</td>
+    <td>string</td>
+    <td>ID of the language to use when none is detected</td>
+  </tr>
+  <tr>
+    <td>local-path</td>
+    <td>string</td>
+    <td>Local path to load file from</td>
+  </tr>
+  <tr>
+    <td> touchscreen</td>
+    <td>true/false</td>
+    <td> Disable mouse gestures for touchscreen devices (eg. MouseOver)</td>
+  </tr>
+  <tr>
+    <td> disable-anim</td>
+    <td>true/false</td>
+    <td>Disable animations</td>
+  </tr>
+  <tr>
+    <td> runtime</td>
+    <td>true/false</td>
+    <td> Disable runtime stats</td>
+  </tr>
+  <tr>
+    <td> error-log</td>
+    <td>true/false</td>
+    <td> Log errors for individual Crayons</td>
+  </tr>
+  <tr>
+    <td> error-log-sys</td>
+    <td>true/false</td>
+    <td> Log system-wide errors</td>
+  </tr>
+  <tr>
+    <td> error-msg-show</td>
+    <td>true/false</td>
+    <td> Display custom message for errors</td>
+  </tr>
+  <tr>
+    <td> error-msg</td>
+    <td>string</td>
+    <td> The error message to show for errors</td>
   </tr>
 </table>
-<p>Here's a simple example of attributes:</p>
-<p><code>
-[crayon lang="html" font-size="20" mark="1" width="200px"] &lt;strong&gt;This is great!&lt;/strong&gt; [/crayon] </code></p>
-<p>These are just a few examples. See the <a href="http://ak.net84.net/?go=crayondocs" target="_blank">online documentation</a> for the complete list and their uses. If you want to prevent the <code>[crayon]</code> shortcode from turning into a Crayon, use: <code>$[crayon]...[/crayon]$</code></p>
+<p>Here's a simple example of attributes:</p><p><code>
+[crayon lang="html" font-size="20" mark="1" width="200px" toolbar=&quot;false&quot;] &lt;strong&gt;This is great!&lt;/strong&gt; [/crayon] </code></p>
+<p>If you want to prevent the <code>[crayon]</code> shortcode from turning into a Crayon, use: <code>$[crayon]...[/crayon]$</code></p>
 <p><strong>Themes</strong></p>
 <p>Crayon comes with  built-in Themes to style your code.  You can learn how to create your own and download more from <a href="http://ak.net84.net/?go=crayonthemes" target="_blank">here</a>. Themes are structured <code>/themes/theme-name/theme-name.css</code>. If you know CSS, take a look at <code>/themes/default/default.css</code> to get an idea of how they work and how you can change/create them.</p>
 <p><strong>Languages</strong></p>

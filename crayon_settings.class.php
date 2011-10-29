@@ -42,7 +42,7 @@ class CrayonSettings {
 	const TOOLBAR_HIDE = 'toolbar-hide';
 	const TOOLBAR_DELAY = 'toolbar-delay';
 	const COPY = 'copy';
-	const POPUP = 'POPUP';
+	const POPUP = 'popup';
 	const SHOW_LANG = 'show-lang';
 	const SHOW_TITLE = 'show-title';
 	const STRIPED = 'striped';
@@ -305,6 +305,11 @@ class CrayonSettings {
 			return '';
 		}
 		// Validations
+		if ($name == CrayonSettings::HEIGHT || $name == CrayonSettings::WIDTH) {
+			if ($value < 0) {
+				$value = 0;
+			}
+		}
 		switch ($name) {
 			case CrayonSettings::LOCAL_PATH:
 				$path = parse_url($value, PHP_URL_PATH);
@@ -319,6 +324,11 @@ class CrayonSettings {
 				return $path;
 			case CrayonSettings::TAB_SIZE:
 				$value = abs($value);
+				break;
+			case CrayonSettings::FONT_SIZE:
+				if ($value < 1) {
+					$value = 1;
+				}
 				break;
 			case CrayonSettings::THEME:
 				$value = strtolower($value);
@@ -339,6 +349,10 @@ class CrayonSettings {
 		
 		// If a setting is given, it is automatically enabled
 		foreach ($settings as $name=>$value) {
+			if ( ($setting = CrayonGlobalSettings::get($name)) !== FALSE && is_bool($setting->def()) ) {
+				$value = CrayonUtil::str_to_bool($value);
+			}
+			
 			if ($name == 'min-height' || $name == 'max-height' || $name == 'height') {
 				self::smart_hw($name, CrayonSettings::HEIGHT_SET, CrayonSettings::HEIGHT_MODE, CrayonSettings::HEIGHT_UNIT, $settings);
 			} else if ($name == 'min-width' || $name == 'max-width' || $name == 'width') {
@@ -353,10 +367,31 @@ class CrayonSettings {
 				$settings[CrayonSettings::BOTTOM_SET] = TRUE;
 			} else if ($name == CrayonSettings::RIGHT_MARGIN) {
 				$settings[CrayonSettings::RIGHT_SET] = TRUE;
+			} else if ($name == CrayonSettings::ERROR_MSG) {
+				$settings[CrayonSettings::ERROR_MSG_SHOW] = TRUE;
 			} else if ($name == CrayonSettings::H_ALIGN) {
 				$settings[CrayonSettings::FLOAT_ENABLE] = TRUE;
-			} else if ($name == CrayonSettings::H_ALIGN) {
-				$settings[CrayonSettings::FLOAT_ENABLE] = TRUE;
+				$value = CrayonUtil::tlower($value);
+				$values = array('none'=>0, 'left'=>1, 'center'=>2, 'right'=>3);
+				if (array_key_exists($value, $values)) {
+					$settings[CrayonSettings::H_ALIGN] = $values[$value];
+				}
+			} else if ($name == CrayonSettings::SHOW_LANG) {
+				$value = CrayonUtil::tlower($value);
+				$values = array('found'=>0, 'always'=>1, 'true'=>1, 'never'=>2, 'false'=>2);
+				if (array_key_exists($value, $values)) {
+					$settings[CrayonSettings::SHOW_LANG] = $values[$value];
+				}
+			} else if ($name == CrayonSettings::TOOLBAR) {
+				if ( CrayonUtil::tlower($value) == 'always' ) {
+					$settings[CrayonSettings::TOOLBAR] = 1;
+				}
+				else if (CrayonUtil::str_to_bool($value) === FALSE) {
+					$settings[CrayonSettings::TOOLBAR] = 2;
+				} else if (CrayonUtil::str_to_bool($value, FALSE)) {
+					$settings[CrayonSettings::TOOLBAR] = 0;
+				}
+				//var_dump($settings[CrayonSettings::TOOLBAR]);
 			}
 		}
 		
@@ -535,6 +570,7 @@ class CrayonSetting {
 	 * @param $value
 	 */
 	function value($value = NULL) {
+		//var_dump($value);
 		if ($value === NULL) {
 			if ($this->is_array) {
 				return $this->default[$this->value]; // value at index
@@ -601,6 +637,11 @@ class CrayonSetting {
 		} else if ($index === NULL) {
 			return $this->value; // return current index
 		} else {
+			//var_dump($index);
+			/*if ( is_string($index) ) {// && ($str_index = $this->find_index($index)) !== FALSE) {
+				var_dump($this->find_index($index));
+				//var_dump($str_index);
+			}*/
 			if (!is_int($index)) {
 				// Ensure $value is int for index
 				$index = intval($index);
@@ -611,6 +652,21 @@ class CrayonSetting {
 			}
 			$this->value = $index;
 		}
+	}
+	
+	/**
+	 * Finds the index of a string in an array setting
+	 */
+	function find_index($str) {
+		if (!$this->is_array || is_string($str)) {
+			return FALSE;
+		}
+		for ($i = 0; $i < count($this->default); $i++) {
+			if ($this->default[$i] == $str) {
+				return $i;
+			}
+		}
+		return FALSE;
 	}
 
 }

@@ -57,6 +57,7 @@ define('CRAYON_JS_ADMIN', CRAYON_JS_DIR . 'crayon_admin.js');
 define('CRAYON_STYLE', CRAYON_CSS_DIR . 'style.css');
 define('CRAYON_STYLE_ADMIN', CRAYON_CSS_DIR . 'admin_style.css');
 define('CRAYON_LOGO', CRAYON_CSS_DIR . 'images/crayon_logo.png');
+define('CRAYON_DONATE_BUTTON', CRAYON_CSS_DIR . 'images/donate.png');
 
 // PHP Files
 define('CRAYON_FORMATTER_PHP', CRAYON_ROOT_PATH . 'crayon_formatter.class.php');

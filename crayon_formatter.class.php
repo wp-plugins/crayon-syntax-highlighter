@@ -74,12 +74,14 @@ class CrayonFormatter {
 		
 		// The line number to start from
 		$start_line = $hl->setting_val(CrayonSettings::START_LINE);
+		$marking = $hl->setting_val(CrayonSettings::MARKING);
+		$striped = $hl->setting_val(CrayonSettings::STRIPED);
 		for ($i = 1; $i <= $hl->line_count(); $i++) {
 			$code_line = $code_lines[0][$i - 1];
 			// Check if the current line has been selected
 			$marked_lines = $hl->marked();
 			// Check if lines need to be marked as important
-			if ($hl->setting_val(CrayonSettings::MARKING) && in_array($i, $marked_lines)) {
+			if ($marking && in_array($i, $marked_lines)) {
 				$marked_num = ' crayon-marked-num';
 				$marked_line = ' crayon-marked-line';
 				// If multiple lines are marked, only show borders for top and bottom lines
@@ -96,7 +98,7 @@ class CrayonFormatter {
 				$marked_num = $marked_line = '';
 			}
 			// Stripe odd lines
-			if ($hl->setting_val(CrayonSettings::STRIPED) && $i % 2 == 0) {
+			if ($striped && $i % 2 == 0) {
 				$striped_num = ' crayon-striped-num';
 				$striped_line = ' crayon-striped-line';
 			} else {
@@ -203,14 +205,14 @@ class CrayonFormatter {
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
 
+			$buttons = $print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
 			$toolbar = '
 			<div class="crayon-toolbar" settings="'.$toolbar_settings.'">'.$print_title.'
-			<div class="crayon-tools">'.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang.'</div>
+			<div class="crayon-tools">'.$buttons.'</div>
 			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info"></div>';
 
-
 		} else {
-			$toolbar = $plain_settings = '';
+			$toolbar = $buttons = $plain_settings = '';
 		}
 		
 		// Print strings

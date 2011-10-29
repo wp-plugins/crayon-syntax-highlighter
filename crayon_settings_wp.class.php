@@ -50,7 +50,7 @@ class CrayonSettingsWP {
 	public static function admin_scripts() {
 		global $CRAYON_VERSION;
 		wp_enqueue_script('crayon_jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array(crayon_jquery), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
 	}
@@ -523,23 +523,36 @@ class CrayonSettingsWP {
 	public static function info() {
 		global $CRAYON_VERSION, $CRAYON_DATE, $CRAYON_AUTHOR, $CRAYON_TWITTER, $CRAYON_EMAIL;
 		echo '<a name="info"></a>';
-		$version = '<b>Version:</b> ' . $CRAYON_VERSION . '<span class="crayon-span" style="width: 40px"></span>';
-		$date = '<b>Build Date:</b> ' . $CRAYON_DATE;
+		$version = '<b>Version:</b> ' . $CRAYON_VERSION;
+		$date = $CRAYON_DATE;
 		$developer = '<b>Developer:</b> ' . $CRAYON_AUTHOR;
+		$paypal = '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal Ñ The safer, easier way to pay online.">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
+</form>
+		';
+		$paypal = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AW99EMEPQ4CFE&lc=AU&item_name=Crayon%20Syntax%20Highlighter%20Donation&item_number=crayon%2ddonate&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted" target="_blank"><img src="'.plugins_url(CRAYON_DONATE_BUTTON, __FILE__).'"></a>
+		';
 		$links = '<a id="twitter-icon" href="' . $CRAYON_TWITTER . '" target="_blank"></a>
-        			<a id="gmail-icon" href="mailto:' . $CRAYON_EMAIL . '" target="_blank"></a>';
+					<a id="gmail-icon" href="mailto:' . $CRAYON_EMAIL . '" target="_blank"></a><div id="crayon-donate">' . $paypal . '</div>';
+					//<a id="donate-icon" href="" target="_blank"></a>
 		echo '
 		<table id="crayon-info" border="0">
 		  <tr>
-		    <td>'.$version.'</td>
-		    <td>'.$date.'</td>
+		    <td>'.$version.' - '.$date.'</td>
 		  </tr>
 		  <tr>
 		    <td>'.$developer.'</td>
 		    <td></td>
 		  </tr>
 		  <tr>
-		    <td colspan="2" style="text-align: centera;">'.$links.'</td>
+		  	<td colspan="2">The result of innumerable hours of hard work over many months. It\'s an ongoing project, keep me motivated!</td>
+		  </tr>
+		  <tr>
+		    <td colspan="2">'.$links.'</td>
 		  </tr>
 		</table>';
 	}

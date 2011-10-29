@@ -84,6 +84,7 @@ make
 mesg
 more
 nice
+exit
 qdel
 qmsg
 qrls

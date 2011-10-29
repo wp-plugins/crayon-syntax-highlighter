@@ -391,7 +391,6 @@ class CrayonSettings {
 				} else if (CrayonUtil::str_to_bool($value, FALSE)) {
 					$settings[CrayonSettings::TOOLBAR] = 0;
 				}
-				//var_dump($settings[CrayonSettings::TOOLBAR]);
 			}
 		}
 		
@@ -570,7 +569,6 @@ class CrayonSetting {
 	 * @param $value
 	 */
 	function value($value = NULL) {
-		//var_dump($value);
 		if ($value === NULL) {
 			if ($this->is_array) {
 				return $this->default[$this->value]; // value at index
@@ -637,11 +635,6 @@ class CrayonSetting {
 		} else if ($index === NULL) {
 			return $this->value; // return current index
 		} else {
-			//var_dump($index);
-			/*if ( is_string($index) ) {// && ($str_index = $this->find_index($index)) !== FALSE) {
-				var_dump($this->find_index($index));
-				//var_dump($str_index);
-			}*/
 			if (!is_int($index)) {
 				// Ensure $value is int for index
 				$index = intval($index);

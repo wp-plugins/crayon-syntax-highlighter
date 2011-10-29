@@ -269,7 +269,6 @@ class CrayonHighlighter {
 
 	// Set and retreive settings
 	function settings($mixed = NULL) {
-		//var_dump($mixed);
 		if ($this->settings == NULL) {
 			$this->settings = CrayonGlobalSettings::get_obj();
 		}
@@ -280,7 +279,6 @@ class CrayonHighlighter {
 			return $this->settings->get($mixed);
 		} else if (is_array($mixed)) {
 			$this->settings->set($mixed);
-			//var_dump($mixed);
 			return TRUE;
 		}
 		return FALSE;

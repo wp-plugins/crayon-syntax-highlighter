@@ -114,9 +114,13 @@ function crayon_s($url = '') {
 	}
 }
 
-// Returns path using forward slashes
-function crayon_pf($url) {
-	return str_replace('\\', '/', crayon_s(trim(strval($url))));
+// Returns path using forward slashes, slash added at the end
+function crayon_pf($url, $slash = TRUE) {
+	$url = trim(strval($url));
+	if ($slash) {
+		$url = crayon_s($url);
+	}
+	return str_replace('\\', '/', $url);
 }
 	
 // Returns path using back slashes

@@ -23,6 +23,8 @@ __assume
 delegate
 __except
 initonly
+ifstream
+ofstream
 noreturn
 novtable
 safecast

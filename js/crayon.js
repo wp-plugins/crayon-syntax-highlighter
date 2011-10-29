@@ -245,7 +245,7 @@ function copy_plain(uid, hover) {
 	
 	var plain = crayon[uid].plain;
 	
-	toggle_plain(uid, true, true);
+	toggle_plain(uid, undefined, true);
 	toolbar_toggle(uid, true);
 	
 	key = crayon[uid].mac ? '\u2318' : 'CTRL';
@@ -518,7 +518,7 @@ function update_nums_button(uid) {
 	}
 }
 
-function update_plain_button(uid) {	
+function update_plain_button(uid) {
 	if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].plain_visible == 'undefined') {
 		return;
 	}

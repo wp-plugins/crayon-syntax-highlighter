@@ -24,7 +24,7 @@ $crayon->settings($settings);
 
 $lang = $crayon->setting_val(CrayonSettings::FALLBACK_LANG);
 
-$path = crayon_pf( dirname(__FILE__) . '/sample/' . $lang . '.txt' );
+$path = crayon_pf( dirname(__FILE__) . '/sample/' . $lang . '.txt', FALSE );
 
 if ($lang && @file_exists($path)) {
 	$crayon->url($path);

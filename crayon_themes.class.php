@@ -21,5 +21,17 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 	public function path($id) {
 		return CRAYON_THEME_PATH . $id . "/$id.css";
 	}
+	
+	// Prints out CSS for all the used themes
+	public function get_used_theme_css() {
+		global $CRAYON_VERSION;
+		$used = $this->get_used();
+		$css = '';
+		foreach ($used as $theme) {
+			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme->id() . '/' . $theme->id() . '.css?ver' . $CRAYON_VERSION;
+			$css .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
+		}
+		return $css;
+	}
 }
 ?>

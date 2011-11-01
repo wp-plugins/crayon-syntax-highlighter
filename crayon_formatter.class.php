@@ -15,8 +15,6 @@ class CrayonFormatter {
 
 	// Methods ================================================================
 	private function __construct() {}
-	
-	private static $test = 0;
 
 	/* Formats the code using the regex and stores the elements for later use. */
 	public static function format_code($code, $language, $highlight = TRUE, $hl = NULL) {
@@ -136,7 +134,7 @@ class CrayonFormatter {
 			}
 		}
 		// Unique ID for this instance of Crayon
-		$uid = 'crayon-' . uniqid();
+		$uid = 'crayon-' . $hl->id();
 		// Disable functionality for errors
 		$error = $hl->error();
 		// Combined settings for code
@@ -239,9 +237,11 @@ class CrayonFormatter {
 		if (!empty($theme_id) && $theme != NULL && !$theme->used()) {
 			// Record usage
 			$theme->used(TRUE);
-			// Add style
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
-			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
+			if ($print) {
+				// Add style
+				$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
+				$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
+			}
 		}
 		
 		// Load font css if not default

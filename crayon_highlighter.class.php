@@ -9,6 +9,7 @@ require_once (CRAYON_LANGS_PHP);
 /* The main class for managing the syntax highlighter */
 class CrayonHighlighter {
 	// Properties and Constants ===============================================
+	private $id = '';
 	private $url = '';
 	private $code = '';
 	private $formatted_code = '';
@@ -30,13 +31,14 @@ class CrayonHighlighter {
 	private $settings = NULL;
 	
 	// Methods ================================================================
-	function __construct($url = NULL, $language = NULL) {
+	function __construct($url = NULL, $language = NULL, $id = NULL) {
 		if ($url !== NULL) {
 			$this->url($url);
 		}
 		if ($language !== NULL) {
 			$this->language($language);
 		}
+		$this->id($id);
 	}
 	
 	/* Tries to load the code locally, then attempts to load it remotely */
@@ -255,6 +257,14 @@ class CrayonHighlighter {
 		}
 	}
 
+	function id($id = NULL) {
+		if ($id == NULL) {
+			return $this->id;
+		} else {
+			$this->id = strval($id);
+		}
+	}
+	
 	function error($string = NULL) {
 		if (!$string) {
 			return $this->error;

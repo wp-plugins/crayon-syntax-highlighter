@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -80,6 +80,14 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 1. Different themes and Live Preview under Settings > Crayon.
 
 == Changelog ==
+
+= 1.4.2 =
+* Huge overhaul of Crayon detection and highlighting
+* IDs are now added to Crayons before detection
+* No more identification issues possible
+* Highlighting grabs the ID and uses it in JS
+* Only detects Crayons in visible posts, performance improved
+* This fixes issues with <!--nextpage-->
 
 = 1.4.1 =
 * Fixed Preview in settings, wasn't loading code from different languages

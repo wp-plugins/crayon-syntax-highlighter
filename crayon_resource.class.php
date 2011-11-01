@@ -234,6 +234,16 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 		}
 	}
 	
+	public function get_used() {
+		$used = array();
+		foreach ($this->get() as $resource) {
+			if ($resource->used()) {
+				$used[] = $resource;
+			}
+		}
+		return $used;
+	}
+	
 	// XXX Override
 	public function resource_instance($id, $name = NULL) {
 		return new CrayonUsedResource($id, $name);

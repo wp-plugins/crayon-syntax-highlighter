@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.4.1
+Version: 1.4.2
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -40,13 +40,15 @@ class CrayonWP {
 	private static $is_excerpt = FALSE;
 	// Whether we have added styles and scripts
 	private static $included = FALSE;
+	// Used to keep Crayon IDs
+	private static $next_id = 0;
 	
 	// Used to detect the shortcode
-	const REGEX_CLOSED = '(?:\[[\t ]*crayon\b([^\]]*)/[\t ]*\])'; // [crayon atts="" /]
-	const REGEX_TAG = '(?:\[[\t ]*crayon\b([^\]]*)\]\r?\n?(.*?)\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\])'; // [crayon atts="" /] ... [/crayon]
+	const REGEX_CLOSED = '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)/[\t ]*\])'; // [crayon atts="" /]
+	const REGEX_TAG =    '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)\]\r?\n?(.*?)\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\])'; // [crayon atts="" /] ... [/crayon]
 	
 	const REGEX_CLOSED_NO_CAPTURE = '(?:\[[\t ]*crayon\b[^\]]*/[\t ]*\])';
-	const REGEX_TAG_NO_CAPTURE = '(?:\[[\t ]*crayon\b[^\]]*\]\r?\n?.*?\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\])';
+	const REGEX_TAG_NO_CAPTURE =    '(?:\[[\t ]*crayon\b[^\]]*\]\r?\n?.*?\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\])';
 
 	// Methods ================================================================
 
@@ -54,6 +56,10 @@ class CrayonWP {
 	
 	public static function regex() {
 		return '#(?<!\$)(?:'. self::REGEX_CLOSED .'|'. self::REGEX_TAG .')(?!\$)#s';
+	}
+	
+	public static function regex_with_id($id) {
+		return '#(?<!\$)(?:(?:\[[\t ]*crayon-'.$id.'\b[^\]]*/[\t ]*\])|(?:\[[\t ]*crayon-'.$id.'\b[^\]]*\]\r?\n?.*?\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\]))(?!\$)#s';
 	}
 	
 	public static function regex_no_capture() {
@@ -67,9 +73,9 @@ class CrayonWP {
 	/**
 	 * Adds the actual Crayon instance, should only be called by add_shortcode()
 	 */
-	private static function shortcode($atts, $content = NULL) {	
+	private static function shortcode($atts, $content = NULL, $id = NULL) {
 		CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
-
+		
 		// Lowercase attributes
 		$lower_atts = array();
 		foreach ($atts as $att=>$value) {
@@ -97,7 +103,7 @@ class CrayonWP {
 		$lang = $title = $mark = '';
 		extract($filtered_atts);
 		
-		$crayon = self::instance($extra_attr);
+		$crayon = self::instance($extra_attr, $id);
 		
 		// Set URL
 		$url = isset($url) ? $url : '';
@@ -119,7 +125,7 @@ class CrayonWP {
 	}
 
 	/* Returns Crayon instance */
-	public static function instance($extra_attr = array()) {
+	public static function instance($extra_attr = array(), $id = NULL) {
 		// Create Crayon
 		$crayon = new CrayonHighlighter();
 		
@@ -127,6 +133,9 @@ class CrayonWP {
 		 * Stores the other shortcode attributes as settings in the crayon. */
 		if (!empty($extra_attr)) {
 			$crayon->settings($extra_attr);
+		}
+		if (!empty($id)) {
+			$crayon->id($id);
 		}
 		return $crayon;
 	}
@@ -137,25 +146,38 @@ class CrayonWP {
 			return $posts;
 		}
 		
+		global $wp_query;
+		
+		if (empty($wp_query->posts)) {
+			return;
+		}
+		
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
 		
-		// Search for shortcode
-		foreach ($posts as $post) {
+		// Search for shortcode in query
+		foreach ($wp_query->posts as $post) {
+
+			// Add IDs to the Crayons
+			$post->post_content = preg_replace_callback('#(?<!\$)\[[\t ]*crayon#i', 'CrayonWP::add_crayon_id', $post->post_content);
+			
 			// Only include if a post exists with Crayon tag
 			preg_match_all(self::regex(), $post->post_content, $matches);
 			
 			if ( count($matches[0]) != 0 ) {
 				// Crayons found!
-				$full_matches = $matches[1];
-				$closed_atts = $matches[1];
-				$open_atts = $matches[2];
-				$contents = $matches[3];
+				$full_matches = $matches[0];
+				$closed_ids = $matches[1];
+				$closed_atts = $matches[2];
+				$open_ids = $matches[3];
+				$open_atts = $matches[4];
+				$contents = $matches[5];
 				
 				// Make sure we enqueue the styles/scripts
 				$enqueue = TRUE;
 				
 				for ($i = 0; $i < count($full_matches); $i++) {
+					// Get attributes
 					if ( !empty($closed_atts[$i]) ) {
 						$atts = $closed_atts[$i];
 					} else if ( !empty($open_atts[$i]) ) {
@@ -167,7 +189,6 @@ class CrayonWP {
 					// Capture attributes
 					preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')([^"]+?)\2#', $atts, $att_matches);
 					$atts_array = array();
-					
 					if ( count($att_matches[0]) != 0 ) {
 						for ($j = 0; $j < count($att_matches[1]); $j++) {
 							$atts_array[trim($att_matches[1][$j])] = trim($att_matches[3][$j]);
@@ -175,7 +196,8 @@ class CrayonWP {
 					}
 					
 					// Add array of atts and content to post queue with key as post ID
-					self::$post_queue[strval($post->ID)][] = array('id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$contents[$i], 'index'=>$i);
+					$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
+					self::$post_queue[strval($post->ID)][$id] = array('post_id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$contents[$i]);
 				}
 			}
 			
@@ -186,6 +208,14 @@ class CrayonWP {
 		}
 		
 		return $posts;
+	}
+	
+	private static function add_crayon_id($content) {
+		return $content[0].'-'.uniqid();
+	}
+	
+	private static function get_crayon_id() {
+		return self::$next_id++;
 	}
 	
 	private static function enqueue_resources() {
@@ -214,14 +244,14 @@ class CrayonWP {
 			$the_content_original = $the_content;
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
-			foreach ($post_in_queue as $p) {
-				$atts = $p['atts'];
-				$content = $p['code']; // The formatted crayon we replace post content with
+			foreach ($post_in_queue as $id=>$v) {
+				$atts = $v['atts'];
+				$content = $v['code']; // The formatted crayon we replace post content with
 				// Remove '$' from $[crayon]...[/crayon]$ contained within [crayon] tag content
 				$content = self::crayon_remove_ignore($content);
 				// Apply shortcode to the content
-				$crayon = self::shortcode($atts, $content);
-				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_no_capture(), $crayon, $the_content, 1, $count);
+				$crayon = self::shortcode($atts, $content, $id);
+				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon, $the_content, 1, $count);
 			}
 		}
 		// Remove '$' from $[crayon]...[/crayon]$ in post body
@@ -253,6 +283,10 @@ class CrayonWP {
 	public static function uninstall() {
 		
 	}
+	
+	public static function crayon_theme_css() {
+		echo CrayonResources::themes()->get_used_theme_css();
+	}
 }
 
 // Only if WP is loaded
@@ -264,5 +298,6 @@ if (defined('ABSPATH')) {
 	add_filter('the_posts', 'CrayonWP::the_posts');
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
+	add_action('loop_end', 'CrayonWP::crayon_theme_css');
 }
 ?>

@@ -91,7 +91,7 @@ class CrayonSettingsWP {
 	}
 
 	// Load the global settings and update them from the db
-	public static function load_settings() {
+	public static function load_settings($just_load_settings = FALSE) {
 		if (self::$options !== NULL) {
 			return;
 		}
@@ -104,7 +104,11 @@ class CrayonSettingsWP {
 		
 		// Initialise default global settings and update them from db
 		CrayonGlobalSettings::set(self::$options);
-				
+		
+		if ($just_load_settings) {
+			return;
+		}
+		
 		// Load all available languages and themes
 		CrayonResources::langs()->load();
 		CrayonResources::themes()->load();
@@ -188,6 +192,11 @@ class CrayonSettingsWP {
 	// Validates all the settings passed from the form in $inputs
 
 	public static function settings_validate($inputs) {
+		//return array();
+		
+		// Load current settings from db
+		self::load_settings(TRUE);
+		
 		global $CRAYON_EMAIL;
 		// When reset button is pressed, remove settings so default loads next time
 		if (array_key_exists('reset', $inputs)) {
@@ -217,6 +226,12 @@ class CrayonSettingsWP {
 		$global_settings = CrayonSettings::get_defaults();
 
 		foreach ($global_settings as $setting) {
+			// XXX Ignore the HIDE_HELP
+			if ($setting->name() == CrayonSettings::HIDE_HELP) {
+				$inputs[CrayonSettings::HIDE_HELP] = CrayonGlobalSettings::val(CrayonSettings::HIDE_HELP);
+				continue;
+			}
+			
 			// If boolean setting is not in input, then it is set to FALSE in the form
 			if (!array_key_exists($setting->name(), $inputs)) {
 				// For booleans, set to FALSE (unchecked boxes are not sent as POST)
@@ -233,6 +248,7 @@ class CrayonSettingsWP {
 				}
 			}
 		}
+		
 		return $inputs;
 	}
 
@@ -530,7 +546,7 @@ class CrayonSettingsWP {
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHXwYJKoZIhvcNAQcEoIIHUDCCB0wCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYBzx2k2FfhgWOnPLgktcZq9vUt1J6sK3heoLAeCqacjL65PW0wv2LwPxPjZCcEe9J8OgNvO1HINX1rrFW6M56tA/qP8d6y57tIeJlp8hU2G7q6zyMiEGS28tc+L+BHKupOvNBfGIosprr/98/dAXALza9Fp3aqsWsnBPBGso/vi+zELMAkGBSsOAwIaBQAwgdwGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQILCwCkW/HPnKAgbiDiTfvLk2wi2cETsFcSPccmQ9Nb/2hmrER3fGshoIaSjW6W+luUbKy03WGHmeRPJM/3XsX1vqYTvY/Ox/8ICHXBvwOU+w2B5PYRetmelbd0jhZD3mlAxOWVwSyp3gN024Z0BMkW6mzfMvwRWaQij19OoM/zZvo66wMwyaoAqBmAlfDFMozIHC5vqY+WEHQJBMyWXfUDy2Woiu41FBzPSPaKRDJWL5yQ1aUD/LNx5GeSFUAuErQDHvHoIIDhzCCA4MwggLsoAMCAQICAQAwDQYJKoZIhvcNAQEFBQAwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMB4XDTA0MDIxMzEwMTMxNVoXDTM1MDIxMzEwMTMxNVowgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBR07d/ETMS1ycjtkpkvjXZe9k+6CieLuLsPumsJ7QC1odNz3sJiCbs2wC0nLE0uLGaEtXynIgRqIddYCHx88pb5HTXv4SZeuv0Rqq4+axW9PLAAATU8w04qqjaSXgbGLP3NmohqM6bV9kZZwZLR/klDaQGo1u9uDb9lr4Yn+rBQIDAQABo4HuMIHrMB0GA1UdDgQWBBSWn3y7xm8XvVk/UtcKG+wQ1mSUazCBuwYDVR0jBIGzMIGwgBSWn3y7xm8XvVk/UtcKG+wQ1mSUa6GBlKSBkTCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb22CAQAwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQCBXzpWmoBa5e9fo6ujionW1hUhPkOBakTr3YCDjbYfvJEiv/2P+IobhOGJr85+XHhN0v4gUkEDI8r2/rNk1m0GA8HKddvTjyGw/XqXa+LSTlDYkqI8OwR8GEYj4efEtcRpRYBxV8KxAW93YDWzFGvruKnnLbDAF6VR5w/cCMn5hzGCAZowggGWAgEBMIGUMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbQIBADAJBgUrDgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTExMDI5MDYwMzMxWjAjBgkqhkiG9w0BCQQxFgQUDxRJGCn0/vBsWOG93mMXOqNDjigwDQYJKoZIhvcNAQEBBQAEgYCtuTjETQyWJK+nteR6FvEyb9rJSyOV5QHsg0S1my/0ZSDKwlebBDVksrPOtL4TiUCfvW5dzDANWuArIrNYe894NHA7Uj0nJDH2Rlw3e8Tyzb+beKu4Dgyv6GXR2UyJJV2doJzGp5WVQdOMxEfAKg6QUs4DzTr+DRF7f2BHwS1Dfw==-----END PKCS7-----
 ">
-<input type="image" src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal Ñ The safer, easier way to pay online.">
+<input type="image" src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal ï¿½ The safer, easier way to pay online.">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
 </form>
 		';

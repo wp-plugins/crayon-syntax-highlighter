@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -80,6 +80,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 1. Different themes and Live Preview under Settings > Crayon.
 
 == Changelog ==
+
+= 1.4.3 =
+* Fixed a bug that caused the help info to remain visible after settings submit
 
 = 1.4.2 =
 * Huge overhaul of Crayon detection and highlighting

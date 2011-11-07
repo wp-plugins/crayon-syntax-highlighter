@@ -40,3 +40,21 @@ Crayon Syntax Highlighter Log Entry
 10:56:28 AM - 07 Nov 2011
 string(55) "The specified URL is empty, please provide a valid URL."
 ------------------------------------------------------------------------------
+==============================================================================
+Crayon Syntax Highlighter Log Entry
+==============================================================================
+11:08:51 AM - 07 Nov 2011
+string(134) "Local url (Users/Aram/Development/Web/crayon/wp-content/plugins/crayon-syntax-highlighter/util/sample/default.txt) could not be loaded"
+------------------------------------------------------------------------------
+==============================================================================
+Crayon Syntax Highlighter Log Entry
+==============================================================================
+11:08:59 AM - 07 Nov 2011
+string(134) "Local url (Users/Aram/Development/Web/crayon/wp-content/plugins/crayon-syntax-highlighter/util/sample/default.txt) could not be loaded"
+------------------------------------------------------------------------------
+==============================================================================
+Crayon Syntax Highlighter Log Entry
+==============================================================================
+11:09:13 AM - 07 Nov 2011
+string(134) "Local url (Users/Aram/Development/Web/crayon/wp-content/plugins/crayon-syntax-highlighter/util/sample/default.txt) could not be loaded"
+------------------------------------------------------------------------------

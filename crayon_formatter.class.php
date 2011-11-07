@@ -195,6 +195,7 @@ class CrayonFormatter {
 			} else {
 				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = $print_popup_button = '';
 			}
+			
 			if ($hl->setting_val(CrayonSettings::NUMS_TOGGLE)) {
 				$print_nums_button = '<a href="#" class="crayon-nums-button crayon-button" title="Toggle Line Numbers" onclick="toggle_nums(\'' . $uid . '\'); return false;"></a>';
 			} else {
@@ -250,7 +251,7 @@ class CrayonFormatter {
 		$font = CrayonResources::fonts()->get($font_id);
 		if ($hl->setting_val(CrayonSettings::FONT) != CrayonFonts::DEFAULT_FONT && !empty($font_id) && $font != NULL && !$font->used()) {
 			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_FONT_DIR) . $font_id . '.css?ver' . $CRAYON_VERSION;
-			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
+			$output .= '<link rel="stylesheetcrayon-tools" type="text/css" href="' . $url . '" />' . CRAYON_NL;
 			$font_id_dashed = ' crayon-font-' . CrayonUtil::clean_css_name($font_id);
 		}
 		

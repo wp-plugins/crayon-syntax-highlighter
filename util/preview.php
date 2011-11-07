@@ -15,6 +15,7 @@ $crayon = CrayonWP::instance();
 
 // Load settings from GET and validate
 foreach ($_GET as $key => $value) {
+	//echo $key, ' ', $value , '<br/>';
 	$_GET[$key] = CrayonSettings::validate($key, $value);
 }
 $crayon->settings($_GET);

@@ -119,7 +119,7 @@ function preview_update() {
 	for (i = 0; i < preview_obj_names.length; i++) {
 		obj = preview_objs[i];
 		if (obj.attr('type') == 'checkbox') {
-			val = bool_to_int(obj.attr('checked'));
+			val = obj.is(':checked');
 		} else {
 			val = obj.val();
 		}

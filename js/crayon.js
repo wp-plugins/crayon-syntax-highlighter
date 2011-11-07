@@ -170,7 +170,7 @@ function init() {
             }
             // Use .hover() for chrome, but in firefox mouseover/mouseout worked best
             jQuery(this).mouseenter(function() { toolbar_toggle(uid, true); })
-                        .mouseleave(function() { toolbar_toggle(uid, false); });
+            			.mouseleave(function() { toolbar_toggle(uid, false); });
             
         } else if (touchscreen) {
             toolbar.show();
@@ -245,7 +245,7 @@ function copy_plain(uid, hover) {
 	
 	var plain = crayon[uid].plain;
 	
-	toggle_plain(uid, undefined, true);
+	toggle_plain(uid, true, true);
 	toolbar_toggle(uid, true);
 	
 	key = crayon[uid].mac ? '\u2318' : 'CTRL';

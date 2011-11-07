@@ -47,7 +47,12 @@ coloring etc.
 	position: static !important;
 }
 
-.crayon-popup .crayon-main {
+.crayon-popup .crayon-main,
+.crayon-popup .crayon-table {
+	display: block !important;
+	opacity: 100 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 	width: 100% !important;
 	height: auto !important;
 }

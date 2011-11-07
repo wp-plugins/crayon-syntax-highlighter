@@ -9,6 +9,8 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 	const DEFAULT_THEME = 'classic';
 	const DEFAULT_THEME_NAME = 'Classic';
 
+	private $printed_themes = array();
+	
 	// Methods ================================================================
 
 	function __construct() {
@@ -28,10 +30,14 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 		$used = $this->get_used();
 		$css = '';
 		foreach ($used as $theme) {
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme->id() . '/' . $theme->id() . '.css?ver' . $CRAYON_VERSION;
-			$css .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
+			if (!in_array($theme, $this->printed_themes)) {
+				$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme->id() . '/' . $theme->id() . '.css?ver' . $CRAYON_VERSION;
+				$css .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
+				$this->printed_themes[] = $theme;
+			}
 		}
 		return $css;
 	}
+	
 }
 ?>

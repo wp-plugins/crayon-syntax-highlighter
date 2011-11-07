@@ -234,7 +234,7 @@ class CrayonFormatter {
 		$theme_id_dashed = CrayonUtil::clean_css_name($theme_id);
 		
 		// Only load css once for each theme
-		if (!empty($theme_id) && $theme != NULL && !$theme->used()) {
+		if (!empty($theme_id) && $theme != NULL /*&& !$theme->used()*/) {
 			// Record usage
 			$theme->used(TRUE);
 			if ($print) {

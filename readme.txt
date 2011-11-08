@@ -57,7 +57,8 @@ Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</
 
 Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
 
-**Planned Featues**
+**Planned Features**
+
 * Translations
 * Multiple highlighting per Crayon
 * Highlighting priority

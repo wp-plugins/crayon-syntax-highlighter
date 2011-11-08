@@ -376,6 +376,8 @@ function toggle_plain(uid, hover, select) {
     	}
     }
     
+    crayon[uid].plain_visible = (hidden == plain);
+    
     // Remember scroll positions of visible
     crayon[uid].top = visible.scrollTop();
     crayon[uid].left = visible.scrollLeft();
@@ -425,8 +427,6 @@ function toggle_plain(uid, hover, select) {
 					plain.focus();
 				}
 			}
-			
-			crayon[uid].plain_visible = (hidden == plain);
 		});
     
 	// Restore scroll positions to hidden

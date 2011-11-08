@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -89,6 +89,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.5.1 =
+* Fixed plain code toggle button update
 
 = 1.5.0 =
 * Added ability to cache remote code requests for a set period of time to reduce server load. See Settings > Crayon > Misc. You can clear the cache at any time in settings. Set the cache clearing interval to "Immediately" to prevent caching.

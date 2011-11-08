@@ -32,7 +32,6 @@ class CrayonFormatter {
 					self::$elements = array_values($elements);
 					$code = preg_replace_callback($regex, 'CrayonFormatter::format_match', $code);
 				}
-				
 			} catch (Exception $e) {
 				$error = 'An error occured when formatting: ' . $e->message();
 				$hl ? $hl->log($error) : CrayonLog::syslog($error);

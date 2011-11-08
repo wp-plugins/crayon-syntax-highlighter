@@ -82,11 +82,25 @@ class CrayonHighlighter {
 				$url = 'http://' . $url;
 			}
 			$http_code = 0;
+			// If available, use the built in wp remote http get function, we don't need SSL
 			if (function_exists('wp_remote_get')) {
-				// If available, use the built in wp remote http get function, we don't need SSL
-				$response = wp_remote_get($url, array('sslverify' => false));
-				$content = wp_remote_retrieve_body($response);
-				$http_code = wp_remote_retrieve_response_code($response);
+				$url_uid = 'crayon_' . CrayonUtil::str_uid($url);
+				$cached = get_transient($url_uid, 'crayon-syntax');
+				CrayonSettingsWP::load_cache();
+				if ($cached !== FALSE) {
+					$content = $cached;
+					$http_code = 200;
+				} else {
+					$response = wp_remote_get($url, array('sslverify' => false, 'timeout' => 20));
+					$content = wp_remote_retrieve_body($response);
+					$http_code = wp_remote_retrieve_response_code($response);
+					$cache = $this->setting_val(CrayonSettings::CACHE);
+					$cache_sec = CrayonSettings::get_cache_sec($cache);
+					if ($cache_sec > 1 && $http_code >= 200 && $http_code < 400) {
+						set_transient($url_uid, $content, $cache_sec);
+						CrayonSettingsWP::add_cache($url_uid);
+					}
+				}
 			} else {
 				$ch = curl_init($url);
 				curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -95,6 +109,7 @@ class CrayonHighlighter {
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+				curl_setopt($ch, CURLOPT_FRESH_CONNECT, FALSE);
 				curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
 				curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 				$content = curl_exec($ch);

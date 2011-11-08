@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.4.5
+Stable tag: 1.5.0
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -20,7 +20,7 @@ It also supports some neat features like:
 * Toggled plain code
 * Toggled line numbers
 * Copy/paste code
-* Open code in a new window
+* Open code in a new window (popup)
 * Tab sizes
 * Code title
 * Toggled toolbar
@@ -56,6 +56,12 @@ Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</
 
 Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
 
+**Planned Featues**
+* Translations
+* Multiple highlighting per Crayon
+* Highlighting priority
+* Theme Editor
+
 == Installation ==
 
 Download the .zip of the plugin and extract the contents. Upload it to the Wordpress plugin directory and activate the plugin.
@@ -77,12 +83,19 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Screenshots ==
 
-1. Different themes and Live Preview under Settings > Crayon.
+1. Classic theme in Live Preview under Settings > Crayon.
+2. Twilight theme.
 
 == Changelog ==
 
-= 1.4.5 =
+= 1.5.0 =
+* Added ability to cache remote code requests for a set period of time to reduce server load. See Settings > Crayon > Misc. You can clear the cache at any time in settings. Set the cache clearing interval to "Immediately" to prevent caching.
+* Fixed a bug preventing dropdown settings from being set correctly
+* Fixed AJAX settings bug
 * Fixed CSS syntax bug for fonts
+* Improved code popup, strips style atts
+* Added preview code for shell, renamed to 'Shell'
+* Code popup window now shows either highlighted or plain code, depending on which is currently visible
 
 = 1.4.4 =
 * Revised CSS style printing

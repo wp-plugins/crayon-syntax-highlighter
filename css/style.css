@@ -44,17 +44,25 @@ coloring etc.
 }
 
 .crayon-popup {
-	position: static !important;
+	/*position: static !important;*/
+}
+
+.crayon-popup .crayon-plain {
+	display: block !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .crayon-popup .crayon-main,
 .crayon-popup .crayon-table {
+	/*max-width: 0;
+	max-height: 0;
 	display: block !important;
 	opacity: 100 !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	width: 100% !important;
-	height: auto !important;
+	height: auto !important;*/
 }
 
 .crayon-syntax,

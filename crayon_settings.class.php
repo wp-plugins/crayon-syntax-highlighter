@@ -66,6 +66,19 @@ class CrayonSettings {
 	const ERROR_MSG_SHOW = 'error-msg-show';
 	const ERROR_MSG = 'error-msg';
 	const HIDE_HELP = 'hide-help';
+	const CACHE = 'cache';
+	
+	private static $cache_array = array('Hourly' => 3600, 'Daily' => 86400, 'Weekly' => 604800, 'Monthly' => 18144000, 'Immediately' => 1);
+	
+	public static function get_cache_sec($cache) {
+		$values = array_values(self::$cache_array);
+		//$cache = $this->get(self::CACHE);
+		if (array_key_exists($cache, $values)) {
+			return $values[$cache];
+		} else {
+			return $values[0];
+		}
+	}
 	
 	// The current settings, should be loaded with default if none exists
 	private $settings = array();
@@ -91,7 +104,6 @@ class CrayonSettings {
 		global $CRAYON_VERSION;
 		$settings = array(
 			new CrayonSetting(self::VERSION, $CRAYON_VERSION, NULL, TRUE),
-
 			new CrayonSetting(self::THEME, CrayonThemes::DEFAULT_THEME), 
 			new CrayonSetting(self::FONT, CrayonFonts::DEFAULT_FONT), 
 			new CrayonSetting(self::FONT_SIZE_ENABLE, FALSE),
@@ -144,7 +156,8 @@ class CrayonSettings {
 			new CrayonSetting(self::ERROR_LOG_SYS, TRUE), 
 			new CrayonSetting(self::ERROR_MSG_SHOW, TRUE), 
 			new CrayonSetting(self::ERROR_MSG, 'An error has occurred. Please try again later.'),
-			new CrayonSetting(self::HIDE_HELP, FALSE)
+			new CrayonSetting(self::HIDE_HELP, FALSE),
+			new CrayonSetting(self::CACHE, array_keys(self::$cache_array), 1),
 		);
 		
 		$this->set($settings);
@@ -570,12 +583,16 @@ class CrayonSetting {
 	 */
 	function value($value = NULL) {
 		if ($value === NULL) {
-			if ($this->is_array) {
+			/*if ($this->is_array) {
 				return $this->default[$this->value]; // value at index
-			} else if ($this->value !== NULL) {
+			} else */if ($this->value !== NULL) {
 				return $this->value;
 			} else {
-				return $this->default;
+				if ($this->is_array) {
+					return 0;
+				} else {
+					return $this->default;
+				}
 			}
 		} else if ($this->locked === FALSE) {
 			if ($this->is_array) {
@@ -585,6 +602,13 @@ class CrayonSetting {
 				$this->value = $value;
 			}
 		}
+	}
+	
+	function array_value() {
+		if ($this->is_array) {
+			return NULL;
+		}
+		return $this->default[$this->value];
 	}
 
 	/**

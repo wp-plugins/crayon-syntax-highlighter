@@ -281,6 +281,34 @@ class CrayonUtil {
 		$path = self::pathf($path);
 		return preg_replace('#\.\w+$#m', '', $path);
 	}
+	
+	// Shorten a URL into a string of given length, used to identify a URL uniquely
+	public static function shorten_url_to_length($url, $length) {
+		if ($length < 1) {
+			return '';
+		}
+		$url = preg_replace('#(^\w+://)|([/\.])#si', '', $url);
+		if (strlen($url) > $length) {
+			$diff = strlen($url) - $length;
+			$rem = floor(strlen($url)/$diff);
+			$rem_count = 0;
+			for ($i = $rem-1; $i < strlen($url) && $rem_count < $diff; $i=$i+$rem) {
+				$url[$i] = '.';
+				$rem_count++;
+			}
+			$url = preg_replace('#\.#s', '', $url);
+		}
+		return $url;
+	}
+	
+	// Creates a unique ID from a string
+	function str_uid($str) {
+		$uid = 0;
+		for ($i = 1; $i < strlen($str); $i++) {
+			$uid += round(ord($str[$i]) * ($i / strlen($str)), 2) * 100;
+		}
+		return strval(dechex(strlen($str))).strval(dechex($uid));
+	}
 
 	// strpos with an array of $needles
 	public static function strposa($haystack, $needles) {

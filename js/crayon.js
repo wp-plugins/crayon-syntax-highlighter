@@ -217,8 +217,10 @@ function code_popup(uid) {
 	if (typeof crayon[uid] == 'undefined') {
 	    return make_uid(uid);
 	}
+	var code = crayon[uid].plain_visible ? crayon[uid].plain : crayon[uid].main;
 	var settings = crayon[uid].popup_settings;
-	settings.data = get_all_css() + '<body style="padding:0; margin:0;"><div class="' + crayon[uid].attr('class') + ' crayon-popup">' + get_jquery_str(crayon[uid].main) + '</div></body>';
+	settings.data = get_all_css() + '<body style="padding:0; margin:0;"><div class="' + crayon[uid].attr('class') + 
+		' crayon-popup">' + remove_css_inline(get_jquery_str(code)) + '</div></body>';
 	if (typeof settings == 'undefined') {
 		return;
 	}
@@ -226,6 +228,10 @@ function code_popup(uid) {
 
 function get_jquery_str(object) {
 	return jQuery('<div>').append(object.clone()).remove().html();
+}
+
+function remove_css_inline(string) {
+	return string.replace(/style="[^"]+"/mi, '');
 }
 
 // Get all CSS on the page as a string
@@ -353,6 +359,7 @@ function toggle_plain(uid, hover, select) {
         if (hover) {
             visible = main;
             hidden = plain;
+            //crayon[uid].plain_visible = true;
         } else {
             visible = plain;
             hidden = main;
@@ -361,11 +368,11 @@ function toggle_plain(uid, hover, select) {
     	if (main.css('z-index') == 1) {
     		visible = main;
     		hidden = plain;
-    		crayon[uid].plain_visible = true;
+    		//crayon[uid].plain_visible = true;
     	} else {
     		visible = plain;
     		hidden = main;
-    		crayon[uid].plain_visible = false;
+    		//crayon[uid].plain_visible = false;
     	}
     }
     
@@ -418,6 +425,8 @@ function toggle_plain(uid, hover, select) {
 					plain.focus();
 				}
 			}
+			
+			crayon[uid].plain_visible = (hidden == plain);
 		});
     
 	// Restore scroll positions to hidden

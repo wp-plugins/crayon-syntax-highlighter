@@ -13,11 +13,14 @@ class CrayonSettingsWP {
 
 	// A copy of the current options in db
 	private static $options = NULL;
+	// An array of cache names for use with Transients API
+	private static $cache = NULL;
 	private static $plugin_hook = '';
 	
 	const SETTINGS = 'crayon_fields';
 	const FIELDS = 'crayon_settings';
 	const OPTIONS = 'crayon_options';
+	const CACHE = 'crayon_cache';
 	const GENERAL = 'crayon_general';
 	const DEBUG = 'crayon_debug';
 	const ABOUT = 'crayon_about';
@@ -139,6 +142,51 @@ class CrayonSettingsWP {
 		update_option(self::OPTIONS, CrayonGlobalSettings::get_array());
 	}
 	
+	// Cache
+	public static function add_cache($name) {
+		self::load_cache();
+		if (!in_array($name, self::$cache)) {
+			self::$cache[] = $name;
+		}
+		self::save_cache();
+	}
+	
+	public static function remove_cache($name) {
+		self::load_cache();
+		if (in_array($name, self::$cache)) {
+			unset(self::$cache[$name]);
+		}
+		self::save_cache();
+	}
+	
+	public static function clear_cache() {
+		self::load_cache();
+		foreach (self::$cache as $name) {
+			delete_transient($name);
+		}
+		self::$cache = array();
+		self::save_cache();
+	}
+	
+	public static function load_cache() {
+		/*if (self::$cache !== NULL) {
+			return;
+		}*/
+		// Load cache from db
+		if (!(self::$cache = get_option(self::CACHE))) {
+			self::$cache = array();
+			update_option(self::CACHE, self::$cache);
+		}
+	}
+	
+	public static function save_cache() {
+		update_option(self::CACHE, self::$cache);
+		self::load_cache();
+	}
+		
+	
+	// Paths
+	
 	public static function wp_root_path() {
 		return preg_replace('#wp\-content.*#', '', CRAYON_ROOT_PATH);
 	}
@@ -200,7 +248,7 @@ class CrayonSettingsWP {
 		global $CRAYON_EMAIL;
 		// When reset button is pressed, remove settings so default loads next time
 		if (array_key_exists('reset', $inputs)) {
-			// Hide the help so we don't annoy them
+			self::clear_cache();
 			return array();
 		}
 		// Clear the log if needed
@@ -216,10 +264,19 @@ class CrayonSettingsWP {
 			CrayonLog::email($CRAYON_EMAIL);
 		}
 
+		// Clear the cache
+		if (array_key_exists('crayon-cache-clear', $_POST)) { 
+			self::clear_cache();
+		}
+		
 		// Validate inputs
 		foreach ($inputs as $input => $value) {
 			// Convert all array setting values to ints
 			$inputs[$input] = CrayonSettings::validate($input, $value);
+			// Clear cache when changed
+			if ($input == CrayonSettings::CACHE && $value != CrayonGlobalSettings::val(CrayonSettings::CACHE)) {
+				self::clear_cache();
+			}
 		}
 		
 		// If settings don't exist in input, set them to default
@@ -498,6 +555,9 @@ class CrayonSettingsWP {
 	}
 
 	public static function misc() {
+		echo 'Clear the cache used to store remote code requests: ';
+		self::dropdown(CrayonSettings::CACHE, false);
+		echo '<input type="submit" id="crayon-cache-clear" name="crayon-cache-clear" class="button-secondary" value="Clear Now" /><br/>';
 		self::checkbox(array(CrayonSettings::TOUCHSCREEN, 'Disable mouse gestures for touchscreen devices (eg. MouseOver)'));
 		self::checkbox(array(CrayonSettings::DISABLE_ANIM, 'Disable animations'));
 		self::checkbox(array(CrayonSettings::DISABLE_RUNTIME, 'Disable runtime stats'));

@@ -15,12 +15,13 @@ It can highlight from a URL, a local file or Wordpress post text. Crayon makes i
 custom language elements with regular expressions.
 It also supports some neat features like:
 
-* Mobile/touchscreen device detection
-* Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Toggled plain code
 * Toggled line numbers
 * Copy/paste code
 * Open code in a new window (popup)
+* Remote request caching
+* Mobile/touchscreen device detection
+* Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Tab sizes
 * Code title
 * Toggled toolbar

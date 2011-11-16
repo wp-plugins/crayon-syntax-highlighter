@@ -23,8 +23,13 @@ $settings = array(CrayonSettings::TOP_SET => TRUE, CrayonSettings::TOP_MARGIN =>
 		CrayonSettings::BOTTOM_SET => FALSE, CrayonSettings::BOTTOM_MARGIN => 0);
 $crayon->settings($settings);
 
-$lang = $crayon->setting_val(CrayonSettings::FALLBACK_LANG);
+// Print the theme CSS
+$theme_id = $crayon->setting_val(CrayonSettings::THEME);
+$theme = CrayonResources::themes()->get($theme_id);
+echo CrayonThemes::get_theme_as_css($theme);
 
+// Load custom code based on language
+$lang = $crayon->setting_val(CrayonSettings::FALLBACK_LANG);
 $path = crayon_pf( dirname(__FILE__) . '/sample/' . $lang . '.txt', FALSE );
 
 if ($lang && @file_exists($path)) {

@@ -204,9 +204,13 @@ class CrayonFormatter {
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
 
 			$buttons = $print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
+			$button_preload = '';
+			foreach (array('nums', 'copy', 'popup', 'plain') as $name) {
+				$button_preload .= '<a href="#" class="crayon-'.$name.'-button crayon-button crayon-pressed crayon-invisible"></a>';
+			}
 			$toolbar = '
 			<div class="crayon-toolbar" settings="'.$toolbar_settings.'">'.$print_title.'
-			<div class="crayon-tools">'.$buttons.'</div>
+			<div class="crayon-tools">'.$buttons.$button_preload.'</div>
 			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info"></div>';
 
 		} else {
@@ -234,15 +238,15 @@ class CrayonFormatter {
 		$theme_id_dashed = CrayonUtil::clean_css_name($theme_id);
 		
 		// Only load css once for each theme
-		if (!empty($theme_id) && $theme != NULL /*&& !$theme->used()*/) {
-			// Record usage
+		//if (!empty($theme_id) && $theme != NULL /*&& !$theme->used()*/) {
+		/*	// Record usage
 			$theme->used(TRUE);
 			if ($print) {
 				// Add style
 				$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
 				$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
 			}
-		}
+		}*/
 		
 		// Load font css if not default
 		$font_id = $hl->setting_val(CrayonSettings::FONT);

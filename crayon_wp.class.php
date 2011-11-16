@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.5.1
+Version: 1.5.2
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -74,8 +74,6 @@ class CrayonWP {
 	 * Adds the actual Crayon instance, should only be called by add_shortcode()
 	 */
 	private static function shortcode($atts, $content = NULL, $id = NULL) {
-		CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
-		
 		// Lowercase attributes
 		$lower_atts = array();
 		foreach ($atts as $att=>$value) {
@@ -166,6 +164,8 @@ class CrayonWP {
 			
 			if ( count($matches[0]) != 0 ) {
 				// Crayons found!
+				CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
+				
 				$full_matches = $matches[0];
 				$closed_ids = $matches[1];
 				$closed_atts = $matches[2];
@@ -175,6 +175,10 @@ class CrayonWP {
 				
 				// Make sure we enqueue the styles/scripts
 				$enqueue = TRUE;
+				
+				// Mark the default theme as being used
+				$default_theme = CrayonResources::themes()->get_default();
+				$default_theme->used(TRUE);
 				
 				for ($i = 0; $i < count($full_matches); $i++) {
 					// Get attributes
@@ -195,12 +199,18 @@ class CrayonWP {
 						}
 					}
 					
+					// Detect if a theme is used
+					if (array_key_exists('theme', $atts_array)) {
+						$theme_id = $atts_array['theme'];
+						$theme = CrayonResources::themes()->get($theme_id);
+						$theme->used(TRUE);
+					}
+					
 					// Add array of atts and content to post queue with key as post ID
 					$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
 					self::$post_queue[strval($post->ID)][$id] = array('post_id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$contents[$i]);
 				}
 			}
-			
 		}
 		
 		if (!is_admin() && $enqueue && !self::$included) {
@@ -221,6 +231,12 @@ class CrayonWP {
 	private static function enqueue_resources() {
 		global $CRAYON_VERSION;
 		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
+		
+		$css = CrayonResources::themes()->get_used_theme_css();
+		foreach ($css as $theme=>$url) {
+			wp_enqueue_style('crayon-theme-'.$theme, $url, array(), $CRAYON_VERSION);
+		}
+		
 		wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
 		wp_enqueue_script('crayon-js', plugins_url(CRAYON_JS, __FILE__), array('crayon-jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon-jquery-popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('crayon-jquery'), $CRAYON_VERSION);
@@ -285,7 +301,11 @@ class CrayonWP {
 	}
 	
 	public static function crayon_theme_css() {
-		echo CrayonResources::themes()->get_used_theme_css();
+		global $CRAYON_VERSION;
+		$css = CrayonResources::themes()->get_used_theme_css();
+		foreach ($css as $theme=>$url) {
+			wp_enqueue_style('crayon-theme-'.$theme, $url, array(), $CRAYON_VERSION);
+		}
 	}
 }
 
@@ -298,7 +318,7 @@ if (defined('ABSPATH')) {
 	add_filter('the_posts', 'CrayonWP::the_posts');
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
-	add_action('loop_end', 'CrayonWP::crayon_theme_css');
+	//add_action('loop_end', 'CrayonWP::crayon_theme_css');
 	//add_action('get_footer', 'CrayonWP::crayon_theme_css');
 }
 ?>

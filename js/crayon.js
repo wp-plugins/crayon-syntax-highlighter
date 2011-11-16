@@ -231,7 +231,7 @@ function get_jquery_str(object) {
 }
 
 function remove_css_inline(string) {
-	return string.replace(/style="[^"]+"/mi, '');
+	return string.replace(/style\s*=\s*"[^"]+"/mi, '');
 }
 
 // Get all CSS on the page as a string

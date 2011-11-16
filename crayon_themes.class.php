@@ -25,16 +25,30 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 	}
 	
 	// Prints out CSS for all the used themes
+	public function get_used_theme_css_str() {
+		$css_str = '';
+		$css = self::get_used_theme_css();
+		foreach ($css as $theme=>$url) {
+			$css_str .= '<link rel="stylesheet" type="text/css" href="' . $css[$url] . '" />' . CRAYON_NL;
+		}
+		return $css_str;
+	}
+	
+	public function get_theme_url($theme) {
+		return CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme->id() . '/' . $theme->id() . '.css';
+	}
+	
+	public function get_theme_as_css($theme) {
+		$css_str = '<link rel="stylesheet" type="text/css" href="' . self::get_theme_url($theme) . '" />' . CRAYON_NL;
+		return $css_str;
+	}
+	
 	public function get_used_theme_css() {
-		global $CRAYON_VERSION;
 		$used = $this->get_used();
-		$css = '';
+		$css = array();
 		foreach ($used as $theme) {
-			if (!in_array($theme, $this->printed_themes)) {
-				$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme->id() . '/' . $theme->id() . '.css?ver' . $CRAYON_VERSION;
-				$css .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
-				$this->printed_themes[] = $theme;
-			}
+			$url = self::get_theme_url($theme);
+			$css[$theme->id()] = $url;
 		}
 		return $css;
 	}

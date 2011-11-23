@@ -1,7 +1,7 @@
 /*
 Theme Name: Epicgeeks
 Description: Epicgeeks Cryaon Theme. 
-Version: 1.1
+Version: 1.2
 Author: J. Newing (synmuffin)
 Author URI: http://epicgeeks.net/
 */
@@ -121,59 +121,59 @@ Author URI: http://epicgeeks.net/
     color: #666666 !important;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:link {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-plain-button:link {
     background: url('images/code.gif') no-repeat 0px -16px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-plain-button:hover,
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:active {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-plain-button:active {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:link {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-copy-button:link {
     background: url('images/copy.gif') no-repeat 0px -16px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-copy-button:hover,
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:active {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-copy-button:active {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:link {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-popup-button:link {
     background: url('images/pop.gif') no-repeat 0px -16px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-popup-button:hover,
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:active {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-popup-button:active {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button:link {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-nums-button:link {
     background: url('images/list.gif') no-repeat 0px -16px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-nums-button:hover,
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button:active {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-toolbar a.crayon-button.crayon-nums-button:active {
     background-position: 0px 0px;
 }
 
-.crayon-syntax .crayon-title {
+.crayon-syntax.crayon-theme-epicgeeks .crayon-title {
     float: left;
 }
 

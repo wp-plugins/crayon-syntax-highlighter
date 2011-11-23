@@ -78,9 +78,10 @@ class CrayonLog {
 
 	}
 
-	public static function email($to) {
+	public static function email($to, $from = NULL) {
 		if (($log_contents = CrayonUtil::file(CRAYON_LOG_FILE)) !== FALSE) {
-			$result = @mail($to, 'Crayon Syntax Highlighter Log', $log_contents);
+			$headers = $from ? 'From: ' . $from : '';
+			$result = @mail($to, 'Crayon Syntax Highlighter Log', $log_contents, $headers);
 			self::log('The log was emailed to the admin.', 'Log Email');
 		} else {
 			// Will result in nothing if we can't email

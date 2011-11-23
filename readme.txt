@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -89,6 +89,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.5.3 =
+* Fixed issue with incorrectly specified theme causing crash
+* Email Developer improved
 
 = 1.5.2 =
 * Proper enquing of themes via wordpress, should cause no more issues with any themes

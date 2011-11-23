@@ -261,7 +261,7 @@ class CrayonSettingsWP {
 		}
 		// Send to developer
 		if (array_key_exists(self::LOG_EMAIL_DEV, $_POST)) {
-			CrayonLog::email($CRAYON_EMAIL);
+			CrayonLog::email($CRAYON_EMAIL, get_bloginfo('admin_email'));
 		}
 
 		// Clear the cache

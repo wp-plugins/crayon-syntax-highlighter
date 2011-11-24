@@ -234,6 +234,15 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 		}
 	}
 	
+	public function set_used($id, $value = TRUE) {
+		$resource = $this->get($id);
+		if ($resource !== NULL && !$resource->used()) {
+			$resource->used($value == TRUE);
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public function get_used() {
 		$used = array();
 		foreach ($this->get() as $resource) {

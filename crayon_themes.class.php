@@ -44,16 +44,12 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 	}
 	
 	public function get_used_theme_css() {
-		CrayonLog::log('get_used_theme_css');
 		$used = $this->get_used();
-		CrayonLog::log($used, 'used');
 		$css = array();
 		foreach ($used as $theme) {
 			$url = self::get_theme_url($theme);
-			CrayonLog::log($url, 'url');
 			$css[$theme->id()] = $url;
 		}
-		CrayonLog::log($css, 'css');
 		return $css;
 	}
 	

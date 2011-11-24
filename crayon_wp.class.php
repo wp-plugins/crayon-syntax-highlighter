@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.5.3
+Version: 1.5.4
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 License: GPL2
@@ -153,8 +153,6 @@ class CrayonWP {
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
 		
-		//CrayonLog::log('enqueue false');
-		
 		// Search for shortcode in query
 		foreach ($wp_query->posts as $post) {
 			
@@ -178,11 +176,10 @@ class CrayonWP {
 				// Make sure we enqueue the styles/scripts
 				$enqueue = TRUE;
 				
-				//CrayonLog::log('enqueue true');
-				
 				// Mark the default theme as being used
-				$default_theme = CrayonResources::themes()->get_default();
-				$default_theme->used(TRUE);
+				if ( ($default_theme_id = CrayonGlobalSettings::val(CrayonSettings::THEME)) != NULL ) {
+					CrayonResources::themes()->set_used($default_theme_id);
+				}
 				
 				for ($i = 0; $i < count($full_matches); $i++) {
 					// Get attributes
@@ -204,14 +201,9 @@ class CrayonWP {
 					}
 					
 					// Detect if a theme is used
-					
-					//CrayonLog::log($atts_array, 'atts_array');
-					
 					if (array_key_exists('theme', $atts_array)) {
 						$theme_id = $atts_array['theme'];
-						if ( ($theme = CrayonResources::themes()->get($theme_id)) !== NULL) {
-							$theme->used(TRUE);
-						}
+						CrayonResources::themes()->set_used($theme_id);
 					}
 					
 					// Add array of atts and content to post queue with key as post ID
@@ -220,10 +212,6 @@ class CrayonWP {
 				}
 			}
 		}
-		
-		//CrayonLog::log(is_admin(), 'is_admin()');
-		//CrayonLog::log($enqueue, 'enqueue');
-		//CrayonLog::log(self::$included, 'included');
 		
 		if (!is_admin() && $enqueue && !self::$included) {
 			self::enqueue_resources();
@@ -241,7 +229,6 @@ class CrayonWP {
 	}
 	
 	private static function enqueue_resources() {
-		//CrayonLog::log('enqueue_resources');
 		global $CRAYON_VERSION;
 		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
 		

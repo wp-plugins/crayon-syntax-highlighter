@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Crayon Syntax Highlighter ===
 Contributors: akarmenia
 Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter

@@ -4,7 +4,7 @@ Donate link: http://ak.net84.net/
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.5.4
+Stable tag: 1.6.0
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -89,6 +89,12 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.6.0 =
+* Added internationalisation with 4 new languages: German, Spanish, French and Italian
+* These were translated using Google Translate, so if you speak these languages and would like to improve them,
+it's actually quite easy to edit - just contact me via email :)
+* More languages will be added as they are demanded 
 
 = 1.5.4 =
 * Recommended update for everyone

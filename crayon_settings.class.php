@@ -68,11 +68,10 @@ class CrayonSettings {
 	const HIDE_HELP = 'hide-help';
 	const CACHE = 'cache';
 	
-	private static $cache_array = array('Hourly' => 3600, 'Daily' => 86400, 'Weekly' => 604800, 'Monthly' => 18144000, 'Immediately' => 1);
+	private static $cache_array;
 	
 	public static function get_cache_sec($cache) {
 		$values = array_values(self::$cache_array);
-		//$cache = $this->get(self::CACHE);
 		if (array_key_exists($cache, $values)) {
 			return $values[$cache];
 		} else {
@@ -87,6 +86,9 @@ class CrayonSettings {
 	private static $default = NULL;
 
 	function __construct() {
+		self::$cache_array = array(crayon__('Hourly') => 3600, crayon__('Daily') => 86400,
+									crayon__('Weekly') => 604800, crayon__('Monthly') => 18144000,
+									crayon__('Immediately') => 1);
 		$this->init();
 	}
 	
@@ -110,13 +112,13 @@ class CrayonSettings {
 			new CrayonSetting(self::FONT_SIZE, 12), 
 			new CrayonSetting(self::PREVIEW, TRUE),
 			new CrayonSetting(self::HEIGHT_SET, FALSE), 
-			new CrayonSetting(self::HEIGHT_MODE, array('Max', 'Min', 'Static')), 
+			new CrayonSetting(self::HEIGHT_MODE, array(crayon__('Max'), crayon__('Min'), crayon__('Static'))), 
 			new CrayonSetting(self::HEIGHT, '500'), 
-			new CrayonSetting(self::HEIGHT_UNIT, array('Pixels', 'Percent')), 
+			new CrayonSetting(self::HEIGHT_UNIT, array(crayon__('Pixels'), crayon__('Percent'))), 
 			new CrayonSetting(self::WIDTH_SET, FALSE), 
-			new CrayonSetting(self::WIDTH_MODE, array('Max', 'Min', 'Static')), 
+			new CrayonSetting(self::WIDTH_MODE, array(crayon__('Max'), crayon__('Min'), crayon__('Static'))), 
 			new CrayonSetting(self::WIDTH, '500'), 
-			new CrayonSetting(self::WIDTH_UNIT, array('Pixels', 'Percent')), 
+			new CrayonSetting(self::WIDTH_UNIT, array(crayon__('Pixels'), crayon__('Percent'))), 
 			new CrayonSetting(self::TOP_SET, TRUE),
 			new CrayonSetting(self::TOP_MARGIN, 12), 
 			new CrayonSetting(self::BOTTOM_SET, TRUE),
@@ -125,15 +127,15 @@ class CrayonSettings {
 			new CrayonSetting(self::LEFT_MARGIN, 12), 
 			new CrayonSetting(self::RIGHT_SET, FALSE),
 			new CrayonSetting(self::RIGHT_MARGIN, 12), 
-			new CrayonSetting(self::H_ALIGN, array('None', 'Left', 'Center', 'Right')), 
+			new CrayonSetting(self::H_ALIGN, array(crayon__('None'), crayon__('Left'), crayon__('Center'), crayon__('Right'))), 
 			new CrayonSetting(self::FLOAT_ENABLE, FALSE), 
-			new CrayonSetting(self::TOOLBAR, array('On MouseOver', 'Always', 'Never')), 
+			new CrayonSetting(self::TOOLBAR, array(crayon__('On MouseOver'), crayon__('Always'), crayon__('Never'))), 
 			new CrayonSetting(self::TOOLBAR_OVERLAY, TRUE),
 			new CrayonSetting(self::TOOLBAR_HIDE, TRUE), 
 			new CrayonSetting(self::TOOLBAR_DELAY, TRUE),
 			new CrayonSetting(self::COPY, TRUE), 
 			new CrayonSetting(self::POPUP, TRUE), 
-			new CrayonSetting(self::SHOW_LANG, array('When Found', 'Always', 'Never')), 
+			new CrayonSetting(self::SHOW_LANG, array(crayon__('When Found'), crayon__('Always'), crayon__('Never'))), 
 			new CrayonSetting(self::SHOW_TITLE, TRUE),
 			new CrayonSetting(self::STRIPED, TRUE), 
 			new CrayonSetting(self::MARKING, TRUE),
@@ -144,10 +146,10 @@ class CrayonSettings {
 			new CrayonSetting(self::TAB_SIZE, 4), 
 			new CrayonSetting(self::FALLBACK_LANG, CrayonLangs::DEFAULT_LANG), 
 			new CrayonSetting(self::LOCAL_PATH, ''), 
-			new CrayonSetting(self::SCROLL, array('On MouseOver', 'Always')), 
+			new CrayonSetting(self::SCROLL, array(crayon__('On MouseOver'), crayon__('Always'))), 
 			new CrayonSetting(self::PLAIN, TRUE), 
 			new CrayonSetting(self::SHOW_PLAIN, 
-					array('On Double Click', 'On Single Click', 'On MouseOver', 'Only Using Toggle')), 
+					array(crayon__('On Double Click'), crayon__('On Single Click'), crayon__('On MouseOver'), crayon__('Only Using Toggle'))), 
 			new CrayonSetting(self::DISABLE_ANIM, FALSE),
 			new CrayonSetting(self::TOUCHSCREEN, TRUE), 
 			new CrayonSetting(self::DISABLE_RUNTIME, FALSE),
@@ -155,7 +157,7 @@ class CrayonSettings {
 			new CrayonSetting(self::ERROR_LOG, TRUE),
 			new CrayonSetting(self::ERROR_LOG_SYS, TRUE), 
 			new CrayonSetting(self::ERROR_MSG_SHOW, TRUE), 
-			new CrayonSetting(self::ERROR_MSG, 'An error has occurred. Please try again later.'),
+			new CrayonSetting(self::ERROR_MSG, crayon__('An error has occurred. Please try again later.')),
 			new CrayonSetting(self::HIDE_HELP, FALSE),
 			new CrayonSetting(self::CACHE, array_keys(self::$cache_array), 1),
 		);

@@ -3,9 +3,10 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.5.4
+Version: 1.6.0
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
+Text Domain: crayon-syntax-highlighter
 License: GPL2
 	Copyright 2011	Aram Kocharyan	(email : akarmenia@gmail.com)
 	This program is free software; you can redistribute it and/or modify
@@ -292,6 +293,14 @@ class CrayonWP {
 		return $the_content;
 	}
 
+	public static function init() {
+		self::load_textdomain();
+	}
+	
+	public static function load_textdomain() {
+		load_plugin_textdomain('crayon-syntax-highlighter', false, CRAYON_DIR.CRAYON_TRANS_DIR);
+	}
+	
 	public static function install() {
 		
 	}
@@ -318,7 +327,6 @@ if (defined('ABSPATH')) {
 	add_filter('the_posts', 'CrayonWP::the_posts');
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
-	//add_action('loop_end', 'CrayonWP::crayon_theme_css');
-	//add_action('get_footer', 'CrayonWP::crayon_theme_css');
+	add_filter('init', 'CrayonWP::init');
 }
 ?>

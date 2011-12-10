@@ -51,6 +51,7 @@ $crayon->title('Sample Code');
 $crayon->marked('5-7');
 $crayon->output($highlight = true, $nums = true, $print = true);
 echo '</div>';
-echo 'Change the <a href="#langs">fallback language</a> to change the sample code. Lines 5-7 are marked.';
+CrayonWP::load_textdomain();
+printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>');
 
 ?>

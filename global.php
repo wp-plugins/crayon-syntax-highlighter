@@ -8,6 +8,9 @@ define('CRAYON_DEBUG', FALSE); // Enable to show exceptions on screen
 
 $uid = CRAYON_DEBUG ? uniqid() : ''; // Prevent caching in debug mode
 
+// General definitions
+define('CRAYON_DOMAIN', 'crayon-syntax-highlighter');
+
 // These are overriden by functions since v1.1.1
 $CRAYON_VERSION = '1.1.1' . $uid;
 $CRAYON_DATE = '27th September, 2011';
@@ -32,6 +35,7 @@ define('CRAYON_FONT_DIR', crayon_s('fonts'));
 define('CRAYON_UTIL_DIR', crayon_s('util'));
 define('CRAYON_CSS_DIR', crayon_s('css'));
 define('CRAYON_JS_DIR', crayon_s('js'));
+define('CRAYON_TRANS_DIR', crayon_s('trans'));
 
 // Paths
 
@@ -148,6 +152,40 @@ function set_info($key, $array, &$info) {
 		$info = $array[$key];
 	} else {
 		return FALSE;
+	}
+}
+
+// LANGUAGE TRANSLATION FUNCTIONS
+
+function crayon__($text) {
+	if (function_exists('__')) {
+		return __($text, CRAYON_DOMAIN);
+	} else {
+		return $text;
+	}
+}
+
+function crayon_e($text) {
+	if (function_exists('_e')) {
+		_e($text, CRAYON_DOMAIN);
+	} else {
+		echo $text;
+	}
+}
+
+function crayon_n($singular, $plural, $count) {
+	if (function_exists('_n')) {
+		return _n($singular, $plural, $count, CRAYON_DOMAIN);
+	} else {
+		return $count > 1 ? $plural : $singular;
+	}
+}
+
+function crayon_x($text, $context) {
+	if (function_exists('_x')) {
+		return _x($text, $context, CRAYON_DOMAIN);
+	} else {
+		return $text;
 	}
 }
 

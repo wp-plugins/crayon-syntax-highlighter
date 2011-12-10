@@ -67,7 +67,6 @@ Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" 
 
 **Planned Features**
 
-* Translations
 * Multiple highlighting per Crayon
 * Highlighting priority
 * Theme Editor

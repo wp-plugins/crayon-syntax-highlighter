@@ -8,6 +8,6 @@ c# cs
 c++ h hh hpp hxx h++ cc cpp cxx c++
 html html htm xhtml xhtm xml xsd
 java java class jar
-objc m
+objc m mm
 python py pyw pyc pyo pyd
-vb cs vbs
+vb vbs

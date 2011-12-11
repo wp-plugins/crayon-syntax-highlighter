@@ -10,8 +10,6 @@
     COMMENT             (#[^\r\n]*)
     STRING              (?:(?<!\\)""".*?(?<!\\)""")|(?:(?<!\\)'''.*?(?<!\\)''')|((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
     
-    #(?:(?<!\\)("+).*?(?<!\\)\1)|(?:(?<!\\)('+).*?(?<!\\)\2)
-    
     FUNCTION:KEYWORD    \b(?alt:function.txt)\b
     MODULE:KEYWORD      \b(?alt:module.txt)\b
     EXCEPTION:KEYWORD   \b(?alt:exception.txt)\b

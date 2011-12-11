@@ -205,8 +205,8 @@ class CrayonHighlighter {
 			return $this->language;
 		}
 		
-		if ( ($lang = CrayonResources::langs()->get($id)) != FALSE ) {
-			// Set the language if it exists
+		if ( ($lang = CrayonResources::langs()->get($id)) != FALSE || ($lang = CrayonResources::langs()->alias($id)) != FALSE ) {
+			// Set the language if it exists or look for an alias
 			$this->language = $lang;
 		} else {
 			// Attempt to detect the language

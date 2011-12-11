@@ -3,10 +3,10 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                Shell
-    VERSION             1.1
+    VERSION             1.2
 
     COMMENT             (?default)|(#.*?$)
-    STRING              (?default)
+    STRING              ((?<!\\)"[^\r\n]*?(?<!\\)")|((?<!\\)'[^\r\n]*?(?<!\\)')
     
     STATEMENT           (?default)|\b(?alt:statement.txt)\b
     RESERVED            (?default)|\b(?alt:reserved.txt)\b

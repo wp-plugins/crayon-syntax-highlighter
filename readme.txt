@@ -97,6 +97,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.6.2 =
+* Added ability to use and define language aliases. eg. XML -> XHTML, cpp -> c++, py -> python
+
 = 1.6.1 =
 * Avoided using $wp_query, $posts instead
 * Updated contextual help to be compliant with WP 3.3

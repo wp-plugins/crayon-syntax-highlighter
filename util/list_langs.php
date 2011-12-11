@@ -3,7 +3,7 @@ require_once (dirname(dirname(__FILE__)) . '/global.php');
 require_once (CRAYON_PARSER_PHP);
 if (($langs = CrayonParser::parse_all()) != FALSE) {
 	echo '<table class="crayon-table" cellspacing="0" cellpadding="0"><tr class="crayon-table-header">',
-		'<td>ID</td><td>Name</td><td>Version</td><td>Mapped Extensions</td><td>State</td></tr>';
+		'<td>ID</td><td>Name</td><td>Version</td><td>File Extensions</td><td>Aliases</td><td>State</td></tr>';
 	$keys = array_values($langs);
 	for ($i = 0; $i < count($langs); $i++) {
 		$lang = $keys[$i];
@@ -13,9 +13,9 @@ if (($langs = CrayonParser::parse_all()) != FALSE) {
 		        '<td>', $lang->name(), '</td>',
 		        '<td>', $lang->version(), '</td>',
 				'<td>', implode(', ', $lang->ext()), '</td>',
+				'<td>', implode(', ', $lang->alias()), '</td>',
 				'<td class="', CrayonUtil::clean_css_name($lang->state_info()), '">', 
 					$lang->state_info(), '</td>',
-				
 			'</tr>';
 	}
 	echo '</table><br/>Languages that have the same extension as their name don\'t need to explicitly map extensions.';

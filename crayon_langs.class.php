@@ -12,7 +12,10 @@ class CrayonLangs extends CrayonResourceCollection {
 			'NOTATION' => 'n', 'FADED' => 'f', CrayonParser::HTML_CHAR => 'h');
 	const DEFAULT_LANG = 'default';
 	const DEFAULT_LANG_NAME = 'Default';
-
+	
+	// Assoc. array of exts to lang id
+	private static $exts = array();
+	
 	// Methods ================================================================
 	public function __construct() {
 		$this->set_default(self::DEFAULT_LANG, self::DEFAULT_LANG_NAME);
@@ -28,6 +31,7 @@ class CrayonLangs extends CrayonResourceCollection {
 	public function load_process() {
 		parent::load_process();
 		$this->load_exts();
+		$this->load_aliases();
 	}
 
 	// XXX Override
@@ -79,20 +83,45 @@ class CrayonLangs extends CrayonResourceCollection {
 		if (!$this->is_state_loading()) {
 			return;
 		}
-		if ( ($lines = CrayonUtil::lines(CRAYON_LANG_EXT, 'lwc')) !== FALSE) {
+		if ( ($lang_exts = self::load_attr_file(CRAYON_LANG_EXT)) !== FALSE ) {
+			foreach ($lang_exts as $lang_id=>$exts) {
+				$lang = $this->get($lang_id);
+				$lang->ext($exts);
+			}
+		}
+	}
+	
+	/* Load all extensions and add them into each language. */
+	private function load_aliases() {
+	// Load only once
+		if (!$this->is_state_loading()) {
+			return;
+		}
+		if ( ($lang_aliases = self::load_attr_file(CRAYON_LANG_ALIAS)) !== FALSE ) {
+			foreach ($lang_aliases as $lang_id=>$aliases) {
+				$lang = $this->get($lang_id);
+				$lang->alias($aliases);
+			}
+		}
+	}
+	
+	// Used to load aliases and extensions to languages
+	private function load_attr_file($path) {
+		if ( ($lines = CrayonUtil::lines($path, 'lwc')) !== FALSE) {
+			$attributes = array(); // key = language id, value = array of attr
 			foreach ($lines as $line) {
 				preg_match('#^[\t ]*([^\r\n\t ]+)[\t ]+([^\r\n]+)#', $line, $matches);
 				if (count($matches) == 3 && $lang = $this->get($matches[1])) {
-					// Add the extension if the language exists
+					// If the langauges of the attribute exists, return it in an array
 					$matches[2] = str_replace('.', '', $matches[2]);
-					$exts = explode(' ', $matches[2]);
-					foreach ($exts as $ext) {
-						$lang->ext($ext);
-					}
+					// TODO merge instead of replace key?
+					$attributes[$matches[1]] = explode(' ', $matches[2]);
 				}
 			}
+			return $attributes;
 		} else {
-			CrayonLog::syslog('Could not load extensions file');
+			CrayonLog::syslog('Could not load attr file: ' . $path);
+			return FALSE;
 		}
 	}
 
@@ -101,6 +130,17 @@ class CrayonLangs extends CrayonResourceCollection {
 		$this->load();
 		foreach ($this->get() as $lang) {
 			if ($lang->has_ext($ext)) {
+				return $lang;
+			}
+		}
+		return FALSE;
+	}
+	
+	/* Returns the CrayonLang for the given alias */
+	public function alias($alias) {
+		$this->load();
+		foreach ($this->get() as $lang) {
+			if ($lang->has_alias($alias)) {
 				return $lang;
 			}
 		}
@@ -156,6 +196,7 @@ class CrayonLangs extends CrayonResourceCollection {
 /* Individual language. */
 class CrayonLang extends CrayonVersionResource {
 	private $ext = array();
+	private $aliases = array();
 	// Associative array of CrayonElement objects
 	private $elements = array();
 	//private $regex = '';
@@ -173,6 +214,10 @@ class CrayonLang extends CrayonVersionResource {
 	function ext($ext = NULL) {
 		if ($ext === NULL) {
 			return $this->ext;
+		} else if (is_array($ext) && !empty($ext)) {
+			foreach ($ext as $e) {
+				$this->ext($e);
+			}
 		} else if (is_string($ext) && !empty($ext) && !in_array($ext, $this->ext)) {
 			$this->ext[] = $ext;
 		}
@@ -180,6 +225,22 @@ class CrayonLang extends CrayonVersionResource {
 	
 	function has_ext($ext) {
 		return is_string($ext) && in_array($ext, $this->ext);
+	}
+	
+	function alias($alias = NULL) {
+		if ($alias === NULL) {
+			return $this->aliases;
+		} else if (is_array($alias) && !empty($alias)) {
+			foreach ($alias as $a) {
+				$this->alias($a);
+			}
+		} else if (is_string($alias) && !empty($alias) && !in_array($alias, $this->aliases)) {
+			$this->aliases[] = $alias;
+		}
+	}
+	
+	function has_alias($alias) {
+		return is_string($alias) && in_array($alias, $this->aliases);
 	}
 
 	function regex($element = NULL) {

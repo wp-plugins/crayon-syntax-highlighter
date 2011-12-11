@@ -53,6 +53,7 @@ define('CRAYON_LOG_MAX_SIZE', 50000); // Bytes
 
 define('CRAYON_README_FILE', CRAYON_ROOT_PATH . 'readme.txt');
 define('CRAYON_LANG_EXT', CRAYON_LANG_PATH . 'extensions.txt');
+define('CRAYON_LANG_ALIAS', CRAYON_LANG_PATH . 'aliases.txt');
 define('CRAYON_HELP_FILE', CRAYON_UTIL_PATH . 'help.htm');
 define('CRAYON_JQUERY', CRAYON_JS_DIR . 'jquery-1.7.min.js');
 define('CRAYON_JQUERY_POPUP', CRAYON_JS_DIR . 'jquery.popup.js');

@@ -97,6 +97,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.6.1 =
+* Avoided using $wp_query, $posts instead
+* Updated contextual help to be compliant with WP 3.3
+
 = 1.6.0 =
 * Added internationalisation with 4 new languages: German, Spanish, French and Italian
 * These were translated using Google Translate, so if you speak these languages and would like to improve them,

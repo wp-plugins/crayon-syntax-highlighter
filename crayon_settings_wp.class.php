@@ -15,7 +15,7 @@ class CrayonSettingsWP {
 	private static $options = NULL;
 	// An array of cache names for use with Transients API
 	private static $cache = NULL;
-	private static $plugin_hook = '';
+	private static $admin_page = '';
 	
 	const SETTINGS = 'crayon_fields';
 	const FIELDS = 'crayon_settings';
@@ -35,14 +35,20 @@ class CrayonSettingsWP {
 	// Methods ================================================================
 
 	public static function admin_load() {
-		$page = add_options_page('Crayon Syntax Highlighter '.crayon__('Settings'), 'Crayon', 'manage_options', 'crayon_settings', 'CrayonSettingsWP::settings');
-		self::$plugin_hook = $page;
-		add_action("admin_print_scripts-$page", 'CrayonSettingsWP::admin_scripts');
-		add_action("admin_print_styles-$page", 'CrayonSettingsWP::admin_styles');
+		self::$admin_page = $admin_page = add_options_page('Crayon Syntax Highlighter '.crayon__('Settings'), 'Crayon', 'manage_options', 'crayon_settings', 'CrayonSettingsWP::settings');
+		add_action("admin_print_scripts-$admin_page", 'CrayonSettingsWP::admin_scripts');
+		add_action("admin_print_styles-$admin_page", 'CrayonSettingsWP::admin_styles');
 		// Register settings, second argument is option name stored in db
 		register_setting(self::FIELDS, self::OPTIONS, 'CrayonSettingsWP::settings_validate');
-		add_action("admin_head-$page", 'CrayonSettingsWP::admin_init');
-		add_filter('contextual_help', 'CrayonSettingsWP::cont_help', 10, 3);
+		add_action("admin_head-$admin_page", 'CrayonSettingsWP::admin_init');
+		
+		// TODO depreciated since WP 3.3, remove eventually
+		global $wp_version;
+		if ($wp_version >= '3.3') {
+			add_action("load-$admin_page", 'CrayonSettingsWP::help_screen');
+		} else {
+			add_filter('contextual_help', 'CrayonSettingsWP::cont_help', 10, 3);
+		}
 	}
 
 	public static function admin_styles() {
@@ -386,13 +392,35 @@ class CrayonSettingsWP {
 ';
 	}
 	
+	public static function get_crayon_help_file() {
+	// Load help
+		if ( ($help = @file_get_contents(CRAYON_HELP_FILE)) !== FALSE) {
+			$help = str_replace('{PLUGIN}', CrayonGlobalSettings::plugin_path(), $help);
+		} else {
+			$help = 'Help failed to load... Try <a href="#info">these</a> instead.';
+		}
+		return $help;
+	}
+	
+	public static function help_screen() {
+		$screen = get_current_screen();
+
+	    if ($screen->id != self::$admin_page) {
+	        return;
+	    }
+	    
+	    // Add my_help_tab if current screen is My Admin Page
+	    $screen->add_help_tab( array(
+	        'id'		=> 'crayon_help_tab',
+	        'title'		=> crayon__('Crayon Help'),
+	        'content'	=> self::get_crayon_help_file() // TODO consider adding tranlations for help
+	    ) );
+	}
+	
+	// XXX Depreciated since WP 3.3 
 	public static function cont_help($contextual_help, $screen_id, $screen) {
-		if ($screen_id == self::$plugin_hook) {
-			if ( ($contextual_help = @file_get_contents(CRAYON_HELP_FILE)) !== FALSE) {
-				$contextual_help = str_replace('{PLUGIN}', CrayonGlobalSettings::plugin_path(), $contextual_help);
-			} else {
-				$contextual_help = 'Help failed to load... Try <a href="#info">these</a> instead.';
-			}
+		if ($screen_id == self::$admin_page) {
+			return self::get_crayon_help_file();
 		}
 		return $contextual_help;
 	}
@@ -468,7 +496,7 @@ class CrayonSettingsWP {
 				}
 				// Information about parsing
 				$parsed = CrayonResources::langs()->is_parsed();
-				$count = CrayonUtil::spnum(count($langs));
+				$count = count($langs);
 				echo '</select>', CRAYON_BR, ($parsed ? '' : '<span class="crayon-error">'), 
 					sprintf(crayon_n('%d language has been detected', '%d languages have been detected', $count), $count), '. ',
 					$parsed ? crayon__('Parsing was successful') : crayon__('Parsing was unsuccessful'),

@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.6.2
+Version: 1.6.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -40,16 +40,20 @@ class CrayonWP {
 	// Whether we are displaying an excerpt
 	private static $is_excerpt = FALSE;
 	// Whether we have added styles and scripts
-	private static $included = FALSE;
+	private static $enqueued = FALSE;
+	// Whether we have already printed the wp head 
+	private static $wp_head = FALSE;
 	// Used to keep Crayon IDs
 	private static $next_id = 0;
 	
 	// Used to detect the shortcode
 	const REGEX_CLOSED = '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)/[\t ]*\])'; // [crayon atts="" /]
-	const REGEX_TAG =    '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)\]\r?\n?(.*?)\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\])'; // [crayon atts="" /] ... [/crayon]
+	const REGEX_TAG =    '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)\][\r\n]*?(.*?)[\r\n]*?\[[\t ]*/[\t ]*crayon\b[^\]]*\])'; // [crayon atts="" /] ... [/crayon]
 	
 	const REGEX_CLOSED_NO_CAPTURE = '(?:\[[\t ]*crayon\b[^\]]*/[\t ]*\])';
-	const REGEX_TAG_NO_CAPTURE =    '(?:\[[\t ]*crayon\b[^\]]*\]\r?\n?.*?\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\])';
+	const REGEX_TAG_NO_CAPTURE =    '(?:\[[\t ]*crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[[\t ]*/[\t ]*crayon\b[^\]]*\])';
+	
+	const REGEX_ID = '#(?<!\$)\[[\t ]*crayon#i';
 
 	// Methods ================================================================
 
@@ -60,7 +64,7 @@ class CrayonWP {
 	}
 	
 	public static function regex_with_id($id) {
-		return '#(?<!\$)(?:(?:\[[\t ]*crayon-'.$id.'\b[^\]]*/[\t ]*\])|(?:\[[\t ]*crayon-'.$id.'\b[^\]]*\]\r?\n?.*?\r?\n?\[[\t ]*/[\t ]*crayon\b[^\]]*\]))(?!\$)#s';
+		return '#(?<!\$)(?:(?:\[[\t ]*crayon-'.$id.'\b[^\]]*/[\t ]*\])|(?:\[[\t ]*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[[\t ]*/[\t ]*crayon\b[^\]]*\]))(?!\$)#s';
 	}
 	
 	public static function regex_no_capture() {
@@ -139,20 +143,16 @@ class CrayonWP {
 		}
 		return $crayon;
 	}
-
+	
 	/* Search for Crayons in posts and queue them for creation */
 	public static function the_posts($posts) {
-		if (empty($posts)) {
-			return $posts;
-		}
-		
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
-		
+
 		// Search for shortcode in query
 		foreach ($posts as $post) {
 			// Add IDs to the Crayons
-			$post->post_content = preg_replace_callback('#(?<!\$)\[[\t ]*crayon#i', 'CrayonWP::add_crayon_id', $post->post_content);
+			$post->post_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $post->post_content);
 			
 			// Only include if a post exists with Crayon tag
 			preg_match_all(self::regex(), $post->post_content, $matches);
@@ -170,11 +170,6 @@ class CrayonWP {
 				
 				// Make sure we enqueue the styles/scripts
 				$enqueue = TRUE;
-				
-				// Mark the default theme as being used
-				if ( ($default_theme_id = CrayonGlobalSettings::val(CrayonSettings::THEME)) != NULL ) {
-					CrayonResources::themes()->set_used($default_theme_id);
-				}
 				
 				for ($i = 0; $i < count($full_matches); $i++) {
 					// Get attributes
@@ -195,12 +190,6 @@ class CrayonWP {
 						}
 					}
 					
-					// Detect if a theme is used
-					if (array_key_exists('theme', $atts_array)) {
-						$theme_id = $atts_array['theme'];
-						CrayonResources::themes()->set_used($theme_id);
-					}
-					
 					// Add array of atts and content to post queue with key as post ID
 					$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
 					self::$post_queue[strval($post->ID)][$id] = array('post_id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$contents[$i]);
@@ -208,7 +197,7 @@ class CrayonWP {
 			}
 		}
 		
-		if (!is_admin() && $enqueue && !self::$included) {
+		if (!is_admin() && $enqueue && !self::$enqueued) {
 			self::enqueue_resources();
 		}
 		
@@ -226,16 +215,10 @@ class CrayonWP {
 	private static function enqueue_resources() {
 		global $CRAYON_VERSION;
 		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
-		
-		$css = CrayonResources::themes()->get_used_theme_css();
-		foreach ($css as $theme=>$url) {
-			wp_enqueue_style('crayon-theme-'.$theme, $url, array(), $CRAYON_VERSION);
-		}
-		
-		wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_script('crayon-js', plugins_url(CRAYON_JS, __FILE__), array('crayon-jquery'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon-jquery-popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('crayon-jquery'), $CRAYON_VERSION);
-		self::$included = TRUE;
+		//wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon-js', plugins_url(CRAYON_JS, __FILE__), array('jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon-jquery-popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
+		self::$enqueued = TRUE;
 	}
 	
 	// Add Crayon into the_content
@@ -287,7 +270,27 @@ class CrayonWP {
 		return $the_content;
 	}
 
-	public static function init() {
+	public static function wp_head() {
+		self::$wp_head = TRUE;
+		if (!self::$enqueued) {
+			// We have missed our chance to enqueue. Use setting to either load always or only in the_post
+			CrayonSettingsWP::load_settings(); // Ensure settings are loaded
+			if (!CrayonGlobalSettings::val(CrayonSettings::EFFICIENT_ENQUEUE)) {
+				// Efficient enqueuing disabled, always load despite enqueuing or not in the_post
+				self::enqueue_resources();
+			}
+		}
+	}
+	
+	public static function crayon_theme_css() {
+		global $CRAYON_VERSION;
+		$css = CrayonResources::themes()->get_used_theme_css();
+		foreach ($css as $theme=>$url) {
+			wp_enqueue_style('crayon-theme-'.$theme, $url, array(), $CRAYON_VERSION);
+		}
+	}
+	
+	public static function init($request) {
 		self::load_textdomain();
 	}
 	
@@ -303,13 +306,6 @@ class CrayonWP {
 		
 	}
 	
-	public static function crayon_theme_css() {
-		global $CRAYON_VERSION;
-		$css = CrayonResources::themes()->get_used_theme_css();
-		foreach ($css as $theme=>$url) {
-			wp_enqueue_style('crayon-theme-'.$theme, $url, array(), $CRAYON_VERSION);
-		}
-	}
 }
 
 // Only if WP is loaded
@@ -321,6 +317,6 @@ if (defined('ABSPATH')) {
 	add_filter('the_posts', 'CrayonWP::the_posts');
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
-	add_filter('init', 'CrayonWP::init');
+	add_action('template_redirect', 'CrayonWP::wp_head');
 }
 ?>

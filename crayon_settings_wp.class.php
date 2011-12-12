@@ -586,6 +586,7 @@ class CrayonSettingsWP {
 		echo crayon__('Clear the cache used to store remote code requests'),': ';
 		self::dropdown(CrayonSettings::CACHE, false);
 		echo '<input type="submit" id="crayon-cache-clear" name="crayon-cache-clear" class="button-secondary" value="', crayon__('Clear Now'), '" /><br/>';
+		self::checkbox(array(CrayonSettings::EFFICIENT_ENQUEUE, crayon__('Attempt to load Crayon\'s CSS and JavaScript only when needed').'. <a href="http://ak.net84.net/?p=660" target="_blank">'.crayon__('Why?').'</a>'));
 		self::checkbox(array(CrayonSettings::TOUCHSCREEN, crayon__('Disable mouse gestures for touchscreen devices (eg. MouseOver)')));
 		self::checkbox(array(CrayonSettings::DISABLE_ANIM, crayon__('Disable animations')));
 		self::checkbox(array(CrayonSettings::DISABLE_RUNTIME, crayon__('Disable runtime stats')));

@@ -97,6 +97,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.6.3 =
+* For those still having issues with CSS and JavaScript not laoding, I have added a new setting in Misc. that will allow you to either attempt to load these resources when needed if you have no issues with your theme or to force them to load on each page.
+* Please see: http://ak.net84.net/php/loading-css-and-javascript-only-when-required-in-a-wordpress-plugin/ 
+
 = 1.6.2 =
 * Added ability to use and define language aliases. eg. XML -> XHTML, cpp -> c++, py -> python
 

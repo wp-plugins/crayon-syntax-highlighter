@@ -67,6 +67,7 @@ class CrayonSettings {
 	const ERROR_MSG = 'error-msg';
 	const HIDE_HELP = 'hide-help';
 	const CACHE = 'cache';
+	const EFFICIENT_ENQUEUE = 'efficient-enqueue';
 	
 	private static $cache_array;
 	
@@ -160,6 +161,7 @@ class CrayonSettings {
 			new CrayonSetting(self::ERROR_MSG, crayon__('An error has occurred. Please try again later.')),
 			new CrayonSetting(self::HIDE_HELP, FALSE),
 			new CrayonSetting(self::CACHE, array_keys(self::$cache_array), 1),
+			new CrayonSetting(self::EFFICIENT_ENQUEUE, FALSE),
 		);
 		
 		$this->set($settings);

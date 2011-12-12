@@ -238,15 +238,11 @@ class CrayonFormatter {
 		$theme_id_dashed = CrayonUtil::clean_css_name($theme_id);
 		
 		// Only load css once for each theme
-		//if (!empty($theme_id) && $theme != NULL /*&& !$theme->used()*/) {
-		/*	// Record usage
+		if (!empty($theme_id) && $theme != NULL && !$theme->used()) {
+			// Record usage
 			$theme->used(TRUE);
-			if ($print) {
-				// Add style
-				$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme_id . '/' . $theme_id . '.css?ver' . $CRAYON_VERSION;
-				$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
-			}
-		}*/
+			$output .= CrayonResources::themes()->get_theme_as_css($theme);
+		}
 		
 		// Load font css if not default
 		$font_id = $hl->setting_val(CrayonSettings::FONT);
@@ -259,13 +255,21 @@ class CrayonFormatter {
 		}
 		
 		// Determine font size
+		// TODO improve logic
 		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
-			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE);
-			$font_height = ($font_size + 4) . 'px;';
-			$toolbar_height = ($font_size + 8) . 'px;';
-			$font_style = "#$uid * { font-size: " . $font_size . "px; line-height: $font_height}\n\t";
-			$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar div { height: $toolbar_height line-height: $toolbar_height }\n\t";
-			$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }";
+			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
+			$font_height = ($font_size + 4) . 'px !important;';
+			$toolbar_height = ($font_size + 8) . 'px !important;';
+			$font_style .= "#$uid * { font-size: $font_size line-height: $font_height}";
+			$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar div { height: $toolbar_height line-height: $toolbar_height }\n";
+			$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
+		} else {
+			if (($font_size = CrayonGlobalSettings::get(CrayonSettings::FONT_SIZE)) !== FALSE) {
+				$font_size = $font_size->def() . 'px !important;';
+				$font_height = ($font_size + 4) . 'px !important;';
+				// Correct font CSS for WP 3.3
+				$font_style .= "#$uid .crayon-plain { font-size: $font_size line-height: $font_height}";
+			}
 		}
 		
 		// Determine scrollbar visibility
@@ -338,10 +342,14 @@ class CrayonFormatter {
 		// Determine if operating system is mac
 		$crayon_os = CrayonUtil::is_mac() ? 'mac' : 'pc';
 		
+		/*
 		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
 			// Produce style for individual crayon
 			$output .= '<style type="text/css">'.$font_style.'</style>';
-		}
+		}*/
+		
+		// Produce style for individual crayon
+		$output .= '<style type="text/css">'.$font_style.'</style>';
 		
 		// Produce output
 		$output .= '

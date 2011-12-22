@@ -16,6 +16,7 @@ class CrayonSettingsWP {
 	// An array of cache names for use with Transients API
 	private static $cache = NULL;
 	private static $admin_page = '';
+	private static $is_fully_loaded = FALSE;
 	
 	const SETTINGS = 'crayon_fields';
 	const FIELDS = 'crayon_settings';
@@ -101,45 +102,43 @@ class CrayonSettingsWP {
 
 	// Load the global settings and update them from the db
 	public static function load_settings($just_load_settings = FALSE) {
-		if (self::$options !== NULL) {
-			return;
-		}
-		
-		// Load settings from db
-		if (!(self::$options = get_option(self::OPTIONS))) {
-			self::$options = CrayonSettings::get_defaults_array();
-			update_option(self::OPTIONS, self::$options);
-		}
-		
-		// Initialise default global settings and update them from db
-		CrayonGlobalSettings::set(self::$options);
-		
-		if ($just_load_settings) {
-			return;
-		}
-		
-		// Load all available languages and themes
-		CrayonResources::langs()->load();
-		CrayonResources::themes()->load();
-		
-		// For local file loading
-		// This is used to decouple WP functions from internal Crayon classes
-		CrayonGlobalSettings::site_http(home_url());
-		CrayonGlobalSettings::site_path(ABSPATH);
-		CrayonGlobalSettings::plugin_path(plugins_url('', __FILE__));
-		
-		// Ensure all missing settings in db are replaced by default values
-		$changed = FALSE;
-		foreach (CrayonSettings::get_defaults_array() as $name => $value) {
-			// Add missing settings
-			if (!array_key_exists($name, self::$options)) {
-				self::$options[$name] = $value;
-				$changed = TRUE;
+		if (self::$options === NULL) {
+			// Load settings from db
+			if (!(self::$options = get_option(self::OPTIONS))) {
+				self::$options = CrayonSettings::get_defaults_array();
+				update_option(self::OPTIONS, self::$options);
 			}
+			// Initialise default global settings and update them from db
+			CrayonGlobalSettings::set(self::$options);
 		}
-		// A setting was missing, update options
-		if ($changed) {
-			update_option(self::OPTIONS, self::$options);
+		
+		if (!self::$is_fully_loaded && !$just_load_settings) {
+			// Load everything else as well
+			// Load all available languages and themes
+			CrayonResources::langs()->load();
+			CrayonResources::themes()->load();
+			
+			// For local file loading
+			// This is used to decouple WP functions from internal Crayon classes
+			CrayonGlobalSettings::site_http(home_url());
+			CrayonGlobalSettings::site_path(ABSPATH);
+			CrayonGlobalSettings::plugin_path(plugins_url('', __FILE__));
+			
+			// Ensure all missing settings in db are replaced by default values
+			$changed = FALSE;
+			foreach (CrayonSettings::get_defaults_array() as $name => $value) {
+				// Add missing settings
+				if (!array_key_exists($name, self::$options)) {
+					self::$options[$name] = $value;
+					$changed = TRUE;
+				}
+			}
+			// A setting was missing, update options
+			if ($changed) {
+				update_option(self::OPTIONS, self::$options);
+			}
+			
+			self::$is_fully_loaded = TRUE;
 		}
 	}
 	
@@ -498,7 +497,7 @@ class CrayonSettingsWP {
 				$parsed = CrayonResources::langs()->is_parsed();
 				$count = count($langs);
 				echo '</select>', CRAYON_BR, ($parsed ? '' : '<span class="crayon-error">'), 
-					sprintf(crayon_n('%d language has been detected', '%d languages have been detected', $count), $count), '. ',
+					sprintf(crayon_n('%d language has been detected.', '%d languages have been detected.', $count), $count), ' ',
 					$parsed ? crayon__('Parsing was successful') : crayon__('Parsing was unsuccessful'),
 					($parsed ? '. ' : '</span>');
 				// Check if fallback from db is loaded
@@ -572,6 +571,7 @@ class CrayonSettingsWP {
 		echo crayon__('Tab size in spaces'),': ';
 		self::textbox(array('name' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));
+		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons')));
 	}
 
 	public static function files() {
@@ -579,7 +579,7 @@ class CrayonSettingsWP {
 		echo crayon__('When loading local files and a relative path is given for the URL, use the absolute path'),': ',
 			'<div style="margin-left: 20px">', home_url(), '/';
 		self::textbox(array('name' => CrayonSettings::LOCAL_PATH));
-		echo '</div>', crayon__('Followed by your relative URL'), '.';
+		echo '</div>', crayon__('Followed by your relative URL.');
 	}
 
 	public static function misc() {
@@ -617,13 +617,13 @@ class CrayonSettingsWP {
 				'<input type="submit" id="crayon-log-email" name="', self::LOG_EMAIL_DEV,
 				'" class="button-secondary" value="', crayon__('Email Developer'), '"> ', '</div>', '</div>';
 		}
-		echo '<span', (!empty($log)) ? ' class="crayon-span"' : '', '>', (empty($log)) ? crayon__('The log is currently empty').'. ' : '';
+		echo '<span', (!empty($log)) ? ' class="crayon-span"' : '', '>', (empty($log)) ? crayon__('The log is currently empty.').' ' : '';
 		if ($exists) {
-			$writable ? crayon_e('The log file exists and is writable') : crayon_e('The log file exists and is not writable');
+			$writable ? crayon_e('The log file exists and is writable.') : crayon_e('The log file exists and is not writable.');
 		} else {
-			crayon_e('The log file does not exist and is not writable');
+			crayon_e('The log file does not exist and is not writable.');
 		}
-		echo '.</span>';
+		echo '</span>';
 	}
 
 	// About Fields ===========================================================

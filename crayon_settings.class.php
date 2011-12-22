@@ -68,6 +68,7 @@ class CrayonSettings {
 	const HIDE_HELP = 'hide-help';
 	const CACHE = 'cache';
 	const EFFICIENT_ENQUEUE = 'efficient-enqueue';
+	const CAPTURE_PRE = 'capture_pre';
 	
 	private static $cache_array;
 	
@@ -162,6 +163,7 @@ class CrayonSettings {
 			new CrayonSetting(self::HIDE_HELP, FALSE),
 			new CrayonSetting(self::CACHE, array_keys(self::$cache_array), 1),
 			new CrayonSetting(self::EFFICIENT_ENQUEUE, FALSE),
+			new CrayonSetting(self::CAPTURE_PRE, TRUE),
 		);
 		
 		$this->set($settings);

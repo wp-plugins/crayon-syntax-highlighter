@@ -262,15 +262,6 @@ msgstr ""
 msgid "When no language is provided, use the fallback"
 msgstr ""
 
-#: crayon_settings_wp.class.php:501
-#, php-format
-#@ crayon-syntax-highlighter
-msgid "%d language has been detected"
-msgid_plural "%d languages have been detected"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 #: crayon_settings_wp.class.php:502
 #@ crayon-syntax-highlighter
 msgid "Parsing was successful"
@@ -354,11 +345,6 @@ msgstr ""
 msgid "When loading local files and a relative path is given for the URL, use the absolute path"
 msgstr ""
 
-#: crayon_settings_wp.class.php:582
-#@ crayon-syntax-highlighter
-msgid "Followed by your relative URL"
-msgstr ""
-
 #: crayon_settings_wp.class.php:586
 #@ crayon-syntax-highlighter
 msgid "Clear the cache used to store remote code requests"
@@ -419,26 +405,6 @@ msgstr ""
 msgid "Email Developer"
 msgstr ""
 
-#: crayon_settings_wp.class.php:620
-#@ crayon-syntax-highlighter
-msgid "The log is currently empty"
-msgstr ""
-
-#: crayon_settings_wp.class.php:622
-#@ crayon-syntax-highlighter
-msgid "The log file exists and is writable"
-msgstr ""
-
-#: crayon_settings_wp.class.php:622
-#@ crayon-syntax-highlighter
-msgid "The log file exists and is not writable"
-msgstr ""
-
-#: crayon_settings_wp.class.php:624
-#@ crayon-syntax-highlighter
-msgid "The log file does not exist and is not writable"
-msgstr ""
-
 #: crayon_settings_wp.class.php:634
 #@ crayon-syntax-highlighter
 msgid "Version"
@@ -473,5 +439,39 @@ msgstr ""
 #: crayon_settings_wp.class.php:589
 #@ crayon-syntax-highlighter
 msgid "Why?"
+msgstr ""
+
+#: crayon_settings_wp.class.php:501
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "%d language has been detected."
+msgid_plural "%d languages have been detected."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: crayon_settings_wp.class.php:582
+#@ crayon-syntax-highlighter
+msgid "Followed by your relative URL."
+msgstr ""
+
+#: crayon_settings_wp.class.php:620
+#@ crayon-syntax-highlighter
+msgid "The log is currently empty."
+msgstr ""
+
+#: crayon_settings_wp.class.php:622
+#@ crayon-syntax-highlighter
+msgid "The log file exists and is writable."
+msgstr ""
+
+#: crayon_settings_wp.class.php:622
+#@ crayon-syntax-highlighter
+msgid "The log file exists and is not writable."
+msgstr ""
+
+#: crayon_settings_wp.class.php:624
+#@ crayon-syntax-highlighter
+msgid "The log file does not exist and is not writable."
 msgstr ""
 

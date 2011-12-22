@@ -311,13 +311,13 @@ class CrayonUtil {
 	}
 
 	// strpos with an array of $needles
-	public static function strposa($haystack, $needles) {
+	public static function strposa($haystack, $needles, $insensitive = FALSE) {
 		if (is_array($needles)) {
 			foreach ($needles as $str) {
 				if (is_array($str)) {
-					$pos = self::strposa($haystack, $str);
+					$pos = self::strposa($haystack, $str, $insensitive);
 				} else {
-					$pos = strpos($haystack, $str);
+					$pos = $insensitive ? stripos($haystack, $str) : strpos($haystack, $str);
 				}
 				if ($pos !== FALSE) {
 					return $pos;

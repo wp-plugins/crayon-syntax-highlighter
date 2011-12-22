@@ -185,7 +185,7 @@ class CrayonFormatter {
 				// TODO doesn't seem to work at the moment
 				$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
 				$readonly = $touch ? '' : 'readonly';
-				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . $hl->code() . '</textarea>';
+				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . self::clean_code($hl->code()) . '</textarea>';
 				$print_plain_button = '<a href="#" class="crayon-plain-button crayon-button" title="Toggle Plain Code" onclick="toggle_plain(\'' . $uid . '\'); return false;"></a>';
 				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
 					'<a href="#" class="crayon-copy-button crayon-button" title="Copy Plain Code" onclick="copy_plain(\'' . $uid . '\'); return false;"></a>' : '';

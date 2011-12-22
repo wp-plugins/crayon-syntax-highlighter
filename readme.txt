@@ -33,11 +33,12 @@ It also supports some neat features like:
 * Live Preview in settings
 * Dimensions, margins, alignment and CSS floating
 * Extensive error logging
+* &lt;pre&gt; tag support
 
 **Supported Languages**
 
 Languages are defined in language files using Regular Expressions to capture elements.
-See http://ak.net84.net/projects/crayon-language-file-specification/
+See http://ak.net84.net/projects/crayon-language-file-specification/ to learn how to make your own.
 
 * Default Langauge (one size fits all, highlights generic code)
 * C
@@ -63,6 +64,7 @@ Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" 
 * German
 * Italian
 * Spanish
+* Japanese (thanks to @west_323)
 * Help from translators at improving/adding to this list greatly appreciated!  
 
 **Planned Features**
@@ -84,6 +86,8 @@ You can change settings and view help under <strong>Settings > Crayon</strong> i
 <code>[crayon url="http://example.com/code.txt" /]</code>
 <code>[crayon url="/local-path-defined-in-settings/code.java" /]</code>
 
+Alternatively, you can use &lt;pre attributes&gt; tags in place of the [crayon attributes] shortcode.
+
 Please see the contextual help under <strong>Settings > Crayon</strong> for quick info about languages, themes, etc.
 
 = I need help, now! =
@@ -96,6 +100,17 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.6.4 =
+* Added user submitted Japanese language support. Thanks to @west_323!
+* &lt;pre&gt;&lt;/pre&gt; tags are now captured as Crayons. This can be turned off in Settings > Crayon > Code.
+* You can remove prevent capturing individual &lt;pre&gt; tags the same way as Crayons: $&lt;pre&gt; ... &lt;/pre&gt;$
+* This method of preventing the &lt;pre&gt; tag should be used if your code contains &lt;pre&gt; tags (nested &lt;pre&gt; tags) - otherwise it will cause conflicts.
+* Keep in mind that &lt;pre&gt; tags should not be editted in Visual Mode. Crayon will display all code as it appears in the HTML view of the post editor, where you can make code changes and use the tab key etc. If you want to use the Visual editor reguarly and are running into problems, consider loading the code form a file using the 'url' attribute. 
+* I have removed the ability to have spacing between the starting and ending square brackets, so [crayon...] is valid but [ crayon ... ] is not.
+The same applies to &lt;pre&gt; tags (not &lt; pre &gt;). The reason is to improve performance on posts without Crayons by using strpos and not regex functions like preg_match, and also it's better formed.
+* Fixed a bug causing Plain Code to display characters as encoded HTML entities
+* Removed jQuery 1.7 from /js folder. Now uses the version provided by WP.
 
 = 1.6.3 =
 * For those still having issues with CSS and JavaScript not laoding, I have added a new setting in Misc. that will allow you to either attempt to load these resources when needed if you have no issues with your theme or to force them to load on each page.

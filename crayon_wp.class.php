@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.6.3
+Version: 1.6.4
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -47,13 +47,13 @@ class CrayonWP {
 	private static $next_id = 0;
 	
 	// Used to detect the shortcode
-	const REGEX_CLOSED = '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)/[\t ]*\])'; // [crayon atts="" /]
-	const REGEX_TAG =    '(?:\[[\t ]*crayon(?:-(\w+))?\b([^\]]*)\][\r\n]*?(.*?)[\r\n]*?\[[\t ]*/[\t ]*crayon\b[^\]]*\])'; // [crayon atts="" /] ... [/crayon]
+	const REGEX_CLOSED = '(?:\[crayon(?:-(\w+))?\b([^\]]*)/\])'; // [crayon atts="" /]
+	const REGEX_TAG =    '(?:\[crayon(?:-(\w+))?\b([^\]]*)\][\r\n]*?(.*?)[\r\n]*?\[/crayon\])'; // [crayon atts=""] ... [/crayon]
 	
-	const REGEX_CLOSED_NO_CAPTURE = '(?:\[[\t ]*crayon\b[^\]]*/[\t ]*\])';
-	const REGEX_TAG_NO_CAPTURE =    '(?:\[[\t ]*crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[[\t ]*/[\t ]*crayon\b[^\]]*\])';
+	const REGEX_CLOSED_NO_CAPTURE = '(?:\[crayon\b[^\]]*/\])';
+	const REGEX_TAG_NO_CAPTURE =    '(?:\[crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\])';
 	
-	const REGEX_ID = '#(?<!\$)\[[\t ]*crayon#i';
+	const REGEX_ID = '#(?<!\$)\[crayon#i';
 
 	// Methods ================================================================
 
@@ -64,7 +64,7 @@ class CrayonWP {
 	}
 	
 	public static function regex_with_id($id) {
-		return '#(?<!\$)(?:(?:\[[\t ]*crayon-'.$id.'\b[^\]]*/[\t ]*\])|(?:\[[\t ]*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[[\t ]*/[\t ]*crayon\b[^\]]*\]))(?!\$)#s';
+		return '#(?<!\$)(?:(?:\[crayon-'.$id.'\b[^\]]*/\])|(?:\[crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\]))(?!\$)#s';
 	}
 	
 	public static function regex_no_capture() {
@@ -72,7 +72,8 @@ class CrayonWP {
 	}
 	
 	public static function regex_ignore() {
-		return '#(?:\$('. self::REGEX_CLOSED_NO_CAPTURE .')\$?)|'. '(?:\$(\[[\t ]*crayon\b))|(?:(\[[\t ]*/[\t ]*crayon\b[^\]]*\])\$)' .'#s';
+		// $[crayon ...] ... [/crayon]$
+		return '#(?:\$('. self::REGEX_CLOSED_NO_CAPTURE .')\$?)|'. '(?:\$(\[crayon\b))|(?:(\[/crayon\])\$)' .'#s';
 	}
 	
 	/**
@@ -151,6 +152,22 @@ class CrayonWP {
 
 		// Search for shortcode in query
 		foreach ($posts as $post) {
+			// To improve efficiency, avoid complicated regex with a simple check first
+			if (CrayonUtil::strposa($post->post_content, array('[crayon', '<pre'), TRUE) === FALSE) {
+				continue;
+			}
+			
+			// Convert <pre> tags to crayon tags, if needed
+			CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
+			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
+				// XXX This will fail if <pre></pre> is used inside another <pre></pre>
+				$post->post_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $post->post_content);
+			}
+			// Remove any '$' in $<pre> ... </pre>$ tags that were ignored
+			// XXX This will remove regardless of the CAPTURE_PRE setting
+			$post->post_content = str_ireplace('$<pre', '<pre', $post->post_content);
+			$post->post_content = str_ireplace('pre>$', 'pre>', $post->post_content);
+			
 			// Add IDs to the Crayons
 			$post->post_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $post->post_content);
 			
@@ -158,8 +175,8 @@ class CrayonWP {
 			preg_match_all(self::regex(), $post->post_content, $matches);
 			
 			if ( count($matches[0]) != 0 ) {
-				// Crayons found!
-				CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
+				// Crayons found! Load settings first to ensure global settings loaded
+				CrayonSettingsWP::load_settings();
 				
 				$full_matches = $matches[0];
 				$closed_ids = $matches[1];
@@ -274,7 +291,7 @@ class CrayonWP {
 		self::$wp_head = TRUE;
 		if (!self::$enqueued) {
 			// We have missed our chance to enqueue. Use setting to either load always or only in the_post
-			CrayonSettingsWP::load_settings(); // Ensure settings are loaded
+			CrayonSettingsWP::load_settings(TRUE); // Ensure settings are loaded
 			if (!CrayonGlobalSettings::val(CrayonSettings::EFFICIENT_ENQUEUE)) {
 				// Efficient enqueuing disabled, always load despite enqueuing or not in the_post
 				self::enqueue_resources();

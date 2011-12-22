@@ -11,7 +11,7 @@ class CrayonParser {
 	const SINGLE_LINE = 'SINGLE_LINE';
 	const NO_END_TAG = '(?![^<]*>)';
 	const HTML_CHAR = 'HTML_CHAR';
-	const HTML_CHAR_REGEX = '<|>|(&([\w-]+);?)|[ \t]*';
+	const HTML_CHAR_REGEX = '<|>|(&([\w-]+);?)|[ \t]+';
 	
 	private static $modes = array(self::CASE_INSENSITIVE => TRUE, self::MULTI_LINE => TRUE, self::SINGLE_LINE => TRUE);
 

@@ -101,6 +101,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.6.5 =
+* Fixed a bug causing international Unicode characters being garbled
+
 = 1.6.4 =
 * Added user submitted Japanese language support. Thanks to @west_323!
 * &lt;pre&gt;&lt;/pre&gt; tags are now captured as Crayons. This can be turned off in Settings > Crayon > Code.

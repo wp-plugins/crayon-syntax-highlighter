@@ -3,7 +3,7 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                Default
-    VERSION             1.6.4
+    VERSION             1.6.5
 
     COMMENT             (/\*.*?\*/)|(//.*?$)
     STRING              ((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
@@ -18,5 +18,5 @@
     IDENTIFIER          \b[A-Za-z_]\w*\b
     CONSTANT            (?<!\w)\.?[0-9][\w]*
     OPERATOR            (?alt:operator.txt)
-    SYMBOL              &[^;]*;|[^\w\s\d]
+    SYMBOL              &[^;]*;|[^\w\s\d]+
     

@@ -1,0 +1,481 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: crayon_settings.class.php:117
+#: crayon_settings.class.php:121
+#@ crayon-syntax-highlighter
+msgid "Max"
+msgstr "Max"
+
+#: crayon_settings.class.php:117
+#: crayon_settings.class.php:121
+#@ crayon-syntax-highlighter
+msgid "Min"
+msgstr "Min"
+
+#: crayon_settings.class.php:117
+#: crayon_settings.class.php:121
+#@ crayon-syntax-highlighter
+msgid "Static"
+msgstr "Statico"
+
+#: crayon_settings.class.php:119
+#: crayon_settings.class.php:123
+#@ crayon-syntax-highlighter
+msgid "Pixels"
+msgstr "Pixels"
+
+#: crayon_settings.class.php:119
+#: crayon_settings.class.php:123
+#@ crayon-syntax-highlighter
+msgid "Percent"
+msgstr "Per cento"
+
+#: crayon_settings.class.php:132
+#@ crayon-syntax-highlighter
+msgid "None"
+msgstr "Nessuno"
+
+#: crayon_settings.class.php:132
+#@ crayon-syntax-highlighter
+msgid "Left"
+msgstr "Sinistra"
+
+#: crayon_settings.class.php:132
+#@ crayon-syntax-highlighter
+msgid "Center"
+msgstr "Centro"
+
+#: crayon_settings.class.php:132
+#@ crayon-syntax-highlighter
+msgid "Right"
+msgstr "Destra"
+
+#: crayon_settings.class.php:134
+#: crayon_settings.class.php:151
+#: crayon_settings.class.php:154
+#@ crayon-syntax-highlighter
+msgid "On MouseOver"
+msgstr "Al passaggio del mouse"
+
+#: crayon_settings.class.php:134
+#: crayon_settings.class.php:140
+#: crayon_settings.class.php:151
+#@ crayon-syntax-highlighter
+msgid "Always"
+msgstr "Sempre"
+
+#: crayon_settings.class.php:134
+#: crayon_settings.class.php:140
+#@ crayon-syntax-highlighter
+msgid "Never"
+msgstr "Mai"
+
+#: crayon_settings.class.php:140
+#@ crayon-syntax-highlighter
+msgid "When Found"
+msgstr "Quando Trovato"
+
+#: crayon_settings.class.php:154
+#@ crayon-syntax-highlighter
+msgid "On Double Click"
+msgstr "Su doppio click"
+
+#: crayon_settings.class.php:154
+#@ crayon-syntax-highlighter
+msgid "On Single Click"
+msgstr "Il singolo click"
+
+#: crayon_settings.class.php:154
+#@ crayon-syntax-highlighter
+msgid "Only Using Toggle"
+msgstr "Utilizzando solo passare"
+
+#: crayon_settings.class.php:162
+#@ crayon-syntax-highlighter
+msgid "An error has occurred. Please try again later."
+msgstr "È verificato un errore. Riprova più tardi."
+
+#: crayon_settings_wp.class.php:39
+#: crayon_settings_wp.class.php:77
+#@ crayon-syntax-highlighter
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: crayon_settings_wp.class.php:70
+#@ crayon-syntax-highlighter
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Non si dispone di autorizzazioni sufficienti per accedere a questa pagina."
+
+#: crayon_settings_wp.class.php:89
+#@ crayon-syntax-highlighter
+msgid "Save Changes"
+msgstr "Salva le modifiche"
+
+#: crayon_settings_wp.class.php:95
+#@ crayon-syntax-highlighter
+msgid "Reset Settings"
+msgstr "Ripristina Impostazioni"
+
+#: crayon_settings_wp.class.php:428
+#@ crayon-syntax-highlighter
+msgid "Height"
+msgstr "Altezza"
+
+#: crayon_settings_wp.class.php:434
+#@ crayon-syntax-highlighter
+msgid "Width"
+msgstr "Larghezza"
+
+#: crayon_settings_wp.class.php:440
+#@ crayon-syntax-highlighter
+msgid "Top Margin"
+msgstr "Margine superiore"
+
+#: crayon_settings_wp.class.php:441
+#@ crayon-syntax-highlighter
+msgid "Bottom Margin"
+msgstr "Basso margine"
+
+#: crayon_settings_wp.class.php:442
+#: crayon_settings_wp.class.php:447
+#@ crayon-syntax-highlighter
+msgid "Left Margin"
+msgstr "Margine sinistro"
+
+#: crayon_settings_wp.class.php:443
+#: crayon_settings_wp.class.php:447
+#@ crayon-syntax-highlighter
+msgid "Right Margin"
+msgstr "Margine destro"
+
+#: crayon_settings_wp.class.php:453
+#@ crayon-syntax-highlighter
+msgid "Horizontal Alignment"
+msgstr "Allineamento orizzontale"
+
+#: crayon_settings_wp.class.php:456
+#@ crayon-syntax-highlighter
+msgid "Allow floating elements to surround Crayon"
+msgstr "Consentire agli elementi flottanti per circondare Crayon"
+
+#: crayon_settings_wp.class.php:461
+#@ crayon-syntax-highlighter
+msgid "Display the Toolbar"
+msgstr "Visualizzare la barra degli strumenti"
+
+#: crayon_settings_wp.class.php:464
+#@ crayon-syntax-highlighter
+msgid "Overlay the toolbar on code rather than push it down when possible"
+msgstr "Sovrapposizione della barra degli strumenti sul codice, piuttosto che spingere verso il basso quando è possibile"
+
+#: crayon_settings_wp.class.php:465
+#@ crayon-syntax-highlighter
+msgid "Toggle the toolbar on single click when it is overlayed"
+msgstr "Attivare o disattivare la barra degli strumenti sul singolo click quando è sovrapposto"
+
+#: crayon_settings_wp.class.php:466
+#@ crayon-syntax-highlighter
+msgid "Delay hiding the toolbar on MouseOut"
+msgstr "Ritardo nascondere la barra degli strumenti su MouseOut"
+
+#: crayon_settings_wp.class.php:468
+#@ crayon-syntax-highlighter
+msgid "Display the title when provided"
+msgstr "Visualizzare il titolo, ove previsto"
+
+#: crayon_settings_wp.class.php:469
+#@ crayon-syntax-highlighter
+msgid "Display the language"
+msgstr "Visualizzare la lingua"
+
+#: crayon_settings_wp.class.php:474
+#@ crayon-syntax-highlighter
+msgid "Display striped code lines"
+msgstr "Visualizzare le linee del codice a strisce"
+
+#: crayon_settings_wp.class.php:475
+#@ crayon-syntax-highlighter
+msgid "Enable line marking for important lines"
+msgstr "Abilita linea di marcatura per linee importanti"
+
+#: crayon_settings_wp.class.php:476
+#@ crayon-syntax-highlighter
+msgid "Display line numbers by default"
+msgstr "Visualizzare i numeri di linea di default"
+
+#: crayon_settings_wp.class.php:477
+#@ crayon-syntax-highlighter
+msgid "Enable line number toggling"
+msgstr "Abilita numero di commutazione linea"
+
+#: crayon_settings_wp.class.php:478
+#@ crayon-syntax-highlighter
+msgid "Start line numbers from"
+msgstr "Inizio numeri di riga da"
+
+#: crayon_settings_wp.class.php:488
+#@ crayon-syntax-highlighter
+msgid "When no language is provided, use the fallback"
+msgstr "Quando non è prevista la lingua, utilizzare il fallback"
+
+#: crayon_settings_wp.class.php:501
+#@ crayon-syntax-highlighter
+msgid "Parsing was successful"
+msgstr "L'analisi ha avuto successo"
+
+#: crayon_settings_wp.class.php:501
+#@ crayon-syntax-highlighter
+msgid "Parsing was unsuccessful"
+msgstr "L'analisi non ha avuto successo"
+
+#: crayon_settings_wp.class.php:507
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "The selected language with id %s could not be loaded"
+msgstr "La lingua selezionata con id %s non può essere caricato"
+
+#: crayon_settings_wp.class.php:511
+#@ crayon-syntax-highlighter
+msgid "Show Languages"
+msgstr "Mostra Lingue"
+
+#: crayon_settings_wp.class.php:532
+#@ crayon-syntax-highlighter
+msgid "Enable Live Preview"
+msgstr "Attiva anteprima dal vivo"
+
+#: crayon_settings_wp.class.php:535
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "The selected theme with id %s could not be loaded"
+msgstr "La tema selezionata con id %s non può essere caricato"
+
+#: crayon_settings_wp.class.php:549
+#@ crayon-syntax-highlighter
+msgid "Theme Default"
+msgstr "Tema di Default"
+
+#: crayon_settings_wp.class.php:553
+#@ crayon-syntax-highlighter
+msgid "Custom Font Size"
+msgstr "Dimensione del carattere personalizzati"
+
+#: crayon_settings_wp.class.php:558
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "The selected font with id %s could not be loaded"
+msgstr "La font selezionata con id %s non può essere caricato"
+
+#: crayon_settings_wp.class.php:563
+#@ crayon-syntax-highlighter
+msgid "Enable plain code view and display"
+msgstr "Attiva la visualizzazione del semplice codice e la visualizzazione"
+
+#: crayon_settings_wp.class.php:566
+#@ crayon-syntax-highlighter
+msgid "Enable code copy/paste"
+msgstr "Abilita copiare il codice/incolla"
+
+#: crayon_settings_wp.class.php:568
+#@ crayon-syntax-highlighter
+msgid "Enable opening code in a window"
+msgstr "Abilita il codice di apertura in una finestra"
+
+#: crayon_settings_wp.class.php:569
+#@ crayon-syntax-highlighter
+msgid "Display scrollbars (when needed)"
+msgstr "Barre di scorrimento del display (quando necessario)"
+
+#: crayon_settings_wp.class.php:571
+#@ crayon-syntax-highlighter
+msgid "Tab size in spaces"
+msgstr "Dimensione tabulazione in spazi"
+
+#: crayon_settings_wp.class.php:573
+#@ crayon-syntax-highlighter
+msgid "Remove whitespace surrounding the shortcode content"
+msgstr "Rimuovere gli spazi bianchi che circondano il contenuto shortcode"
+
+#: crayon_settings_wp.class.php:579
+#@ crayon-syntax-highlighter
+msgid "When loading local files and a relative path is given for the URL, use the absolute path"
+msgstr "Quando si caricano i file locali e un percorso relativo è dato per l'URL, utilizzare il percorso assoluto"
+
+#: crayon_settings_wp.class.php:586
+#@ crayon-syntax-highlighter
+msgid "Clear the cache used to store remote code requests"
+msgstr "Svuotare la cache utilizzata per memorizzare le richieste di codice remoto"
+
+#: crayon_settings_wp.class.php:588
+#@ crayon-syntax-highlighter
+msgid "Clear Now"
+msgstr "Svuota adesso"
+
+#: crayon_settings_wp.class.php:590
+#@ crayon-syntax-highlighter
+msgid "Disable mouse gestures for touchscreen devices (eg. MouseOver)"
+msgstr "Disabilitare i gesti del mouse per i dispositivi touchscreen (es. MouseOver)"
+
+#: crayon_settings_wp.class.php:591
+#@ crayon-syntax-highlighter
+msgid "Disable animations"
+msgstr "Disattivare le animazioni"
+
+#: crayon_settings_wp.class.php:592
+#@ crayon-syntax-highlighter
+msgid "Disable runtime stats"
+msgstr "Disabilitare runtime stats"
+
+#: crayon_settings_wp.class.php:599
+#@ crayon-syntax-highlighter
+msgid "Log errors for individual Crayons"
+msgstr "Errori nel registro di Crayons singoli"
+
+#: crayon_settings_wp.class.php:600
+#@ crayon-syntax-highlighter
+msgid "Log system-wide errors"
+msgstr "Log di sistema a livello di errori"
+
+#: crayon_settings_wp.class.php:601
+#@ crayon-syntax-highlighter
+msgid "Display custom message for errors"
+msgstr "Display messaggio personalizzato per gli errori"
+
+#: crayon_settings_wp.class.php:613
+#@ crayon-syntax-highlighter
+msgid "Show Log"
+msgstr "Mostra registro"
+
+#: crayon_settings_wp.class.php:615
+#@ crayon-syntax-highlighter
+msgid "Clear Log"
+msgstr "Cancella registro"
+
+#: crayon_settings_wp.class.php:616
+#@ crayon-syntax-highlighter
+msgid "Email Admin"
+msgstr "E-mail Admin"
+
+#: crayon_settings_wp.class.php:618
+#@ crayon-syntax-highlighter
+msgid "Email Developer"
+msgstr "Email Developer"
+
+#: crayon_settings_wp.class.php:634
+#@ crayon-syntax-highlighter
+msgid "Version"
+msgstr "Versione"
+
+#: crayon_settings_wp.class.php:636
+#@ crayon-syntax-highlighter
+msgid "Developer"
+msgstr "Sviluppatore"
+
+#: crayon_settings_wp.class.php:660
+#@ crayon-syntax-highlighter
+msgid "The result of innumerable hours of hard work over many months. It's an ongoing project, keep me motivated!"
+msgstr "Il risultato di innumerevoli ore di duro lavoro per molti mesi. E 'un progetto in corso, tenermi motivato!"
+
+#: util/preview.php:55
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked."
+msgstr "Cambiare la %1$slingua di fallback%2$s di cambiare il codice di esempio. Le righe 5-7 sono contrassegnati."
+
+#: crayon_settings.class.php:91
+#@ crayon-syntax-highlighter
+msgid "Hourly"
+msgstr "Ogni ora"
+
+#: crayon_settings.class.php:91
+#@ crayon-syntax-highlighter
+msgid "Daily"
+msgstr "Quotidiano"
+
+#: crayon_settings.class.php:92
+#@ crayon-syntax-highlighter
+msgid "Weekly"
+msgstr "Settimanale"
+
+#: crayon_settings.class.php:92
+#@ crayon-syntax-highlighter
+msgid "Monthly"
+msgstr "Mensile"
+
+#: crayon_settings.class.php:93
+#@ crayon-syntax-highlighter
+msgid "Immediately"
+msgstr "Immediatamente"
+
+#: crayon_settings_wp.class.php:414
+#@ crayon-syntax-highlighter
+msgid "Crayon Help"
+msgstr "Crayon Aiuto"
+
+#: crayon_settings_wp.class.php:589
+#@ crayon-syntax-highlighter
+msgid "Attempt to load Crayon's CSS and JavaScript only when needed"
+msgstr "Tentativo di caricare Crayon CSS e JavaScript solo quando necessario"
+
+#: crayon_settings_wp.class.php:589
+#@ crayon-syntax-highlighter
+msgid "Why?"
+msgstr "Perché?"
+
+#: crayon_settings_wp.class.php:500
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "%d language has been detected."
+msgid_plural "%d languages have been detected."
+msgstr[0] "%d lingua è stata rilevata."
+msgstr[1] "%d lingue sono state rilevate."
+
+#: crayon_settings_wp.class.php:582
+#@ crayon-syntax-highlighter
+msgid "Followed by your relative URL."
+msgstr "Seguito dal relativo URL."
+
+#: crayon_settings_wp.class.php:620
+#@ crayon-syntax-highlighter
+msgid "The log is currently empty."
+msgstr "Il registro è vuoto."
+
+#: crayon_settings_wp.class.php:622
+#@ crayon-syntax-highlighter
+msgid "The log file exists and is writable."
+msgstr "Il file di registro esiste ed è scrivibile."
+
+#: crayon_settings_wp.class.php:622
+#@ crayon-syntax-highlighter
+msgid "The log file exists and is not writable."
+msgstr "Il file di registro esiste e non è scrivibile."
+
+#: crayon_settings_wp.class.php:624
+#@ crayon-syntax-highlighter
+msgid "The log file does not exist and is not writable."
+msgstr "Il file di registro non esiste e non è scrivibile."
+
+#: crayon_settings_wp.class.php:574
+#@ crayon-syntax-highlighter
+msgid "Capture &lt;pre&gt; tags as Crayons"
+msgstr "Cattura tag &lt;pre&gt; come Crayons"
+

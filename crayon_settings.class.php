@@ -68,7 +68,9 @@ class CrayonSettings {
 	const HIDE_HELP = 'hide-help';
 	const CACHE = 'cache';
 	const EFFICIENT_ENQUEUE = 'efficient-enqueue';
-	const CAPTURE_PRE = 'capture_pre';
+	const CAPTURE_PRE = 'capture-pre';
+	const MIXED = 'mixed';
+	const SHOW_MIXED = 'show_mixed';
 	
 	private static $cache_array;
 	
@@ -164,6 +166,8 @@ class CrayonSettings {
 			new CrayonSetting(self::CACHE, array_keys(self::$cache_array), 1),
 			new CrayonSetting(self::EFFICIENT_ENQUEUE, FALSE),
 			new CrayonSetting(self::CAPTURE_PRE, TRUE),
+			new CrayonSetting(self::MIXED, TRUE),
+			new CrayonSetting(self::SHOW_MIXED, TRUE),
 		);
 		
 		$this->set($settings);

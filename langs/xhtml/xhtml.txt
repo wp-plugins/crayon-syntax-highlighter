@@ -3,15 +3,17 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                XHTML
-    VERSION             1.1
+    VERSION             1.7.0
 
     COMMENT             \<!--.*?--\>
     ATT_STR:STRING      (((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)'))
     NOTATION            <!.*?>
     
-    TAG:KEYWORD			</?\s*[^<\s>]+\s*>?
+    HTML_TAG:KEYWORD			(</?\s*[^<\s>]+\s*>?)|(\s*>)
+    
+    #</?\s*[^<\s>]+\s*>?
 
-    ATTR:ENTITY         \w+(?=\s*=)(?=[^\<]*\>)
+    ATTR:ENTITY         [\w-]+(?=\s*=")
     TEXT:IDENTIFIER     (?<=\>)[^\<\>]*(?=\<)
     SYMBOL              (?default)
-    OTHER:CONSTANT      (?default:identifier)
+#    OTHER:CONSTANT      (?default:identifier)

@@ -101,6 +101,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.0 =
+* Added the ability to highlight multiple languages in a single Crayon! http://bit.ly/ukwts2
+* A bunch of language improvements, a few CSS improvements, etc.
+
 = 1.6.6 =
 * Fixed a bug causing international Unicode characters being garbled in the title (thanks to simplelib.com!)
 * Fixed a bug that prevented strings from being highlighted

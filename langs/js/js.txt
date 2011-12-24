@@ -13,6 +13,11 @@
     TYPE                (?default)
     MODIFIER            (?default)
     
+    # For the <script> tag
+    ATT_STR:STRING      (((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)'))
+    TAG     			(</?\s*[^<\s>]+\s*>?)|(\s*>)
+    ATTR:ENTITY         [\w-]+(?=\s*=")
+    
     ENTITY              (?default)
     VARIABLE            (?default)|\b\s*[A-Za-z_]\w*\s*\:
     IDENTIFIER          (?default)

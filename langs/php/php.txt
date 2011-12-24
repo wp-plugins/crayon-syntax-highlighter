@@ -3,14 +3,14 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                        PHP
-    VERSION                     1.1
+    VERSION                     1.7.0
 
-    HTML:FADED 		            ((?<=\?>).*?(?=<\?(?:php)?))|(\A.*?(?=<\?(?:php)?))|((?<=\?>).*\Z)
+    #HTML:FADED 		            ((?<=\?>).*?(?=<\?(?:php)?))|(\A.*?(?=<\?(?:php)?))|((?<=\?>).*\Z)
   
     COMMENT                     (?default)|(\#.*?$)
     STRING                      (?default)|(<<<EOT.*?^EOT)
     
-    PHP_TAG:KEYWORD             <\?php|<\?|\?>
+    TAG                         <\?php|<\?|\?>
     CONSTRUCT:KEYWORD           \b(?alt:construct.txt)\b
     STATEMENT                   (?default)
     RESERVED                    (?default)

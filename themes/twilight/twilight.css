@@ -115,6 +115,9 @@ Author URI: http://ak.net84.net/
 	background-color: #F2F2F2 !important;
     color: #666 !important;
 }
+.crayon-theme-twilight .crayon-toolbar .crayon-mixed-highlight {
+	background-image: url('../../css/images/toolbar/plus_dark.png');
+}
 /* End Code Style ================== */
 
 /* Syntax Highlighting ============= */
@@ -130,6 +133,9 @@ Author URI: http://ak.net84.net/
 .crayon-theme-twilight .crayon-pre .t,
 .crayon-theme-twilight .crayon-pre .m {
     color: #d8b584 !important;
+}
+.crayon-theme-twilight .crayon-pre .ta {
+	color: #AAA !important;
 }
 .crayon-theme-twilight .crayon-pre .i {
     color: #fbefb1 !important;

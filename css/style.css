@@ -204,6 +204,25 @@ coloring etc.
 	background-image: url('images/toolbar/nums_dark.png');
 }
 
+/* Plus Sign */
+.crayon-syntax .crayon-toolbar .crayon-mixed-highlight {
+	background-image: url('images/toolbar/plus.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	margin: 0px 4px;
+	float: left;
+}
+
+/* Language */
+.crayon-syntax .crayon-toolbar .crayon-language {
+	padding-right: 3px !important; 
+}
+
+/* Tools */
+.crayon-syntax .crayon-toolbar .crayon-tools {
+	padding-right: 2px !important; 
+}
+
 .crayon-syntax .crayon-title {
     float: left;
 }

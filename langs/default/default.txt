@@ -3,7 +3,7 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                Default
-    VERSION             1.6.5
+    VERSION             1.7.0
 
     COMMENT             (/\*.*?\*/)|(//.*?$)
     STRING              ((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
@@ -18,5 +18,7 @@
     IDENTIFIER          \b[A-Za-z_]\w*\b
     CONSTANT            (?<!\w)\.?[0-9][\w]*
     OPERATOR            (?alt:operator.txt)
-    SYMBOL              &[^;]*;|[^\w\s\d'"]+
+    SYMBOL              &[^;]+;|(?alt:symbol.txt)
+    
+    # |[^\w\s\d'"] in SYMBOL causes it to crash
     

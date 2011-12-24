@@ -7,14 +7,14 @@ class CrayonLangs extends CrayonResourceCollection {
 	// Properties and Constants ===============================================
 	// CSS classes for known elements
 	private static $known_elements = array('COMMENT' => 'c', 'STRING' => 's', 'KEYWORD' => 'k', 
-			'STATEMENT' => 'st', 'RESERVED' => 'r', 'TYPE' => 't', 'MODIFIER' => 'm', 'IDENTIFIER' => 'i', 
+			'STATEMENT' => 'st', 'RESERVED' => 'r', 'TYPE' => 't', 'TAG' => 'ta', 'MODIFIER' => 'm', 'IDENTIFIER' => 'i', 
 			'ENTITY' => 'e', 'VARIABLE' => 'v', 'CONSTANT' => 'cn', 'OPERATOR' => 'o', 'SYMBOL' => 'sy', 
-			'NOTATION' => 'n', 'FADED' => 'f', CrayonParser::HTML_CHAR => 'h');
+			'NOTATION' => 'n', 'FADED' => 'f', CrayonParser::HTML_CHAR => 'h', CrayonParser::CRAYON_ELEMENT => 'crayon-internal-element');
 	const DEFAULT_LANG = 'default';
 	const DEFAULT_LANG_NAME = 'Default';
 	
-	// Assoc. array of exts to lang id
-	private static $exts = array();
+	// Used to cache the delimiters, since they are unlikely to change during a single run
+	private static $delimiters = NULL; 
 	
 	// Methods ================================================================
 	public function __construct() {
@@ -32,6 +32,7 @@ class CrayonLangs extends CrayonResourceCollection {
 		parent::load_process();
 		$this->load_exts();
 		$this->load_aliases();
+		$this->load_delimiters(); // TODO check for setting? 
 	}
 
 	// XXX Override
@@ -105,6 +106,20 @@ class CrayonLangs extends CrayonResourceCollection {
 		}
 	}
 	
+	/* Load all extensions and add them into each language. */
+	private function load_delimiters() {
+	// Load only once
+		if (!$this->is_state_loading()) {
+			return;
+		}
+		if ( ($lang_delims = self::load_attr_file(CRAYON_LANG_DELIM)) !== FALSE ) {
+			foreach ($lang_delims as $lang_id=>$delims) {
+				$lang = $this->get($lang_id);
+				$lang->delimiter($delims);
+			}
+		}
+	}
+	
 	// Used to load aliases and extensions to languages
 	private function load_attr_file($path) {
 		if ( ($lines = CrayonUtil::lines($path, 'lwc')) !== FALSE) {
@@ -113,7 +128,6 @@ class CrayonLangs extends CrayonResourceCollection {
 				preg_match('#^[\t ]*([^\r\n\t ]+)[\t ]+([^\r\n]+)#', $line, $matches);
 				if (count($matches) == 3 && $lang = $this->get($matches[1])) {
 					// If the langauges of the attribute exists, return it in an array
-					$matches[2] = str_replace('.', '', $matches[2]);
 					// TODO merge instead of replace key?
 					$attributes[$matches[1]] = explode(' ', $matches[2]);
 				}
@@ -145,6 +159,22 @@ class CrayonLangs extends CrayonResourceCollection {
 			}
 		}
 		return FALSE;
+	}
+	
+	/* Returns all the delimiters for the languages in an associative array of CrayonLang id strings as keys */
+	public function delimiters($reload = FALSE) {
+		$this->load();
+		if (self::$delimiters === NULL || $reload) {
+			$delimiters = array();
+			foreach ($this->get() as $lang) {
+				$lang_delims_regex = $lang->delimiter();
+				if ( !empty($lang_delims_regex) ) {
+					$delimiters[$lang->id()] = $lang->delimiter();
+				}
+			}
+			self::$delimiters = $delimiters;
+		}
+		return self::$delimiters;
 	}
 
 	/* Return the array of valid elements or a particular element value */
@@ -197,6 +227,7 @@ class CrayonLangs extends CrayonResourceCollection {
 class CrayonLang extends CrayonVersionResource {
 	private $ext = array();
 	private $aliases = array();
+	private $delimiters = '';
 	// Associative array of CrayonElement objects
 	private $elements = array();
 	//private $regex = '';
@@ -219,6 +250,8 @@ class CrayonLang extends CrayonVersionResource {
 				$this->ext($e);
 			}
 		} else if (is_string($ext) && !empty($ext) && !in_array($ext, $this->ext)) {
+			$ext = strtolower($ext);
+			$ext = str_replace('.', '', $ext);
 			$this->ext[] = $ext;
 		}
 	}
@@ -235,12 +268,24 @@ class CrayonLang extends CrayonVersionResource {
 				$this->alias($a);
 			}
 		} else if (is_string($alias) && !empty($alias) && !in_array($alias, $this->aliases)) {
+			$alias = strtolower($alias);
 			$this->aliases[] = $alias;
 		}
 	}
 	
 	function has_alias($alias) {
 		return is_string($alias) && in_array($alias, $this->aliases);
+	}
+	
+	function delimiter($delim = NULL) {
+		if ($delim === NULL) {
+			return $this->delimiters;
+		// Convert to regex for capturing delimiters
+		} else if (is_string($delim) && !empty($delim)) {
+			$this->delimiters = '#(?:'.$delim.')#msi';
+		} else if (is_array($delim) && !empty($delim)) {
+			$this->delimiters = '#(?:'.implode(')|(?:', $delim).')#msi';
+		}
 	}
 
 	function regex($element = NULL) {
@@ -249,7 +294,7 @@ class CrayonLang extends CrayonVersionResource {
 			foreach ($this->elements as $element) {
 				$regexes[] = $element->regex();
 			}
-			return '#' . '(?:(' . implode(')|(', array_values($regexes)) . '))' . '#' .
+			return '#' . '(?:('. implode(')|(', array_values($regexes)) . '))' . '#' .
 					 ($this->mode(CrayonParser::CASE_INSENSITIVE) ? 'i' : '') .
 					 ($this->mode(CrayonParser::MULTI_LINE) ? 'm' : '') .
 					 ($this->mode(CrayonParser::SINGLE_LINE) ? 's' : '');

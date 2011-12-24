@@ -126,6 +126,9 @@ Author URI: http://ak.net84.net/
 .crayon-theme-classic .crayon-pre .m {
     color: #800080 !important;
 }
+.crayon-theme-classic .crayon-pre .ta {
+	color: #FF0000 !important;
+}
 .crayon-theme-classic .crayon-pre .i {
     color: #000 !important;
 }

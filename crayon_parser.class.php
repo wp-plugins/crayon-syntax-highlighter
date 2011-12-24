@@ -9,9 +9,12 @@ class CrayonParser {
 	const CASE_INSENSITIVE = 'CASE_INSENSITIVE';
 	const MULTI_LINE = 'MULTI_LINE';
 	const SINGLE_LINE = 'SINGLE_LINE';
-	const NO_END_TAG = '(?![^<]*>)';
+	//const NO_END_TAG = '(?![^<]*>)'; // No longer used
 	const HTML_CHAR = 'HTML_CHAR';
 	const HTML_CHAR_REGEX = '<|>|(&([\w-]+);?)|[ \t]+';
+	const CRAYON_ELEMENT = 'CRAYON_ELEMENT';
+	const CRAYON_ELEMENT_REGEX = '\{\{crayon-internal:[^\}]*\}\}';
+	const CRAYON_ELEMENT_REGEX_CAPTURE = '\{\{crayon-internal:([^\}]*)\}\}';
 	
 	private static $modes = array(self::CASE_INSENSITIVE => TRUE, self::MULTI_LINE => TRUE, self::SINGLE_LINE => TRUE);
 
@@ -80,6 +83,10 @@ class CrayonParser {
 			}
 			$file = preg_replace($mode_pattern, '', $file);
 		}
+		
+		/* Add reserved Crayon element. This is used by Crayon internally. */
+		$crayon_element = new CrayonElement(self::CRAYON_ELEMENT, $path, self::CRAYON_ELEMENT_REGEX);
+		$lang->element(self::CRAYON_ELEMENT, $crayon_element);
 		
 		// Extract elements, classes and regex
 		$pattern = '#^[ \t]*([\w:]+)[ \t]+(?:\[([\w\t ]*)\][ \t]+)?([^\r\n]+)[ \t]*#m';

@@ -22,7 +22,7 @@ class CrayonFormatter {
 		if ($language != NULL && $highlight) {
 			/* Perform the replace on the code using the regex, pass the captured matches for
 			 formatting before they are replaced */
-			try {				
+			try {
 				// Match language regex
 				$elements = $language->elements();
 				$regex = $language->regex();
@@ -50,9 +50,14 @@ class CrayonFormatter {
 		$captured_group_number = count($matches) - 2;
 		if (array_key_exists($captured_group_number, self::$elements)) {
 			$captured_element = self::$elements[$captured_group_number];
-			// Separate lines and add css class.
-			$css = $captured_element->css() . CrayonLangs::known_elements($captured_element->fallback());
-			return self::split_lines($matches[0], $css);
+			// Avoid capturing and formatting internal Crayon elements
+			if ($captured_element->name() == CrayonParser::CRAYON_ELEMENT) {
+				return $matches[0]; // Return as is
+			} else {
+				// Separate lines and add css class.
+				$css = $captured_element->css() . CrayonLangs::known_elements($captured_element->fallback());
+				return self::split_lines($matches[0], $css);
+			}
 		}
 	}
 
@@ -203,7 +208,8 @@ class CrayonFormatter {
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
 
-			$buttons = $print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
+			$print_plus = $hl->is_mixed() && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="Contains Mixed Languages"></span>' : '';
+			$buttons = $print_plus.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
 			$button_preload = '';
 			foreach (array('nums', 'copy', 'popup', 'plain') as $name) {
 				$button_preload .= '<a href="#" class="crayon-'.$name.'-button crayon-button crayon-pressed crayon-invisible"></a>';
@@ -414,12 +420,6 @@ class CrayonFormatter {
 		$code = preg_replace('|	 |', '&nbsp;&nbsp;', $code);
 		// Replace tabs with 4 spaces
 		$code = preg_replace('|\t|', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
-		/* $code = preg_replace('|\t|', '	 ', $code);
-		// Add a line break for empty lines
-		$code = preg_replace('|^$|m', ' ', $code); // CRAYON_BR ^\r$\n becomes ^\r<br/>\n
-		// The last line can be entirely blank, without any \n, we need to make it render as a
-		// blank line, just like in a text editor when you do a \n
-		$code = preg_replace('|$\r?\n|', "\n ", $code);*/
 		return $code;
 	}
 

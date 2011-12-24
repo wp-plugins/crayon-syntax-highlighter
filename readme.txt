@@ -20,6 +20,7 @@ It also supports some neat features like:
 * Copy/paste code
 * Open code in a new window (popup)
 * Remote request caching
+* Multiple language highlighting in a single Crayon
 * Mobile/touchscreen device detection
 * Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Tab sizes

@@ -142,7 +142,7 @@ class CrayonUtil {
 	// Sets a variable to a string if valid
 	public static function str(&$var, $str, $escape = TRUE) {
 		if (is_string($str)) {
-			$var = ($escape == TRUE ? htmlentities($str) : $str);
+			$var = ($escape == TRUE ? htmlentities($str, ENT_COMPAT, 'UTF-8') : $str);
 			return TRUE;
 		}
 		return FALSE;

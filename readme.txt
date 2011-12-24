@@ -101,6 +101,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.6.6 =
+* Fixed a bug causing international Unicode characters being garbled in the title (thanks to simplelib.com!)
+* Fixed a bug that prevented strings from being highlighted
+
 = 1.6.5 =
 * Fixed a bug causing international Unicode characters being garbled
 

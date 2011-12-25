@@ -102,6 +102,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.1 =
+* Renamed Japanese GNU language code from ja_JP to ja.
+
 = 1.7.0 =
 * Added the ability to highlight multiple languages in a single Crayon! http://bit.ly/ukwts2
 * A bunch of language improvements, a few CSS improvements, etc.

@@ -102,6 +102,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.2 =
+* Fixed a bug that prevented foreign languages from being initialised and used. Thanks to @west_323 for finding it.  
+
 = 1.7.1 =
 * Renamed Japanese GNU language code from ja_JP to ja.
 

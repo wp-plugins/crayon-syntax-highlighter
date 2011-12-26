@@ -70,7 +70,7 @@ Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" 
 
 **Planned Features**
 
-* Multiple highlighting per Crayon
+* [lang][/lang] tags
 * Highlighting priority
 * Theme Editor
 

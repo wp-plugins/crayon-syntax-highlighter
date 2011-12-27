@@ -2,6 +2,12 @@
 require_once ('global.php');
 require_once (CRAYON_RESOURCE_PHP);
 
+class CrayonLangsResourceType {
+    const EXTENSION = 0;
+	const ALIAS = 1;
+	const DELIMITER = 2;
+}
+
 /* Manages languages once they are loaded. The parser directly loads them, saves them here. */
 class CrayonLangs extends CrayonResourceCollection {
 	// Properties and Constants ===============================================
@@ -13,8 +19,13 @@ class CrayonLangs extends CrayonResourceCollection {
 	const DEFAULT_LANG = 'default';
 	const DEFAULT_LANG_NAME = 'Default';
 	
-	// Used to cache the delimiters, since they are unlikely to change during a single run
-	private static $delimiters = NULL; 
+	const RESOURCE_TYPE = 'CrayonLangsResourceType';
+	
+	// Used to cache the objects, since they are unlikely to change during a single run
+	private static $resource_cache = array(); 
+//	private static $extensions = NULL;
+//	private static $aliases = NULL;
+//	private static $delimiters = NULL;
 	
 	// Methods ================================================================
 	public function __construct() {
@@ -161,20 +172,58 @@ class CrayonLangs extends CrayonResourceCollection {
 		return FALSE;
 	}
 	
-	/* Returns all the delimiters for the languages in an associative array of CrayonLang id strings as keys */
-	public function delimiters($reload = FALSE) {
+	/* Fetches a resource. Type is an int from CrayonLangsResourceType. */
+	public function fetch($type, $reload = FALSE, $keep_empty_fetches = FALSE) {
 		$this->load();
-		if (self::$delimiters === NULL || $reload) {
-			$delimiters = array();
+		
+		if (!array_key_exists($type, self::$resource_cache) || $reload) {
+			$fetches = array();
 			foreach ($this->get() as $lang) {
-				$lang_delims_regex = $lang->delimiter();
-				if ( !empty($lang_delims_regex) ) {
-					$delimiters[$lang->id()] = $lang->delimiter();
+				
+				switch ($type) {
+					case CrayonLangsResourceType::EXTENSION:
+						$fetch = $lang->ext();
+						break;
+					case CrayonLangsResourceType::ALIAS:
+						$fetch = $lang->alias();
+						break;
+					case CrayonLangsResourceType::DELIMITER:
+						$fetch = $lang->delimiter();
+						break;
+					default:
+						return FALSE;
+				}
+				
+				if ( !empty($fetch) || $keep_empty_fetches ) {
+					$fetches[$lang->id()] = $fetch;
 				}
 			}
-			self::$delimiters = $delimiters;
+			self::$resource_cache[$type] = $fetches;
 		}
-		return self::$delimiters;
+		return self::$resource_cache[$type];
+	}
+	
+	public function extensions($reload = FALSE) {
+		return $this->fetch(CrayonLangsResourceType::EXTENSION, $reload);
+	}
+	
+	public function aliases($reload = FALSE) {
+		return $this->fetch(CrayonLangsResourceType::ALIAS, $reload);
+	}
+	
+	public function delimiters($reload = FALSE) {
+		return $this->fetch(CrayonLangsResourceType::DELIMITER, $reload);
+	}
+	
+	public function ids_and_aliases($reload = FALSE) {
+		$fetch = $this->fetch(CrayonLangsResourceType::ALIAS, $reload, TRUE);
+		foreach ($fetch as $id=>$alias_array) {
+			$ids_and_aliases[] = $id;
+			foreach ($alias_array as $alias) {
+				$ids_and_aliases[] = $alias;
+			}
+		} 
+		return $ids_and_aliases; 
 	}
 
 	/* Return the array of valid elements or a particular element value */

@@ -1,6 +1,6 @@
 === Crayon Syntax Highlighter ===
 Contributors: akarmenia
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AW99EMEPQ4CFE&lc=AU&item_name=Crayon%20Syntax%20Highlighter%20Donation&item_number=crayon%2ddonate&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
+Donate link: http://ak.net84.net/files/donate.php
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3
@@ -21,6 +21,9 @@ It also supports some neat features like:
 * Open code in a new window (popup)
 * Remote request caching
 * Multiple language highlighting in a single Crayon
+* Mini Tags like [php][/php]
+* Plain Tag ([plain]...[/plain]) for quick &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;
+* &lt;pre&gt; tag support
 * Mobile/touchscreen device detection
 * Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Tab sizes
@@ -34,7 +37,6 @@ It also supports some neat features like:
 * Live Preview in settings
 * Dimensions, margins, alignment and CSS floating
 * Extensive error logging
-* &lt;pre&gt; tag support
 
 **Supported Languages**
 
@@ -59,6 +61,8 @@ Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</
 
 Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
 
+Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_blank">Coffee</a>!
+
 **International Languages**
 
 * French
@@ -68,9 +72,15 @@ Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" 
 * Japanese (thanks to @west_323)
 * Help from translators at improving/adding to this list greatly appreciated!  
 
+**Articles**
+
+These are helpful for discovering new features.
+
+* <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting in Crayon</a>
+* <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags And Plain Tags In Crayon</a> 
+
 **Planned Features**
 
-* [lang][/lang] tags
 * Highlighting priority
 * Theme Editor
 
@@ -87,7 +97,13 @@ You can change settings and view help under <strong>Settings > Crayon</strong> i
 <code>[crayon url="http://example.com/code.txt" /]</code>
 <code>[crayon url="/local-path-defined-in-settings/code.java" /]</code>
 
-Alternatively, you can use &lt;pre attributes&gt; tags in place of the [crayon attributes] shortcode.
+You can use &lt;pre&gt;:
+
+<code>&lt;pre lang="php"&gt; your code &lt;/crayon&gt;</code>
+
+You can also use Mini Tags:
+
+<code>[php theme="twilight"]your code[/php]</code>
 
 Please see the contextual help under <strong>Settings > Crayon</strong> for quick info about languages, themes, etc.
 
@@ -101,6 +117,11 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.7.3 =
+* Added Mini Tags and Plain Tags into Crayon. http://bit.ly/rRZuzk
+* Fixed a bug causing RSS feeds to contain malformed HTML of Crayons, now it shows plain code with correct indentations. Thanks to Артём.
+* Updated help in Settings and http://ak.net84.net/projects/crayon-syntax-highlighter/
 
 = 1.7.2 =
 * Fixed a bug that prevented foreign languages from being initialised and used. Thanks to @west_323 for finding it.  
@@ -281,4 +302,4 @@ http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-
 
 == Upgrade Notice ==
 
-No issues upgrading.
+Make sure to upgrade to the latest release when possible, I usually fix bugs on the day and add new features quickly. 

@@ -25,6 +25,7 @@ coloring etc.
 	border: none;
 	padding: 0px;
     margin: 0px;
+    text-align: left;
 }
 
 .crayon-syntax .crayon-main,

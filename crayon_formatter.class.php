@@ -422,11 +422,24 @@ class CrayonFormatter {
 		$code = preg_replace('|\t|', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
 		return $code;
 	}
+	
+	/* Converts the code to entities and wraps in a <pre><code></code></pre> */
+	public static function plain_code($code) {
+		if (is_array($code)) {
+			// When used as a preg_replace_callback
+			$code = $code[1];
+		}
+		$code = CrayonUtil::htmlentities($code);
+		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
+			$code = trim($code);
+		}
+		return '<pre><code>'.$code.'</code></pre>';
+	}
 
 	public static function split_lines($code, $class) {
 		$code = self::clean_code($code);
-		$code = preg_replace('|^|m', "<span class=\"$class\">", $code);
-		$code = preg_replace('|$|m', "</span>", $code);
+		$code = preg_replace('|^|m', '<span class="'.$class.'">', $code);
+		$code = preg_replace('|$|m', '</span>', $code);
 		return $code;
 	}
 

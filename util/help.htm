@@ -29,7 +29,15 @@
     <td width="30%"><code>mark="5-10,12"</code></td>
   </tr>
 </table>
-<p>You can also use <code>&lt;pre attributes&gt;...&lt;/pre&gt;</code> so that the code remains visible even if you disable Crayon. Make sure to edit all your code in HTML mode, however, not Visual.</p>
+<p>You can also use <code>&lt;pre attributes&gt;...&lt;/pre&gt;</code> so that the code can be reused by other plugins even if you disable Crayon. Make sure to edit all your code in HTML mode, however, not Visual.</p>
+<p>You can even use Mini Tags  like:</p>
+<p align="center"><code>[html]&lt;strong&gt;some code&lt;/strong&gt;[/html]</code><br />
+<code>[php]echo "whassup?";[/php]</code></p>
+<p>The short name in brackets you use are called IDs and Aliases. For example, <code>xml</code> and <code>hxml</code> are Aliases to the language ID <code>xhtml</code>. The IDs and their Aliases are under:</p><pre style="text-align:center;">Settings &gt; Crayon &gt; Show Languages
+</pre>
+<p>Perhaps best of all, you can mix code together like on a real HTML page, by having <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> and <code>&lt;?php...?&gt;</code> tags all in a single Crayon. Find out more <a href="http://bit.ly/ukwts2" target="_blank">here</a>.</p>
+<p>You can also display a quick unhighlighted snapshot of code using the <code>[plain]...[/plain]</code> tag. The code will look like it does in the HTML view of the post editor.</p>
+<p><strong>Settings</strong></p>
 <p>Crayon is versatile so you can override global settings for individual Crayons with attributes.</p>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="crayon-table crayon-table-light">
   <tr class="crayon-table-header">
@@ -208,9 +216,8 @@
     <td> Allow mixed languages using delimiters and tags</td>
   </tr>
 </table>
-<p>Here's a simple example of attributes:</p><p><code>
-[crayon lang="html" font-size="20" mark="1" width="200px" toolbar=&quot;false&quot;] &lt;strong&gt;This is great!&lt;/strong&gt; [/crayon] </code></p>
-<p>If you want to prevent the <code>[crayon]</code> shortcode from turning into a Crayon, use: <code>$[crayon]...[/crayon]$</code></p>
+<p>Here's a simple example of attributes:</p><p><code>[crayon lang="html" font-size="20" mark="1" width="200px" toolbar=&quot;false&quot;] &lt;strong&gt;This is great!&lt;/strong&gt; [/crayon] </code></p>
+<p>If you want to prevent the <code>[crayon]</code> shortcode from turning into a Crayon, use: <code>$[crayon]...[/crayon]</code>.  If you want to prevent a <code>[/crayon]</code> from ending a Crayon (say if you wanted to have the Crayon shortcode appear in a Crayon itself), then use <code>$[crayon]...[/crayon]$</code>. The same applies to <code>&lt;pre&gt;</code> and Mini Tags.</p>
 <p><strong>Themes</strong></p>
 <p>Crayon comes with  built-in Themes to style your code.  You can learn how to create your own and download more from <a href="http://ak.net84.net/?go=crayonthemes" target="_blank">here</a>. Themes are structured <code>/themes/theme-name/theme-name.css</code>. If you know CSS, take a look at <code>/themes/default/default.css</code> to get an idea of how they work and how you can change/create them.</p>
 <p><strong>Languages</strong></p>

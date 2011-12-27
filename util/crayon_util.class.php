@@ -27,9 +27,9 @@ class CrayonUtil {
 			$escape_regex = strpos($opts, 'r') !== FALSE;
 			$clean_commments = strpos($opts, 'c') !== FALSE;
 			$return_string = strpos($opts, 's') !== FALSE;
-			$escape_hash = strpos($opts, 'h') !== FALSE;
+//			$escape_hash = strpos($opts, 'h') !== FALSE;
 		} else {
-			$lowercase = $whitespace = $escape_regex = $clean_commments = $return_string = $escape_hash = FALSE;
+			$lowercase = $whitespace = $escape_regex = $clean_commments = $return_string = /*$escape_hash =*/ FALSE;
 		}
 		// Remove comments
 		if ($clean_commments) {
@@ -54,10 +54,10 @@ class CrayonUtil {
 		if ($escape_regex) {
 			for ($i = 0; $i < count($lines); $i++) {
 				$lines[$i] = self::esc_regex($lines[$i]);
-				if ($escape_hash || true) {
+//				if ($escape_hash || true) {
 					// If we have used \#, then we don't want it to become \\#
 					$lines[$i] = preg_replace('|\\\\\\\\#|', '\#', $lines[$i]);
-				}
+//				}
 			}
 		}
 		
@@ -142,10 +142,14 @@ class CrayonUtil {
 	// Sets a variable to a string if valid
 	public static function str(&$var, $str, $escape = TRUE) {
 		if (is_string($str)) {
-			$var = ($escape == TRUE ? htmlentities($str, ENT_COMPAT, 'UTF-8') : $str);
+			$var = ($escape == TRUE ? self::htmlentities($str) : $str);
 			return TRUE;
 		}
 		return FALSE;
+	}
+	
+	public static function htmlentities($str) {
+		return htmlentities($str, ENT_COMPAT, 'UTF-8');
 	}
 
 	// Sets a variable to an int if valid
@@ -213,7 +217,7 @@ class CrayonUtil {
 		return /*htmlspecialchars(*/preg_quote($regex)/* , ENT_NOQUOTES)*/;
 	}
 	
-	// Escapes regex characters as literals
+	// Escapes hash character as literals
 	public static function esc_hash($regex) {
 		if (is_string($regex)) {
 			return preg_replace('|(?<!\\\\)#|', '\#', $regex);

@@ -174,9 +174,6 @@ class CrayonSettingsWP {
 	}
 	
 	public static function load_cache() {
-		/*if (self::$cache !== NULL) {
-			return;
-		}*/
 		// Load cache from db
 		if (!(self::$cache = get_option(self::CACHE))) {
 			self::$cache = array();
@@ -572,6 +569,8 @@ class CrayonSettingsWP {
 		self::textbox(array('name' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));
 		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons')));
+		self::checkbox(array(CrayonSettings::CAPTURE_MINI_TAG, crayon__('Capture Mini Tags like [php][/php] as Crayons.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
+		self::checkbox(array(CrayonSettings::PLAIN_TAG, crayon__('Enable [plain][/plain] tag.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::MIXED, crayon__('Allow Mixed Language Highlighting with delimiters and tags.') . ' <a href="http://bit.ly/ukwts2" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::SHOW_MIXED, crayon__('Show Mixed Language Icon (+)')));
 	}
@@ -636,14 +635,14 @@ class CrayonSettingsWP {
 		$version = '<b>'.crayon__('Version').':</b> ' . $CRAYON_VERSION;
 		$date = $CRAYON_DATE;
 		$developer = '<b>'.crayon__('Developer').':</b> ' . $CRAYON_AUTHOR;
-		$paypal = '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+		/*$paypal = '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
 ">
 <input type="image" src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal � The safer, easier way to pay online.">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
 </form>
-		';
+		';*/
 		$paypal = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AW99EMEPQ4CFE&lc=AU&item_name=Crayon%20Syntax%20Highlighter%20Donation&item_number=crayon%2ddonate&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted" target="_blank"><img src="'.plugins_url(CRAYON_DONATE_BUTTON, __FILE__).'"></a>
 		';
 		$links = '<a id="twitter-icon" href="' . $CRAYON_TWITTER . '" target="_blank"></a>

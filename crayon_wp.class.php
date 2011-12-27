@@ -2,11 +2,12 @@
 /*
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
-Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings.</a>
-Version: 1.7.2
+Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings</a> | <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/">View Help</a> | <a href="http://ak.net84.net/files/donate.php">Donate Coffee</a>
+Version: 1.7.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
+Domain Path: /trans/
 License: GPL2
 	Copyright 2011	Aram Kocharyan	(email : akarmenia@gmail.com)
 	This program is free software; you can redistribute it and/or modify
@@ -45,6 +46,11 @@ class CrayonWP {
 	private static $wp_head = FALSE;
 	// Used to keep Crayon IDs
 	private static $next_id = 0;
+	// Array of tag search strings
+	private static $search_tags = array('[crayon', '<pre', '[plain');
+	// String to store the regex for capturing mini tags
+	private static $alias_regex = '';
+	private static $is_mini_tag_init = FALSE;  
 	
 	// Used to detect the shortcode
 	const REGEX_CLOSED = '(?:\[crayon(?:-(\w+))?\b([^\]]*)/\])'; // [crayon atts="" /]
@@ -54,6 +60,8 @@ class CrayonWP {
 	const REGEX_TAG_NO_CAPTURE =    '(?:\[crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\])';
 	
 	const REGEX_ID = '#(?<!\$)\[crayon#i';
+	
+	const MODE_NORMAL = 0, MODE_JUST_CODE = 1, MODE_PLAIN_CODE = 2;
 
 	// Methods ================================================================
 
@@ -71,15 +79,11 @@ class CrayonWP {
 		return '#(?<!\$)(?:'. self::REGEX_CLOSED_NO_CAPTURE .'|'. self::REGEX_TAG_NO_CAPTURE .')(?!\$)#s';
 	}
 	
-	public static function regex_ignore() {
-		// $[crayon ...] ... [/crayon]$
-		return '#(?:\$('. self::REGEX_CLOSED_NO_CAPTURE .')\$?)|'. '(?:\$(\[crayon\b))|(?:(\[/crayon\])\$)' .'#s';
-	}
-	
 	/**
 	 * Adds the actual Crayon instance, should only be called by add_shortcode()
+	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
-	private static function shortcode($atts, $content = NULL, $id = NULL) {
+	private static function shortcode($atts, $content = NULL, $id = NULL, $mode = self::MODE_NORMAL) {
 		// Lowercase attributes
 		$lower_atts = array();
 		foreach ($atts as $att=>$value) {
@@ -126,7 +130,12 @@ class CrayonWP {
 		// Determine if we should highlight
 		$highlight = array_key_exists('highlight', $atts) ? CrayonUtil::str_to_bool($atts['highlight'], FALSE) : TRUE;
 		
-		return $crayon->output($highlight, $nums = true, $print = false);
+		if ($mode === self::MODE_JUST_CODE || $mode === self::MODE_PLAIN_CODE) {
+			$crayon->process($highlight && ($mode === self::MODE_JUST_CODE));
+			return $crayon;	
+		} else {
+			return $crayon->output($highlight, $nums = true, $print = false);
+		}
 	}
 
 	/* Returns Crayon instance */
@@ -149,24 +158,33 @@ class CrayonWP {
 	public static function the_posts($posts) {
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
+		CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
 
+		self::init_mini_tags();
+		
 		// Search for shortcode in query
 		foreach ($posts as $post) {
+			
 			// To improve efficiency, avoid complicated regex with a simple check first
-			if (CrayonUtil::strposa($post->post_content, array('[crayon', '<pre'), TRUE) === FALSE) {
+			if (CrayonUtil::strposa($post->post_content, self::$search_tags, TRUE) === FALSE) {
 				continue;
 			}
 			
 			// Convert <pre> tags to crayon tags, if needed
-			CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
 			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 				// XXX This will fail if <pre></pre> is used inside another <pre></pre>
 				$post->post_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $post->post_content);
 			}
-			// Remove any '$' in $<pre> ... </pre>$ tags that were ignored
-			// XXX This will remove regardless of the CAPTURE_PRE setting
-			$post->post_content = str_ireplace('$<pre', '<pre', $post->post_content);
-			$post->post_content = str_ireplace('pre>$', 'pre>', $post->post_content);
+			
+			// Convert mini [php][/php] tags to crayon tags, if needed
+			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+				$post->post_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon\2 lang="\1"]\3[/crayon]', $post->post_content);
+			}
+
+			// Convert [plain] tags into <pre><code></code></pre>, if needed
+			if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
+				$post->post_content = preg_replace_callback('#(?<!\$)\[plain\](.*?)\[/plain\]#msi', 'CrayonFormatter::plain_code', $post->post_content);
+			}
 			
 			// Add IDs to the Crayons
 			$post->post_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $post->post_content);
@@ -209,9 +227,12 @@ class CrayonWP {
 					
 					// Add array of atts and content to post queue with key as post ID
 					$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
-					self::$post_queue[strval($post->ID)][$id] = array('post_id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$contents[$i]);
+					$code = self::crayon_remove_ignore($contents[$i]);
+					self::$post_queue[strval($post->ID)][$id] = array('post_id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$code);
 				}
 			}
+			
+			$post->post_content = self::crayon_remove_ignore($post->post_content);
 		}
 		
 		if (!is_admin() && $enqueue && !self::$enqueued) {
@@ -238,6 +259,23 @@ class CrayonWP {
 		self::$enqueued = TRUE;
 	}
 	
+	private static function init_mini_tags() {
+		if (!self::$is_mini_tag_init && CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+			$aliases = CrayonResources::langs()->ids_and_aliases();
+			for ($i = 0; $i < count($aliases); $i++) {
+				$alias = $aliases[$i];
+				self::$search_tags[] = '[' . $alias;
+				
+				$alias_regex = CrayonUtil::esc_hash(CrayonUtil::esc_regex($alias));
+				if ($i != count($aliases) - 1) {
+					$alias_regex .= '|';
+				}
+				self::$alias_regex .= $alias_regex;
+			}
+			self::$is_mini_tag_init = TRUE;
+		}
+	}
+	
 	// Add Crayon into the_content
 	public static function the_content($the_content) {
 		global $post;
@@ -248,7 +286,7 @@ class CrayonWP {
 			// Remove Crayon from content if we are displaying an excerpt
 			return preg_replace(self::regex_no_capture(), '', $the_content);
 		}
-		
+
 		// Find if this post has Crayons
 		if ( array_key_exists($post_id, self::$post_queue) ) {
 			// XXX We want the plain post content, no formatting
@@ -257,17 +295,18 @@ class CrayonWP {
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $id=>$v) {
 				$atts = $v['atts'];
-				$content = $v['code']; // The formatted crayon we replace post content with
-				// Remove '$' from $[crayon]...[/crayon]$ contained within [crayon] tag content
-				$content = self::crayon_remove_ignore($content);
-				// Apply shortcode to the content
-				$crayon = self::shortcode($atts, $content, $id);
-				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon, $the_content, 1, $count);
+				$content = $v['code']; // The crayon we replace post content with
+				if (is_feed()) { 
+					// Convert the plain code to entities and put in a <pre></pre> tag
+					$crayon = self::shortcode($atts, $content, $id, self::MODE_PLAIN_CODE);
+					$crayon_formatted = CrayonFormatter::plain_code($crayon->code());
+				} else {
+					// Apply shortcode to the content
+					$crayon_formatted = self::shortcode($atts, $content, $id);
+				}
+				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
 			}
 		}
-		// Remove '$' from $[crayon]...[/crayon]$ in post body
-		// XXX Do this after applying shortcode to avoid matching
-		$the_content = self::crayon_remove_ignore($the_content);
 		return $the_content;
 	}
 	
@@ -279,11 +318,20 @@ class CrayonWP {
 		return $the_excerpt;
 	}
 	
-	// Check if the $[crayon]...[/crayon]$ notation has been used to ignore [crayon] tags within posts
+	// Check if the $[crayon]...[/crayon] notation has been used to ignore [crayon] tags within posts
 	public static function crayon_remove_ignore($the_content) {
-		$the_content = preg_replace('#\$('. self::REGEX_CLOSED_NO_CAPTURE .')\$?#', '$1', $the_content);
-		$the_content = preg_replace('#\$(\[[\t ]*crayon\b)#', '$1', $the_content);
-		$the_content = preg_replace('#(\[[\t ]*/[\t ]*crayon\b[^\]]*\])\$#', '$1', $the_content);
+		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
+		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
+			$the_content = str_ireplace(array('$<pre', 'pre>$'), array('<pre', 'pre>'), $the_content);
+		}
+		if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
+			$the_content = str_ireplace(array('$[plain', 'plain]$'), array('[plain', 'plain]'), $the_content);
+		}
+		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+			self::init_mini_tags();
+			$the_content = preg_replace('#\$\[('. self::$alias_regex .')#', '[$1', $the_content);
+			$the_content = preg_replace('#('. self::$alias_regex .')\]\$#', '$1]', $the_content);
+		}
 		return $the_content;
 	}
 

@@ -132,7 +132,7 @@ class CrayonHighlighter {
 	}
 
 	/* Central point of access for all other functions to update code. */
-	private function process($highlight = TRUE) {
+	public function process($highlight = TRUE) {
 		$tmr = new CrayonTimer();
 		$this->runtime = NULL;
 		if ($this->needs_load) {

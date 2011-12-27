@@ -143,7 +143,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.6.4 =
 * Added user submitted Japanese language support. Thanks to @west_323!
 * &lt;pre&gt;&lt;/pre&gt; tags are now captured as Crayons. This can be turned off in Settings > Crayon > Code.
-* You can remove prevent capturing individual &lt;pre&gt; tags the same way as Crayons: $&lt;pre&gt; ... &lt;/pre&gt;$
+* You can remove prevent capturing individual &lt;pre&gt; tags the same way as Crayons: $&lt;pre&gt; ... &lt;/pre&gt;
 * This method of preventing the &lt;pre&gt; tag should be used if your code contains &lt;pre&gt; tags (nested &lt;pre&gt; tags) - otherwise it will cause conflicts.
 * Keep in mind that &lt;pre&gt; tags should not be editted in Visual Mode. Crayon will display all code as it appears in the HTML view of the post editor, where you can make code changes and use the tab key etc. If you want to use the Visual editor reguarly and are running into problems, consider loading the code form a file using the 'url' attribute. 
 * I have removed the ability to have spacing between the starting and ending square brackets, so [crayon...] is valid but [ crayon ... ] is not.

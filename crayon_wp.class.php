@@ -2,7 +2,7 @@
 /*
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/
-Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings</a> | <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/">View Help</a> | <a href="http://ak.net84.net/files/donate.php">Donate Coffee</a>
+Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings</a>
 Version: 1.7.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/

@@ -118,6 +118,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.4 =
+* Added namespacing to crayon.js to prevent conflicts
+
 = 1.7.3 =
 * Added Mini Tags and Plain Tags into Crayon. http://bit.ly/rRZuzk
 * Fixed a bug causing RSS feeds to contain malformed HTML of Crayons, now it shows plain code with correct indentations. Thanks to Артём.

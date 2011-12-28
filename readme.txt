@@ -118,6 +118,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.5 =
+* Removed jQuery.noConflict() from crayon.js. This must have been causing some trouble if anything used $.
+
 = 1.7.4 =
 * Added namespacing to crayon.js to prevent conflicts
 

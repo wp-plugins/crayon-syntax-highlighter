@@ -8,7 +8,7 @@ var DEBUG = true;
 
 // jQuery
 
-jQuery.noConflict();
+// jQuery.noConflict();
 
 var PRESSED = 'crayon-pressed';
 var UNPRESSED = '';

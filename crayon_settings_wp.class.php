@@ -504,7 +504,7 @@ class CrayonSettingsWP {
 					echo '<br/><span class="crayon-error">', sprintf(crayon__('The selected language with id %s could not be loaded'), '<strong>'.$db_fallback.'</strong>'), '. </span>';
 				}
 				// Language parsing info
-				echo '<a href="#" id="show-lang" onclick="show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
+				echo '<a href="#" id="show-lang" onclick="CrayonSyntaxAdmin.show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
 					'\'); return false;">', crayon__('Show Languages'), '</a><div id="lang-info"></div>';
 			} else {
 				echo 'No languages could be parsed.';

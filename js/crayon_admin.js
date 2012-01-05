@@ -1,15 +1,19 @@
 <!--
 // Crayon Syntax Highlighter Admin JavaScript
 
-var DEBUG = false;
+if (typeof DEBUG == 'undefined') {
+	var DEBUG = false;
+}
 
 // Disables $ for referencing jQuery
 jQuery.noConflict();
 
-function crayon_log(string) {
-    if (typeof console != 'undefined' && DEBUG) {
-        console.log(string);
-    }
+if (typeof crayon_log == 'undefined') {
+	function crayon_log(string) {
+	    if (typeof console != 'undefined' && DEBUG) {
+	        console.log(string);
+	    }
+	}
 }
 
 // Not used, # is left unencoded
@@ -264,7 +268,7 @@ var CrayonSyntaxAdmin = new function() {
 	    }
 	}
 	
-	var show_langs = function(url) {
+	this.show_langs = function(url) {
 		jQuery('#show-lang').hide();
 		jQuery.get(url, function(data) {
 			jQuery('#lang-info').show();

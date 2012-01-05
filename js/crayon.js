@@ -2,9 +2,17 @@
 // Crayon Syntax Highlighter JavaScript
 
 // Contants
-var ON = true;
-var OFF = false;
-var DEBUG = true;
+if (typeof DEBUG == 'undefined') {
+	var DEBUG = false;
+}
+
+if (typeof crayon_log == 'undefined') {
+	function crayon_log(string) {
+	    if (typeof console != 'undefined' && DEBUG) {
+	        console.log(string);
+	    }
+	}
+}
 
 // jQuery
 
@@ -95,6 +103,10 @@ var CrayonSyntax = new function() {
 	        	if (main.height() < 30) {
 	        		crayon[uid].scroll_block_fix = true;
 	        	}
+	        	
+	        	// Reconsile dimensions
+	    		plain.height(main.height());
+	    	    plain.width(main.width());
 	        	
 	            // If nums hidden by default
 	            if (nums.filter('[settings~="hide"]').length != 0) {
@@ -190,7 +202,7 @@ var CrayonSyntax = new function() {
 	                nums_button.hide();
 	            }
 	            if (plain.filter('[settings~="show-plain-default"]').length != 0) {
-	            	CrayonSyntax.toggle_plain(uid);
+	            	CrayonSyntax.toggle_plain(uid, true);
 	            }
 	        }
 	        // Scrollbar show events
@@ -352,10 +364,6 @@ var CrayonSyntax = new function() {
 	    var plain = crayon[uid].plain;
 	    var plain_button = crayon[uid].plain_button;
 	    
-	    // Reconsile height
-		plain.height(main.height());
-	    plain.width(main.width());
-	
 	    if ( (main.is(':animated') || plain.is(':animated')) && typeof hover == 'undefined' ) {
 	        return;
 	    }
@@ -381,7 +389,7 @@ var CrayonSyntax = new function() {
 	    		//crayon[uid].plain_visible = false;
 	    	}
 	    }
-	    
+	    	    
 	    crayon[uid].plain_visible = (hidden == plain);
 	    
 	    // Remember scroll positions of visible

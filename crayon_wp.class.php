@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Crayon Syntax Highlighter
-Plugin URI: http://ak.net84.net/
-Description: Supports multiple languages, themes, highlighting from a URL, local file or post text. <a href="options-general.php?page=crayon_settings">View Settings</a>
-Version: 1.7.7
+Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
+Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
+Version: 1.7.8
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -363,6 +363,12 @@ class CrayonWP {
 		load_plugin_textdomain(CRAYON_DOMAIN, false, CRAYON_DIR.CRAYON_TRANS_DIR);
 	}
 	
+	public static function plugin_row_meta($meta) {
+		$meta[] = '<a href="options-general.php?page=crayon_settings">' . crayon__('View Settings') . '</a>';
+		$meta[] = '<a href="http://ak.net84.net/files/donate.php" target="_blank">' . crayon__('Donate') . '</a>';
+		return $meta;
+	}
+	
 	public static function install() {
 		
 	}
@@ -384,5 +390,7 @@ if (defined('ABSPATH')) {
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');
+	
+	add_filter('plugin_row_meta', 'CrayonWP::plugin_row_meta');
 }
 ?>

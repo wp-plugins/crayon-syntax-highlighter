@@ -118,6 +118,11 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.8 =
+* Fixed a JavaScript bug in admin preventing language list loading
+* Fixed an issue causing plain code to load invisible the first time if set to default view 
+* Added translations for 1.7.7 features
+
 = 1.7.7 =
 * Added plain code toggling and ability to set plain code as default view
 * Minor improvements to Objective-C

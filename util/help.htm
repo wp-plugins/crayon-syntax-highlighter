@@ -33,7 +33,8 @@
 <p>You can even use Mini Tags  like:</p>
 <p align="center"><code>[html]&lt;strong&gt;some code&lt;/strong&gt;[/html]</code><br />
 <code>[php]echo "whassup?";[/php]</code></p>
-<p>The short name in brackets you use are called IDs and Aliases. For example, <code>xml</code> and <code>hxml</code> are Aliases to the language ID <code>xhtml</code>. The IDs and their Aliases are under:</p><pre style="text-align:center;">Settings &gt; Crayon &gt; Show Languages
+<p>The short name in brackets you use are called IDs and Aliases. For example, <code>xml</code> and <code>hxml</code> are Aliases to the language ID <code>xhtml</code>. The IDs and their Aliases are under:</p>
+<pre style="text-align:center;">Settings &gt; Crayon &gt; Languages &gt; Show Languages
 </pre>
 <p>Perhaps best of all, you can mix code together like on a real HTML page, by having <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> and <code>&lt;?php...?&gt;</code> tags all in a single Crayon. Find out more <a href="http://bit.ly/ukwts2" target="_blank">here</a>.</p>
 <p>You can also display a quick unhighlighted snapshot of code using the <code>[plain]...[/plain]</code> tag. The code will look like it does in the HTML view of the post editor.</p>
@@ -161,6 +162,21 @@
     <td>Enable line number toggling</td>
   </tr>
   <tr>
+    <td>plain</td>
+    <td>true/false</td>
+    <td>Enable plain code. Disabling will also disable plain toggling and copy/paste which use the plain code.</td>
+  </tr>
+  <tr>
+    <td>plain-toggle</td>
+    <td>true/false</td>
+    <td>Enable plain code toggling</td>
+  </tr>
+  <tr>
+    <td>show-plain-default</td>
+    <td>true/false</td>
+    <td>Show the plain code by default instead of the highlighted code</td>
+  </tr>
+  <tr>
     <td>start-line</td>
     <td>number &gt;= 0</td>
     <td>When to start line numbers from</td>
@@ -219,9 +235,9 @@
 <p>Here's a simple example of attributes:</p><p><code>[crayon lang="html" font-size="20" mark="1" width="200px" toolbar=&quot;false&quot;] &lt;strong&gt;This is great!&lt;/strong&gt; [/crayon] </code></p>
 <p>If you want to prevent the <code>[crayon]</code> shortcode from turning into a Crayon, use: <code>$[crayon]...[/crayon]</code>.  If you want to prevent a <code>[/crayon]</code> from ending a Crayon (say if you wanted to have the Crayon shortcode appear in a Crayon itself), then use <code>$[crayon]...[/crayon]$</code>. The same applies to <code>&lt;pre&gt;</code> and Mini Tags.</p>
 <p><strong>Themes</strong></p>
-<p>Crayon comes with  built-in Themes to style your code.  You can learn how to create your own and download more from <a href="http://ak.net84.net/?go=crayonthemes" target="_blank">here</a>. Themes are structured <code>/themes/theme-name/theme-name.css</code>. If you know CSS, take a look at <code>/themes/default/default.css</code> to get an idea of how they work and how you can change/create them.</p>
+<p>Crayon comes with  built-in Themes to style your code. Themes are structured <code>/themes/theme-name/theme-name.css</code>. If you know CSS, take a look at <code>/themes/default/default.css</code> to get an idea of how they work and how you can change/create them.</p>
 <p><strong>Languages</strong></p>
-<p>You can customize and create new languages and define how to capture each element (keywords, comments, strings, etc.) with regular expressions. Languages are structured <code>/langs/lang-name/lang-name.txt</code>. Take a look at <code>/langs/default/default.txt</code> and check out the neat regex of the default/generic language. I've also spent considerable time putting together a <a href="{PLUGIN}langs/readme.txt" target="_blank">quick guide</a>  in <code>/langs/readme.txt</code> that will be added to the online docs. If your language is missing, send me an <a href="#info" target="_blank">email</a>. There will be more languages added over time, of course.</p>
+<p>You can customize and create new languages and define how to capture each element (keywords, comments, strings, etc.) with regular expressions. Languages are structured <code>/langs/lang-name/lang-name.txt</code>. Take a look at <code>/langs/default/default.txt</code> and check out the neat regex of the default/generic language. I've also spent considerable time putting together a <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">quick guide</a>  in <code>/langs/readme.txt</code> that will be added to the online docs. If your language is missing, send me an <a href="#info" target="_blank">email</a>. There will be more languages added over time, of course.</p>
 <p><strong>Fonts</strong></p>
 <p>You can define fonts and font-sizes within Themes, but you can also override the theme's font with those inside <code>/fonts/</code> and also provide @font-face fonts just like in themes - it's just CSS after all.</p>
 <p><strong>Disabling Highlight</strong></p>

@@ -186,19 +186,24 @@ class CrayonFormatter {
 					default :
 						$plain_settings = '';
 				}
+				if ($hl->setting_val(CrayonSettings::SHOW_PLAIN_DEFAULT)) {
+					$plain_settings .= ' show-plain-default';
+				}
 				$tab = $hl->setting_val(CrayonSettings::TAB_SIZE);
 				// TODO doesn't seem to work at the moment
 				$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
 				$readonly = $touch ? '' : 'readonly';
+				$print_plain = $print_plain_button = '';
 				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . self::clean_code($hl->code()) . '</textarea>';
-				$print_plain_button = '<a href="#" class="crayon-plain-button crayon-button" title="Toggle Plain Code" onclick="CrayonSyntax.toggle_plain(\'' . $uid . '\'); return false;"></a>';
+				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a href="#" class="crayon-plain-button crayon-button" title="Toggle Plain Code" onclick="CrayonSyntax.toggle_plain(\'' . $uid . '\'); return false;"></a>' : '';
 				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
 					'<a href="#" class="crayon-copy-button crayon-button" title="Copy Plain Code" onclick="CrayonSyntax.copy_plain(\'' . $uid . '\'); return false;"></a>' : '';
-				$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
-					'<a href="#" class="crayon-popup-button crayon-button" title="Open Code in Window" onclick="return false;"></a>' : '';
 			} else {
-				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = $print_popup_button = '';
+				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = '';
 			}
+			
+			$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
+					'<a href="#" class="crayon-popup-button crayon-button" title="Open Code in Window" onclick="return false;"></a>' : '';
 			
 			if ($hl->setting_val(CrayonSettings::NUMS_TOGGLE)) {
 				$print_nums_button = '<a href="#" class="crayon-nums-button crayon-button" title="Toggle Line Numbers" onclick="CrayonSyntax.toggle_nums(\'' . $uid . '\'); return false;"></a>';

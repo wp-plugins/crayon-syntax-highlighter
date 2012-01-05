@@ -1,4 +1,6 @@
 volatile
+readonly
+readwrite
 nonatomic
 register
 restrict
@@ -9,6 +11,7 @@ atomic
 extern
 inline
 static
+assign
 const
 inout
 byref

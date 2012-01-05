@@ -56,6 +56,7 @@ class CrayonSettings {
 	const LOCAL_PATH = 'local-path';
 	const SCROLL = 'scroll';
 	const PLAIN = 'plain';
+	const PLAIN_TOGGLE = 'plain-toggle';
 	const SHOW_PLAIN = 'show-plain';
 	const DISABLE_RUNTIME = 'runtime';
 	const EXP_SCROLL = 'exp-scroll';
@@ -73,6 +74,7 @@ class CrayonSettings {
 	const MIXED = 'mixed';
 	const SHOW_MIXED = 'show_mixed';
 	const PLAIN_TAG = 'plain_tag';
+	const SHOW_PLAIN_DEFAULT = 'show-plain-default';
 	
 	private static $cache_array;
 	
@@ -153,9 +155,11 @@ class CrayonSettings {
 			new CrayonSetting(self::FALLBACK_LANG, CrayonLangs::DEFAULT_LANG), 
 			new CrayonSetting(self::LOCAL_PATH, ''), 
 			new CrayonSetting(self::SCROLL, array(crayon__('On MouseOver'), crayon__('Always'))), 
-			new CrayonSetting(self::PLAIN, TRUE), 
+			new CrayonSetting(self::PLAIN, TRUE),
+			new CrayonSetting(self::PLAIN_TOGGLE, TRUE),
+			new CrayonSetting(self::SHOW_PLAIN_DEFAULT, FALSE),
 			new CrayonSetting(self::SHOW_PLAIN, 
-					array(crayon__('On Double Click'), crayon__('On Single Click'), crayon__('On MouseOver'), crayon__('Only Using Toggle'))), 
+					array(crayon__('On Double Click'), crayon__('On Single Click'), crayon__('On MouseOver'), crayon__('Disable Mouse Events'))), 
 			new CrayonSetting(self::DISABLE_ANIM, FALSE),
 			new CrayonSetting(self::TOUCHSCREEN, TRUE), 
 			new CrayonSetting(self::DISABLE_RUNTIME, FALSE),

@@ -59,10 +59,10 @@ class CrayonSettingsWP {
 
 	public static function admin_scripts() {
 		global $CRAYON_VERSION;
-		wp_enqueue_script('crayon_jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('crayon_jquery'), $CRAYON_VERSION);
+		//wp_enqueue_script('crayon_jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
 	}
 
 	public static function settings() {
@@ -560,6 +560,8 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::PLAIN, crayon__('Enable plain code view and display').': '), FALSE);
 		self::dropdown(CrayonSettings::SHOW_PLAIN);
 		echo '<span id="crayon-copy-check">';
+		self::checkbox(array(CrayonSettings::PLAIN_TOGGLE, crayon__('Enable plain code toggling')));
+		self::checkbox(array(CrayonSettings::SHOW_PLAIN_DEFAULT, crayon__('Show the plain code by default')));
 		self::checkbox(array(CrayonSettings::COPY, crayon__('Enable code copy/paste')));
 		echo '</span>';
 		self::checkbox(array(CrayonSettings::POPUP, crayon__('Enable opening code in a window')));

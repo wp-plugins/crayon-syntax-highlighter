@@ -3,7 +3,7 @@ Contributors: akarmenia
 Donate link: http://ak.net84.net/files/donate.php
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
-Tested up to: 3.3
+Tested up to: 3.3.1
 Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
@@ -117,6 +117,15 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.7.7 =
+* Added plain code toggling and ability to set plain code as default view
+* Minor improvements to Objective-C
+* Fixed some JavaScript bugs in the admin preview
+* Fixed copy/paste key combinations. Thanks to http://wordpress.org/support/profile/nickelfault.
+
+= 1.7.6 =
+* Added highlight support for catching multiple exceptions in Java
 
 = 1.7.5 =
 * Removed jQuery.noConflict() from crayon.js. This must have been causing some trouble if anything used $.

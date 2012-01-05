@@ -189,6 +189,9 @@ var CrayonSyntax = new function() {
 	                            .mouseleave(function() { CrayonSyntax.toggle_plain(uid, false); });
 	                nums_button.hide();
 	            }
+	            if (plain.filter('[settings~="show-plain-default"]').length != 0) {
+	            	CrayonSyntax.toggle_plain(uid);
+	            }
 	        }
 	        // Scrollbar show events
 	        if (!touchscreen && jQuery(this).filter('[settings~="scroll-mouseover"]').length != 0) {
@@ -258,7 +261,7 @@ var CrayonSyntax = new function() {
 		toolbar_toggle(uid, true);
 		
 		key = crayon[uid].mac ? '\u2318' : 'CTRL';
-		text = 'Press ' + key + '+C to Copy, ' + key + '+P to Paste :)';
+		text = 'Press ' + key + '+C to Copy, ' + key + '+V to Paste :)';
 		crayon_info(uid, text);
 	}
 	

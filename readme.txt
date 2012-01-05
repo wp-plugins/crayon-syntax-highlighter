@@ -49,6 +49,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * C++
 * CSS
 * HTML (XML/XHTML)
+* Monkey
 * Java
 * JavaScript
 * Objective-C
@@ -117,6 +118,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.7.9 =
+* Added Monkey language thanks to https://github.com/devolonter/
 
 = 1.7.8 =
 * Fixed a JavaScript bug in admin preventing language list loading

@@ -119,6 +119,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.10 =
+* Fixed a visual artifact of loading that caused the plain code to be partially visible
+
 = 1.7.9 =
 * Added Monkey language thanks to https://github.com/devolonter/
 

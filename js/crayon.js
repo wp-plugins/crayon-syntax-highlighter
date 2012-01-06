@@ -81,7 +81,6 @@ var CrayonSyntax = new function() {
 	        crayon[uid].time = 1;
 	        
 	        // Set plain
-	        jQuery(CRAYON_PLAIN).css('position', 'absolute');
 	        jQuery(CRAYON_PLAIN).css('z-index', 0);
 	        
 	        // Remember CSS dimensions

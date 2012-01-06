@@ -256,6 +256,8 @@ coloring etc.
 }
 
 .crayon-syntax .crayon-plain {
+	position: absolute;
+	opacity: 0;
 	padding: 0 5px;
 	margin: 0px;
 	resize: none; /* vertical */

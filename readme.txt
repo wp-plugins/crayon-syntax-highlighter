@@ -115,7 +115,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Screenshots ==
 
-1. Classic theme in Live Preview under Settings > Crayon.
+1. Classic theme.
 2. Twilight theme.
 
 == Changelog ==

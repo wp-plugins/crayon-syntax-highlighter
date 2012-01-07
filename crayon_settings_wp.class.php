@@ -203,24 +203,24 @@ class CrayonSettingsWP {
 		self::load_settings();
 		// General
 
-		self::add_section(self::GENERAL, 'General');
-		self::add_field(self::GENERAL, 'Theme', 'themes');
-		self::add_field(self::GENERAL, 'Font', 'fonts');
-		self::add_field(self::GENERAL, 'Metrics', 'metrics');
-		self::add_field(self::GENERAL, 'Toolbar', 'toolbar');
-		self::add_field(self::GENERAL, 'Lines', 'lines');
-		self::add_field(self::GENERAL, 'Code', 'code');
-		self::add_field(self::GENERAL, 'Languages', 'langs');
-		self::add_field(self::GENERAL, 'Files', 'files');
-		self::add_field(self::GENERAL, 'Misc', 'misc');
+		self::add_section(self::GENERAL, crayon__('General'));
+		self::add_field(self::GENERAL, crayon__('Theme'), 'themes');
+		self::add_field(self::GENERAL, crayon__('Font'), 'fonts');
+		self::add_field(self::GENERAL, crayon__('Metrics'), 'metrics');
+		self::add_field(self::GENERAL, crayon__('Toolbar'), 'toolbar');
+		self::add_field(self::GENERAL, crayon__('Lines'), 'lines');
+		self::add_field(self::GENERAL, crayon__('Code'), 'code');
+		self::add_field(self::GENERAL, crayon__('Languages'), 'langs');
+		self::add_field(self::GENERAL, crayon__('Files'), 'files');
+		self::add_field(self::GENERAL, crayon__('Misc'), 'misc');
 		// Debug
 
-		self::add_section(self::DEBUG, 'Debug');
-		self::add_field(self::DEBUG, 'Errors', 'errors');
-		self::add_field(self::DEBUG, 'Log', 'log');
+		self::add_section(self::DEBUG, crayon__('Debug'));
+		self::add_field(self::DEBUG, crayon__('Errors'), 'errors');
+		self::add_field(self::DEBUG, crayon__('Log'), 'log');
 		// ABOUT
 
-		self::add_section(self::ABOUT, 'About');
+		self::add_section(self::ABOUT, crayon__('About'));
 		$image = '<div id="crayon-logo">
 
 			<img src="' . plugins_url(CRAYON_LOGO, __FILE__) . '" /><br/></div>';
@@ -526,7 +526,9 @@ class CrayonSettingsWP {
 		}
 		echo '</select><span class="crayon-span-10"></span>';
 		// Preview checkbox
-		self::checkbox(array(CrayonSettings::PREVIEW, crayon__('Enable Live Preview')), TRUE, FALSE);
+		self::checkbox(array(CrayonSettings::PREVIEW, crayon__('Enable Live Preview')), FALSE, FALSE);
+		echo '</select><span class="crayon-span-10"></span>';
+		self::checkbox(array(CrayonSettings::ENQUEUE_THEMES, crayon__('Enqueue themes in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank">' . crayon__('Learn More') . '</a>'));
 		// Check if theme from db is loaded
 		if (!CrayonResources::themes()->is_loaded($db_theme) || !CrayonResources::themes()->exists($db_theme)) {
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected theme with id %s could not be loaded'), '<strong>'.$db_theme.'</strong>'), '. </span>';
@@ -552,8 +554,9 @@ class CrayonSettingsWP {
 		echo '<span class="crayon-span-margin">Pixels</span></br>';
 		if ($db_font != CrayonFonts::DEFAULT_FONT && (!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
 			// Default font doesn't actually exist as a file, it means do not override default theme font
-			echo '<span class="crayon-error">', sprintf(crayon__('The selected font with id %s could not be loaded'), '<strong>'.$db_font.'</strong>'), '. </span>';
+			echo '<span class="crayon-error">', sprintf(crayon__('The selected font with id %s could not be loaded'), '<strong>'.$db_font.'</strong>'), '. </span><br/>';
 		}
+		self::checkbox(array(CrayonSettings::ENQUEUE_FONTS, crayon__('Enqueue fonts in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank">' . crayon__('Learn More') . '</a>'));
 	}
 
 	public static function code() {
@@ -672,6 +675,8 @@ class CrayonSettingsWP {
 
 if (defined('ABSPATH') && is_admin()) {
 	add_action('admin_menu', 'CrayonSettingsWP::admin_load');
+	// For the admin section
+	add_filter('plugin_row_meta', 'CrayonWP::plugin_row_meta');
 }
 
 ?>

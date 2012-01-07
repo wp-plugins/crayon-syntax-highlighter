@@ -239,30 +239,22 @@ class CrayonFormatter {
 			$num_settings = ($hl->setting_val(CrayonSettings::NUMS) ? 'show' : 'hide');
 		}
 		
-		// If theme not found, use default
+		// Print theme id
+		// We make the assumption that the id is correct (checked in crayon_wp)
 		$theme_id = $hl->setting_val(CrayonSettings::THEME);
-		$theme = CrayonResources::themes()->get($theme_id);
-		if (!$theme) {
-			$theme = CrayonResources::themes()->get_default();
-			$theme_id = CrayonThemes::DEFAULT_THEME;
-		}
 		$theme_id_dashed = CrayonUtil::clean_css_name($theme_id);
 		
-		// Only load css once for each theme
-		if (!empty($theme_id) && $theme != NULL && !$theme->used()) {
-			// Record usage
-			$theme->used(TRUE);
-			$output .= CrayonResources::themes()->get_theme_as_css($theme);
+		if (!$hl->setting_val(CrayonSettings::ENQUEUE_THEMES)) {
+			$output .= CrayonResources::themes()->get_css($theme_id);
 		}
 		
-		// Load font css if not default
+		// Print theme id
+		// We make the assumption that the id is correct (checked in crayon_wp)
 		$font_id = $hl->setting_val(CrayonSettings::FONT);
-		$font_id_dashed = '';
-		$font = CrayonResources::fonts()->get($font_id);
-		if ($hl->setting_val(CrayonSettings::FONT) != CrayonFonts::DEFAULT_FONT && !empty($font_id) && $font != NULL && !$font->used()) {
-			$url = CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_FONT_DIR) . $font_id . '.css?ver' . $CRAYON_VERSION;
-			$output .= '<link rel="stylesheet" type="text/css" href="' . $url . '" />' . CRAYON_NL;
-			$font_id_dashed = ' crayon-font-' . CrayonUtil::clean_css_name($font_id);
+		$font_id_dashed = $font_id ? 'crayon-font-' . CrayonUtil::clean_css_name($font_id) : '';
+		
+		if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
+			$output .= CrayonResources::fonts()->get_css($font_id);
 		}
 		
 		// Determine font size
@@ -353,18 +345,12 @@ class CrayonFormatter {
 		// Determine if operating system is mac
 		$crayon_os = CrayonUtil::is_mac() ? 'mac' : 'pc';
 		
-		/*
-		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
-			// Produce style for individual crayon
-			$output .= '<style type="text/css">'.$font_style.'</style>';
-		}*/
-		
 		// Produce style for individual crayon
 		$output .= '<style type="text/css">'.$font_style.'</style>';
 		
 		// Produce output
 		$output .= '
-		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
+		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' '.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
 		'.$toolbar.'
 			<div class="crayon-main" style="'.$main_style.'">
 				<table class="crayon-table" cellpadding="0" cellspacing="0">

@@ -31,8 +31,10 @@ $crayon->settings($settings);
 
 // Print the theme CSS
 $theme_id = $crayon->setting_val(CrayonSettings::THEME);
-$theme = CrayonResources::themes()->get($theme_id);
-echo CrayonThemes::get_theme_as_css($theme);
+echo CrayonResources::themes()->get_css($theme_id);
+
+$font_id = $crayon->setting_val(CrayonSettings::FONT);
+echo CrayonResources::fonts()->get_css($font_id);
 
 // Load custom code based on language
 $lang = $crayon->setting_val(CrayonSettings::FALLBACK_LANG);

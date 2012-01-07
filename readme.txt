@@ -78,7 +78,8 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 These are helpful for discovering new features.
 
 * <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting in Crayon</a>
-* <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags And Plain Tags In Crayon</a> 
+* <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags And Plain Tags In Crayon</a>
+* <a href="http://ak.net84.net/projects/enqueuing-themes-and-fonts-in-crayon/" target="_blank">Enqueuing Themes and Fonts in Crayon</a> 
 
 **Planned Features**
 
@@ -118,6 +119,12 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.7.11 =
+* Added the option of either enqueuing themes and fonts (efficient) or printing them before the Crayon each time when enqueuing fails
+* Thanks to http://www.adostudio.it/ for finding the bugs
+* Improved theme and font handling
+* Improved theme detection and Crayon capturing
 
 = 1.7.10 =
 * Fixed a visual artifact of loading that caused the plain code to be partially visible

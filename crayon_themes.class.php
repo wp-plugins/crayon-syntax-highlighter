@@ -19,38 +19,13 @@ class CrayonThemes extends CrayonUsedResourceCollection {
 	}
 
 	// XXX Override
-
 	public function path($id) {
 		return CRAYON_THEME_PATH . $id . "/$id.css";
 	}
 	
-	// Prints out CSS for all the used themes
-	public function get_used_theme_css_str() {
-		$css_str = '';
-		$css = self::get_used_theme_css();
-		foreach ($css as $theme=>$url) {
-			$css_str .= '<link rel="stylesheet" type="text/css" href="' . $css[$url] . '" />' . CRAYON_NL;
-		}
-		return $css_str;
-	}
-	
-	public function get_theme_url($theme) {
-		return CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $theme->id() . '/' . $theme->id() . '.css';
-	}
-	
-	public function get_theme_as_css($theme) {
-		$css_str = '<link rel="stylesheet" type="text/css" href="' . self::get_theme_url($theme) . '" />' . CRAYON_NL;
-		return $css_str;
-	}
-	
-	public function get_used_theme_css() {
-		$used = $this->get_used();
-		$css = array();
-		foreach ($used as $theme) {
-			$url = self::get_theme_url($theme);
-			$css[$theme->id()] = $url;
-		}
-		return $css;
+	// XXX Override
+	public function get_url($id) {
+		return CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_THEME_DIR) . $id . '/' . $id . '.css';
 	}
 	
 }

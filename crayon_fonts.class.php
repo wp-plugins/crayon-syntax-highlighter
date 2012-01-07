@@ -17,13 +17,11 @@ class CrayonFonts extends CrayonUsedResourceCollection {
 	}
 
 	// XXX Override
-
 	public function path($id) {
 		return CRAYON_FONT_PATH . "$id.css";
 	}
 
 	// XXX Override
-
 	public function load_process() {
 		if (!$this->is_state_loading()) {
 			return;
@@ -33,6 +31,11 @@ class CrayonFonts extends CrayonUsedResourceCollection {
 		// If some idiot puts a font with the default font name, this will replace it
 
 		$this->add(self::DEFAULT_FONT, $default);
+	}
+	
+	// XXX Override
+	public function get_url($id) {
+		return CrayonGlobalSettings::plugin_path() . CrayonUtil::pathf(CRAYON_FONT_DIR) . $id . '.css';
 	}
 }
 ?>

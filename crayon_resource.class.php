@@ -211,11 +211,20 @@ class CrayonResourceCollection {
 			return $this->dir;
 		}
 	}
+	
+	public function get_url($id) {
+		return '';
+	}
+	
+	public function get_css($id) {
+		$resource = $this->get($id);
+		return '<link rel="stylesheet" type="text/css" href="' . $this->get_url($resource->id()) . '" />' . CRAYON_NL;
+	}
 }
 
 class CrayonUsedResourceCollection extends CrayonResourceCollection {
 
-	// Checks if any of the themes are being used
+	// Checks if any resoruces are being used
 	public function is_used($id = NULL) {
 		if ($id === NULL) {
 			foreach ($this->get() as $resource) {
@@ -256,6 +265,16 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 	// XXX Override
 	public function resource_instance($id, $name = NULL) {
 		return new CrayonUsedResource($id, $name);
+	}
+	
+	public function get_used_css() {
+		$used = $this->get_used();
+		$css = array();
+		foreach ($used as $resource) {
+			$url = $this->get_url($resource->id());
+			$css[$resource->id()] = $url;
+		}
+		return $css;
 	}
 }
 

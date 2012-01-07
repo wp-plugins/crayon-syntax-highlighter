@@ -394,6 +394,7 @@ class CrayonHighlighter {
 	}
 
 	// Set and retreive settings
+	// TODO fix this, it's too limiting
 	function settings($mixed = NULL) {
 		if ($this->settings == NULL) {
 			$this->settings = CrayonGlobalSettings::get_obj();
@@ -414,6 +415,7 @@ class CrayonHighlighter {
 	 * return TRUE to ensure FALSE is only sent when a setting is found. This prevents a fake
 	 * FALSE when the formatter checks for a positive setting (Show/Enable) and fails. When a
 	 * negative setting is needed (Hide/Disable), $default_return should be set to FALSE. */
+	// TODO fix this (see above)
 	function setting_val($name = NULL, $default_return = TRUE) {
 		if (is_string($name) && $setting = $this->settings($name)) {
 			return $setting->value();
@@ -421,6 +423,12 @@ class CrayonHighlighter {
 			// Name not valid
 			return (is_bool($default_return) ? $default_return : TRUE);
 		}
+	}
+	
+	// Set a setting value
+	// TODO fix this (see above)
+	function setting_set($name = NULL, $value = TRUE) {
+		$this->settings->set($name, $value);
 	}
 
 	// Used to find current index in dropdown setting

@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.10
+Version: 1.7.11
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -84,13 +84,6 @@ class CrayonWP {
 	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
 	private static function shortcode($atts, $content = NULL, $id = NULL, $mode = self::MODE_NORMAL) {
-		// Lowercase attributes
-		$lower_atts = array();
-		foreach ($atts as $att=>$value) {
-			$lower_atts[trim(strip_tags(strtolower($att)))] = $value;
-		}
-		$atts = $lower_atts;
-		
 		// Load attributes from shortcode
 		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL);
 		$filtered_atts = shortcode_atts($allowed_atts, $atts);
@@ -151,15 +144,20 @@ class CrayonWP {
 		if (!empty($id)) {
 			$crayon->id($id);
 		}
+		
 		return $crayon;
 	}
 	
 	/* Search for Crayons in posts and queue them for creation */
+	// TODO remove $posts from params
 	public static function the_posts($posts) {
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
 		CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
-
+		
+		global $wp_the_query;
+		$posts = $wp_the_query->posts;
+		
 		self::init_mini_tags();
 		
 		// Search for shortcode in query
@@ -221,8 +219,48 @@ class CrayonWP {
 					$atts_array = array();
 					if ( count($att_matches[0]) != 0 ) {
 						for ($j = 0; $j < count($att_matches[1]); $j++) {
-							$atts_array[trim($att_matches[1][$j])] = trim($att_matches[3][$j]);
+							$atts_array[trim(strtolower($att_matches[1][$j]))] = trim($att_matches[3][$j]);
 						}
+					}
+					
+					// Capture theme
+					$theme_id = array_key_exists(CrayonSettings::THEME, $atts_array) ? $atts_array[CrayonSettings::THEME] : '';
+					$theme = CrayonResources::themes()->get($theme_id);
+					// If theme not found, use fallbacks
+					if (!$theme) {
+						// Given theme is invalid, try global setting
+						$theme_id = CrayonGlobalSettings::val(CrayonSettings::THEME);
+						$theme = CrayonResources::themes()->get($theme_id);
+						if (!$theme) {
+							// Global setting is invalid, fall back to default
+							$theme = CrayonResources::themes()->get_default();
+							$theme_id = CrayonThemes::DEFAULT_THEME;
+						}
+					}
+					// If theme is now valid, change the array
+					if ($theme) {
+						$atts_array[CrayonSettings::THEME] = $theme_id;
+						$theme->used(TRUE);
+					}
+					
+					// Capture font
+					$font_id = array_key_exists(CrayonSettings::FONT, $atts_array) ? $atts_array[CrayonSettings::FONT] : '';
+					$font = CrayonResources::fonts()->get($font_id);
+					// If font not found, use fallbacks
+					if (!$font) {
+						// Given font is invalid, try global setting
+						$font_id = CrayonGlobalSettings::val(CrayonSettings::FONT);
+						$font = CrayonResources::fonts()->get($font_id);
+						if (!$font) {
+							// Global setting is invalid, fall back to default
+							$font = CrayonResources::fonts()->get_default();
+							$font_id = CrayonFonts::DEFAULT_FONT;
+						}
+					}
+					// If font is now valid, change the array
+					if ($font) {
+						$atts_array[CrayonSettings::FONT] = $font_id;
+						$font->used(TRUE);
 					}
 					
 					// Add array of atts and content to post queue with key as post ID
@@ -236,6 +274,7 @@ class CrayonWP {
 		}
 		
 		if (!is_admin() && $enqueue && !self::$enqueued) {
+			// Crayons have been found and we enqueue efficiently
 			self::enqueue_resources();
 		}
 		
@@ -338,20 +377,36 @@ class CrayonWP {
 	public static function wp_head() {
 		self::$wp_head = TRUE;
 		if (!self::$enqueued) {
-			// We have missed our chance to enqueue. Use setting to either load always or only in the_post
+			// We have missed our chance to check before enqueuing. Use setting to either load always or only in the_post
 			CrayonSettingsWP::load_settings(TRUE); // Ensure settings are loaded
 			if (!CrayonGlobalSettings::val(CrayonSettings::EFFICIENT_ENQUEUE)) {
 				// Efficient enqueuing disabled, always load despite enqueuing or not in the_post
 				self::enqueue_resources();
 			}
 		}
+		// Enqueue Theme CSS
+		if (CrayonGlobalSettings::val(CrayonSettings::ENQUEUE_THEMES)) {
+			self::crayon_theme_css();
+		}
+		// Enqueue Font CSS
+		if (CrayonGlobalSettings::val(CrayonSettings::ENQUEUE_FONTS)) {
+			self::crayon_font_css();
+		}
 	}
 	
 	public static function crayon_theme_css() {
 		global $CRAYON_VERSION;
-		$css = CrayonResources::themes()->get_used_theme_css();
+		$css = CrayonResources::themes()->get_used_css();
 		foreach ($css as $theme=>$url) {
 			wp_enqueue_style('crayon-theme-'.$theme, $url, array(), $CRAYON_VERSION);
+		}
+	}
+	
+	public static function crayon_font_css() {
+		global $CRAYON_VERSION;
+		$css = CrayonResources::fonts()->get_used_css();
+		foreach ($css as $font=>$url) {
+			wp_enqueue_style('crayon-font-'.$font, $url, array(), $CRAYON_VERSION);
 		}
 	}
 	
@@ -386,11 +441,11 @@ if (defined('ABSPATH')) {
 	
 	// Filters and Actions
 	add_filter('init', 'CrayonWP::init');
-	add_filter('the_posts', 'CrayonWP::the_posts');
+//	add_filter('the_posts', 'CrayonWP::the_posts');
+	add_action('wp', 'CrayonWP::the_posts');
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');
-	
-	add_filter('plugin_row_meta', 'CrayonWP::plugin_row_meta');
 }
+
 ?>

@@ -75,6 +75,8 @@ class CrayonSettings {
 	const SHOW_MIXED = 'show_mixed';
 	const PLAIN_TAG = 'plain_tag';
 	const SHOW_PLAIN_DEFAULT = 'show-plain-default';
+	const ENQUEUE_THEMES = 'enqueque-themes';
+	const ENQUEUE_FONTS = 'enqueque-fonts';
 	
 	private static $cache_array;
 	
@@ -176,6 +178,8 @@ class CrayonSettings {
 			new CrayonSetting(self::MIXED, TRUE),
 			new CrayonSetting(self::SHOW_MIXED, TRUE),
 			new CrayonSetting(self::PLAIN_TAG, TRUE),
+			new CrayonSetting(self::ENQUEUE_THEMES, TRUE),
+			new CrayonSetting(self::ENQUEUE_FONTS, TRUE),
 		);
 		
 		$this->set($settings);

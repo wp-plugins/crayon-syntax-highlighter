@@ -147,6 +147,10 @@
 	clear: both;
 }
 
+#crayon-preview {
+	float: none;
+}
+
 #crayon-logo {
 	text-align: center;
 }

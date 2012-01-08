@@ -420,7 +420,7 @@ class CrayonWP {
 	
 	public static function plugin_row_meta($meta) {
 		$meta[] = '<a href="options-general.php?page=crayon_settings">' . crayon__('View Settings') . '</a>';
-		$meta[] = '<a href="http://ak.net84.net/files/donate.php" target="_blank">' . crayon__('Donate') . '</a>';
+		$meta[] = '<a href="http://bit.ly/crayondonate" target="_blank">' . crayon__('Donate') . '</a>';
 		return $meta;
 	}
 	

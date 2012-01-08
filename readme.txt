@@ -120,6 +120,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.12 =
+* Added Russian translation thanks to minimus (http://simplelib.com)
+* Added Consolas Font
+
 = 1.7.11 =
 * Added the option of either enqueuing themes and fonts (efficient) or printing them before the Crayon each time when enqueuing fails
 * Thanks to http://www.adostudio.it/ for finding the bugs

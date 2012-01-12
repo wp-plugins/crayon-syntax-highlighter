@@ -83,8 +83,9 @@ These are helpful for discovering new features.
 
 **Planned Features**
 
-* Highlighting priority
+* Ruby support (feel free to add before me!)
 * Theme Editor
+* Highlighting priority
 
 == Installation ==
 
@@ -119,6 +120,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.7.13 =
+* Fixed a bug causing my settings and donate links to be appended to all plugins in the list. Thanks to Ben.
 
 = 1.7.12 =
 * Added Russian translation thanks to minimus (http://simplelib.com)

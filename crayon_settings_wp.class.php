@@ -670,13 +670,21 @@ class CrayonSettingsWP {
 		  </tr>
 		</table>';
 	}
+	
+	public static function plugin_row_meta($meta, $file) {
+		if ($file == CrayonWP::basename()) {
+			$meta[] = '<a href="options-general.php?page=crayon_settings">' . crayon__('View Settings') . '</a>';
+			$meta[] = '<a href="http://bit.ly/crayondonate" target="_blank">' . crayon__('Donate') . '</a>';
+		}
+		return $meta;
+	}
 }
 // Add the settings menus
 
 if (defined('ABSPATH') && is_admin()) {
-	add_action('admin_menu', 'CrayonSettingsWP::admin_load');
 	// For the admin section
-	add_filter('plugin_row_meta', 'CrayonWP::plugin_row_meta');
+	add_action('admin_menu', 'CrayonSettingsWP::admin_load');
+	add_filter('plugin_row_meta', 'CrayonSettingsWP::plugin_row_meta', 10, 2);
 }
 
 ?>

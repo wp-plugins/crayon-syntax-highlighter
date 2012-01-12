@@ -669,6 +669,7 @@ class CrayonSettingsWP {
 		    <td colspan="2">'.$links.'</td>
 		  </tr>
 		</table>';
+		
 	}
 	
 	public static function plugin_row_meta($meta, $file) {

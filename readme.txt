@@ -121,6 +121,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.14 =
+* Fixed a bug that could potentially cause a PHP warning when reading the log when not permitted to do so. 
+
 = 1.7.13 =
 * Fixed a bug causing my settings and donate links to be appended to all plugins in the list. Thanks to Ben.
 

@@ -19,7 +19,7 @@ class CrayonLog {
 		} else {
 			try {
 				if (self::$file == NULL) {
-					self::$file = fopen(CRAYON_LOG_FILE, 'a+'); // TODO why give warning?
+					self::$file = @fopen(CRAYON_LOG_FILE, 'a+');
 
 					if (self::$file) {
 						$header = CRAYON_DASH . CRAYON_NL . 'Crayon Syntax Highlighter Log Entry' . CRAYON_NL .

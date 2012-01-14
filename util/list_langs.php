@@ -14,7 +14,7 @@ if (($langs = CrayonParser::parse_all()) != FALSE) {
 		        '<td>', $lang->version(), '</td>',
 				'<td>', implode(', ', $lang->ext()), '</td>',
 				'<td>', implode(', ', $lang->alias()), '</td>',
-				'<td class="', CrayonUtil::clean_css_name($lang->state_info()), '">', 
+				'<td class="', strtolower(CrayonUtil::space_to_hyphen($lang->state_info())), '">', 
 					$lang->state_info(), '</td>',
 			'</tr>';
 	}

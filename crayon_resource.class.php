@@ -103,7 +103,7 @@ class CrayonResourceCollection {
 							$file = CrayonUtil::path_rem_ext($file);
 						}
 						if ($this->exists($file)) {
-							$this->add($file, $this->resource_instance($file));
+							$this->add_resource($this->resource_instance($file));
 						}
 					}
 				}
@@ -149,16 +149,25 @@ class CrayonResourceCollection {
 		return $this->get($this->default_id);
 	}
 
-	/* Override in subclasses */
+	/* Override in subclasses to create subclass object if needed */
 	public function resource_instance($id, $name = NULL) {
 		return new CrayonResource($id, $name);
 	}
+	
+//	/* Override in subclasses to clean differently */
+//	public function clean_id($id) {
+//		return CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
+//	}
 
-	public function add($name, $object) {
-		if (is_string($name) && !empty($name)) {
-			$this->collection[strtolower(trim($name))] = $object;
+	public function add($id, $resource) {
+		if (is_string($id) && !empty($id)) {
+			$this->collection[$id] = $resource;
 			asort($this->collection);
 		}
+	}
+	
+	public function add_resource($resource) {
+		$this->add($resource->id(), $resource);
 	}
 
 	public function remove($name) {
@@ -176,7 +185,7 @@ class CrayonResourceCollection {
 		$this->load();
 		if ($id === NULL) {
 			return $this->collection;
-		} else if (is_string($id) && ($id = strtolower(trim($id))) !== FALSE && $this->is_loaded($id)) {
+		} else if (is_string($id) && $this->is_loaded($id)) {
 			return $this->collection[$id];
 		}
 		return NULL;
@@ -283,8 +292,9 @@ class CrayonResource {
 	private $name = '';
 
 	function __construct($id, $name = NULL) {
+		$id = $this->clean_id($id);
 		CrayonUtil::str($this->id, $id);
-		( empty($name) ) ? $this->name(CrayonUtil::ucwords($this->id)) : $this->name($name);
+		( empty($name) ) ? $this->name( $this->clean_name($this->id) ) : $this->name($name);
 	}
 
 	function __tostring() {
@@ -296,10 +306,24 @@ class CrayonResource {
 	}
 
 	function name($name = NULL) {
-		if (!CrayonUtil::str($this->name, $name, FALSE)) {
-			return $this->name;
+		if ($name === NULL) {
+			return $this->name; 
+		} else {
+			$this->name = $name;
 		}
 	}
+	
+	// Override
+	function clean_id($id) {
+		return CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
+	}
+	
+	// Override
+	function clean_name($id) {
+		$id = CrayonUtil::hyphen_to_space( strtolower(trim($id)) );
+		return CrayonUtil::ucwords($id);
+	}
+
 }
 
 /* Keeps track of usage */

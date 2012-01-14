@@ -121,6 +121,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.7.15 =
+* Fixed a bug prevented fonts and themes with spaces from being enqueued. Thanks to Fredrik Nygren.
+* Improved handling of id's and names of resources.
+
 = 1.7.14 =
 * Fixed a bug that could potentially cause a PHP warning when reading the log when not permitted to do so. 
 

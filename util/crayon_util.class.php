@@ -191,11 +191,14 @@ class CrayonUtil {
 		}
 	}
 
-	// Removes non-alphanumeric chars in string, replaces spaces with hypthen, makes lowercase
-	public static function clean_css_name($str) {
-		$str = preg_replace('#[^\w\s]#', '', $str);
-		$str = preg_replace('#\s+#', '-', $str);
-		return strtolower($str);
+	// Replaces whitespace with hypthens
+	public static function space_to_hyphen($str) {
+		return preg_replace('#\s+#', '-', $str);
+	}
+	
+	// Replaces hypthens with spaces
+	public static function hyphen_to_space($str) {
+		return preg_replace('#-#', ' ', $str);
 	}
 
 	// Remove comments with /* */, // or #, if they occur before any other char on a line

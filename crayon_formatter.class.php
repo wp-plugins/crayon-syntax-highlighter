@@ -242,7 +242,7 @@ class CrayonFormatter {
 		// Print theme id
 		// We make the assumption that the id is correct (checked in crayon_wp)
 		$theme_id = $hl->setting_val(CrayonSettings::THEME);
-		$theme_id_dashed = CrayonUtil::clean_css_name($theme_id);
+		$theme_id_dashed = CrayonUtil::space_to_hyphen($theme_id);
 		
 		if (!$hl->setting_val(CrayonSettings::ENQUEUE_THEMES)) {
 			$output .= CrayonResources::themes()->get_css($theme_id);
@@ -251,7 +251,7 @@ class CrayonFormatter {
 		// Print theme id
 		// We make the assumption that the id is correct (checked in crayon_wp)
 		$font_id = $hl->setting_val(CrayonSettings::FONT);
-		$font_id_dashed = $font_id ? 'crayon-font-' . CrayonUtil::clean_css_name($font_id) : '';
+		$font_id_dashed = $font_id ? 'crayon-font-' . CrayonUtil::space_to_hyphen($font_id) : '';
 		
 		if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
 			$output .= CrayonResources::fonts()->get_css($font_id);

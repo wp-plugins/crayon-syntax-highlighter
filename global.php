@@ -2,7 +2,11 @@
 
 // Switches
 
-define('CRAYON_DEBUG', FALSE); // Enable to show exceptions on screen
+// Enable to show exceptions on screen
+define('CRAYON_DEBUG', FALSE);
+
+// TODO remove once done
+define('CRAYON_THEME_EDITOR', false);
 
 // Constants
 
@@ -36,6 +40,7 @@ define('CRAYON_UTIL_DIR', crayon_s('util'));
 define('CRAYON_CSS_DIR', crayon_s('css'));
 define('CRAYON_JS_DIR', crayon_s('js'));
 define('CRAYON_TRANS_DIR', crayon_s('trans'));
+define('CRAYON_THEME_EDITOR_DIR', crayon_s('theme-editor'));
 
 // Paths
 
@@ -56,7 +61,7 @@ define('CRAYON_LANG_EXT', CRAYON_LANG_PATH . 'extensions.txt');
 define('CRAYON_LANG_ALIAS', CRAYON_LANG_PATH . 'aliases.txt');
 define('CRAYON_LANG_DELIM', CRAYON_LANG_PATH . 'delimiters.txt');
 define('CRAYON_HELP_FILE', CRAYON_UTIL_PATH . 'help.htm');
-define('CRAYON_JQUERY', CRAYON_JS_DIR . 'jquery-1.7.min.js');
+//define('CRAYON_JQUERY', CRAYON_JS_DIR . 'jquery-1.7.min.js');
 define('CRAYON_JQUERY_POPUP', CRAYON_JS_DIR . 'jquery.popup.js');
 define('CRAYON_JS', CRAYON_JS_DIR . 'crayon.js');
 define('CRAYON_JS_ADMIN', CRAYON_JS_DIR . 'crayon_admin.js');
@@ -64,6 +69,8 @@ define('CRAYON_STYLE', CRAYON_CSS_DIR . 'style.css');
 define('CRAYON_STYLE_ADMIN', CRAYON_CSS_DIR . 'admin_style.css');
 define('CRAYON_LOGO', CRAYON_CSS_DIR . 'images/crayon_logo.png');
 define('CRAYON_DONATE_BUTTON', CRAYON_CSS_DIR . 'images/donate.png');
+define('CRAYON_THEME_EDITOR_BUTTON', CRAYON_CSS_DIR . 'images/theme_editor.png');
+define('CRAYON_THEME_EDITOR_JS', CRAYON_UTIL_DIR . CRAYON_THEME_EDITOR_DIR . 'editor.js');
 
 // PHP Files
 define('CRAYON_FORMATTER_PHP', CRAYON_ROOT_PATH . 'crayon_formatter.class.php');
@@ -81,6 +88,7 @@ define('CRAYON_LOG_PHP', CRAYON_UTIL_DIR . 'crayon_log.class.php');
 define('CRAYON_LIST_LANGS_PHP', CRAYON_UTIL_DIR . 'list_langs.php');
 define('CRAYON_PREVIEW_PHP', CRAYON_UTIL_DIR . 'preview.php');
 define('CRAYON_AJAX_PHP', CRAYON_UTIL_DIR . 'ajax.php');
+define('CRAYON_THEME_EDITOR_PHP', CRAYON_UTIL_DIR . CRAYON_THEME_EDITOR_DIR . 'editor.php');
 
 // Script time
 
@@ -135,21 +143,21 @@ function crayon_pb($url) {
 }
 
 // Get/Set plugin information
-function set_crayon_info($info_array) {
+function crayon_set_info($info_array) {
 	global $CRAYON_VERSION, $CRAYON_DATE, $CRAYON_AUTHOR, $CRAYON_WEBSITE, $uid;
 	if (!is_array($info_array)) {
 		return;
 	}
-	set_info('Version', $info_array, $CRAYON_VERSION);
+	crayon_set_info_key('Version', $info_array, $CRAYON_VERSION);
 	$CRAYON_VERSION .= $uid;
 	if (($date = @filemtime(CRAYON_README_FILE)) !== FALSE) {
 		$CRAYON_DATE = date("jS F, Y", $date);
 	}
-	set_info('AuthorName', $info_array, $CRAYON_A);
-	set_info('PluginURI', $info_array, $CRAYON_WEBSITE);
+	crayon_set_info_key('AuthorName', $info_array, $CRAYON_A);
+	crayon_set_info_key('PluginURI', $info_array, $CRAYON_WEBSITE);
 }
 
-function set_info($key, $array, &$info) {
+function crayon_set_info_key($key, $array, &$info) {
 	if (array_key_exists($key, $array)) {
 		$info = $array[$key];
 	} else {

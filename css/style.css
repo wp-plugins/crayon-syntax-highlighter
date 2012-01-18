@@ -52,6 +52,8 @@ coloring etc.
 	display: block !important;
 	width: 100% !important;
 	height: 100% !important;
+	opacity: 100 !important;
+	position: relative !important;
 }
 
 .crayon-popup .crayon-main,
@@ -81,6 +83,7 @@ coloring etc.
 	margin-top: 0px !important;
 	margin-right: 0px !important;
 	margin-bottom: 0px !important;
+	width: auto !important;
 	/* left margin needed for nums toggle */
 }
 
@@ -143,6 +146,7 @@ coloring etc.
     height: 16px;
     line-height: 16px;
     margin: 2px 2px !important;
+    border: none;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -150,59 +154,51 @@ coloring etc.
 }
 
 /* Plain Button */
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:link {
+.crayon-toolbar a.crayon-button.crayon-plain-button,
+.crayon-toolbar a.crayon-button.crayon-plain-button:hover,
+.crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed:hover {
 	background-image: url('images/toolbar/plain_dark.png');
-	background-position: center;
-	background-repeat: no-repeat;
 }
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed {
+.crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed,
+.crayon-toolbar a.crayon-button.crayon-plain-button:active,
+.crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed:active {
 	background-image: url('images/toolbar/plain_light.png');
-}
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-plain-button:active {
-	background-image: url('images/toolbar/plain_dark.png');
 }
 
 /* Copy Button */
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:link {
+.crayon-toolbar a.crayon-button.crayon-copy-button,
+.crayon-toolbar a.crayon-button.crayon-copy-button:hover,
+.crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed:hover {
 	background-image: url('images/toolbar/copy_dark.png');
-	background-position: center;
-	background-repeat: no-repeat;
 }
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed {
+.crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed,
+.crayon-toolbar a.crayon-button.crayon-copy-button:active,
+.crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed:active {
 	background-image: url('images/toolbar/copy_light.png');
-}
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-copy-button:active {
-	background-image: url('images/toolbar/copy_dark.png');
 }
 
 /* Popup Button */
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:link {
+.crayon-toolbar a.crayon-button.crayon-popup-button,
+.crayon-toolbar a.crayon-button.crayon-popup-button:hover,
+.crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed:hover {
 	background-image: url('images/toolbar/popup_dark.png');
-	background-position: center;
-	background-repeat: no-repeat;
 }
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed {
+.crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed,
+.crayon-toolbar a.crayon-button.crayon-popup-button:active,
+.crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed:active {
 	background-image: url('images/toolbar/popup_light.png');
-}
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-popup-button:active {
-	background-image: url('images/toolbar/popup_dark.png');
 }
 
 /* Nums Button */
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button:link {
+.crayon-toolbar a.crayon-button.crayon-nums-button,
+.crayon-toolbar a.crayon-button.crayon-nums-button:hover,
+.crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed:hover {
 	background-image: url('images/toolbar/nums_dark.png');
-	background-position: center;
-	background-repeat: no-repeat;
 }
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button:hover,
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed {
+.crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed,
+.crayon-toolbar a.crayon-button.crayon-nums-button:active,
+.crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed:active {
 	background-image: url('images/toolbar/nums_light.png');
-}
-.crayon-syntax .crayon-toolbar a.crayon-button.crayon-nums-button:active {
-	background-image: url('images/toolbar/nums_dark.png');
 }
 
 /* Plus Sign */
@@ -249,6 +245,7 @@ coloring etc.
     font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;
 	font-size: 12px;
     line-height: 16px;
+    font-weight: 500;
 }
 .crayon-syntax .crayon-num,
 .crayon-syntax .crayon-line {
@@ -256,6 +253,8 @@ coloring etc.
 }
 
 .crayon-syntax .crayon-plain {
+	width: 100%;
+	height: 100%;
 	position: absolute;
 	opacity: 0;
 	padding: 0 5px;

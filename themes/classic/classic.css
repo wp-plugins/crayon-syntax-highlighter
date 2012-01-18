@@ -97,19 +97,24 @@ Author URI: http://ak.net84.net/
 .crayon-theme-classic .crayon-language {
     color: #999 !important;
 }
-.crayon-theme-classic a.crayon-button:link {
-    background-color: #F2F2F2 !important;
-    color: #666 !important;
+
+/* Buttons */
+.crayon-theme-classic a.crayon-button {
+	background-color: transparent;
 }
 .crayon-theme-classic a.crayon-button:hover,
-.crayon-theme-classic a.crayon-button.crayon-pressed {
-    background-color: #BBB !important;
-    color: #FFF !important;
+.crayon-theme-classic a.crayon-button.crayon-pressed:hover {
+	background-color: #F2F2F2;
+    color: #666;
 }
+/* :active MUST come after :hover */
+.crayon-theme-classic a.crayon-button.crayon-pressed,
+.crayon-theme-classic a.crayon-button.crayon-pressed:active,
 .crayon-theme-classic a.crayon-button:active {
-	background-color: #F2F2F2 !important;
-    color: #666 !important;
+	background-color: #BBB;
+    color: #FFF;
 }
+
 /* End Code Style ================== */
 
 /* Syntax Highlighting ============= */

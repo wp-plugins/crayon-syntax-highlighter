@@ -3,7 +3,7 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                CSS
-    VERSION             1.7.0
+    VERSION             1.8.0
 
     COMMENT             (/\*.*?\*/)
     STRING              (?default)
@@ -14,9 +14,8 @@
     TAG     			(</?\s*[^<\s>]+\s*>?)|(\s*>)
     ATTR:ENTITY         [\w-]+(?=\s*=")
 
-    SELECTOR:KEYWORD    (\.|\#)[A-Za-z_][\w-]*\b(?=[^;}]*{)
+    SELECTOR:KEYWORD    [^\s\;\{\}][^\;\{\}]*(?=\{)
     PROPERTY:ENTITY     \b[A-Za-z_][\w-]*(?=\s*:)
     IMP:CONSTANT        !important
-    VALUE:IDENTIFIER    (?<=:)[\s\w-]+(?=[^;{:]*;)
+    VALUE:IDENTIFIER    [^\s\{\}\;\:\!\(\)]+
     SYMBOL              (?default)
-    

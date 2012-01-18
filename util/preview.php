@@ -2,39 +2,44 @@
 
 require_once (dirname(dirname(__FILE__)) . '/crayon_wp.class.php');
 
-$wp_root_path = str_replace('wp-content/plugins/' . CRAYON_DIR, '', CrayonUtil::pathf(CRAYON_ROOT_PATH));
+$wp_root_path = str_replace('wp-content/plugins/' . CRAYON_DIR, '', CRAYON_ROOT_PATH);
 require_once ($wp_root_path . 'wp-load.php');
 
 echo '<link rel="stylesheet" href="', plugins_url(CRAYON_STYLE, dirname(__FILE__)),
 	'?ver=', $CRAYON_VERSION, '" type="text/css" media="all" />';
-echo '<script type="text/javascript">
-
-jQuery(document).ready(function() {
-    //CrayonSyntax.init();
-});
-
-</script>';
 echo '<div id="content">';
+
 CrayonSettingsWP::load_settings(); // Run first to ensure global settings loaded
 
 $crayon = CrayonWP::instance();
 
+// Settings to prevent from validating
+$preview_settings = array();
+
 // Load settings from GET and validate
 foreach ($_GET as $key => $value) {
-	//echo $key, ' ', $value , '<br/>';
-	$_GET[$key] = CrayonSettings::validate($key, $value);
+//	echo $key, ' ', $value , '<br/>';
+	if (!in_array($key, $preview_settings)) {
+		$_GET[$key] = CrayonSettings::validate($key, $value);
+	}
 }
 $crayon->settings($_GET);
-$settings = array(CrayonSettings::TOP_SET => TRUE, CrayonSettings::TOP_MARGIN => 10, 
-		CrayonSettings::BOTTOM_SET => FALSE, CrayonSettings::BOTTOM_MARGIN => 0);
-$crayon->settings($settings);
+if (!isset($crayon_preview_dont_override_get) || !$crayon_preview_dont_override_get) {
+	$settings = array(CrayonSettings::TOP_SET => TRUE, CrayonSettings::TOP_MARGIN => 10, 
+			CrayonSettings::BOTTOM_SET => FALSE, CrayonSettings::BOTTOM_MARGIN => 0);
+	$crayon->settings($settings);
+}
 
 // Print the theme CSS
 $theme_id = $crayon->setting_val(CrayonSettings::THEME);
-echo CrayonResources::themes()->get_css($theme_id);
+if ($theme_id != NULL) {
+	echo CrayonResources::themes()->get_css($theme_id);
+}
 
 $font_id = $crayon->setting_val(CrayonSettings::FONT);
-echo CrayonResources::fonts()->get_css($font_id);
+if ($font_id != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
+	echo CrayonResources::fonts()->get_css($font_id);
+}
 
 // Load custom code based on language
 $lang = $crayon->setting_val(CrayonSettings::FALLBACK_LANG);
@@ -60,6 +65,5 @@ $crayon->marked('5-7');
 $crayon->output($highlight = true, $nums = true, $print = true);
 echo '</div>';
 CrayonWP::load_textdomain();
-printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>');
 
 ?>

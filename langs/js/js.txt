@@ -3,10 +3,11 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                JavaScript
-    VERSION             1.1
+    VERSION             1.8
 
     COMMENT             (?default)
     STRING              (?default)
+	REGEX:COMMENT		/([^/]|(?<=\\)/)+/[gmiys]
     
     STATEMENT           (?default)
     RESERVED            (?default)|\b(?<![:\.])(?-i:(?alt:reserved.txt))(?![:\.])\b

@@ -309,6 +309,15 @@ class CrayonUtil {
 	}
 	
 	// Creates a unique ID from a string
+	function get_var_str() {
+		$get_vars = array();
+		foreach ($_GET as $get=>$val) {
+			$get_vars[] = $get . '=' . $val;
+		}
+		return implode($get_vars, '&');
+	}
+	
+	// Creates a unique ID from a string
 	function str_uid($str) {
 		$uid = 0;
 		for ($i = 1; $i < strlen($str); $i++) {

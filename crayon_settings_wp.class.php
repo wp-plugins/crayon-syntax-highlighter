@@ -63,15 +63,20 @@ class CrayonSettingsWP {
 		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
+		if (CRAYON_THEME_EDITOR) {
+			wp_enqueue_script('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_JS, __FILE__), array('jquery'), $CRAYON_VERSION);
+		}
 	}
 
 	public static function settings() {
 		if (!current_user_can('manage_options')) {
 			wp_die(crayon__('You do not have sufficient permissions to access this page.'));
 		}
+		
 		?>
 
-<div class="wrap">
+<div id="crayon-main-wrap" class="wrap">
+
 <div id="icon-options-general" class="icon32"><br>
 </div>
 <h2>Crayon Syntax Highlighter <?php crayon_e('Settings'); ?></h2>
@@ -96,6 +101,8 @@ class CrayonSettingsWP {
 		?>"></p>
 </form>
 </div>
+
+<div id="crayon-theme-editor-wrap" class="wrap" url="<?php echo plugins_url(CRAYON_THEME_EDITOR_PHP, __FILE__); ?>"></div>
 
 <?php
 	}
@@ -382,8 +389,7 @@ class CrayonSettingsWP {
 		$web = $CRAYON_WEBSITE;
 		echo '
 <div id="crayon-help" class="updated settings-error crayon-help">
-	<span><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top of this page to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="'.$web,'">here</a>.</span>
-	<a class="crayon-help-close" href="#" url="'.$url.'">X</a>
+	<p><strong>Howdy, coder!</strong> Thanks for using Crayon. Use <strong>help</strong> on the top of this page to learn how to use the shortcode and basic features, or check out my <a href="#info">Twitter & Email</a>. For online help and info, visit <a target="_blank" href="'.$web,'">here</a>. <a class="crayon-help-close" url="'.$url.'">X</a></p>
 </div>
 ';
 	}
@@ -484,12 +490,7 @@ class CrayonSettingsWP {
 				$name = CrayonSettings::FALLBACK_LANG;
 				echo crayon__('When no language is provided, use the fallback'), ': ', '<select id="', $name, '" name="', self::OPTIONS,
 					'[', $name, ']" crayon-preview="1">';
-				foreach ($langs as $lang) {
-
-					$title = $lang->name() . ' [' . $lang->id() . ']';
-					echo '<option value="', $lang->id(), '" ', selected(self::$options[CrayonSettings::FALLBACK_LANG],
-						$lang->id()), '>', $title, '</option>';
-				}
+				self::lang_dropdown($langs);
 				// Information about parsing
 				$parsed = CrayonResources::langs()->is_parsed();
 				$count = count($langs);
@@ -504,11 +505,19 @@ class CrayonSettingsWP {
 					echo '<br/><span class="crayon-error">', sprintf(crayon__('The selected language with id %s could not be loaded'), '<strong>'.$db_fallback.'</strong>'), '. </span>';
 				}
 				// Language parsing info
-				echo '<a href="#" id="show-lang" onclick="CrayonSyntaxAdmin.show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
-					'\'); return false;">', crayon__('Show Languages'), '</a><div id="lang-info"></div>';
+				echo '<a id="show-lang" onclick="CrayonSyntaxAdmin.show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
+					'\');">', crayon__('Show Languages'), '</a><div id="lang-info"></div>';
 			} else {
 				echo 'No languages could be parsed.';
 			}
+		}
+	}
+	
+	public static function lang_dropdown($langs) {
+		foreach ($langs as $lang) {
+			$title = $lang->name() . ' [' . $lang->id() . ']';
+			echo '<option value="', $lang->id(), '" ', selected(self::$options[CrayonSettings::FALLBACK_LANG],
+				$lang->id()), '>', $title, '</option>';
 		}
 	}
 
@@ -524,8 +533,16 @@ class CrayonSettingsWP {
 			$title = $theme->name();
 			echo '<option value="', $theme->id(), '" ', selected($db_theme, $theme->id()), '>', $title, '</option>';
 		}
-		echo '</select><span class="crayon-span-10"></span>';
+		echo '</select><span class="crayon-span-5"></span>';
+		// Theme editor
+		if (CRAYON_THEME_EDITOR) {
+			echo '<a id="crayon-theme-editor-button" class="button-primary crayon-admin-button" loading="'. crayon__('Loading...') .'" loaded="'. crayon__('Theme Editor') .'" >'. crayon__('Theme Editor') .'</a></br>';
+		}
+		// Preview Box
+		echo '<div id="crayon-preview" url="', plugins_url(CRAYON_PREVIEW_PHP, __FILE__), '"></div>';
+		printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>');
 		// Preview checkbox
+		echo '<div style="height:10px;"></div>';
 		self::checkbox(array(CrayonSettings::PREVIEW, crayon__('Enable Live Preview')), FALSE, FALSE);
 		echo '</select><span class="crayon-span-10"></span>';
 		self::checkbox(array(CrayonSettings::ENQUEUE_THEMES, crayon__('Enqueue themes in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank">' . crayon__('Learn More') . '</a>'));
@@ -533,7 +550,6 @@ class CrayonSettingsWP {
 		if (!CrayonResources::themes()->is_loaded($db_theme) || !CrayonResources::themes()->exists($db_theme)) {
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected theme with id %s could not be loaded'), '<strong>'.$db_theme.'</strong>'), '. </span>';
 		}
-		echo '<div id="crayon-preview" url="', plugins_url(CRAYON_PREVIEW_PHP, __FILE__), '"></div>';
 	}
 
 	public static function fonts() {
@@ -556,6 +572,7 @@ class CrayonSettingsWP {
 			// Default font doesn't actually exist as a file, it means do not override default theme font
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected font with id %s could not be loaded'), '<strong>'.$db_font.'</strong>'), '. </span><br/>';
 		}
+		echo '<div style="height:10px;"></div>';
 		self::checkbox(array(CrayonSettings::ENQUEUE_FONTS, crayon__('Enqueue fonts in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank">' . crayon__('Learn More') . '</a>'));
 	}
 
@@ -674,7 +691,10 @@ class CrayonSettingsWP {
 	
 	public static function plugin_row_meta($meta, $file) {
 		if ($file == CrayonWP::basename()) {
-			$meta[] = '<a href="options-general.php?page=crayon_settings">' . crayon__('View Settings') . '</a>';
+			$meta[] = '<a href="options-general.php?page=crayon_settings">' . crayon__('Settings') . '</a>';
+			if (CRAYON_THEME_EDITOR) {
+				$meta[] = '<a href="options-general.php?page=crayon_settings&subpage=theme_editor">' . crayon__('Theme Editor') . '</a>';
+			}
 			$meta[] = '<a href="http://bit.ly/crayondonate" target="_blank">' . crayon__('Donate') . '</a>';
 		}
 		return $meta;

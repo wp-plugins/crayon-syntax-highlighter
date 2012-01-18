@@ -58,6 +58,9 @@ class CrayonFormatter {
 				$css = $captured_element->css() . CrayonLangs::known_elements($captured_element->fallback());
 				return self::split_lines($matches[0], $css);
 			}
+		} else {
+			// All else fails, return the match
+			return $matches[0];
 		}
 	}
 
@@ -195,18 +198,18 @@ class CrayonFormatter {
 				$readonly = $touch ? '' : 'readonly';
 				$print_plain = $print_plain_button = '';
 				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . self::clean_code($hl->code()) . '</textarea>';
-				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a href="#" class="crayon-plain-button crayon-button" title="Toggle Plain Code" onclick="CrayonSyntax.toggle_plain(\'' . $uid . '\'); return false;"></a>' : '';
+				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="Toggle Plain Code"></a>' : '';
 				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
-					'<a href="#" class="crayon-copy-button crayon-button" title="Copy Plain Code" onclick="CrayonSyntax.copy_plain(\'' . $uid . '\'); return false;"></a>' : '';
+					'<a class="crayon-copy-button crayon-button" title="Copy Plain Code"></a>' : '';
 			} else {
 				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = '';
 			}
 			
 			$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
-					'<a href="#" class="crayon-popup-button crayon-button" title="Open Code in Window" onclick="return false;"></a>' : '';
+				'<a class="crayon-popup-button crayon-button" title="Open Code in Window" onclick="return false;"></a>' : '';
 			
 			if ($hl->setting_val(CrayonSettings::NUMS_TOGGLE)) {
-				$print_nums_button = '<a href="#" class="crayon-nums-button crayon-button" title="Toggle Line Numbers" onclick="CrayonSyntax.toggle_nums(\'' . $uid . '\'); return false;"></a>';
+				$print_nums_button = '<a class="crayon-nums-button crayon-button" title="Toggle Line Numbers"></a>';
 			} else {
 				$print_nums_button = '';
 			}
@@ -217,7 +220,7 @@ class CrayonFormatter {
 			$buttons = $print_plus.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
 			$button_preload = '';
 			foreach (array('nums', 'copy', 'popup', 'plain') as $name) {
-				$button_preload .= '<a href="#" class="crayon-'.$name.'-button crayon-button crayon-pressed crayon-invisible"></a>';
+				$button_preload .= '<a class="crayon-'.$name.'-button crayon-button crayon-pressed crayon-invisible"></a>';
 			}
 			$toolbar = '
 			<div class="crayon-toolbar" settings="'.$toolbar_settings.'">'.$print_title.'
@@ -251,10 +254,13 @@ class CrayonFormatter {
 		// Print theme id
 		// We make the assumption that the id is correct (checked in crayon_wp)
 		$font_id = $hl->setting_val(CrayonSettings::FONT);
-		$font_id_dashed = $font_id ? 'crayon-font-' . CrayonUtil::space_to_hyphen($font_id) : '';
+		$font_id_dashed = '';
 		
-		if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
-			$output .= CrayonResources::fonts()->get_css($font_id);
+		if ($font_id != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
+			if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
+				$output .= CrayonResources::fonts()->get_css($font_id);
+			}
+			$font_id_dashed = 'crayon-font-' . CrayonUtil::space_to_hyphen($font_id); 
 		}
 		
 		// Determine font size

@@ -14,9 +14,69 @@ if (typeof crayon_log == 'undefined') {
 	}
 }
 
-// jQuery
+jQuery.fn.exists = function () {
+    return this.length !== 0;
+}
 
-// jQuery.noConflict();
+// For those who need them (< IE 9), add support for CSS functions
+var isStyleFuncSupported = CSSStyleDeclaration.prototype.getPropertyValue != null;
+if (!isStyleFuncSupported) {
+	CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
+        return this.getAttribute(a);
+    };
+    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
+        this.setAttribute(styleName,value);
+        var priority = typeof priority != 'undefined' ? priority : '';
+        if (priority != '') {
+	        // Add priority manually
+			var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*' + RegExp.escape(value) + '(\\s*;)?', 'gmi');
+			this.cssText = this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
+        } 
+    }
+    CSSStyleDeclaration.prototype.removeProperty = function(a) {
+        return this.removeAttribute(a);
+    }
+    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
+    	var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?', 'gmi');
+        return rule.test(this.cssText) ? 'important' : '';
+    }
+}
+
+// Escape regex chars with \
+RegExp.escape = function(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
+// The style function
+jQuery.fn.style = function(styleName, value, priority) {
+	// DOM node
+	var node = this.get(0);
+	// Ensure we have a DOM node 
+	if (typeof node == 'undefined') {
+		return;
+	}
+	// CSSStyleDeclaration
+	var style = this.get(0).style;
+	// Getter/Setter
+	if (typeof styleName != 'undefined') {
+		if (typeof value != 'undefined') {
+			// Set style property
+			var priority = typeof priority != 'undefined' ? priority : '';
+			style.setProperty(styleName, value, priority);
+		} else {
+			// Get style property
+			return style.getPropertyValue(styleName);
+		}
+	} else {
+		// Get CSSStyleDeclaration
+		return style;
+	}
+}
+
+
+
+
+
 
 var PRESSED = 'crayon-pressed';
 var UNPRESSED = '';
@@ -25,7 +85,6 @@ var CRAYON_SYNTAX = 'div.crayon-syntax';
 var CRAYON_TOOLBAR = '.crayon-toolbar';
 var CRAYON_INFO = '.crayon-info';
 var CRAYON_PLAIN = '.crayon-plain';
-var CRAYON_PLAIN_BUTTON = '.crayon-plain-button';
 var CRAYON_MAIN = '.crayon-main';
 var CRAYON_TABLE = '.crayon-table';
 var CRAYON_CODE = '.crayon-code';
@@ -33,6 +92,8 @@ var CRAYON_NUMS = '.crayon-nums';
 var CRAYON_NUMS_CONTENT = '.crayon-nums-content';
 var CRAYON_NUMS_BUTTON = '.crayon-nums-button';
 var CRAYON_POPUP_BUTTON = '.crayon-popup-button';
+var CRAYON_COPY_BUTTON = '.crayon-copy-button';
+var CRAYON_PLAIN_BUTTON = '.crayon-plain-button';
 
 jQuery(document).ready(function() {
     CrayonSyntax.init();
@@ -41,6 +102,7 @@ jQuery(document).ready(function() {
 var CrayonSyntax = new function() {
 
 	var crayon = new Object();
+	var currUID = 0;
 	
 	this.init = function() {
 		if (typeof crayon == 'undefined') {
@@ -49,10 +111,21 @@ var CrayonSyntax = new function() {
 		
 	    jQuery(CRAYON_SYNTAX).each(function() {
 	        var uid = jQuery(this).attr('id');
+	        if (uid == 'crayon-') {
+	        	// No ID, generate one
+	        	uid += getUID();
+	        }
+	        jQuery(this).attr('id', uid);
+	        crayon_log(uid);
+	        
+	        if (!make_uid(uid)) {
+	        	// Already a Crayon
+	        	return;
+	        }
+	        
 	        var toolbar = jQuery(this).find(CRAYON_TOOLBAR);
 	        var info = jQuery(this).find(CRAYON_INFO);
 	        var plain = jQuery(this).find(CRAYON_PLAIN);
-	        var plain_button = jQuery(this).find(CRAYON_PLAIN_BUTTON);
 	        var main = jQuery(this).find(CRAYON_MAIN);
 	        var table = jQuery(this).find(CRAYON_TABLE);
 	        var code = jQuery(this).find(CRAYON_CODE);
@@ -60,12 +133,12 @@ var CrayonSyntax = new function() {
 	        var nums_content = jQuery(this).find(CRAYON_NUMS_CONTENT);
 	        var nums_button = jQuery(this).find(CRAYON_NUMS_BUTTON);
 	        var popup_button = jQuery(this).find(CRAYON_POPUP_BUTTON);
-	        // Register the objects
-	        make_uid(uid);
+	        var copy_button = jQuery(this).find(CRAYON_COPY_BUTTON);
+	        var plain_button = jQuery(this).find(CRAYON_PLAIN_BUTTON);
+	        
 	        crayon[uid] = jQuery(this);
 	        crayon[uid].toolbar = toolbar;
 	        crayon[uid].plain = plain;
-	        crayon[uid].plain_button = plain_button;
 	        crayon[uid].info = info;
 	        crayon[uid].main = main;
 	        crayon[uid].table = table;
@@ -74,6 +147,8 @@ var CrayonSyntax = new function() {
 	        crayon[uid].nums_content = nums_content;
 	        crayon[uid].nums_button = nums_button;
 	        crayon[uid].popup_button = popup_button;
+	        crayon[uid].copy_button = copy_button;
+	        crayon[uid].plain_button = plain_button;
 	        crayon[uid].nums_visible = true;
 	        crayon[uid].plain_visible = false;
 	        
@@ -83,14 +158,15 @@ var CrayonSyntax = new function() {
 	        // Set plain
 	        jQuery(CRAYON_PLAIN).css('z-index', 0);
 	        
-	        // Remember CSS dimensions
-	        var main_style = crayon[uid].main.get(0).style;
-	        crayon[uid].main_height = main_style.height;
-	        crayon[uid].main_max_height = main_style.maxHeight;
-	        crayon[uid].main_min_height = main_style.minHeight;
-	        crayon[uid].main_width = main_style.width;
-	        crayon[uid].main_max_width = main_style.maxWidth;
-	        crayon[uid].main_min_width = main_style.minWidth;
+	        // XXX Remember CSS dimensions
+	        var main_style = crayon[uid].main.style();
+	        
+	        crayon[uid].main_style = {
+	        	height: main_style.height || '',
+                max_height: main_style.maxHeight || '',
+                min_height: main_style.minHeight || '',
+                width: main_style.width || ''
+	        }
 	        
 	        var load_timer;
 	        var last_num_width = nums.width();
@@ -98,24 +174,28 @@ var CrayonSyntax = new function() {
 	        crayon[uid].loading = true;
 	        crayon[uid].scroll_block_fix = false;
 	        
+	        // Register click events
+	        nums_button.click(function() { CrayonSyntax.toggle_nums(uid) });
+	        plain_button.click(function() { CrayonSyntax.toggle_plain(uid) });
+	        copy_button.click(function() { CrayonSyntax.copy_plain(uid) });
+	        
 	        var load_func = function() {
 	        	if (main.height() < 30) {
 	        		crayon[uid].scroll_block_fix = true;
 	        	}
 	        	
-	        	// Reconsile dimensions
-	    		plain.height(main.height());
-	    	    plain.width(main.width());
-	        	
+	        	reconsile_dimensions(uid);
+	    	    
 	            // If nums hidden by default
 	            if (nums.filter('[settings~="hide"]').length != 0) {
 	            	nums_content.ready(function() {
+	            		crayon_log('function' + uid);
 	            		CrayonSyntax.toggle_nums(uid, true, true);
 	            	});
 	            } else {
 	            	update_nums_button(uid);
 	            }
-	        	
+	            
 	            // TODO If width has changed or timeout, stop timer
 	            if (/*last_num_width != nums.width() ||*/ i == 5) {
 	            	clearInterval(load_timer);
@@ -153,16 +233,15 @@ var CrayonSyntax = new function() {
 	    	}, function() {
 	    		code_popup(uid);
 	    	}, function() {
-	    		//alert('after');
+	    		//crayon_log('after');
 	    	});
 
 	        plain.css('opacity', 0);
-	        crayon.toolbar_neg_height = '-' + toolbar.height() + 'px';
 	        // If a toolbar with mouseover was found
 	        if (toolbar.filter('[settings~="mouseover"]').length != 0 && !touchscreen) {
 	        	crayon[uid].toolbar_mouseover = true;
 	            
-	            toolbar.css('margin-top', crayon.toolbar_neg_height);
+	            toolbar.css('margin-top', '-' + toolbar.height() + 'px');
 	            toolbar.hide();
 	            // Overlay the toolbar if needed, only if doing so will not hide the
 				// whole code!
@@ -201,7 +280,7 @@ var CrayonSyntax = new function() {
 	                nums_button.hide();
 	            }
 	            if (plain.filter('[settings~="show-plain-default"]').length != 0) {
-	            	CrayonSyntax.toggle_plain(uid, true);
+	            	this.toggle_plain(uid, true);
 	            }
 	        }
 	        // Scrollbar show events
@@ -223,11 +302,19 @@ var CrayonSyntax = new function() {
 	}
 	
 	var make_uid = function(uid) {
+		crayon_log(crayon);
 	    if (typeof crayon[uid] == 'undefined') {
 	        crayon[uid] = jQuery('#'+uid);
+	        crayon_log('make ' + uid);
 	        return true;
 	    }
+	    
+	    crayon_log('no make ' + uid);
 	    return false;
+	}
+	
+	var getUID = function() {
+		return currUID++;
 	}
 	
 	var code_popup = function(uid) {
@@ -248,7 +335,7 @@ var CrayonSyntax = new function() {
 	}
 	
 	var remove_css_inline = function(string) {
-		return string.replace(/style\s*=\s*"[^"]+"/mi, '');
+		return string.replace(/style\s*=\s*["'][^"]+["']/gmi, '');
 	}
 	
 	// Get all CSS on the page as a string
@@ -268,12 +355,13 @@ var CrayonSyntax = new function() {
 		
 		var plain = crayon[uid].plain;
 		
-		CrayonSyntax.toggle_plain(uid, true, true);
+		this.toggle_plain(uid, true, true);
 		toolbar_toggle(uid, true);
 		
 		key = crayon[uid].mac ? '\u2318' : 'CTRL';
 		text = 'Press ' + key + '+C to Copy, ' + key + '+V to Paste :)';
 		crayon_info(uid, text);
+		return false;
 	}
 	
 	var crayon_info = function(uid, text, show) {
@@ -367,12 +455,13 @@ var CrayonSyntax = new function() {
 	        return;
 	    }
 	    
+	    reconsile_dimensions(uid);
+	    
 	    var visible, hidden;
 	    if (typeof hover != 'undefined') {
 	        if (hover) {
 	            visible = main;
 	            hidden = plain;
-	            //crayon[uid].plain_visible = true;
 	        } else {
 	            visible = plain;
 	            hidden = main;
@@ -381,11 +470,9 @@ var CrayonSyntax = new function() {
 	    	if (main.css('z-index') == 1) {
 	    		visible = main;
 	    		hidden = plain;
-	    		//crayon[uid].plain_visible = true;
 	    	} else {
 	    		visible = plain;
 	    		hidden = main;
-	    		//crayon[uid].plain_visible = false;
 	    	}
 	    }
 	    	    
@@ -426,20 +513,22 @@ var CrayonSyntax = new function() {
 					hidden.css('overflow', hid_over);
 				}
 				
+				// Give focus to plain code
+				if (hidden == plain) {
+					if (select) {
+						plain.select();
+					} else {
+						// XXX not needed
+						// plain.focus();
+					}
+				}
+				
 				// Refresh scrollbar draw
 				hidden.scrollTop(crayon[uid].top + 1);
 				hidden.scrollTop(crayon[uid].top);
 				hidden.scrollLeft(crayon[uid].left + 1);
 				hidden.scrollLeft(crayon[uid].left);
 				
-				// Give focus to plain code
-				if (hidden == plain) {
-					if (select) {
-						plain.select();
-					} else {
-						plain.focus();
-					}
-				}
 			});
 	    
 		// Restore scroll positions to hidden
@@ -450,15 +539,17 @@ var CrayonSyntax = new function() {
 	    
 	    // Hide toolbar if possible
 	    toolbar_toggle(uid, false);
+	    return false;
 	}
 	
 	this.toggle_nums = function(uid, hide, instant) {
 		if (typeof crayon[uid] == 'undefined') {
-		    return make_uid(uid);
+			make_uid(uid);
+		    return false;
 		}
 		
 		if (crayon[uid].table.is(':animated')) {
-	        return;
+	        return false;
 	    }
 		var nums_width = Math.round(crayon[uid].nums_content.width() + 1);
 		var neg_width = '-' + nums_width + 'px';
@@ -473,7 +564,6 @@ var CrayonSyntax = new function() {
 		}
 			
 	    var num_margin;
-	    var table_width = crayon[uid].main.width();
 	    if (num_hidden) {
 	    	// Show
 	        num_margin = '0px';
@@ -483,14 +573,12 @@ var CrayonSyntax = new function() {
 	        crayon[uid].table.css('margin-left', '0px');
 	        crayon[uid].nums_visible = false;
 	        num_margin = neg_width;
-	        table_width += nums_width;
 	    }
 	    
 	    if (typeof instant != 'undefined') {
 	    	crayon[uid].table.css('margin-left', num_margin);
-	    	crayon[uid].table.width(table_width);
 	    	update_nums_button(uid);
-	    	return;
+	    	return false;
 	    }
 	    
 	    // Stop jerking animation from scrollbar appearing for a split second due to
@@ -501,8 +589,7 @@ var CrayonSyntax = new function() {
 	    	crayon[uid].main.css('overflow', 'hidden');
 	    }
 	    crayon[uid].table.animate({
-	        marginLeft: num_margin,
-	        width: table_width
+	        marginLeft: num_margin
 	    }, animt(200, uid), function() {        
 	        if (typeof crayon[uid] != 'undefined') {
 	        	update_nums_button(uid);
@@ -511,6 +598,14 @@ var CrayonSyntax = new function() {
 	            }
 	        }
 	    });
+	    return false;
+	}
+	
+	var fix_table_width = function(uid) {
+		if (typeof crayon[uid] == 'undefined') {
+			make_uid(uid);
+		    return false;
+		}
 	}
 	
 	// Convert '-10px' to -10
@@ -575,7 +670,7 @@ var CrayonSyntax = new function() {
 	    if (typeof crayon[uid] == 'undefined') {
 		    return make_uid(uid);
 		}
-	    if (typeof show == 'undefined' /*|| crayon[uid].loading*/) {
+	    if (typeof show == 'undefined') {
 	        return;
 	    }
 	    
@@ -612,10 +707,10 @@ var CrayonSyntax = new function() {
 	        plain.css('overflow', 'hidden');
 	        if (!crayon[uid].scroll_block_fix) {
 	        	// Restore dimensions
-	        	main.css('height', crayon[uid].main_height);
-	        	main.css('max-height', crayon[uid].main_max_height);
-	        	main.css('min-height', crayon[uid].main_min_height);
-	        	main.css('width', crayon[uid].main_width);
+	        	main.css('height', crayon[uid].main_style['height']);
+	        	main.css('max-height', crayon[uid].main_style['max-height']);
+	        	main.css('min-height', crayon[uid].main_style['min-height']);
+	        	main.css('width', crayon[uid].main_style['width']);
 	        }
 	    }
 		// Register that overflow has changed
@@ -625,6 +720,10 @@ var CrayonSyntax = new function() {
 	
 	/* Fix weird draw error, causes blank area to appear where scrollbar once was. */
 	var fix_scroll_blank = function(uid) {
+		// TODO Fix stupid scrollbar draw error in chrome by forcing redraw...
+		return;
+		
+		crayon_log('fix_scroll_blank');
 	    if (typeof crayon[uid] == 'undefined') {
 		    return make_uid(uid);
 		}
@@ -633,6 +732,12 @@ var CrayonSyntax = new function() {
 		crayon[uid].main.width(width - 1);
 		crayon[uid].main.width(width + 1);
 		crayon[uid].main.width(width);
+	}
+	
+	var reconsile_dimensions = function(uid) {
+		// Reconsile dimensions
+		crayon[uid].plain.height(crayon[uid].main.height());
+		//crayon[uid].plain.width(crayon[uid].main.width());
 	}
 	
 	var animt = function(x, uid) {

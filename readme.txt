@@ -71,6 +71,7 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 * Italian
 * Spanish
 * Japanese (thanks to @west_323)
+* Russian (thanks to minimus - http://simplelib.com)
 * Help from translators at improving/adding to this list greatly appreciated!  
 
 **Articles**
@@ -84,8 +85,9 @@ These are helpful for discovering new features.
 **Planned Features**
 
 * Ruby support (feel free to add before me!)
+* Highlighting in sentences
 * Theme Editor
-* Highlighting priority
+* Visual Editor Support
 
 == Installation ==
 
@@ -120,6 +122,19 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 
 == Changelog ==
+
+= 1.8.0 =
+* Theme Editor coming soon!
+
+= 1.7.16 =
+* Running out of revision numbers!
+* Fixed a bug causing default-theme from loading as a font
+* Fixed an issue where the js used to remove inline styles before opening in another window was missing the /g regex modifier
+* Cleaned up loading and event handling in crayon.js
+* Fixed a bug causing code popup to fail
+* Improved CSS language
+* Improved JS language by adding regex syntax, yay!
+* Fixed issues with resizing Crayon and dimensions
 
 = 1.7.15 =
 * Fixed a bug prevented fonts and themes with spaces from being enqueued. Thanks to Fredrik Nygren.
@@ -352,3 +367,10 @@ http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-
 == Upgrade Notice ==
 
 Make sure to upgrade to the latest release when possible, I usually fix bugs on the day and add new features quickly. 
+
+== Donations ==
+
+Thanks to all those who donate to my project!
+
+Nick Weisser (http://www.openstream.ch/), Switzerland
+Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom

@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.15
+Version: 1.7.16
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -28,8 +28,9 @@ require_once (CRAYON_HIGHLIGHTER_PHP);
 require_once ('crayon_settings_wp.class.php');
 
 if (defined('ABSPATH')) {
+	// Used to get plugin version info
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	set_crayon_info(get_plugin_data( __FILE__ ));
+	crayon_set_info(get_plugin_data( __FILE__ ));
 }
 
 /* The plugin class that manages all other classes and integrates Crayon with WP */
@@ -352,7 +353,14 @@ class CrayonWP {
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
 		self::$is_excerpt = TRUE;
-		$the_excerpt = wpautop(wp_trim_excerpt(''));
+		global $post;
+		if (!empty($post->post_excerpt)) {
+			// Use custom excerpt if defined
+			$the_excerpt = wpautop($post->post_excerpt);
+		} else {
+			// Pass wp_trim_excerpt('') to gen from content (and remove [crayons])
+			$the_excerpt = wpautop(wp_trim_excerpt(''));
+		}
 		self::$is_excerpt = FALSE;
 		return $the_excerpt;
 	}
@@ -405,8 +413,10 @@ class CrayonWP {
 	public static function crayon_font_css() {
 		global $CRAYON_VERSION;
 		$css = CrayonResources::fonts()->get_used_css();
-		foreach ($css as $font=>$url) {
-			wp_enqueue_style('crayon-font-'.$font, $url, array(), $CRAYON_VERSION);
+		foreach ($css as $font_id=>$url) {
+			if ($font_id != CrayonFonts::DEFAULT_FONT) {
+				wp_enqueue_style('crayon-font-'.$font_id, $url, array(), $CRAYON_VERSION);
+			}
 		}
 	}
 	

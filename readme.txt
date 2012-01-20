@@ -373,5 +373,5 @@ Make sure to upgrade to the latest release when possible, I usually fix bugs on 
 
 Thanks to all those who donate to my project!
 
-Nick Weisser (http://www.openstream.ch/), Switzerland
-Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom
+* Nick Weisser (http://www.openstream.ch/), Switzerland
+* Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom

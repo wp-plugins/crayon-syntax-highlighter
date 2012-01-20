@@ -135,6 +135,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Improved CSS language
 * Improved JS language by adding regex syntax, yay!
 * Fixed issues with resizing Crayon and dimensions
+* Added support for custom excerpts
 
 = 1.7.15 =
 * Fixed a bug prevented fonts and themes with spaces from being enqueued. Thanks to Fredrik Nygren.

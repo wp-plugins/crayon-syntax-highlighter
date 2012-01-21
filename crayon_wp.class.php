@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.16
+Version: 1.7.17
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -85,6 +85,8 @@ class CrayonWP {
 	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
 	private static function shortcode($atts, $content = NULL, $id = NULL, $mode = self::MODE_NORMAL) {
+//		CrayonLog::log('shortcode');
+		
 		// Load attributes from shortcode
 		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL);
 		$filtered_atts = shortcode_atts($allowed_atts, $atts);
@@ -134,6 +136,8 @@ class CrayonWP {
 
 	/* Returns Crayon instance */
 	public static function instance($extra_attr = array(), $id = NULL) {
+//		CrayonLog::log('instance');
+		
 		// Create Crayon
 		$crayon = new CrayonHighlighter();
 		
@@ -149,15 +153,20 @@ class CrayonWP {
 		return $crayon;
 	}
 	
+	/* Uses the main query */
+	public static function wp() {
+		global $wp_the_query;
+		$posts = $wp_the_query->posts;
+		self::the_posts($posts);
+	}
+	
 	/* Search for Crayons in posts and queue them for creation */
-	// TODO remove $posts from params
 	public static function the_posts($posts) {
+//		CrayonLog::log('the_posts');
+		
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
 		CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
-		
-		global $wp_the_query;
-		$posts = $wp_the_query->posts;
 		
 		self::init_mini_tags();
 		
@@ -291,6 +300,8 @@ class CrayonWP {
 	}
 	
 	private static function enqueue_resources() {
+//		CrayonLog::log('enqueue');
+		
 		global $CRAYON_VERSION;
 		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
 		//wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
@@ -318,13 +329,16 @@ class CrayonWP {
 	
 	// Add Crayon into the_content
 	public static function the_content($the_content) {
+//		CrayonLog::log('the_content');
+		
 		global $post;
 		// Go through queued posts and find crayons		
 		$post_id = strval($post->ID);
 		
 		if (self::$is_excerpt) {
 			// Remove Crayon from content if we are displaying an excerpt
-			return preg_replace(self::regex_no_capture(), '', $the_content);
+			$excerpt = preg_replace(self::regex_no_capture(), '', $the_content);
+			return $excerpt;
 		}
 
 		// Find if this post has Crayons
@@ -352,6 +366,8 @@ class CrayonWP {
 	
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
+//		CrayonLog::log('excerpt');
+		
 		self::$is_excerpt = TRUE;
 		global $post;
 		if (!empty($post->post_excerpt)) {
@@ -383,6 +399,8 @@ class CrayonWP {
 	}
 
 	public static function wp_head() {
+//		CrayonLog::log('head');
+		
 		self::$wp_head = TRUE;
 		if (!self::$enqueued) {
 			// We have missed our chance to check before enqueuing. Use setting to either load always or only in the_post
@@ -421,6 +439,8 @@ class CrayonWP {
 	}
 	
 	public static function init($request) {
+//		CrayonLog::log('init');
+		
 		self::load_textdomain();
 	}
 	
@@ -449,8 +469,14 @@ if (defined('ABSPATH')) {
 	
 	// Filters and Actions
 	add_filter('init', 'CrayonWP::init');
-//	add_filter('the_posts', 'CrayonWP::the_posts');
-	add_action('wp', 'CrayonWP::the_posts');
+	
+	CrayonSettingsWP::load_settings(TRUE);
+	if (CrayonGlobalSettings::val(CrayonSettings::MAIN_QUERY)) {
+		add_action('wp', 'CrayonWP::wp');
+	} else {
+		add_filter('the_posts', 'CrayonWP::the_posts');
+	}
+	
 	add_filter('the_content', 'CrayonWP::the_content');
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');

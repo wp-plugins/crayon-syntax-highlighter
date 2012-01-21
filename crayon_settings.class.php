@@ -77,6 +77,7 @@ class CrayonSettings {
 	const SHOW_PLAIN_DEFAULT = 'show-plain-default';
 	const ENQUEUE_THEMES = 'enqueque-themes';
 	const ENQUEUE_FONTS = 'enqueque-fonts';
+	const MAIN_QUERY = 'main-query';
 	
 	private static $cache_array;
 	
@@ -180,6 +181,7 @@ class CrayonSettings {
 			new CrayonSetting(self::PLAIN_TAG, TRUE),
 			new CrayonSetting(self::ENQUEUE_THEMES, TRUE),
 			new CrayonSetting(self::ENQUEUE_FONTS, TRUE),
+			new CrayonSetting(self::MAIN_QUERY, FALSE),
 		);
 		
 		$this->set($settings);

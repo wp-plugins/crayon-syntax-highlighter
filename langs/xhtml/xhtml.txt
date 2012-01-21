@@ -3,7 +3,7 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                XHTML
-    VERSION             1.7.0
+    VERSION             1.7.17
 
     COMMENT             \<!--.*?--\>
     ATT_STR:STRING      (((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)'))
@@ -15,5 +15,7 @@
 
     ATTR:ENTITY         [\w-]+(?=\s*=")
     TEXT:IDENTIFIER     (?<=\>)[^\<\>]*(?=\<)
+	OPERATOR              (?default)
     SYMBOL              (?default)
+
 #    OTHER:CONSTANT      (?default:identifier)

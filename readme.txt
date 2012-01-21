@@ -126,6 +126,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.17 =
+* Added a setting to use just the main WP query or to use the_posts wherever it is used (default now).
+* Improved XHTML
+
 = 1.7.16 =
 * Running out of revision numbers!
 * Fixed a bug causing default-theme from loading as a font

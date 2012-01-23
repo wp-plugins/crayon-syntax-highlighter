@@ -78,6 +78,7 @@ class CrayonSettings {
 	const ENQUEUE_THEMES = 'enqueque-themes';
 	const ENQUEUE_FONTS = 'enqueque-fonts';
 	const MAIN_QUERY = 'main-query';
+	const SAFE_ENQUEUE = 'safe-enqueue';
 	
 	private static $cache_array;
 	
@@ -182,6 +183,7 @@ class CrayonSettings {
 			new CrayonSetting(self::ENQUEUE_THEMES, TRUE),
 			new CrayonSetting(self::ENQUEUE_FONTS, TRUE),
 			new CrayonSetting(self::MAIN_QUERY, FALSE),
+			new CrayonSetting(self::SAFE_ENQUEUE, TRUE),
 		);
 		
 		$this->set($settings);

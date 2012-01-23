@@ -14,9 +14,9 @@
     TYPE                \b(?alt:type.txt)\b
     MODIFIER            (?alt:modifier_at.txt)\b|\b(?alt:modifier.txt)\b
     
+	CONSTANT            (?default)|\b(?alt:constant.txt)\b
     ENTITY              (\b[a-z_]\w*\b(?=\s*\([^\)]*\)))|((?<!\.)(\b[a-z_]\w*\b)(?=[^},.:;\)]*{))|(\b[a-z_]\w+\b\s+(?=\b[a-z_][\w]+\b(?!\s*\:)))|(\b[a-z_]\w*\s*\*)|(?-i:NS[\w]+)
     VARIABLE            (?default)|(\*\w+)
     IDENTIFIER          (?default)
-    CONSTANT            (?default)|\b(?alt:constant.txt)\b
     OPERATOR            (?default)
     SYMBOL              (?default)

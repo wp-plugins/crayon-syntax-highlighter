@@ -126,6 +126,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.19 =
+* Fixed issue with Crayons failing to load on pages with templates containing The Loop. http://bit.ly/AcWRNY
+* Objective-C operators improved
+
 = 1.7.18 =
 * Fixed issue with extra &lt;br/&gt; and &lt;p&gt; tags before and after Crayons
 

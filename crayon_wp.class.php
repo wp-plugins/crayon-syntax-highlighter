@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.18
+Version: 1.7.19
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -179,6 +179,13 @@ class CrayonWP {
 		
 		// Search for shortcode in query
 		foreach ($posts as $post) {
+			
+			// If we get query for a page, then that page might have a template and load more posts containing Crayons
+			// By this state, we would be unable to enqueue anything (header already written).
+			if (CrayonGlobalSettings::val(CrayonSettings::SAFE_ENQUEUE) && is_page($post->ID)) {
+				CrayonGlobalSettings::set(CrayonSettings::ENQUEUE_THEMES, false);
+				CrayonGlobalSettings::set(CrayonSettings::ENQUEUE_FONTS, false);
+			}
 			
 			// To improve efficiency, avoid complicated regex with a simple check first
 			if (CrayonUtil::strposa($post->post_content, self::$search_tags, TRUE) === FALSE) {

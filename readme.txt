@@ -127,7 +127,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Theme Editor coming soon!
 
 = 1.7.18 =
-* Fixed issue with extra <br/> and <p> tags before and after Crayons
+* Fixed issue with extra &lt;br/&gt; and &lt;p&gt; tags before and after Crayons
 
 = 1.7.17 =
 * Added a setting to use just the main WP query or to use the_posts wherever it is used (default now).

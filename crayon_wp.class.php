@@ -483,7 +483,6 @@ class CrayonWP {
 	
 	public static function init($request) {
 //		CrayonLog::log('init');
-		
 		self::load_textdomain();
 	}
 	
@@ -492,6 +491,14 @@ class CrayonWP {
 	}
 	
 	public static function install() {
+		self::update();
+	}
+
+	public static function uninstall() {
+		
+	}
+	
+	public  static function update() {
 		// Upgrade database
 		global $CRAYON_VERSION;
 		if ($CRAYON_VERSION < '1.7.20') {
@@ -504,10 +511,6 @@ class CrayonWP {
 					CrayonSettingsWP::save_settings($settings);
 			}
 		}
-	}
-
-	public static function uninstall() {
-		
 	}
 	
 	public static function basename() {
@@ -524,6 +527,8 @@ if (defined('ABSPATH')) {
 	// Filters and Actions
 	add_filter('init', 'CrayonWP::init');
 	
+	// TODO find a better way to handle updates
+	CrayonWP::update();
 	CrayonSettingsWP::load_settings(TRUE);
 	if (CrayonGlobalSettings::val(CrayonSettings::MAIN_QUERY)) {
 		add_action('wp', 'CrayonWP::wp');

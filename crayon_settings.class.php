@@ -158,7 +158,7 @@ class CrayonSettings {
 			new CrayonSetting(self::TAB_SIZE, 4), 
 			new CrayonSetting(self::FALLBACK_LANG, CrayonLangs::DEFAULT_LANG), 
 			new CrayonSetting(self::LOCAL_PATH, ''), 
-			new CrayonSetting(self::SCROLL, array(crayon__('On MouseOver'), crayon__('Always'))), 
+			new CrayonSetting(self::SCROLL, FALSE),//array(crayon__('On MouseOver'), crayon__('Always'))), 
 			new CrayonSetting(self::PLAIN, TRUE),
 			new CrayonSetting(self::PLAIN_TOGGLE, TRUE),
 			new CrayonSetting(self::SHOW_PLAIN_DEFAULT, FALSE),

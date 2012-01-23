@@ -126,6 +126,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.20 =
+* "Always display scrollbars" now a checkbox
+
 = 1.7.19 =
 * Fixed issue with Crayons failing to load on pages with templates containing The Loop. http://bit.ly/AcWRNY
 * Objective-C operators improved

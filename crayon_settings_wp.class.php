@@ -149,9 +149,16 @@ class CrayonSettingsWP {
 		}
 	}
 	
-	// Saves settings from CrayonGlobalSettings to the db
-	public static function save_settings() {
-		update_option(self::OPTIONS, CrayonGlobalSettings::get_array());
+	public static function get_settings() {
+		return get_option(self::OPTIONS);
+	}
+	
+	// Saves settings from CrayonGlobalSettings, or provided array, to the db
+	public static function save_settings($settings) {
+		if ($settings === NULL) {
+			$settings = CrayonGlobalSettings::get_array();
+		}
+		update_option(self::OPTIONS, $settings);
 	}
 	
 	// Cache
@@ -584,8 +591,7 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::COPY, crayon__('Enable code copy/paste')));
 		echo '</span>';
 		self::checkbox(array(CrayonSettings::POPUP, crayon__('Enable opening code in a window')));
-		echo crayon__('Display scrollbars (when needed)'),': ';
-		self::dropdown(CrayonSettings::SCROLL);
+		self::checkbox(array(CrayonSettings::SCROLL, crayon__('Always display scrollbars')));
 		echo crayon__('Tab size in spaces'),': ';
 		self::textbox(array('name' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));

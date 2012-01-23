@@ -282,13 +282,14 @@ class CrayonFormatter {
 		}
 		
 		// Determine scrollbar visibility
-		switch ($hl->setting_index(CrayonSettings::SCROLL) && !$touch) {
-			case 0 :
-				$code_settings .= ' scroll-mouseover';
-				break;
-			default :
-				$code_settings .= ' scroll-always';
-		}
+		$code_settings .= $hl->setting_val(CrayonSettings::SCROLL) && !$touch ? ' scroll-always' : ' scroll-mouseover';
+//		switch ($hl->setting_index(CrayonSettings::SCROLL) && !$touch) {
+//			case 0 :
+//				$code_settings .= ' scroll-mouseover';
+//				break;
+//			default :
+//				$code_settings .= ' scroll-always';
+//		}
 		
 		// Disable animations
 		if ($hl->setting_val(CrayonSettings::DISABLE_ANIM)) {

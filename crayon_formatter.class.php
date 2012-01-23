@@ -378,12 +378,12 @@ class CrayonFormatter {
 		// Debugging stats
 		$runtime = $hl->runtime();
 		if (!$hl->setting_val(CrayonSettings::DISABLE_RUNTIME) && is_array($runtime) && !empty($runtime)) {
-			$output = CRAYON_NL . CRAYON_NL . '<!-- Crayon Syntax Highlighter v' . $CRAYON_VERSION . ' -->'
+			$output = '<!-- Crayon Syntax Highlighter v' . $CRAYON_VERSION . ' -->'
 				. CRAYON_NL . $output . CRAYON_NL . '<!-- ';
 			foreach ($hl->runtime() as $type => $time) {
 				$output .= '[' . $type . ': ' . sprintf('%.4f seconds', $time) . '] ';
 			}
-			$output .= '-->' . CRAYON_NL . CRAYON_NL;
+			$output .= '-->' . CRAYON_NL;
 		}
 		// Determine whether to print to screen or save
 		if ($print) {

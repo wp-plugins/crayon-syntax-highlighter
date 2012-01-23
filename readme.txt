@@ -126,6 +126,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.18 =
+* Fixed issue with extra <br/> and <p> tags before and after Crayons
+
 = 1.7.17 =
 * Added a setting to use just the main WP query or to use the_posts wherever it is used (default now).
 * Improved XHTML
@@ -379,3 +382,4 @@ Thanks to all those who donate to my project!
 
 * Nick Weisser (http://www.openstream.ch/), Switzerland
 * Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom
+* Andrew McDonnell (http://blog.oldcomputerjunk.net/), Australia

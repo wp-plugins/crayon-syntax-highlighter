@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.17
+Version: 1.7.18
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -59,6 +59,13 @@ class CrayonWP {
 	
 	const REGEX_CLOSED_NO_CAPTURE = '(?:\[crayon\b[^\]]*/\])';
 	const REGEX_TAG_NO_CAPTURE =    '(?:\[crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\])';
+	
+	const REGEX_QUICK_CAPTURE = '(?:\[crayon[^\]]*\].*?\[/crayon\])|(?:\[crayon[^\]]*/\])';
+	
+	const REGEX_BETWEEN_PARAGRAPH = '<p[^<]*>(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*((?:\[crayon[^\]]*\].*?\[/crayon\])|(?:\[crayon[^\]]*/\]))(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*</p[^<]*>';
+	const REGEX_BETWEEN_PARAGRAPH_SIMPLE = '(<p(?:\s+[^>]*)?>)(.*?)(</p(?:\s+[^>]*)?>)';
+	const REGEX_BR_BEFORE = '<br\s*/?>\s*(\[crayon)';
+	const REGEX_BR_AFTER = '(\[/crayon\])\s*<br\s*/?>';
 	
 	const REGEX_ID = '#(?<!\$)\[crayon#i';
 	
@@ -358,10 +365,39 @@ class CrayonWP {
 					// Apply shortcode to the content
 					$crayon_formatted = self::shortcode($atts, $content, $id);
 				}
+				// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them
+				$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
+				// Replace the code with the Crayon
 				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
 			}
 		}
 		return $the_content;
+	}
+	
+	public static function add_paragraphs($capture) {
+		if (count($capture) != 4) {
+			return $capture[0];
+		}
+		
+		// Remove <br/>
+		$capture[2] = preg_replace('#' . self::REGEX_BR_BEFORE . '#msi', '$1', $capture[2]);
+		$capture[2] = preg_replace('#' . self::REGEX_BR_AFTER . '#msi', '$1', $capture[2]);
+		// Add <p>
+		$capture[2] = trim($capture[2]);
+		
+		if (stripos($capture[2], '[crayon') !== 0) {
+			$capture[2] = preg_replace('#(\[crayon)#msi', '</p>$1', $capture[2]);
+		} else {
+			$capture[1] = '';
+		}
+		
+		if ( stripos($capture[2], '[/crayon]') !== strlen($capture[2]) - strlen('[/crayon]') ) {
+			$capture[2] = preg_replace('#(\[/crayon\])#msi', '$1<p>', $capture[2]);
+		} else {
+			$capture[3] = '';
+		}
+		
+		return $capture[1].$capture[2].$capture[3];
 	}
 	
 	// Remove Crayons from the_excerpt

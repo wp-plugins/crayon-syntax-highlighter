@@ -142,7 +142,9 @@ coloring etc.
 	display: inline;
 	float: left !important;
 	min-width: 20px;
-	
+
+	background-repeat: no-repeat;
+	background-position: center;
     height: 16px;
     line-height: 16px;
     margin: 2px 2px !important;

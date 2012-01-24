@@ -270,7 +270,7 @@ class CrayonFormatter {
 			$font_height = ($font_size + 4) . 'px !important;';
 			$toolbar_height = ($font_size + 8) . 'px !important;';
 			$font_style .= "#$uid * { font-size: $font_size line-height: $font_height}";
-			$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar div { height: $toolbar_height line-height: $toolbar_height }\n";
+			$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
 			$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
 		} else {
 			if (($font_size = CrayonGlobalSettings::get(CrayonSettings::FONT_SIZE)) !== FALSE) {

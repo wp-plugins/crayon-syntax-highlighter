@@ -40,6 +40,8 @@ class CrayonHighlighter {
 		if ($language !== NULL) {
 			$this->language($language);
 		}
+		// Default ID
+		$id = $id !== NULL ? $id : uniqid();
 		$this->id($id);
 	}
 	

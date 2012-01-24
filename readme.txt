@@ -126,6 +126,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.22 =
+* Fixed dimension and redraw issues on scrollbars
+
 = 1.7.21 =
 * Fixed a bug that relied on register_activation_hook to update the database on auto update
 

@@ -205,6 +205,7 @@ var CrayonSyntax = new function() {
 	        };
 	        main.ready(function() {
 	        	load_timer = setInterval(load_func, 300);
+	        	fix_scroll_blank(uid);
 	        });
 	        
 	        // Used for toggling
@@ -677,6 +678,8 @@ var CrayonSyntax = new function() {
 	    var main = crayon[uid].main;
 	    var plain = crayon[uid].plain;
 	    
+	    var main_size = {width:main.width(), height:main.height()};
+	    
 	    if (show) {
 	        main.css('overflow', 'auto');
 	        plain.css('overflow', 'auto');
@@ -690,8 +693,8 @@ var CrayonSyntax = new function() {
 	        }
 	        if (!crayon[uid].scroll_block_fix) {
 	        	// Fix dimensions so scrollbars stay inside
-	        	main.css('height', main.height());
-	        	main.css('width', main.width());
+	        	main.css('height', main_size.height);
+	        	main.css('width', main_size.width);
 	        } else {
 	        	// Relax dimensions so scrollbars are visible
 	        	main.css('height', '');
@@ -720,18 +723,12 @@ var CrayonSyntax = new function() {
 	
 	/* Fix weird draw error, causes blank area to appear where scrollbar once was. */
 	var fix_scroll_blank = function(uid) {
-		// TODO Fix stupid scrollbar draw error in chrome by forcing redraw...
-		return;
-		
-		crayon_log('fix_scroll_blank');
-	    if (typeof crayon[uid] == 'undefined') {
-		    return make_uid(uid);
-		}
-	    var width = crayon[uid].main.width();
-		crayon[uid].main.width(width);
-		crayon[uid].main.width(width - 1);
-		crayon[uid].main.width(width + 1);
-		crayon[uid].main.width(width);
+		// Scrollbar draw error in Chrome
+		crayon[uid].table.style('width', '100%', 'important');
+		var redraw = setTimeout(function() {
+			crayon[uid].table.style('width', '');
+			clearInterval(redraw);
+		}, 10);
 	}
 	
 	var reconsile_dimensions = function(uid) {

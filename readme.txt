@@ -126,6 +126,11 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.23 =
+* Remove 'theme-font' and replaced default as 'Monaco'.
+* Remove @import for fonts and replace with CSS tags. This should fix any 404 issues.
+* Now all fonts reside in /fonts with font-face fonts having a separate directory by their name to store the font vectors etc
+
 = 1.7.22 =
 * Fixed dimension and redraw issues on scrollbars
 

@@ -567,14 +567,15 @@ class CrayonSettingsWP {
 		$fonts = CrayonResources::fonts()->get();
 		echo '<select id="', $name, '" name="', self::OPTIONS, '[', $name, ']" crayon-preview="1">';
 		foreach ($fonts as $font) {
-			$title = $font->id() != CrayonFonts::DEFAULT_FONT ? $font->name() : crayon__('Theme Default');
+//			$title = $font->id() != CrayonFonts::DEFAULT_FONT ? $font->name() : crayon__('Theme Default');
+			$title = $font->name();
 			echo '<option value="', $font->id(), '" ', selected($db_font, $font->id()), '>', $title, '</option>';
 		}
 		echo '</select><span class="crayon-span-10"></span>';
 		self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size').': '), FALSE);
 		self::textbox(array('name' => CrayonSettings::FONT_SIZE, 'size' => 2));
 		echo '<span class="crayon-span-margin">Pixels</span></br>';
-		if ($db_font != CrayonFonts::DEFAULT_FONT && (!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
+		if (/*$db_font != CrayonFonts::DEFAULT_FONT &&*/ (!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
 			// Default font doesn't actually exist as a file, it means do not override default theme font
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected font with id %s could not be loaded'), '<strong>'.$db_font.'</strong>'), '. </span><br/>';
 		}

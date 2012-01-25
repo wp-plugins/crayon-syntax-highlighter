@@ -37,7 +37,7 @@ if ($theme_id != NULL) {
 }
 
 $font_id = $crayon->setting_val(CrayonSettings::FONT);
-if ($font_id != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
+if ($font_id != NULL /*&& $font_id != CrayonFonts::DEFAULT_FONT*/) {
 	echo CrayonResources::fonts()->get_css($font_id);
 }
 

@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.22
+Version: 1.7.23
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -282,7 +282,7 @@ class CrayonWP {
 						}
 					}
 					// If font is now valid, change the array
-					if ($font != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
+					if ($font/* != NULL && $font_id != CrayonFonts::DEFAULT_FONT*/) {
 						$atts_array[CrayonSettings::FONT] = $font_id;
 						$font->used(TRUE);
 					}
@@ -475,9 +475,9 @@ class CrayonWP {
 		global $CRAYON_VERSION;
 		$css = CrayonResources::fonts()->get_used_css();
 		foreach ($css as $font_id=>$url) {
-			if ($font_id != CrayonFonts::DEFAULT_FONT) {
+//			if ($font_id != CrayonFonts::DEFAULT_FONT) {
 				wp_enqueue_style('crayon-font-'.$font_id, $url, array(), $CRAYON_VERSION);
-			}
+//			}
 		}
 	}
 	
@@ -512,6 +512,11 @@ class CrayonWP {
 		
 		if ($version < '1.7.21') {
 			$settings[CrayonSettings::SCROLL] = $defaults[CrayonSettings::SCROLL];
+			$touched = TRUE;
+		}
+		
+		if ($version < '1.7.23' && $settings[CrayonSettings::FONT] == 'theme-font') {
+			$settings[CrayonSettings::FONT] = $defaults[CrayonSettings::FONT];
 			$touched = TRUE;
 		}
 		

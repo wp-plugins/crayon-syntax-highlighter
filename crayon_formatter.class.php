@@ -254,14 +254,14 @@ class CrayonFormatter {
 		// Print theme id
 		// We make the assumption that the id is correct (checked in crayon_wp)
 		$font_id = $hl->setting_val(CrayonSettings::FONT);
-		$font_id_dashed = '';
+		$font_id_dashed = CrayonUtil::space_to_hyphen($font_id);
 		
-		if ($font_id != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
+//		if ($font_id != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
 			if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
 				$output .= CrayonResources::fonts()->get_css($font_id);
 			}
-			$font_id_dashed = 'crayon-font-' . CrayonUtil::space_to_hyphen($font_id); 
-		}
+//			$font_id_dashed = 'crayon-font-' . CrayonUtil::space_to_hyphen($font_id); 
+//		}
 		
 		// Determine font size
 		// TODO improve logic
@@ -357,7 +357,7 @@ class CrayonFormatter {
 		
 		// Produce output
 		$output .= '
-		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' '.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
+		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
 		'.$toolbar.'
 			<div class="crayon-main" style="'.$main_style.'">
 				<table class="crayon-table" cellpadding="0" cellspacing="0">

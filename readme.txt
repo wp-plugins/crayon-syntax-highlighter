@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 1.7.22
+Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -86,6 +86,7 @@ These are helpful for discovering new features.
 
 * Ruby support (feel free to add before me!)
 * Highlighting in sentences
+* Highlighting in comments
 * Theme Editor
 * Visual Editor Support
 

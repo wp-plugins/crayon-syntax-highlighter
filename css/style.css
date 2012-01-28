@@ -96,6 +96,10 @@ coloring etc.
 .crayon-syntax .crayon-invisible {
     display: none !important;
 }
+
+.crayon-plain-tag {
+	margin-bottom: 12px;
+}
 /* End General ===================== */
 
 /* Line Numbers ==================== */

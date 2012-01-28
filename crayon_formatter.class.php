@@ -127,6 +127,8 @@ class CrayonFormatter {
 		$print_title = ($hl->setting_val(CrayonSettings::SHOW_TITLE) && $title ? '<span class="crayon-title">' . $title . '</span>' : '');
 		// Determine whether to print language
 		$print_lang = '';
+		// XXX Use for printing the regex
+//		var_dump($hl->language()->regex()); exit;
 		if ($hl->language()) {
 			$lang = $hl->language()->name();
 			switch ($hl->setting_index(CrayonSettings::SHOW_LANG)) {
@@ -431,7 +433,7 @@ class CrayonFormatter {
 		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
 			$code = trim($code);
 		}
-		return '<pre><code>'.$code.'</code></pre>';
+		return '<pre class="crayon-plain-tag"><code>'.$code.'</code></pre>';
 	}
 
 	public static function split_lines($code, $class) {

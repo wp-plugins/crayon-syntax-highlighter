@@ -20,8 +20,8 @@ It also supports some neat features like:
 * Copy/paste code
 * Open code in a new window (popup)
 * Remote request caching
-* Multiple language highlighting in a single Crayon
-* Mini Tags like [php][/php]
+* <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting</a> in a single Crayon
+* <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags</a> like [php][/php]
 * Plain Tag ([plain]...[/plain]) for quick &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;
 * &lt;pre&gt; tag support
 * Mobile/touchscreen device detection
@@ -55,6 +55,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * Objective-C
 * PHP
 * Python
+* Ruby
 * Shell (Unix)
 * Visual Basic
 
@@ -86,7 +87,6 @@ These are helpful for discovering new features.
 
 * AutoIt support
 * ActionScript support
-* Ruby support
 * Highlighting in sentences
 * Highlighting in comments
 * Visual Editor Support
@@ -123,11 +123,21 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 1. Classic theme.
 2. Twilight theme.
+3. Mixed Language Highlighting.
 
 == Changelog ==
 
 = 1.8.0 =
 * Theme Editor coming soon!
+
+= 1.7.24 =
+* Added support for Ruby(on Rails)?
+* Added support for Ruby file extensions like rb, rbx
+* Added "rb" alias for [rb][/rb] Mini Tags
+* Added RHTML delimiters like %lt;% and %%gt;
+* Added a bottom margin to the Plain Tag
+* Added support for quotes in the title attribute
+* You still need to use <code>" some 'title'"</code> or <code>' some "title" '</code> properly, not "' or '" ;)
 
 = 1.7.23 =
 * Remove 'theme-font' and replaced default as 'Monaco'.

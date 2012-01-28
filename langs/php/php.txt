@@ -3,9 +3,7 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                        PHP
-    VERSION                     1.7.0
-
-    #HTML:FADED 		            ((?<=\?>).*?(?=<\?(?:php)?))|(\A.*?(?=<\?(?:php)?))|((?<=\?>).*\Z)
+    VERSION                     1.7.24
   
     COMMENT                     (?default)|(\#.*?$)
     STRING                      (?default)|(<<<EOT.*?^EOT)

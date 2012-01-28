@@ -9,3 +9,4 @@ python py
 vb vbs
 js javascript
 sh shell unix bash
+ruby rb

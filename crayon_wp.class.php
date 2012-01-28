@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.7.23
+Version: 1.7.24
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -200,7 +200,7 @@ class CrayonWP {
 			
 			// Convert mini [php][/php] tags to crayon tags, if needed
 			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
-				$post->post_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon\2 lang="\1"]\3[/crayon]', $post->post_content);
+				$post->post_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $post->post_content);
 			}
 
 			// Convert [plain] tags into <pre><code></code></pre>, if needed
@@ -239,7 +239,7 @@ class CrayonWP {
 					}
 					
 					// Capture attributes
-					preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')([^"]+?)\2#', $atts, $att_matches);
+					preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')([^2]+?)\2#', $atts, $att_matches);
 					$atts_array = array();
 					if ( count($att_matches[0]) != 0 ) {
 						for ($j = 0; $j < count($att_matches[1]); $j++) {

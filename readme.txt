@@ -130,6 +130,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.25 =
+* Oh, added <code>&lt;html&gt;...&lt;/html&gt;</code> tag into the delimiters
+* But of course, if you wanted say HTML with PHP, then you'd set the language to HTML and use <code><?php ... ?></code> tag when you needed them
+
 = 1.7.24 =
 * Added support for Ruby(on Rails)?
 * Added support for Ruby file extensions like rb, rbx

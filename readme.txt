@@ -84,11 +84,13 @@ These are helpful for discovering new features.
 
 **Planned Features**
 
-* Ruby support (feel free to add before me!)
+* AutoIt support
+* ActionScript support
+* Ruby support
 * Highlighting in sentences
 * Highlighting in comments
-* Theme Editor
 * Visual Editor Support
+* Theme Editor
 
 == Installation ==
 

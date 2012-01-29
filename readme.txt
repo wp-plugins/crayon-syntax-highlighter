@@ -68,7 +68,7 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 **International Languages**
 
 * French
-* German
+* German (thanks to Stephan Knau&#223)
 * Italian
 * Spanish
 * Japanese (thanks to @west_323)

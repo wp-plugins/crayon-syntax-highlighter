@@ -19,8 +19,9 @@ define('CRAYON_DOMAIN', 'crayon-syntax-highlighter');
 $CRAYON_VERSION = '1.1.1' . $uid;
 $CRAYON_DATE = '27th September, 2011';
 $CRAYON_AUTHOR = 'Aram Kocharyan';
-$CRAYON_WEBSITE = 'http://ak.net84.net/?go=crayon';
-$CRAYON_WEBSITE_DOCS = 'http://ak.net84.net/?go=crayondocs';
+$CRAYON_AUTHOR_SITE = 'http://ak.net84.net/';
+$CRAYON_DONATE = 'http://bit.ly/crayondonate';
+$CRAYON_WEBSITE = 'http://ak.net84.net/projects/crayon-syntax-highlighter';
 $CRAYON_EMAIL = 'crayon.syntax@gmail.com';
 $CRAYON_TWITTER = 'http://twitter.com/crayonsyntax';
 
@@ -167,11 +168,15 @@ function crayon_set_info_key($key, $array, &$info) {
 
 // LANGUAGE TRANSLATION FUNCTIONS
 
+function crayon_load_plugin_textdomain() {
+	load_plugin_textdomain(CRAYON_DOMAIN, false, CRAYON_DIR.CRAYON_TRANS_DIR);
+}
+
 function crayon__($text) {
 	if (function_exists('__')) {
 		return __($text, CRAYON_DOMAIN);
 	} else {
-		return $text;
+		return $text . CRAYON_DOMAIN;
 	}
 }
 

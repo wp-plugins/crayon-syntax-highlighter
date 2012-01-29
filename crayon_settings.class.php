@@ -116,6 +116,9 @@ class CrayonSettings {
 
 	private function init() {
 		global $CRAYON_VERSION;
+		
+		crayon_load_plugin_textdomain();
+		
 		$settings = array(
 			new CrayonSetting(self::VERSION, $CRAYON_VERSION, NULL, TRUE),
 			new CrayonSetting(self::THEME, CrayonThemes::DEFAULT_THEME), 

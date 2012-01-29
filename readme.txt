@@ -131,6 +131,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Theme Editor coming soon!
 
 = 1.7.25 =
+* German translation improved by Stephan Knau&#223;
+* Added missing translations in other languages and fixed bug preventing dropdowns from being translated
+* Added translators to the about page
 * Oh, added <code>&lt;html&gt;...&lt;/html&gt;</code> tag into the delimiters
 * But of course, if you wanted say HTML with PHP, then you'd set the language to HTML and use <code>&lt;?php ... ?&gt;</code> tag when you needed them
 

@@ -64,6 +64,6 @@ $crayon->title('Sample Code');
 $crayon->marked('5-7');
 $crayon->output($highlight = true, $nums = true, $print = true);
 echo '</div>';
-CrayonWP::load_textdomain();
+crayon_load_plugin_textdomain();
 
 ?>

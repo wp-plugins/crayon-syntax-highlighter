@@ -349,11 +349,6 @@ msgstr "今すぐクリア"
 msgid "Attempt to load Crayon's CSS and JavaScript only when needed"
 msgstr "必要な時だけCrayonのCSSとJavaScriptを読み込むように試みる"
 
-#: crayon_settings_wp.class.php:618
-#@ crayon-syntax-highlighter
-msgid "Why?"
-msgstr "なぜ試みるのか?"
-
 #: crayon_settings_wp.class.php:621
 #@ crayon-syntax-highlighter
 msgid "Disable mouse gestures for touchscreen devices (eg. MouseOver)"
@@ -467,6 +462,7 @@ msgstr "ログファイルが存在しないので書き込むことが出来ま
 #: crayon_settings_wp.class.php:600
 #: crayon_settings_wp.class.php:601
 #: crayon_settings_wp.class.php:602
+#: crayon_settings_wp.class.php:618
 #: crayon_settings_wp.class.php:619
 #@ crayon-syntax-highlighter
 msgid "Learn More"
@@ -654,14 +650,50 @@ msgstr "唯一の主要なWordpressのクエリからロードクレヨン"
 msgid "Translators"
 msgstr "翻訳者"
 
-#. translators: plugin header field 'Version'
-#: crayon_wp.class.php:0
-#@ crayon-syntax-highlighter
-msgid "1.7.25"
-msgstr ""
-
 #: util/theme-editor/editor.php:16
 #@ crayon-syntax-highlighter
 msgid "Back To Settings"
 msgstr "バックの設定へ"
+
+#: crayon_formatter.class.php:203
+#@ crayon-syntax-highlighter
+msgid "Toggle Plain Code"
+msgstr "トグルプレーンコード"
+
+#: crayon_formatter.class.php:205
+#@ crayon-syntax-highlighter
+msgid "Copy Plain Code"
+msgstr "コピープレーンコード"
+
+#: crayon_formatter.class.php:211
+#@ crayon-syntax-highlighter
+msgid "Open Code In New Window"
+msgstr "新しいウィンドウで開くコード"
+
+#: crayon_formatter.class.php:214
+#@ crayon-syntax-highlighter
+msgid "Toggle Line Numbers"
+msgstr "トグル行番号"
+
+#: crayon_formatter.class.php:221
+#@ crayon-syntax-highlighter
+msgid "Contains Mixed Languages"
+msgstr "混在言語が含まれています"
+
+#: crayon_settings_wp.class.php:644
+#@ crayon-syntax-highlighter
+msgid "Hide Log"
+msgstr "ログ隠す"
+
+#. translators: plugin header field 'Version'
+#: crayon_wp.class.php:0
+#@ crayon-syntax-highlighter
+msgid "1.7.26"
+msgstr ""
+
+#: crayon_formatter.class.php:205
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "Press %s to Copy, %s to Paste"
+msgstr "貼り付けにコピー、%sに%sを押して、"
 

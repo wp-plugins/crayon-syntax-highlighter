@@ -652,14 +652,50 @@ msgstr "Нагрузка Мелки только из основного зап�
 msgid "Translators"
 msgstr "Переводчики"
 
-#. translators: plugin header field 'Version'
-#: crayon_wp.class.php:0
-#@ crayon-syntax-highlighter
-msgid "1.7.25"
-msgstr ""
-
 #: util/theme-editor/editor.php:16
 #@ crayon-syntax-highlighter
 msgid "Back To Settings"
 msgstr "Вернуться к настройкам"
+
+#: crayon_formatter.class.php:203
+#@ crayon-syntax-highlighter
+msgid "Toggle Plain Code"
+msgstr "Переключить Обычная кодекса"
+
+#: crayon_formatter.class.php:205
+#@ crayon-syntax-highlighter
+msgid "Copy Plain Code"
+msgstr "Скопируйте Обычная кодекса"
+
+#: crayon_formatter.class.php:211
+#@ crayon-syntax-highlighter
+msgid "Open Code In New Window"
+msgstr "Открытый код откроется в новом окне"
+
+#: crayon_formatter.class.php:214
+#@ crayon-syntax-highlighter
+msgid "Toggle Line Numbers"
+msgstr "Переключение нумерации строк"
+
+#: crayon_formatter.class.php:221
+#@ crayon-syntax-highlighter
+msgid "Contains Mixed Languages"
+msgstr "Содержит Смешанные Языки"
+
+#: crayon_settings_wp.class.php:644
+#@ crayon-syntax-highlighter
+msgid "Hide Log"
+msgstr "Скрыть Вход"
+
+#. translators: plugin header field 'Version'
+#: crayon_wp.class.php:0
+#@ crayon-syntax-highlighter
+msgid "1.7.26"
+msgstr ""
+
+#: crayon_formatter.class.php:205
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "Press %s to Copy, %s to Paste"
+msgstr "Пресс %s до Копировать, Вставить, чтобы %s"
 

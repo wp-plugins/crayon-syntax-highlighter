@@ -116,11 +116,11 @@ var CrayonSyntaxAdmin = new function() {
 		});
 	    
 	    // Log
-	    var show_log = 'Show Log';
-	    var hide_log = 'Hide Log';
 	    log_wrapper = jQuery('#crayon-log-wrapper');
 	    log_button = jQuery('#crayon-log-toggle');
 	    log_text = jQuery('#crayon-log-text');
+	    var show_log = log_button.attr('show_txt');
+	    var hide_log = log_button.attr('hide_txt');
 	    clog = jQuery('#crayon-log');
 	    log_button.val(show_log);
 	    log_button.click(function() {

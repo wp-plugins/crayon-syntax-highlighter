@@ -44,7 +44,7 @@ class CrayonFormatter {
 	}
 
 	/* Performs a replace to format each match based on the captured element. */
-	private static function format_match($matches) {		
+	private static function format_match($matches) {
 		/* First index in $matches is full match, subsequent indices are groups.
 		 * Minimum number of elements in array is 2, so minimum captured group is 0. */
 		$captured_group_number = count($matches) - 2;
@@ -200,25 +200,25 @@ class CrayonFormatter {
 				$readonly = $touch ? '' : 'readonly';
 				$print_plain = $print_plain_button = '';
 				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . self::clean_code($hl->code()) . '</textarea>';
-				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="Toggle Plain Code"></a>' : '';
+				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="'.crayon__('Toggle Plain Code').'"></a>' : '';
 				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
-					'<a class="crayon-copy-button crayon-button" title="Copy Plain Code"></a>' : '';
+					'<a class="crayon-copy-button crayon-button" show_txt="'.crayon__('Press %s to Copy, %s to Paste').'" title="'.crayon__('Copy Plain Code').'"></a>' : '';
 			} else {
 				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = '';
 			}
 			
 			$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
-				'<a class="crayon-popup-button crayon-button" title="Open Code in Window" onclick="return false;"></a>' : '';
+				'<a class="crayon-popup-button crayon-button" title="'.crayon__('Open Code In New Window').'" onclick="return false;"></a>' : '';
 			
 			if ($hl->setting_val(CrayonSettings::NUMS_TOGGLE)) {
-				$print_nums_button = '<a class="crayon-nums-button crayon-button" title="Toggle Line Numbers"></a>';
+				$print_nums_button = '<a class="crayon-nums-button crayon-button" title="'.crayon__('Toggle Line Numbers').'"></a>';
 			} else {
 				$print_nums_button = '';
 			}
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
 
-			$print_plus = $hl->is_mixed() && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="Contains Mixed Languages"></span>' : '';
+			$print_plus = $hl->is_mixed() && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
 			$buttons = $print_plus.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
 			$button_preload = '';
 			foreach (array('nums', 'copy', 'popup', 'plain') as $name) {

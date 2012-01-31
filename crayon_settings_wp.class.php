@@ -641,7 +641,7 @@ class CrayonSettingsWP {
 		if (!empty($log)) {
 			echo '<div id="crayon-log-wrapper">', '<div id="crayon-log"><div id="crayon-log-text">', $log,
 				'</div></div>', '<div id="crayon-log-controls">',
-				'<input type="button" id="crayon-log-toggle" class="button-secondary" value="', crayon__('Show Log'), '"> ',
+				'<input type="button" id="crayon-log-toggle" show_txt="',crayon__('Show Log'),'" hide_txt="',crayon__('Hide Log'),'" class="button-secondary" value="', crayon__('Show Log'), '"> ',
 				'<input type="submit" id="crayon-log-clear" name="', self::LOG_CLEAR ,
 				'" class="button-secondary" value="', crayon__('Clear Log'), '"> ', '<input type="submit" id="crayon-log-email" name="',
 				self::LOG_EMAIL_ADMIN . '" class="button-secondary" value="', crayon__('Email Admin'), '"> ',
@@ -666,7 +666,7 @@ class CrayonSettingsWP {
 		$date = $CRAYON_DATE;
 		$developer = '<strong>'.crayon__('Developer').':</strong> ' . '<a href="'.$CRAYON_AUTHOR_SITE.'" target="_blank">' . $CRAYON_AUTHOR . '</a>';
 		$translators = '<strong>'.crayon__('Translators').':</strong> ' .
-			'German (Stephan Knau&#223;),
+			'German (<a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223;</a>),
 			Japanese (<a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>), 
 			Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>)';
 		

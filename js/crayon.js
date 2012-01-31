@@ -360,7 +360,9 @@ var CrayonSyntax = new function() {
 		toolbar_toggle(uid, true);
 		
 		key = crayon[uid].mac ? '\u2318' : 'CTRL';
-		text = 'Press ' + key + '+C to Copy, ' + key + '+V to Paste :)';
+		var text = crayon[uid].copy_button.attr('show_txt');
+		text = text.replace(/%s/, key + '+C');
+		text = text.replace(/%s/, key + '+V');
 		crayon_info(uid, text);
 		return false;
 	}

@@ -420,11 +420,6 @@ msgstr "Crayon Ayuda"
 msgid "Attempt to load Crayon's CSS and JavaScript only when needed"
 msgstr "Intento de cargar CSS y JavaScript Crayón sólo cuando sea necesario"
 
-#: crayon_settings_wp.class.php:618
-#@ crayon-syntax-highlighter
-msgid "Why?"
-msgstr "¿Por qué?"
-
 #: crayon_settings_wp.class.php:504
 #, php-format
 #@ crayon-syntax-highlighter
@@ -468,6 +463,7 @@ msgstr "Captura de etiquetas &lt;pre&gt; como Crayons"
 #: crayon_settings_wp.class.php:600
 #: crayon_settings_wp.class.php:601
 #: crayon_settings_wp.class.php:602
+#: crayon_settings_wp.class.php:618
 #: crayon_settings_wp.class.php:619
 #@ crayon-syntax-highlighter
 msgid "Learn More"
@@ -655,14 +651,50 @@ msgstr "Lápices de colores única carga de la principal consulta de Wordpress"
 msgid "Translators"
 msgstr "Traductores"
 
-#. translators: plugin header field 'Version'
-#: crayon_wp.class.php:0
-#@ crayon-syntax-highlighter
-msgid "1.7.25"
-msgstr ""
-
 #: util/theme-editor/editor.php:16
 #@ crayon-syntax-highlighter
 msgid "Back To Settings"
 msgstr "Volver a la configuración"
+
+#: crayon_formatter.class.php:203
+#@ crayon-syntax-highlighter
+msgid "Toggle Plain Code"
+msgstr "Código normal cambiar"
+
+#: crayon_formatter.class.php:205
+#@ crayon-syntax-highlighter
+msgid "Copy Plain Code"
+msgstr "Copia simple código"
+
+#: crayon_formatter.class.php:211
+#@ crayon-syntax-highlighter
+msgid "Open Code In New Window"
+msgstr "Código abierto en una ventana nueva"
+
+#: crayon_formatter.class.php:214
+#@ crayon-syntax-highlighter
+msgid "Toggle Line Numbers"
+msgstr "Números de cambiar de línea"
+
+#: crayon_formatter.class.php:221
+#@ crayon-syntax-highlighter
+msgid "Contains Mixed Languages"
+msgstr "Contiene Idiomas mixtos"
+
+#: crayon_settings_wp.class.php:644
+#@ crayon-syntax-highlighter
+msgid "Hide Log"
+msgstr "Ocultar Conectarse"
+
+#. translators: plugin header field 'Version'
+#: crayon_wp.class.php:0
+#@ crayon-syntax-highlighter
+msgid "1.7.26"
+msgstr ""
+
+#: crayon_formatter.class.php:205
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "Press %s to Copy, %s to Paste"
+msgstr "Prensa %s para copiar, pegar a %s"
 

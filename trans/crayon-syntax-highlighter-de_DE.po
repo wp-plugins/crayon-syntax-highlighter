@@ -219,7 +219,7 @@ msgstr "Zeilennummern standardmäßig anzeigen"
 #: crayon_settings_wp.class.php:486
 #@ crayon-syntax-highlighter
 msgid "Enable line number toggling"
-msgstr "Zeilennummern Umschalten"
+msgstr "Zeilennummern umschaltbar"
 
 #: crayon_settings_wp.class.php:487
 #@ crayon-syntax-highlighter
@@ -277,7 +277,7 @@ msgstr "Die ausgewählte Schrift mit der id %s konnte nicht geladen werden"
 #: crayon_settings_wp.class.php:587
 #@ crayon-syntax-highlighter
 msgid "Enable plain code view and display"
-msgstr "Unformatierte Code-Ansicht und Anzeige"
+msgstr "Unformatierte Code-Ansicht ermöglichen"
 
 #: crayon_settings_wp.class.php:592
 #@ crayon-syntax-highlighter
@@ -297,7 +297,7 @@ msgstr "Anzahl Leerzeichen für Tabulator"
 #: crayon_settings_wp.class.php:598
 #@ crayon-syntax-highlighter
 msgid "Remove whitespace surrounding the shortcode content"
-msgstr "Entfernen Sie Leerzeichen um den Shortcode Inhalt"
+msgstr "Leerzeichen um den Shortcode Inhalt entfernen"
 
 #: crayon_settings_wp.class.php:608
 #@ crayon-syntax-highlighter
@@ -420,11 +420,6 @@ msgstr "Crayon Hilfe"
 msgid "Attempt to load Crayon's CSS and JavaScript only when needed"
 msgstr "Versuchen Crayon CSS und JavaScript nur bei Bedarf zu laden"
 
-#: crayon_settings_wp.class.php:618
-#@ crayon-syntax-highlighter
-msgid "Why?"
-msgstr "Warum?"
-
 #: crayon_settings_wp.class.php:611
 #@ crayon-syntax-highlighter
 msgid "Followed by your relative URL."
@@ -468,6 +463,7 @@ msgstr "&lt;pre&gt; tags wie Crayons behandeln"
 #: crayon_settings_wp.class.php:600
 #: crayon_settings_wp.class.php:601
 #: crayon_settings_wp.class.php:602
+#: crayon_settings_wp.class.php:618
 #: crayon_settings_wp.class.php:619
 #@ crayon-syntax-highlighter
 msgid "Learn More"
@@ -660,9 +656,45 @@ msgstr "Zurück zu Einstellungen"
 msgid "Translators"
 msgstr "Übersetzer"
 
+#: crayon_formatter.class.php:203
+#@ crayon-syntax-highlighter
+msgid "Toggle Plain Code"
+msgstr "Unformatierte Code-Ansicht"
+
+#: crayon_formatter.class.php:205
+#@ crayon-syntax-highlighter
+msgid "Copy Plain Code"
+msgstr "Unformatierten Code kopieren"
+
+#: crayon_formatter.class.php:211
+#@ crayon-syntax-highlighter
+msgid "Open Code In New Window"
+msgstr "Code in einem neuen Fenster anzeigen"
+
+#: crayon_formatter.class.php:214
+#@ crayon-syntax-highlighter
+msgid "Toggle Line Numbers"
+msgstr "Zeilennummern"
+
+#: crayon_formatter.class.php:221
+#@ crayon-syntax-highlighter
+msgid "Contains Mixed Languages"
+msgstr "Enthält verschiedene Sprachen"
+
+#: crayon_settings_wp.class.php:644
+#@ crayon-syntax-highlighter
+msgid "Hide Log"
+msgstr "Protokoll ausblenden"
+
 #. translators: plugin header field 'Version'
 #: crayon_wp.class.php:0
 #@ crayon-syntax-highlighter
-msgid "1.7.25"
+msgid "1.7.26"
 msgstr ""
+
+#: crayon_formatter.class.php:205
+#, php-format
+#@ crayon-syntax-highlighter
+msgid "Press %s to Copy, %s to Paste"
+msgstr "Drücken Sie %s zum Kopieren, %s zum Einfügen"
 

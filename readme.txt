@@ -68,11 +68,11 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 **International Languages**
 
 * French
-* German (thanks to Stephan Knau&#223)
+* German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223</a>)
 * Italian
 * Spanish
 * Japanese (thanks to @west_323)
-* Russian (thanks to minimus - http://simplelib.com)
+* Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a>)
 * Help from translators at improving/adding to this list greatly appreciated!  
 
 **Articles**
@@ -129,6 +129,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.8.0 =
 * Theme Editor coming soon!
+
+= 1.7.26 =
+* Added translations to the tooltips and copy notification in the toolbar
 
 = 1.7.25 =
 * German translation improved by Stephan Knau&#223;

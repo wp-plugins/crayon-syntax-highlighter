@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 1.7.22
+Stable tag: 1.7.27
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -129,6 +129,11 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.8.0 =
 * Theme Editor coming soon!
+
+= 1.7.27 =
+* Recommended update for everyone. This fixes a bug in 1.7.25 where Mixed Highlighting would fail inside an html tag
+* Greatly simplified the mixed highlighting method, more robust
+* Made it impossible to nest delimiters, which mimics the behaviour in supported languages. 
 
 = 1.7.26 =
 * Added translations to the tooltips and copy notification in the toolbar

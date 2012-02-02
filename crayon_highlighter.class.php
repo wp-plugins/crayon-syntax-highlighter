@@ -19,7 +19,6 @@ class CrayonHighlighter {
 	private $error = '';
 	// Determine whether the code needs to be loaded, parsed or formatted
 	private $needs_load = TRUE;
-	private $needs_parse = TRUE;
 	private $needs_format = TRUE;
 	// Record the script run times
 	private $runtime = array();
@@ -146,117 +145,19 @@ class CrayonHighlighter {
 			// Disable highlighting for errors and empty code
 			return;
 		}
-		// Build the syntax regex, elements and regex are passed by reference
-		if ($this->needs_parse) {
-			$tmr->start();
-			if (empty($this->language)) {
-				$this->language($this->setting_val(CrayonSettings::FALLBACK_LANG));
-			}
-			
-			if ( $this->language != NULL && !$this->language->is_default() && !$this->language->is_parsed()) {
-				CrayonParser::parse($this->language()->id());
-			}
-			$this->needs_parse = FALSE;
-			$this->runtime[CRAYON_PARSE_TIME] = $tmr->stop();
+		if ($this->language === NULL) {
+			$this->language($this->setting_val(CrayonSettings::FALLBACK_LANG));
 		}
 		if ($this->needs_format) {
 			$tmr->start();
 			try {
-				
 				if (!$this->setting_val(CrayonSettings::MIXED)) {
 					// Format the code with the generated regex and elements
 					$this->formatted_code = CrayonFormatter::format_code($this->code, $this->language, $highlight, $this);
 				} else {
-					
-					// Remove crayon internal element from input code
-					$this->code = preg_replace('#'.CrayonParser::CRAYON_ELEMENT_REGEX_CAPTURE.'#msi', '', $this->code);
-					
-					/* Stores the pieces of code in different languages.
-					 * Each element is array($start_index, $end_index, $code)
-					 * More than one language can add matches, so we need to keep this array sorted by $start_index
-					 * and also ensure there is no overlap between matches as we add more matches. We then use the indicies
-					 * to concatenate the highlighted code and the code left over is used as glue between them.
-					 */
-					$pieces = array();
-					$orignal_code = $this->code;
-					$delimiters = CrayonResources::langs()->delimiters();
-					$piece_id = 1;
-					
-					// Find all delimiters in all languages
-					foreach ($delimiters as $lang_id=>$delim_regex) {
-						if ( ($lang = CrayonResources::langs()->get($lang_id)) === NULL ) {
-							continue;
-						}
-											
-						// Get the regex and find matches
-						preg_match_all($delim_regex, $orignal_code, $delim_matches, PREG_OFFSET_CAPTURE);
-						$length_offset = 0;
-						
-						// No instance of delimiter used
-						if (empty($delim_matches[0])) {
-							continue;
-						}
-						
-						CrayonParser::parse($lang_id);
-						foreach ($delim_matches[0] as $match) {
-							$code = $match[0];
-							
-							if (strlen($code) == 0) {
-								continue;
-							}
-							
-							$start_index = $match[1] + $length_offset;
-							$length = strlen($code);
-							$end_index = $start_index + strlen($code)-1;
-							
-							$formatted_code = CrayonFormatter::format_code($code, $lang, $highlight, $this);
-	
-							$pieces[$piece_id] = $formatted_code;
-							$crayon_element = sprintf('{{crayon-internal:%d}}', $piece_id);
-							
-							// Replace the code in the original code with the internal element for now
-							$orignal_code = substr_replace($orignal_code, $crayon_element, $start_index, $length);
-							
-							// Replacing the code with the internal element will invalidate $match[1] index 
-							$length_offset += strlen($crayon_element) - $length;
-							$piece_id++;
-							$this->is_mixed = TRUE;
-						}
-					}
-					
-					// Format the non-delimited code under the given language
-					$orignal_code = CrayonFormatter::format_code($orignal_code, $this->language, $highlight, $this);
-					
-					if ($this->is_mixed) {
-						preg_match_all('#'.CrayonParser::CRAYON_ELEMENT_REGEX_CAPTURE.'#msi', $orignal_code, $delim_matches, PREG_OFFSET_CAPTURE);
-						
-						// Replace the crayon elements with the formatted code pieces
-						$length_offset = 0;
-						for ($i = 0; $i < count($delim_matches[0]); $i++) {
-							$crayon_element = $delim_matches[0][$i][0];
-							$start_index = $delim_matches[0][$i][1] + $length_offset;
-							$length = strlen($crayon_element);
-							
-							$piece_id = intval($delim_matches[1][$i][0]);
-							if ($piece_id < 1 || !array_key_exists($piece_id, $pieces)) {
-								// Not a valid piece id
-								continue;
-							}
-							
-							$formatted_code = $pieces[$piece_id];
-							
-							// Replace the internal element in the formatted code with the formatted delimited formatted
-							$orignal_code = substr_replace($orignal_code, $formatted_code, $start_index, $length);
-							
-							// Replacing will invalidate index 
-							$length_offset += strlen($formatted_code) - $length;
-						}
-					}
-					
-					// Apply the changes
-					$this->formatted_code = $orignal_code;
+					// Format the code with Mixed Highlighting
+					$this->formatted_code = CrayonFormatter::format_mixed_code($this->code, $this->language, $highlight, $this);					
 				}
-
 			} catch (Exception $e) {
 				$this->error($e->message());
 				return;
@@ -391,7 +292,6 @@ class CrayonHighlighter {
 		$this->log($string);
 		// Add the error string and ensure no further processing occurs
 		$this->needs_load = FALSE;
-		$this->needs_parse = FALSE;
 		$this->needs_format = FALSE;
 	}
 
@@ -452,8 +352,12 @@ class CrayonHighlighter {
 		return $this->runtime;
 	}
 	
-	function is_mixed() {
-		return $this->is_mixed;
+	function is_mixed($mixed = NULL) {
+		if ($mixed === NULL) {
+			return $this->is_mixed;			
+		} else {
+			$this->is_mixed = $mixed;
+		}
 	}
 }
 ?>

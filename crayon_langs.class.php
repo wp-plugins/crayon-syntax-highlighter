@@ -22,10 +22,7 @@ class CrayonLangs extends CrayonResourceCollection {
 	const RESOURCE_TYPE = 'CrayonLangsResourceType';
 	
 	// Used to cache the objects, since they are unlikely to change during a single run
-	private static $resource_cache = array(); 
-//	private static $extensions = NULL;
-//	private static $aliases = NULL;
-//	private static $delimiters = NULL;
+	private static $resource_cache = array();
 	
 	// Methods ================================================================
 	public function __construct() {
@@ -331,9 +328,13 @@ class CrayonLang extends CrayonVersionResource {
 			return $this->delimiters;
 		// Convert to regex for capturing delimiters
 		} else if (is_string($delim) && !empty($delim)) {
-			$this->delimiters = '#(?:'.$delim.')#msi';
+			$this->delimiters = '(?:'.$delim.')';
 		} else if (is_array($delim) && !empty($delim)) {
-			$this->delimiters = '#(?:'.implode(')|(?:', $delim).')#msi';
+			for ($i = 0; $i < count($delim); $i++) {
+				$delim[$i] = CrayonUtil::esc_atomic($delim[$i]);
+			}
+			
+			$this->delimiters = '(?:'.implode(')|(?:', $delim).')';
 		}
 	}
 

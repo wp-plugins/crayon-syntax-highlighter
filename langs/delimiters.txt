@@ -6,4 +6,3 @@ php <\?(?:php)?.*?\?\>
 js <script\b[^\>]*>.*?</script>
 css <style\b[^\>]*>.*?</style>
 ruby (<%.*?%>)|(^%.*?[\r\n])
-xhtml <x?html\b[^\>]*>.*?</x?html>

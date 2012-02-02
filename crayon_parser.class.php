@@ -203,7 +203,7 @@ class CrayonParser {
 			}
 			
 			// Ensure all parenthesis are atomic to avoid conflicting with element matches
-			$regex = preg_replace('#(?<!\\\\)\((?!\?)#', '(?:', $regex);
+			$regex = CrayonUtil::esc_atomic($regex);
 			
 			// Escape #, this is our delimiter
 			$regex = CrayonUtil::esc_hash($regex);

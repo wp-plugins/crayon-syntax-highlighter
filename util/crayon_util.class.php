@@ -228,6 +228,11 @@ class CrayonUtil {
 			return FALSE;
 		}
 	}
+	
+	// Ensure all parenthesis are atomic to avoid conflicting with element matches
+	public static function esc_atomic($regex) {
+		return preg_replace('#(?<!\\\\)\((?!\?)#', '(?:', $regex);
+	}
 
 	// Removes crayon plugin path from absolute path
 	public static function path_rel($url) {

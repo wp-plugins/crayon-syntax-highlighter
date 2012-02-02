@@ -94,7 +94,7 @@ define('CRAYON_THEME_EDITOR_PHP', CRAYON_UTIL_DIR . CRAYON_THEME_EDITOR_DIR . 'e
 // Script time
 
 define('CRAYON_LOAD_TIME', 'Load Time');
-define('CRAYON_PARSE_TIME', 'Parse Time');
+//define('CRAYON_PARSE_TIME', 'Parse Time');
 define('CRAYON_FORMAT_TIME', 'Format Time');
 
 // Printing

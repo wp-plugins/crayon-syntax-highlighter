@@ -13,6 +13,13 @@ class CrayonFormatter {
 	 accordingly. This must be static for preg_replace_callback() to access it.*/
 	private static $elements = array();
 
+	// Delimiters
+	// Current crayon undergoing delimiter replace
+	private static $curr;
+	private static $delimiters;
+	private static $delim_regex;
+	private static $delim_pieces;
+	
 	// Methods ================================================================
 	private function __construct() {}
 
@@ -23,10 +30,10 @@ class CrayonFormatter {
 			/* Perform the replace on the code using the regex, pass the captured matches for
 			 formatting before they are replaced */
 			try {
+				CrayonParser::parse($language->id());
 				// Match language regex
 				$elements = $language->elements();
 				$regex = $language->regex();
-				
 				if (!empty($regex) && !empty($elements)) {
 					// Get array of CrayonElements
 					self::$elements = array_values($elements);
@@ -38,7 +45,7 @@ class CrayonFormatter {
 			}
 			
 			return $code;
-		} else {			
+		} else {
 			return self::clean_code($code);
 		}
 	}
@@ -258,12 +265,9 @@ class CrayonFormatter {
 		$font_id = $hl->setting_val(CrayonSettings::FONT);
 		$font_id_dashed = CrayonUtil::space_to_hyphen($font_id);
 		
-//		if ($font_id != NULL && $font_id != CrayonFonts::DEFAULT_FONT) {
-			if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
-				$output .= CrayonResources::fonts()->get_css($font_id);
-			}
-//			$font_id_dashed = 'crayon-font-' . CrayonUtil::space_to_hyphen($font_id); 
-//		}
+		if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
+			$output .= CrayonResources::fonts()->get_css($font_id);
+		}
 		
 		// Determine font size
 		// TODO improve logic
@@ -285,14 +289,7 @@ class CrayonFormatter {
 		
 		// Determine scrollbar visibility
 		$code_settings .= $hl->setting_val(CrayonSettings::SCROLL) && !$touch ? ' scroll-always' : ' scroll-mouseover';
-//		switch ($hl->setting_index(CrayonSettings::SCROLL) && !$touch) {
-//			case 0 :
-//				$code_settings .= ' scroll-mouseover';
-//				break;
-//			default :
-//				$code_settings .= ' scroll-always';
-//		}
-		
+
 		// Disable animations
 		if ($hl->setting_val(CrayonSettings::DISABLE_ANIM)) {
 			$code_settings .= ' disable-anim';
@@ -408,6 +405,55 @@ class CrayonFormatter {
 		return self::print_code($hl, $error, $line_numbers, $print);
 	}
 
+	// Delimiters =============================================================
+	
+	public static function format_mixed_code($code, $language, $highlight = TRUE, $hl = NULL) {
+		if (!$highlight) {
+			return self::format_code($code, $language, $highlight, $hl);
+		}
+		self::$curr = $hl;
+		self::$delim_pieces = array();
+		// Remove crayon internal element from INPUT code
+		$code = preg_replace('#'.CrayonParser::CRAYON_ELEMENT_REGEX_CAPTURE.'#msi', '', $code);
+		
+		if (self::$delimiters == NULL) {
+			self::$delimiters = CrayonResources::langs()->delimiters();
+		}
+		
+		// Find all delimiters in all languages
+		if (self::$delim_regex == NULL) {
+			self::$delim_regex = '#(' . implode(')|(', array_values(self::$delimiters)) . ')#msi';
+		}
+		
+		// Extract delimited code, replace with internal elements
+		$internal_code = preg_replace_callback(self::$delim_regex, 'CrayonFormatter::delim_to_internal', $code);
+		
+		// Format with given language
+		$formatted_code = CrayonFormatter::format_code($internal_code, $language, TRUE, $hl);
+		
+		// Replace internal elements with delimited pieces
+		$formatted_code = preg_replace_callback('#\{\{crayon-internal:(\d+)\}\}#', 'CrayonFormatter::internal_to_code', $formatted_code);
+
+		return $formatted_code;
+	}
+	
+	public static function delim_to_internal($matches) {
+		self::$curr->is_mixed(TRUE);
+		$capture_group = count($matches) - 2;
+		$capture_groups = array_keys(self::$delimiters);
+		$lang_id = $capture_groups[$capture_group]; 
+		if ( ($lang = CrayonResources::langs()->get($lang_id)) === NULL ) {
+			return $matches[0];
+		}
+		$internal = sprintf('{{crayon-internal:%d}}', count(self::$delim_pieces));
+		self::$delim_pieces[] = CrayonFormatter::format_code($matches[0], $lang, TRUE, self::$curr);
+		return $internal;
+	}
+	
+	public static function internal_to_code($matches) {
+		return self::$delim_pieces[intval($matches[1])];
+	}
+	
 	// Auxiliary Methods ======================================================
 	/* Prepares code for formatting. */
 	public static function clean_code($code) {

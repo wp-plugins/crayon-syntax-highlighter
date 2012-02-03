@@ -73,7 +73,8 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 * Spanish
 * Japanese (thanks to @west_323)
 * Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a>)
-* Help from translators at improving/adding to this list greatly appreciated!  
+* Turkish (thanks to <a href="http://kazancexpert.com" target="_blank">Hakan</a>)
+* Help from translators at improving/adding to this list greatly appreciated!
 
 **Articles**
 
@@ -87,6 +88,7 @@ These are helpful for discovering new features.
 
 * AutoIt support
 * ActionScript support
+* PowerShell support
 * Highlighting in sentences
 * Highlighting in comments
 * Visual Editor Support
@@ -129,6 +131,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.8.0 =
 * Theme Editor coming soon!
+
+= 1.7.28 =
+* Fixed a bug prevent attributes from being detected since 1.7.24
+* Added Turkish languge thanks to Hakan (http://kazancexpert.com)
 
 = 1.7.27 =
 * Recommended update for everyone. This fixes a bug in 1.7.25 where Mixed Highlighting would fail inside an html tag

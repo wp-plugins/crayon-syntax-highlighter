@@ -668,7 +668,8 @@ class CrayonSettingsWP {
 		$translators = '<strong>'.crayon__('Translators').':</strong> ' .
 			'German (<a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223;</a>),
 			Japanese (<a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>), 
-			Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>)';
+			Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>),
+			Turkish (<a href="http://kazancexpert.com" target="_blank">Hakan</a>)';
 		
 		/*$paypal = '<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">

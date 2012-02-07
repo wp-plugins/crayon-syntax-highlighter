@@ -435,3 +435,4 @@ Thanks to all those who donate to my project!
 * Nick Weisser (http://www.openstream.ch/), Switzerland
 * Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom
 * Andrew McDonnell (http://blog.oldcomputerjunk.net/), Australia
+* Waimanu Solutions (http://daveblog.waimanu.web44.net/), USA

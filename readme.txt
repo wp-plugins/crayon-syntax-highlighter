@@ -132,6 +132,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.29 =
+* Thanks to @west_323 for updating the Japanese translation
+
 = 1.7.28 =
 * Fixed a bug prevent attributes from being detected since 1.7.24
 * Added Turkish languge thanks to Hakan (http://kazancexpert.com)

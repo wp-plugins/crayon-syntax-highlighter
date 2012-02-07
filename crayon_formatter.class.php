@@ -352,14 +352,14 @@ class CrayonFormatter {
 		$crayon_os = CrayonUtil::is_mac() ? 'mac' : 'pc';
 		
 		// Produce style for individual crayon
-		$output .= '<style type="text/css">'.$font_style.'</style>';
+		$output .= '<style type="text/css" media="all">'.$font_style.'</style>';
 		
 		// Produce output
 		$output .= '
 		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
 		'.$toolbar.'
 			<div class="crayon-main" style="'.$main_style.'">
-				<table class="crayon-table" cellpadding="0" cellspacing="0">
+				<table class="crayon-table">
 					<tr class="crayon-row">';
 
 		if ($print_nums !== FALSE) {

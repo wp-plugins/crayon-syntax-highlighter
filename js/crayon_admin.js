@@ -288,9 +288,9 @@ var CrayonSyntaxAdmin = new function() {
 	}
 	
 	this.show_langs = function(url) {
-		jQuery('#show-lang').hide();
+//		jQuery('#show-lang').hide();
 		jQuery.get(url, function(data) {
-			jQuery('#lang-info').show();
+//			jQuery('#lang-info').show();
 			jQuery('#lang-info').html(data);
 		});
 		return false;

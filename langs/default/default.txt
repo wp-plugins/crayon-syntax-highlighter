@@ -3,7 +3,7 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                Default
-    VERSION             1.7.0
+    VERSION             1.7.30
 
     COMMENT             (/\*.*?\*/)|(//.*?$)
     STRING              ((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
@@ -16,7 +16,7 @@
     ENTITY              (\b[a-z_]\w*\b(?=\s*\([^\)]*\)))|((?<!\.)(\b[a-z_]\w*\b)(?=[^},.:;\)]*{))|(\b[a-z_]\w+\b\s+(?=\b[a-z_]\w+\b))|(\b[a-z_]\w*\s*\*)
     VARIABLE            \b(?<=\.)\s*[A-Za-z_]\w*
     IDENTIFIER          \b[A-Za-z_]\w*\b
-    CONSTANT            (?<!\w)\.?[0-9][\w]*
+    CONSTANT            (?<!\w)[0-9][\.\w]*
     OPERATOR            (?alt:operator.txt)
     SYMBOL              &[^;]+;|(?alt:symbol.txt)
     

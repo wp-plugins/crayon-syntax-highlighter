@@ -126,8 +126,12 @@
 	border: 0;
 }
 
-#lang-info {
+/*#lang-info {
 	display: none;
+}*/
+
+#lang-info div {
+	padding: 5px 0px;
 }
 
 .crayon-table .not-parsed {

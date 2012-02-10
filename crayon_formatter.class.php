@@ -359,7 +359,7 @@ class CrayonFormatter {
 		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
 		'.$toolbar.'
 			<div class="crayon-main" style="'.$main_style.'">
-				<table class="crayon-table">
+				<table class="crayon-table" cellspacing="0" cellpadding="0">
 					<tr class="crayon-row">';
 
 		if ($print_nums !== FALSE) {

@@ -132,6 +132,13 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.0 =
 * Theme Editor coming soon!
 
+= 1.7.30 =
+* Added Inventor iLogic as a language
+* Added cellspacing and cellpadding back into table due to spacing issue after trying to conform to W3C standards...
+* Improved default language constants
+* Added missing language samples for live preview (ruby, monkey and ilogic)
+* More prominent "show language" button
+
 = 1.7.29 =
 * Thanks to @west_323 for updating the Japanese translation
 

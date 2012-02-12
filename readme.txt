@@ -129,8 +129,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.8.0 =
-* Theme Editor coming soon!
+Due to demand from some users that I reduce my updates, I've decided not to release updates as quickly as possible, but in batches of updates every few weeks making up incremental releases. I will squeeze in what I can into 1.8, but it may not include all the items in the planned features. Consider 1.7.30 the final release until an addequate ammount of those features are ready for 1.8. When that will be is subjective.
 
 = 1.7.30 =
 * Added Inventor iLogic as a language

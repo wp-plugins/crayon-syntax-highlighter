@@ -68,7 +68,7 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 **International Languages**
 
 * French
-* German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223</a>)
+* German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau§</a>)
 * Italian
 * Spanish
 * Japanese (thanks to @west_323)
@@ -154,7 +154,7 @@ Due to demand from some users that I reduce my updates, I've decided not to rele
 * Added translations to the tooltips and copy notification in the toolbar
 
 = 1.7.25 =
-* German translation improved by Stephan Knau&#223;
+* German translation improved by Stephan Knau§;
 * Added missing translations in other languages and fixed bug preventing dropdowns from being translated
 * Added translators to the about page
 * Oh, added <code>&lt;html&gt;...&lt;/html&gt;</code> tag into the delimiters

@@ -19,27 +19,30 @@ jQuery.fn.exists = function () {
 }
 
 // For those who need them (< IE 9), add support for CSS functions
-var isStyleFuncSupported = CSSStyleDeclaration.prototype.getPropertyValue != null;
-if (!isStyleFuncSupported) {
-	CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
-        return this.getAttribute(a);
-    };
-    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
-        this.setAttribute(styleName,value);
-        var priority = typeof priority != 'undefined' ? priority : '';
-        if (priority != '') {
-	        // Add priority manually
-			var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*' + RegExp.escape(value) + '(\\s*;)?', 'gmi');
-			this.cssText = this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
-        } 
-    }
-    CSSStyleDeclaration.prototype.removeProperty = function(a) {
-        return this.removeAttribute(a);
-    }
-    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
-    	var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?', 'gmi');
-        return rule.test(this.cssText) ? 'important' : '';
-    }
+var isStyleFuncSupported = null;
+if (typeof(CSSStyleDeclaration) != 'undefined') {
+	isStyleFuncSupported = CSSStyleDeclaration.prototype.getPropertyValue != null;
+	if (!isStyleFuncSupported) {
+		CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
+	        return this.getAttribute(a);
+	    };
+	    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
+	        this.setAttribute(styleName,value);
+	        var priority = typeof priority != 'undefined' ? priority : '';
+	        if (priority != '') {
+		        // Add priority manually
+				var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*' + RegExp.escape(value) + '(\\s*;)?', 'gmi');
+				this.cssText = this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
+	        } 
+	    }
+	    CSSStyleDeclaration.prototype.removeProperty = function(a) {
+	        return this.removeAttribute(a);
+	    }
+	    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
+	    	var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?', 'gmi');
+	        return rule.test(this.cssText) ? 'important' : '';
+	    }
+	}
 }
 
 // Escape regex chars with \
@@ -230,7 +233,7 @@ var CrayonSyntax = new function() {
 	    		left:50,
 	    		scrollbars:1,
 	    		windowURL:'',
-	    		data:'', // Data overrides URL
+	    		data:'' // Data overrides URL
 	    	}, function() {
 	    		code_popup(uid);
 	    	}, function() {

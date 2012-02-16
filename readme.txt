@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: trunk
+Stable tag: 1.7.30
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -54,6 +54,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * JavaScript
 * Objective-C
 * PHP
+* PostgreSQL (thanks to <a href="http://bitorchestra.com/" target="_blank">http://bitorchestra.com/</a>)
 * Python
 * Ruby
 * Shell (Unix)
@@ -67,11 +68,12 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 
 **International Languages**
 
+* Chinese (Simplified, thanks to <a href="http://smerpup.com/" target="_blank">Dezhi Liu</a>)
 * French
 * German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau§</a>)
 * Italian
 * Spanish
-* Japanese (thanks to @west_323)
+* Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
 * Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a>)
 * Turkish (thanks to <a href="http://kazancexpert.com" target="_blank">Hakan</a>)
 * Help from translators at improving/adding to this list greatly appreciated!
@@ -87,7 +89,6 @@ These are helpful for discovering new features.
 **Planned Features**
 
 * AutoIt support
-* ActionScript support
 * PowerShell support
 * Highlighting in sentences
 * Highlighting in comments
@@ -130,6 +131,14 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 Due to demand from some users that I reduce my updates, I've decided not to release updates as quickly as possible, but in batches of updates every few weeks making up incremental releases. I will squeeze in what I can into 1.8, but it may not include all the items in the planned features. Consider 1.7.30 the final release until an adequate amount of those features are ready for 1.8. When that will be is subjective.
+
+= 1.8.0 =
+* Added PostgreSQL thanks to Emiliano Leporati and Alessandro Venezia from http://bitorchestra.com/
+* Added ActionScript
+* Thanks to Thomas Tan for finding and fixing IE6 compatibility bugs in crayon.js!
+* Improved Objective-C, XHTML and default language
+* ?alt: tag now supports spaces in language files, treats then as \s+
+* Added support for single quotes in CSS and JS
 
 = 1.7.30 =
 * Added Inventor iLogic as a language

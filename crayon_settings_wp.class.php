@@ -666,7 +666,8 @@ class CrayonSettingsWP {
 		$date = $CRAYON_DATE;
 		$developer = '<strong>'.crayon__('Developer').':</strong> ' . '<a href="'.$CRAYON_AUTHOR_SITE.'" target="_blank">' . $CRAYON_AUTHOR . '</a>';
 		$translators = '<strong>'.crayon__('Translators').':</strong> ' .
-			'German (<a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223;</a>),
+			'Chinese (<a href="http://smerpup.com/" target="_blank">Dezhi Liu</a>),
+			German (<a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223;</a>),
 			Japanese (<a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>), 
 			Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>),
 			Turkish (<a href="http://kazancexpert.com" target="_blank">Hakan</a>)';

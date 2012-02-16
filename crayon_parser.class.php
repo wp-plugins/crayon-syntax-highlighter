@@ -163,6 +163,8 @@ class CrayonParser {
 					$file_lines = CrayonUtil::lines(dirname($element->path()) . crayon_s() . $file[1][$i], 'rcwh');
 					if ($file_lines !== FALSE) {
 						$file_lines = implode('|', $file_lines);
+						// If any spaces exist, treat them as whitespace
+						$file_lines = preg_replace('#[ \t]+#msi', '\s+', $file_lines);
 						$regex = str_replace($file[0][$i], "(?:$file_lines)", $regex);
 					} else {
 						CrayonLog::syslog("Parsing of '{$element->path()}' failed, an (?alt) tag failed for the element '{$element->name()}'" );

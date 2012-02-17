@@ -71,7 +71,7 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 
 * Chinese (Simplified, thanks to <a href="http://smerpup.com/" target="_blank">Dezhi Liu</a>)
 * French
-* German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau§</a>)
+* German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&szlig;</a>)
 * Italian
 * Spanish
 * Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
@@ -162,7 +162,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added translations to the tooltips and copy notification in the toolbar
 
 = 1.7.25 =
-* German translation improved by Stephan Knau§;
+* German translation improved by Stephan Knau&szlig;;
 * Added missing translations in other languages and fixed bug preventing dropdowns from being translated
 * Added translators to the about page
 * Oh, added <code>&lt;html&gt;...&lt;/html&gt;</code> tag into the delimiters

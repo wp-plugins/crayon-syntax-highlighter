@@ -44,6 +44,7 @@ Languages are defined in language files using Regular Expressions to capture ele
 See http://ak.net84.net/projects/crayon-language-file-specification/ to learn how to make your own.
 
 * Default Langauge (one size fits all, highlights generic code)
+* ActionScript
 * C
 * C#
 * C++

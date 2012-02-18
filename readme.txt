@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: trunk
+Stable tag: 1.8.0
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -130,6 +130,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 3. Mixed Language Highlighting.
 
 == Changelog ==
+
+= 1.8.1 =
+* Added different highlighting for preprocessor in C, C++, C# and Obj-C. Any other lang can use it as well. 
 
 = 1.8.0 =
 * Added PostgreSQL thanks to Emiliano Leporati and Alessandro Venezia from http://bitorchestra.com/

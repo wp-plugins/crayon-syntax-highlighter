@@ -3,9 +3,10 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                Default
-    VERSION             1.8.0
+    VERSION             1.8.1
 
     COMMENT             (/\*.*?\*/)|(//.*?$)
+    PREPROCESSOR		(#.*?$)
     STRING              ((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)')
     
     STATEMENT           \b(?alt:statement.txt)\b

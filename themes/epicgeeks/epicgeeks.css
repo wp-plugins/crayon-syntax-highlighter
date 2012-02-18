@@ -180,6 +180,9 @@ Author URI: http://epicgeeks.net/
 .crayon-theme-epicgeeks .crayon-pre .c {
     color: #787878 !important;
 }
+.crayon-theme-epicgeeks .crayon-pre .p {
+    color: #a3a3a3 !important;
+}
 .crayon-theme-epicgeeks .crayon-pre .s {
     color: #90c300 !important;
 }

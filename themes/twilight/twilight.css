@@ -128,6 +128,9 @@ Author URI: http://ak.net84.net/
 .crayon-theme-twilight .crayon-pre .c {
     color: #7f7b80 !important;
 }
+.crayon-theme-twilight .crayon-pre .p {
+    color: #a19ba2 !important;
+}
 .crayon-theme-twilight .crayon-pre .s {
     color: #a0ab83 !important;
 }

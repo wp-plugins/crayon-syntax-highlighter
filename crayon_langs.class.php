@@ -12,7 +12,7 @@ class CrayonLangsResourceType {
 class CrayonLangs extends CrayonResourceCollection {
 	// Properties and Constants ===============================================
 	// CSS classes for known elements
-	private static $known_elements = array('COMMENT' => 'c', 'STRING' => 's', 'KEYWORD' => 'k', 
+	private static $known_elements = array('COMMENT' => 'c', 'PREPROCESSOR' => 'p', 'STRING' => 's', 'KEYWORD' => 'k', 
 			'STATEMENT' => 'st', 'RESERVED' => 'r', 'TYPE' => 't', 'TAG' => 'ta', 'MODIFIER' => 'm', 'IDENTIFIER' => 'i', 
 			'ENTITY' => 'e', 'VARIABLE' => 'v', 'CONSTANT' => 'cn', 'OPERATOR' => 'o', 'SYMBOL' => 'sy', 
 			'NOTATION' => 'n', 'FADED' => 'f', CrayonParser::HTML_CHAR => 'h', CrayonParser::CRAYON_ELEMENT => 'crayon-internal-element');

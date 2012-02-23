@@ -92,7 +92,7 @@ class CrayonWP {
 	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
 	private static function shortcode($atts, $content = NULL, $id = NULL, $mode = self::MODE_NORMAL) {
-//		CrayonLog::log('shortcode');
+		CrayonLog::log('shortcode');
 		
 		// Load attributes from shortcode
 		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL);
@@ -143,7 +143,7 @@ class CrayonWP {
 
 	/* Returns Crayon instance */
 	public static function instance($extra_attr = array(), $id = NULL) {
-//		CrayonLog::log('instance');
+		CrayonLog::log('instance');
 		
 		// Create Crayon
 		$crayon = new CrayonHighlighter();
@@ -169,7 +169,7 @@ class CrayonWP {
 	
 	/* Search for Crayons in posts and queue them for creation */
 	public static function the_posts($posts) {
-//		CrayonLog::log('the_posts');
+		CrayonLog::log('the_posts');
 		
 		// Whether to enqueue syles/scripts
 		$enqueue = FALSE;
@@ -315,7 +315,7 @@ class CrayonWP {
 	}
 	
 	private static function enqueue_resources() {
-//		CrayonLog::log('enqueue');
+		CrayonLog::log('enqueue');
 		
 		global $CRAYON_VERSION;
 		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
@@ -344,7 +344,7 @@ class CrayonWP {
 	
 	// Add Crayon into the_content
 	public static function the_content($the_content) {
-//		CrayonLog::log('the_content');
+		CrayonLog::log('the_content');
 		
 		global $post;
 		// Go through queued posts and find crayons		
@@ -410,7 +410,7 @@ class CrayonWP {
 	
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
-//		CrayonLog::log('excerpt');
+		CrayonLog::log('excerpt');
 		
 		self::$is_excerpt = TRUE;
 		global $post;
@@ -443,7 +443,7 @@ class CrayonWP {
 	}
 
 	public static function wp_head() {
-//		CrayonLog::log('head');
+		CrayonLog::log('head');
 		
 		self::$wp_head = TRUE;
 		if (!self::$enqueued) {
@@ -483,7 +483,7 @@ class CrayonWP {
 	}
 	
 	public static function init($request) {
-//		CrayonLog::log('init');
+		CrayonLog::log('init');
 		crayon_load_plugin_textdomain();
 	}
 	

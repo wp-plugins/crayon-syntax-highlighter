@@ -75,7 +75,7 @@ Please Thank Me With <a href="http://ak.net84.net/files/donate.php" target="_bla
 * Italian
 * Spanish
 * Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
-* Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a>)
+* Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a> & <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>)
 * Turkish (thanks to <a href="http://kazancexpert.com" target="_blank">Hakan</a>)
 * Help from translators at improving/adding to this list greatly appreciated!
 
@@ -133,7 +133,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.8.1 =
-* Added different highlighting for preprocessor in C, C++, C# and Obj-C. Any other lang can use it as well. 
+* Added different highlighting for preprocessor in C, C++, C# and Obj-C. Any other lang can use it as well.
+* Improved Russian translation thanks to Di_Skyer (http://atlocal.net/) 
 
 = 1.8.0 =
 * Added PostgreSQL thanks to Emiliano Leporati and Alessandro Venezia from http://bitorchestra.com/

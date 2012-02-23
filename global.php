@@ -2,7 +2,6 @@
 
 // Switches
 
-// Enable to show exceptions on screen
 define('CRAYON_DEBUG', FALSE);
 
 // TODO remove once done

@@ -67,6 +67,13 @@ class CrayonLog {
 			self::log($var, $title, $trim_url);
 		}
 	}
+	
+	public static function debug($var = NULL, $title = '', $trim_url = TRUE) {
+		if (CRAYON_DEBUG) {
+			$title = (empty($title)) ? 'DEBUG' : $title;
+			self::log($var, $title, $trim_url);
+		}
+	}
 
 	public static function clear() {
 		if (!@unlink(CRAYON_LOG_FILE)) {

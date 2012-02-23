@@ -279,6 +279,7 @@ class CrayonLang extends CrayonVersionResource {
 	//private $regex = '';
 	private $state = self::UNPARSED;
 	private $modes = array();
+	// Whether this language allows Multiple Highlighting from other languages
 	const PARSED_ERRORS = -1;
 	const UNPARSED = 0;
 	const PARSED_SUCCESS = 1;

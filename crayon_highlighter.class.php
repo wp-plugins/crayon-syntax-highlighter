@@ -151,7 +151,10 @@ class CrayonHighlighter {
 		if ($this->needs_format) {
 			$tmr->start();
 			try {
-				if (!$this->setting_val(CrayonSettings::MIXED)) {
+				// Parse before hand to read modes
+				CrayonParser::parse($this->language->id());
+				// Allow mixed if langauge supports it and setting is set
+				if (!$this->setting_val(CrayonSettings::MIXED) || !$this->language->mode(CrayonParser::ALLOW_MIXED)) {
 					// Format the code with the generated regex and elements
 					$this->formatted_code = CrayonFormatter::format_code($this->code, $this->language, $highlight, $this);
 				} else {

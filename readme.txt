@@ -134,11 +134,13 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.8.1 =
+* Added Lua
+* Added YAML
 * Added different highlighting for preprocessor in C, C++, C# and Obj-C. Any other lang can use it as well.
 * Improved Russian translation thanks to Di_Skyer (http://atlocal.net/)
 * Added new "Neon" theme thanks to Di_Skyer (http://atlocal.net/)
 * Added ability to log debug messages if CRAYON_DEBUG is TRUE in global.php
-
+* Added ALLOW_MIXED = YES/NO option in language files to disable ability to have mixed language highlighting
 
 = 1.8.0 =
 * Added PostgreSQL thanks to Emiliano Leporati and Alessandro Venezia from http://bitorchestra.com/

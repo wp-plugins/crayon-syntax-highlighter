@@ -9,6 +9,7 @@ class CrayonParser {
 	const CASE_INSENSITIVE = 'CASE_INSENSITIVE';
 	const MULTI_LINE = 'MULTI_LINE';
 	const SINGLE_LINE = 'SINGLE_LINE';
+	const ALLOW_MIXED = 'ALLOW_MIXED';
 	//const NO_END_TAG = '(?![^<]*>)'; // No longer used
 	const HTML_CHAR = 'HTML_CHAR';
 	const HTML_CHAR_REGEX = '<|>|(&([\w-]+);?)|[ \t]+';
@@ -16,7 +17,7 @@ class CrayonParser {
 	const CRAYON_ELEMENT_REGEX = '\{\{crayon-internal:[^\}]*\}\}';
 	const CRAYON_ELEMENT_REGEX_CAPTURE = '\{\{crayon-internal:([^\}]*)\}\}';
 	
-	private static $modes = array(self::CASE_INSENSITIVE => TRUE, self::MULTI_LINE => TRUE, self::SINGLE_LINE => TRUE);
+	private static $modes = array(self::CASE_INSENSITIVE => TRUE, self::MULTI_LINE => TRUE, self::SINGLE_LINE => TRUE, self::ALLOW_MIXED => TRUE);
 
 	// Methods ================================================================
 	private function __construct() {}

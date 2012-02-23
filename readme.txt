@@ -457,3 +457,4 @@ Thanks to all those who donate to my project!
 * Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom
 * Andrew McDonnell (http://blog.oldcomputerjunk.net/), Australia
 * Waimanu Solutions (http://daveblog.waimanu.web44.net/), USA
+* Greg Pettit (http://blog.monkey-house.ca/), Canada

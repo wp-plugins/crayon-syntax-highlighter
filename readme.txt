@@ -92,6 +92,7 @@ These are helpful for discovering new features.
 * AutoIt support
 * PowerShell support
 * LUA
+* YAML
 * Highlighting in sentences
 * Highlighting in comments
 * Visual Editor Support

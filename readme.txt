@@ -50,6 +50,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * C++
 * CSS
 * HTML (XML/XHTML)
+* Lua
 * Monkey
 * Java
 * JavaScript
@@ -60,6 +61,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * Ruby
 * Shell (Unix)
 * Visual Basic
+* YAML
 
 Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
 

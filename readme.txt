@@ -135,6 +135,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.8.2 =
+* Fixed bug causing crayon.js to fail when show-plain-default was enabled thanks to http://www.stuarticus.com/
+
 = 1.8.1 =
 * Added Lua
 * Added YAML

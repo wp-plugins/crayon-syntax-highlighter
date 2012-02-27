@@ -284,7 +284,7 @@ var CrayonSyntax = new function() {
 	                nums_button.hide();
 	            }
 	            if (plain.filter('[settings~="show-plain-default"]').length != 0) {
-	            	this.toggle_plain(uid, true);
+	            	CrayonSyntax.toggle_plain(uid, true);
 	            }
 	        }
 	        // Scrollbar show events

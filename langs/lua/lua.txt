@@ -5,7 +5,7 @@
     NAME                Lua
     VERSION             1.8.1
 
-    COMMENT             (--\[\[.*?\]\])|(--.*?[\r\n])
+    COMMENT             (--\[\[.*?\]\])|(--.*?$)
     STRING              (?default)|(\[(==)?\[[^\]]*\](==)?\])
     
     STATEMENT           (?default)|\b(?alt:statement.txt)\b

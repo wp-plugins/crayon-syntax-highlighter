@@ -6,7 +6,7 @@
     VERSION             1.8.1
     ALLOW_MIXED			NO
 
-    COMMENT             #.*?[\r\n]
+    COMMENT             #.*?$
     QUOTED:IDENTIFIER   ("[^"]*")|('[^']*')
     VALUES:IDENTIFIER	\[[^\]]*\]
     

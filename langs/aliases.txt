@@ -13,3 +13,4 @@ ruby rb
 ilogic logic inventor inv ilog
 pgsql sql mysql
 as flash swf fla
+ps powershell

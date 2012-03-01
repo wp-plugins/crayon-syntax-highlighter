@@ -5,7 +5,7 @@
     NAME                Inventor iLogic
     VERSION             1.7.30
 
-    COMMENT             (?default)|('[^\r\n]*)
+    COMMENT             (?default)|('.*?$)
     STRING              (?default)
     
     KEYWORD				(\b\w+\b)\.(?=[a-z])|((?<![^\s])\b\w+\b(?=\s*\())

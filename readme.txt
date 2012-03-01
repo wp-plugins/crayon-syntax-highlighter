@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 1.8.1
+Stable tag: 1.8.2
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -45,23 +45,26 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 
 * Default Langauge (one size fits all, highlights generic code)
 * ActionScript
+* AutoIt
 * C
 * C#
 * C++
 * CSS
 * HTML (XML/XHTML)
 * Lua
-* Monkey
+* Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">https://github.com/devolonter</a>)
 * Java
 * JavaScript
 * Objective-C
 * PHP
 * PostgreSQL (thanks to <a href="http://bitorchestra.com/" target="_blank">http://bitorchestra.com/</a>)
+* PowerShell
 * Python
 * Ruby
 * Shell (Unix)
 * Visual Basic
 * YAML
+* Others will be added when requested
 
 Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
 
@@ -91,10 +94,6 @@ These are helpful for discovering new features.
 
 **Planned Features**
 
-* AutoIt support
-* PowerShell support
-* LUA
-* YAML
 * Highlighting in sentences
 * Highlighting in comments
 * Visual Editor Support
@@ -136,6 +135,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.8.2 =
+* Added AutoIt and PowerShell
+* Fixed a bug causing single line comments on the last line without carriage return to be ignored.
 * Fixed bug causing crayon.js to fail when show-plain-default was enabled thanks to http://www.stuarticus.com/
 
 = 1.8.1 =

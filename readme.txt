@@ -45,6 +45,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 
 * Default Langauge (one size fits all, highlights generic code)
 * ActionScript
+* Apache
 * AutoIt
 * C
 * C#
@@ -133,6 +134,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 3. Mixed Language Highlighting.
 
 == Changelog ==
+
+= 1.8.3 =
+* Added Apache
 
 = 1.8.2 =
 * Added AutoIt and PowerShell

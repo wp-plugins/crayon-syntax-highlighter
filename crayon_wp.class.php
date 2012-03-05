@@ -546,7 +546,8 @@ if (defined('ABSPATH')) {
 		add_filter('the_posts', 'CrayonWP::the_posts');
 	}
 	
-	add_filter('the_content', 'CrayonWP::the_content');
+	// XXX Some themes like to play with the content, make sure we replace after they're done
+	add_filter('the_content', 'CrayonWP::the_content', 100);
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');
 }

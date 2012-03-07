@@ -79,7 +79,9 @@ class CrayonSettings {
 	const ENQUEUE_FONTS = 'enqueque-fonts';
 	const MAIN_QUERY = 'main-query';
 	const SAFE_ENQUEUE = 'safe-enqueue';
+	const INLINE_TAG = 'inline-tag';
 	const INLINE_MARGIN = 'inline-margin';
+	const BACKQUOTE = 'backquote';
 	
 	private static $cache_array;
 	
@@ -188,7 +190,9 @@ class CrayonSettings {
 			new CrayonSetting(self::ENQUEUE_FONTS, TRUE),
 			new CrayonSetting(self::MAIN_QUERY, FALSE),
 			new CrayonSetting(self::SAFE_ENQUEUE, TRUE),
+			new CrayonSetting(self::INLINE_TAG, TRUE),
 			new CrayonSetting(self::INLINE_MARGIN, 5),
+			new CrayonSetting(self::BACKQUOTE, TRUE),
 		);
 		
 		$this->set($settings);

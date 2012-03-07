@@ -200,13 +200,18 @@ class CrayonWP {
 			}
 			
 			// Convert inline {php}{/php} tags to crayon tags, if needed
-			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+			if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
 				$post->post_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $post->post_content);
 			}
 
 			// Convert [plain] tags into <pre><code></code></pre>, if needed
 			if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
 				$post->post_content = preg_replace_callback('#(?<!\$)\[plain\](.*?)\[/plain\]#msi', 'CrayonFormatter::plain_code', $post->post_content);
+			}
+			
+			// Convert `` backquote tags into <code></code>, if needed
+			if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
+				$post->post_content = preg_replace('#(?<!\\\\)`(.*?)`#msi', '<code>\1</code>', $post->post_content);
 			}
 			
 			// Add IDs to the Crayons
@@ -441,6 +446,9 @@ class CrayonWP {
 			self::init_mini_tags();
 			$the_content = preg_replace('#\$\[('. self::$alias_regex .')#', '[$1', $the_content);
 			$the_content = preg_replace('#('. self::$alias_regex .')\]\$#', '$1]', $the_content);
+		}
+		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
+			$the_content = str_ireplace('\\`', '`', $the_content);
 		}
 		return $the_content;
 	}

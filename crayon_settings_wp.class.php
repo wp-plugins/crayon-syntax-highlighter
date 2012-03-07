@@ -223,6 +223,7 @@ class CrayonSettingsWP {
 		self::add_field(self::GENERAL, crayon__('Toolbar'), 'toolbar');
 		self::add_field(self::GENERAL, crayon__('Lines'), 'lines');
 		self::add_field(self::GENERAL, crayon__('Code'), 'code');
+		self::add_field(self::GENERAL, crayon__('Tags'), 'tags');
 		self::add_field(self::GENERAL, crayon__('Languages'), 'langs');
 		self::add_field(self::GENERAL, crayon__('Files'), 'files');
 		self::add_field(self::GENERAL, crayon__('Misc'), 'misc');
@@ -434,13 +435,13 @@ class CrayonSettingsWP {
 	}
 
 	public static function metrics() {
-		self::checkbox(array(CrayonSettings::HEIGHT_SET, '<span class="crayon-span-50">'.crayon__('Height').': </span>'), FALSE);
+		self::checkbox(array(CrayonSettings::HEIGHT_SET, '<span class="crayon-span-50">'.crayon__('Height').' </span>'), FALSE);
 		self::dropdown(CrayonSettings::HEIGHT_MODE, FALSE);
 		echo ' ';
 		self::textbox(array('name' => CrayonSettings::HEIGHT, 'size' => 8));
 		echo ' ';
 		self::dropdown(CrayonSettings::HEIGHT_UNIT);
-		self::checkbox(array(CrayonSettings::WIDTH_SET, '<span class="crayon-span-50">'.crayon__('Width').': </span>'), FALSE);
+		self::checkbox(array(CrayonSettings::WIDTH_SET, '<span class="crayon-span-50">'.crayon__('Width').' </span>'), FALSE);
 		self::dropdown(CrayonSettings::WIDTH_MODE, FALSE);
 		echo ' ';
 		self::textbox(array('name' => CrayonSettings::WIDTH, 'size' => 8));
@@ -459,7 +460,7 @@ class CrayonSettingsWP {
 			self::textbox(array('name' => $margin, 'size' => 8, 'preview' => FALSE));
 			echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span>', CRAYON_BR;
 		}
-		echo '<span class="crayon-span" style="min-width: 135px;">'.crayon__('Horizontal Alignment').': </span>';
+		echo '<span class="crayon-span" style="min-width: 135px;">'.crayon__('Horizontal Alignment').' </span>';
 		self::dropdown(CrayonSettings::H_ALIGN);
 		echo '<div id="crayon-float">';
 		self::checkbox(array(CrayonSettings::FLOAT_ENABLE, crayon__('Allow floating elements to surround Crayon')), FALSE, FALSE);
@@ -470,7 +471,7 @@ class CrayonSettingsWP {
 	}
 
 	public static function toolbar() {
-		echo crayon__('Display the Toolbar'), ': ';
+		echo crayon__('Display the Toolbar'), ' ';
 		self::dropdown(CrayonSettings::TOOLBAR);
 		echo '<div id="' . CrayonSettings::TOOLBAR_OVERLAY . '">';
 		self::checkbox(array(CrayonSettings::TOOLBAR_OVERLAY, crayon__('Overlay the toolbar on code rather than push it down when possible')));
@@ -478,7 +479,7 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::TOOLBAR_DELAY, crayon__('Delay hiding the toolbar on MouseOut')));
 		echo '</div>';
 		self::checkbox(array(CrayonSettings::SHOW_TITLE, crayon__('Display the title when provided')));
-		echo crayon__('Display the language'), ': ';
+		echo crayon__('Display the language'), ' ';
 		self::dropdown(CrayonSettings::SHOW_LANG);
 	}
 
@@ -487,7 +488,7 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::MARKING, crayon__('Enable line marking for important lines')));
 		self::checkbox(array(CrayonSettings::NUMS, crayon__('Display line numbers by default')));
 		self::checkbox(array(CrayonSettings::NUMS_TOGGLE, crayon__('Enable line number toggling')));
-		echo crayon__('Start line numbers from'), ': ';
+		echo crayon__('Start line numbers from'), ' ';
 		self::textbox(array('name' => CrayonSettings::START_LINE, 'size' => 2, 'break' => TRUE));
 	}
 
@@ -575,7 +576,7 @@ class CrayonSettingsWP {
 			echo '<option value="', $font->id(), '" ', selected($db_font, $font->id()), '>', $title, '</option>';
 		}
 		echo '</select><span class="crayon-span-10"></span>';
-		self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size').': '), FALSE);
+		self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size').' '), FALSE);
 		self::textbox(array('name' => CrayonSettings::FONT_SIZE, 'size' => 2));
 		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span></br>';
 		if (/*$db_font != CrayonFonts::DEFAULT_FONT &&*/ (!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
@@ -587,7 +588,7 @@ class CrayonSettingsWP {
 	}
 
 	public static function code() {
-		self::checkbox(array(CrayonSettings::PLAIN, crayon__('Enable plain code view and display').': '), FALSE);
+		self::checkbox(array(CrayonSettings::PLAIN, crayon__('Enable plain code view and display').' '), FALSE);
 		self::dropdown(CrayonSettings::SHOW_PLAIN);
 		echo '<span id="crayon-copy-check">';
 		self::checkbox(array(CrayonSettings::PLAIN_TOGGLE, crayon__('Enable plain code toggling')));
@@ -599,11 +600,16 @@ class CrayonSettingsWP {
 		echo crayon__('Tab size in spaces'),': ';
 		self::textbox(array('name' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));
-		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons')));
-		self::checkbox(array(CrayonSettings::CAPTURE_MINI_TAG, crayon__('Capture Mini Tags like [php][/php] as Crayons.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
-		self::checkbox(array(CrayonSettings::PLAIN_TAG, crayon__('Enable [plain][/plain] tag.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::MIXED, crayon__('Allow Mixed Language Highlighting with delimiters and tags.') . ' <a href="http://bit.ly/ukwts2" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::SHOW_MIXED, crayon__('Show Mixed Language Icon (+)')));
+	}
+	
+	public static function tags() {
+		self::checkbox(array(CrayonSettings::CAPTURE_MINI_TAG, crayon__('Capture Mini Tags like [php][/php] as Crayons.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
+		self::checkbox(array(CrayonSettings::INLINE_TAG, crayon__('Capture Inline Tags like {php}{/php} inside sentences.') . ' <a href="#" target="_blank">' . crayon__('Learn More') . '</a>'));
+		self::checkbox(array(CrayonSettings::BACKQUOTE, crayon__('Capture `backquotes` as &lt;code&gt;') . ' <a href="#" target="_blank">' . crayon__('Learn More') . '</a>'));
+		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
+		self::checkbox(array(CrayonSettings::PLAIN_TAG, crayon__('Enable [plain][/plain] tag.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
 	}
 
 	public static function files() {

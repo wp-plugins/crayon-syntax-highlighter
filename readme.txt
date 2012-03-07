@@ -137,6 +137,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.8.3 =
 * Added inline support for Crayons using the inline="true" attribute or even cooler with {php}...{/php} style tags.
+* `backquotes` become &lt;code&gt;
 * Added Apache
 * Fixed a bug causing irregular formatting of Crayons by increasing the priority of the_content filter, thanks to http://joshmountain.com/
 * Added sample code for missing languages in Live Preview

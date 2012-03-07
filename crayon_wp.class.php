@@ -91,11 +91,11 @@ class CrayonWP {
 	 * Adds the actual Crayon instance, should only be called by add_shortcode()
 	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
-	private static function shortcode($atts, $content = NULL, $id = NULL, $mode = self::MODE_NORMAL) {
+	private static function shortcode($atts, $content = NULL, $id = NULL) {
 		CrayonLog::debug('shortcode');
 		
 		// Load attributes from shortcode
-		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL);
+		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL, 'inline' => NULL);
 		$filtered_atts = shortcode_atts($allowed_atts, $atts);
 		$filtered_atts['lang'] = strtolower($filtered_atts['lang']);
 		
@@ -112,7 +112,7 @@ class CrayonWP {
 			$extra_attr = array_diff_key($atts, $allowed_atts);
 			$extra_attr = CrayonSettings::smart_settings($extra_attr);
 		}
-		$lang = $title = $mark = '';
+		$lang = $title = $mark = $inline = '';
 		extract($filtered_atts);
 		
 		$crayon = self::instance($extra_attr, $id);
@@ -129,16 +129,12 @@ class CrayonWP {
 		$crayon->language($lang);
 		$crayon->title($title);
 		$crayon->marked($mark);
+		$crayon->is_inline($inline);
 		
 		// Determine if we should highlight
 		$highlight = array_key_exists('highlight', $atts) ? CrayonUtil::str_to_bool($atts['highlight'], FALSE) : TRUE;
-		
-		if ($mode === self::MODE_JUST_CODE || $mode === self::MODE_PLAIN_CODE) {
-			$crayon->process($highlight && ($mode === self::MODE_JUST_CODE));
-			return $crayon;	
-		} else {
-			return $crayon->output($highlight, $nums = true, $print = false);
-		}
+		$crayon->is_highlighted($highlight);
+		return $crayon;
 	}
 
 	/* Returns Crayon instance */
@@ -364,17 +360,19 @@ class CrayonWP {
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $id=>$v) {
 				$atts = $v['atts'];
-				$content = $v['code']; // The crayon we replace post content with
+				$content = $v['code']; // The code we replace post content with
+				$crayon = self::shortcode($atts, $content, $id);
 				if (is_feed()) { 
 					// Convert the plain code to entities and put in a <pre></pre> tag
-					$crayon = self::shortcode($atts, $content, $id, self::MODE_PLAIN_CODE);
 					$crayon_formatted = CrayonFormatter::plain_code($crayon->code());
 				} else {
 					// Apply shortcode to the content
-					$crayon_formatted = self::shortcode($atts, $content, $id);
+					$crayon_formatted = $crayon->output(TRUE, FALSE);
 				}
-				// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them
-				$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
+				// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them if needed
+				if (!$crayon->is_inline()) { 
+					$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
+				}
 				// Replace the code with the Crayon
 				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
 			}

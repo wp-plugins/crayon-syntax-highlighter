@@ -24,7 +24,7 @@ class CrayonFormatter {
 	private function __construct() {}
 
 	/* Formats the code using the regex and stores the elements for later use. */
-	public static function format_code($code, $language, $highlight = TRUE, $hl = NULL) {
+	public static function format_code($code, $language, $hl = NULL, $highlight = TRUE) {
 		// Ensure the language is defined
 		if ($language != NULL && $highlight) {
 			/* Perform the replace on the code using the regex, pass the captured matches for
@@ -73,11 +73,77 @@ class CrayonFormatter {
 
 	/* Prints the formatted code, option to override the line numbers with a custom string */
 	public static function print_code($hl, $code, $line_numbers = TRUE, $print = TRUE) {
-		if (get_class($hl) != CRAYON_HIGHLIGHTER) {
-			return;
+		global $CRAYON_VERSION;
+		
+		// We can print either block or inline, inline is treated differently, factor out common stuff here
+		$output = '';
+		// Unique ID for this instance of Crayon
+		$uid = 'crayon-' . $hl->id();
+		// Print theme id
+		// We make the assumption that the id is correct (checked in crayon_wp)
+		$theme_id = $hl->setting_val(CrayonSettings::THEME);
+		$theme_id_dashed = CrayonUtil::space_to_hyphen($theme_id);
+		if (!$hl->setting_val(CrayonSettings::ENQUEUE_THEMES)) {
+			$output .= CrayonResources::themes()->get_css($theme_id);
 		}
 		
-		global $CRAYON_VERSION;
+		// Print font id
+		// We make the assumption that the id is correct (checked in crayon_wp)
+		$font_id = $hl->setting_val(CrayonSettings::FONT);
+		$font_id_dashed = CrayonUtil::space_to_hyphen($font_id);
+		if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
+			$output .= CrayonResources::fonts()->get_css($font_id);
+		}
+		
+		// Inline margin
+		if ($hl->is_inline()) {
+			$inline_margin = $hl->setting_val(CrayonSettings::INLINE_MARGIN) . 'px !important;';
+			$output .= '<style type="text/css" media="all">' . "#$uid { margin: 0 {$inline_margin}; }</style>";
+		}
+		
+		// Determine font size
+		// TODO improve logic
+		$font_style = '';
+		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
+			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
+			$font_height = ($font_size + 4) . 'px !important;';
+			$toolbar_height = ($font_size + 8) . 'px !important;';
+			$font_style .= "#$uid * {
+									font-size: $font_size
+									line-height: $font_height
+									display: inline-block;
+									/* <= IE 7 */
+									zoom:1;
+									*display: inline;
+									_height: $font_height }";
+			if (!$hl->is_inline()) {
+				$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
+				$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
+			}
+		} else if (!$hl->is_inline()) {
+			if (($font_size = CrayonGlobalSettings::get(CrayonSettings::FONT_SIZE)) !== FALSE) {
+				$font_size = $font_size->def() . 'px !important;';
+				$font_height = ($font_size + 4) . 'px !important;';
+				// Correct font CSS for WP 3.3
+				$font_style .= "#$uid .crayon-plain { font-size: $font_size line-height: $font_height }";
+			}
+		}
+		
+		// Produce style for individual crayon
+		if (!empty($font_style)) {
+			$output .= '<style type="text/css" media="all">'.$font_style.'</style>';
+		}
+		
+		// This will return from function with inline print
+		if ($hl->is_inline()) {
+			$output .= '
+			<span id="'.$uid.'" class="crayon-syntax crayon-syntax-inline crayon-theme-'.$theme_id_dashed.' crayon-theme-'.$theme_id_dashed.'-inline crayon-font-'.$font_id_dashed.'">' .
+				'<span class="crayon-pre">' . $code . '</span>' . 
+			'</span>';
+			return $output;
+		}
+		
+		// Below code only for block (default) printing
 		
 		// Generate the code lines and separate each line as a div
 		$print_code = '';
@@ -149,8 +215,6 @@ class CrayonFormatter {
 					break;
 			}
 		}
-		// Unique ID for this instance of Crayon
-		$uid = 'crayon-' . $hl->id();
 		// Disable functionality for errors
 		$error = $hl->error();
 		// Combined settings for code
@@ -241,7 +305,7 @@ class CrayonFormatter {
 		}
 		
 		// Print strings
-		$output = $main_style = $code_style = $font_style = '';
+		$main_style = $code_style = '';
 		
 		// Line numbers visibility
 		$num_vis = $num_settings = '';
@@ -249,42 +313,6 @@ class CrayonFormatter {
 			$num_vis = 'crayon-invisible';
 		} else {
 			$num_settings = ($hl->setting_val(CrayonSettings::NUMS) ? 'show' : 'hide');
-		}
-		
-		// Print theme id
-		// We make the assumption that the id is correct (checked in crayon_wp)
-		$theme_id = $hl->setting_val(CrayonSettings::THEME);
-		$theme_id_dashed = CrayonUtil::space_to_hyphen($theme_id);
-		
-		if (!$hl->setting_val(CrayonSettings::ENQUEUE_THEMES)) {
-			$output .= CrayonResources::themes()->get_css($theme_id);
-		}
-		
-		// Print theme id
-		// We make the assumption that the id is correct (checked in crayon_wp)
-		$font_id = $hl->setting_val(CrayonSettings::FONT);
-		$font_id_dashed = CrayonUtil::space_to_hyphen($font_id);
-		
-		if (!$hl->setting_val(CrayonSettings::ENQUEUE_FONTS)) {
-			$output .= CrayonResources::fonts()->get_css($font_id);
-		}
-		
-		// Determine font size
-		// TODO improve logic
-		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
-			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
-			$font_height = ($font_size + 4) . 'px !important;';
-			$toolbar_height = ($font_size + 8) . 'px !important;';
-			$font_style .= "#$uid * { font-size: $font_size line-height: $font_height}";
-			$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
-			$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
-		} else {
-			if (($font_size = CrayonGlobalSettings::get(CrayonSettings::FONT_SIZE)) !== FALSE) {
-				$font_size = $font_size->def() . 'px !important;';
-				$font_height = ($font_size + 4) . 'px !important;';
-				// Correct font CSS for WP 3.3
-				$font_style .= "#$uid .crayon-plain { font-size: $font_size line-height: $font_height}";
-			}
 		}
 		
 		// Determine scrollbar visibility
@@ -351,8 +379,7 @@ class CrayonFormatter {
 		// Determine if operating system is mac
 		$crayon_os = CrayonUtil::is_mac() ? 'mac' : 'pc';
 		
-		// Produce style for individual crayon
-		$output .= '<style type="text/css" media="all">'.$font_style.'</style>';
+		
 		
 		// Produce output
 		$output .= '
@@ -407,10 +434,7 @@ class CrayonFormatter {
 
 	// Delimiters =============================================================
 	
-	public static function format_mixed_code($code, $language, $highlight = TRUE, $hl = NULL) {
-		if (!$highlight) {
-			return self::format_code($code, $language, $highlight, $hl);
-		}
+	public static function format_mixed_code($code, $language, $hl) {
 		self::$curr = $hl;
 		self::$delim_pieces = array();
 		// Remove crayon internal element from INPUT code
@@ -429,7 +453,7 @@ class CrayonFormatter {
 		$internal_code = preg_replace_callback(self::$delim_regex, 'CrayonFormatter::delim_to_internal', $code);
 		
 		// Format with given language
-		$formatted_code = CrayonFormatter::format_code($internal_code, $language, TRUE, $hl);
+		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl, TRUE);
 		
 		// Replace internal elements with delimited pieces
 		$formatted_code = preg_replace_callback('#\{\{crayon-internal:(\d+)\}\}#', 'CrayonFormatter::internal_to_code', $formatted_code);

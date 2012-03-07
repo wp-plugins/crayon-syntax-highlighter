@@ -13,6 +13,12 @@ Author URI: http://ak.net84.net/
     background: #fdfdfd !important;
 }
 
+/* Inline Style */
+.crayon-theme-classic-inline {
+	border: 1px solid #ddd !important;
+	background: #fafafa !important;
+}
+
 /* Line Numbers */
 .crayon-theme-classic .crayon-nums {
 	background: #dfefff !important;

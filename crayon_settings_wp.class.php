@@ -457,13 +457,16 @@ class CrayonSettingsWP {
 			self::checkbox(array($set, '<span class="crayon-span-110">' . $p . '</span>'), FALSE, $preview);
 			echo ' ';
 			self::textbox(array('name' => $margin, 'size' => 8, 'preview' => FALSE));
-			echo '<span class="crayon-span-margin">Pixels</span>', CRAYON_BR;
+			echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span>', CRAYON_BR;
 		}
 		echo '<span class="crayon-span" style="min-width: 135px;">'.crayon__('Horizontal Alignment').': </span>';
 		self::dropdown(CrayonSettings::H_ALIGN);
 		echo '<div id="crayon-float">';
 		self::checkbox(array(CrayonSettings::FLOAT_ENABLE, crayon__('Allow floating elements to surround Crayon')), FALSE, FALSE);
 		echo '</div>';
+		echo '<span class="crayon-span-100">' . crayon__('Inline Margin') . '</span>';
+		self::textbox(array('name' => CrayonSettings::INLINE_MARGIN, 'size' => 2));
+		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span>';
 	}
 
 	public static function toolbar() {
@@ -574,7 +577,7 @@ class CrayonSettingsWP {
 		echo '</select><span class="crayon-span-10"></span>';
 		self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size').': '), FALSE);
 		self::textbox(array('name' => CrayonSettings::FONT_SIZE, 'size' => 2));
-		echo '<span class="crayon-span-margin">Pixels</span></br>';
+		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span></br>';
 		if (/*$db_font != CrayonFonts::DEFAULT_FONT &&*/ (!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
 			// Default font doesn't actually exist as a file, it means do not override default theme font
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected font with id %s could not be loaded'), '<strong>'.$db_font.'</strong>'), '. </span><br/>';

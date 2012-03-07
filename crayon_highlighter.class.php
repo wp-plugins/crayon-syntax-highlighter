@@ -24,6 +24,9 @@ class CrayonHighlighter {
 	private $runtime = array();
 	// Whether the code is mixed
 	private $is_mixed = FALSE;
+	// Inline code on a single floating line
+	private $is_inline = FALSE;
+	private $is_highlighted = TRUE;
 	
 	// Objects
 	// Stores the CrayonLang being used
@@ -133,7 +136,7 @@ class CrayonHighlighter {
 	}
 
 	/* Central point of access for all other functions to update code. */
-	public function process($highlight = TRUE) {
+	public function process() {
 		$tmr = new CrayonTimer();
 		$this->runtime = NULL;
 		if ($this->needs_load) {
@@ -153,13 +156,21 @@ class CrayonHighlighter {
 			try {
 				// Parse before hand to read modes
 				CrayonParser::parse($this->language->id());
+				$code = $this->code;
+				// If inline, then combine lines into one
+				if ($this->is_inline) {
+					$code = preg_replace('#[\r\n]+#ms', '', $code);
+					if ($this->setting_val(CrayonSettings::TRIM_WHITESPACE)) {
+						$code = trim($code);
+					}
+				}
 				// Allow mixed if langauge supports it and setting is set
 				if (!$this->setting_val(CrayonSettings::MIXED) || !$this->language->mode(CrayonParser::ALLOW_MIXED)) {
 					// Format the code with the generated regex and elements
-					$this->formatted_code = CrayonFormatter::format_code($this->code, $this->language, $highlight, $this);
+					$this->formatted_code = CrayonFormatter::format_code($code, $this->language, $this, $this->is_highlighted);
 				} else {
 					// Format the code with Mixed Highlighting
-					$this->formatted_code = CrayonFormatter::format_mixed_code($this->code, $this->language, $highlight, $this);					
+					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this);					
 				}
 			} catch (Exception $e) {
 				$this->error($e->message());
@@ -178,8 +189,8 @@ class CrayonHighlighter {
 
 	/* Sends the code to the formatter for printing. Apart from the getters and setters, this is
 	 the only other function accessible outside this class. $show_lines can also be a string. */
-	function output($highlight = TRUE, $show_lines = TRUE, $print = TRUE) {
-		$this->process($highlight);
+	function output($show_lines = TRUE, $print = TRUE) {
+		$this->process();
 		if (empty($this->error)) {
 			// If no errors have occured, print the formatted code
 			$ret = CrayonFormatter::print_code($this, $this->formatted_code, $show_lines, $print);
@@ -355,11 +366,28 @@ class CrayonHighlighter {
 		return $this->runtime;
 	}
 	
+	function is_highlighted($highlighted = NULL) {
+		if ($highlighted === NULL) {
+			return $this->is_highlighted;			
+		} else {
+			$this->is_highlighted = $highlighted;
+		}
+	}
+	
 	function is_mixed($mixed = NULL) {
 		if ($mixed === NULL) {
 			return $this->is_mixed;			
 		} else {
 			$this->is_mixed = $mixed;
+		}
+	}
+	
+	function is_inline($inline = NULL) {
+		if ($inline === NULL) {
+			return $this->is_inline;			
+		} else {
+			$inline = CrayonUtil::str_to_bool($inline, FALSE);
+			$this->is_inline = $inline;
 		}
 	}
 }

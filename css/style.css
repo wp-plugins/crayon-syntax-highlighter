@@ -74,6 +74,10 @@ coloring etc.
     margin: 0px;
 }
 
+.crayon-syntax-inline {
+	margin: 0 5px;
+}
+
 .crayon-syntax .crayon-table {
     border: none !important;
 	background: none !important;

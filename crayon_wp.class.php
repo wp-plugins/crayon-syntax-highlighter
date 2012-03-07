@@ -198,6 +198,11 @@ class CrayonWP {
 			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
 				$post->post_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $post->post_content);
 			}
+			
+			// Convert inline {php}{/php} tags to crayon tags, if needed
+			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+				$post->post_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $post->post_content);
+			}
 
 			// Convert [plain] tags into <pre><code></code></pre>, if needed
 			if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {

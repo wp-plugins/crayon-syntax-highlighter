@@ -98,7 +98,7 @@ class CrayonFormatter {
 		// Inline margin
 		if ($hl->is_inline()) {
 			$inline_margin = $hl->setting_val(CrayonSettings::INLINE_MARGIN) . 'px !important;';
-			$output .= '<style type="text/css" media="all">' . "#$uid { margin: 0 {$inline_margin}; }</style>";
+			$output .= '<style type="text/css" media="all">' . "#$uid { margin: 0 {$inline_margin} }</style>";
 		}
 		
 		// Determine font size
@@ -108,10 +108,11 @@ class CrayonFormatter {
 			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
 			$font_height = ($font_size + 4) . 'px !important;';
 			$toolbar_height = ($font_size + 8) . 'px !important;';
+			$inline_block = $hl->is_inline() ? 'display: inline-block;' : '';
 			$font_style .= "#$uid * {
 									font-size: $font_size
 									line-height: $font_height
-									display: inline-block;
+									$inline_block
 									/* <= IE 7 */
 									zoom:1;
 									*display: inline;

@@ -39,6 +39,10 @@ class CrayonWP {
 
 	//	Associative array, keys are post IDs as strings and values are number of crayons parsed as ints
 	private static $post_queue = array();
+	// Ditto for comments
+	private static $comment_queue = array();
+	private static $post_captures = array();
+	private static $comment_captures = array();
 	// Whether we are displaying an excerpt
 	private static $is_excerpt = FALSE;
 	// Whether we have added styles and scripts
@@ -163,6 +167,140 @@ class CrayonWP {
 		self::the_posts($posts);
 	}
 	
+	public static function capture_crayons($wp_id, $wp_content) {
+		// Will contain captured crayons and altered $wp_content
+		$capture = array('capture' => array(), 'content' => '');
+		
+		// If we get query for a page, then that page might have a template and load more posts containing Crayons
+		// By this state, we would be unable to enqueue anything (header already written).
+		if (CrayonGlobalSettings::val(CrayonSettings::SAFE_ENQUEUE) && is_page($wp_id)) {
+			CrayonGlobalSettings::set(CrayonSettings::ENQUEUE_THEMES, false);
+			CrayonGlobalSettings::set(CrayonSettings::ENQUEUE_FONTS, false);
+		}
+		
+		// To improve efficiency, avoid complicated regex with a simple check first
+		if (CrayonUtil::strposa($wp_content, self::$search_tags, TRUE) === FALSE) {
+			return $capture;
+		}
+		
+		// Convert <pre> tags to crayon tags, if needed
+		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
+			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
+			$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
+		}
+		
+		// Convert mini [php][/php] tags to crayon tags, if needed
+		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
+		}
+		
+		// Convert inline {php}{/php} tags to crayon tags, if needed
+		if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
+			$wp_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
+		}
+		
+		// Convert [plain] tags into <pre><code></code></pre>, if needed
+		if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
+			$wp_content = preg_replace_callback('#(?<!\$)\[plain\](.*?)\[/plain\]#msi', 'CrayonFormatter::plain_code', $wp_content);
+		}
+		
+		// Convert `` backquote tags into <code></code>, if needed
+		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
+			$wp_content = preg_replace('#(?<!\\\\)`(.*?)`#msi', '<code>\1</code>', $wp_content);
+		}
+		
+		// Add IDs to the Crayons
+		$wp_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $wp_content);
+		
+		// Only include if a post exists with Crayon tag
+		preg_match_all(self::regex(), $wp_content, $matches);
+		
+		if ( count($matches[0]) != 0 ) {
+			// Crayons found! Load settings first to ensure global settings loaded
+			CrayonSettingsWP::load_settings();
+			
+			$full_matches = $matches[0];
+			$closed_ids = $matches[1];
+			$closed_atts = $matches[2];
+			$open_ids = $matches[3];
+			$open_atts = $matches[4];
+			$contents = $matches[5];
+			
+			// Make sure we enqueue the styles/scripts
+			$enqueue = TRUE;
+			
+			for ($i = 0; $i < count($full_matches); $i++) {
+				// Get attributes
+				if ( !empty($closed_atts[$i]) ) {
+					$atts = $closed_atts[$i];
+				} else if ( !empty($open_atts[$i]) ) {
+					$atts = $open_atts[$i];
+				} else {
+					$atts = '';
+				}
+				
+				// Capture attributes
+				preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')(.*?)\2#', $atts, $att_matches);
+				
+				$atts_array = array();
+				if ( count($att_matches[0]) != 0 ) {
+					for ($j = 0; $j < count($att_matches[1]); $j++) {
+						$atts_array[trim(strtolower($att_matches[1][$j]))] = trim($att_matches[3][$j]);
+					}
+				}
+				
+				// Capture theme
+				$theme_id = array_key_exists(CrayonSettings::THEME, $atts_array) ? $atts_array[CrayonSettings::THEME] : '';
+				$theme = CrayonResources::themes()->get($theme_id);
+				// If theme not found, use fallbacks
+				if (!$theme) {
+					// Given theme is invalid, try global setting
+					$theme_id = CrayonGlobalSettings::val(CrayonSettings::THEME);
+					$theme = CrayonResources::themes()->get($theme_id);
+					if (!$theme) {
+						// Global setting is invalid, fall back to default
+						$theme = CrayonResources::themes()->get_default();
+						$theme_id = CrayonThemes::DEFAULT_THEME;
+					}
+				}
+				// If theme is now valid, change the array
+				if ($theme) {
+					$atts_array[CrayonSettings::THEME] = $theme_id;
+					$theme->used(TRUE);
+				}
+				
+				// Capture font
+				$font_id = array_key_exists(CrayonSettings::FONT, $atts_array) ? $atts_array[CrayonSettings::FONT] : '';
+				$font = CrayonResources::fonts()->get($font_id);
+				// If font not found, use fallbacks
+				if (!$font) {
+					// Given font is invalid, try global setting
+					$font_id = CrayonGlobalSettings::val(CrayonSettings::FONT);
+					$font = CrayonResources::fonts()->get($font_id);
+					if (!$font) {
+						// Global setting is invalid, fall back to default
+						$font = CrayonResources::fonts()->get_default();
+						$font_id = CrayonFonts::DEFAULT_FONT;
+					}
+				}
+				// If font is now valid, change the array
+				if ($font/* != NULL && $font_id != CrayonFonts::DEFAULT_FONT*/) {
+					$atts_array[CrayonSettings::FONT] = $font_id;
+					$font->used(TRUE);
+				}
+				
+				// Add array of atts and content to post queue with key as post ID
+				$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
+				$code = self::crayon_remove_ignore($contents[$i]);
+				$capture['capture'][$id] = array('post_id'=>$wp_id, 'atts'=>$atts_array, 'code'=>$code);
+			}
+		}
+		
+		$capture['content'] = self::crayon_remove_ignore($wp_content);
+		
+		return $capture;
+	}
+	
 	/* Search for Crayons in posts and queue them for creation */
 	public static function the_posts($posts) {
 		CrayonLog::debug('the_posts');
@@ -173,135 +311,38 @@ class CrayonWP {
 		
 		self::init_mini_tags();
 		
-		// Search for shortcode in query
+		// Search for shortcode in posts
 		foreach ($posts as $post) {
-			
-			// If we get query for a page, then that page might have a template and load more posts containing Crayons
-			// By this state, we would be unable to enqueue anything (header already written).
-			if (CrayonGlobalSettings::val(CrayonSettings::SAFE_ENQUEUE) && is_page($post->ID)) {
-				CrayonGlobalSettings::set(CrayonSettings::ENQUEUE_THEMES, false);
-				CrayonGlobalSettings::set(CrayonSettings::ENQUEUE_FONTS, false);
-			}
-			
-			// To improve efficiency, avoid complicated regex with a simple check first
-			if (CrayonUtil::strposa($post->post_content, self::$search_tags, TRUE) === FALSE) {
+			$id_str = strval($post->ID);
+			if ( isset(self::$post_queue[$id_str]) ) {
+				// Don't capture twice
 				continue;
 			}
-			
-			// Convert <pre> tags to crayon tags, if needed
-			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
-				// XXX This will fail if <pre></pre> is used inside another <pre></pre>
-				$post->post_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $post->post_content);
+			// Capture post Crayons
+			$captures = self::capture_crayons($post->ID, $post->post_content);
+			self::$post_queue[$id_str] = array();
+			foreach ($captures['capture'] as $capture_id=>$capture_content) {
+				self::$post_queue[$id_str][$capture_id] = $capture_content;
 			}
+			// TODO improve by using capture, but careful not to undo changes by other plugins
+			$post->post_content = $captures['content'];
+			self::$post_captures[$id_str] = $captures['content']; 
 			
-			// Convert mini [php][/php] tags to crayon tags, if needed
-			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
-				$post->post_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $post->post_content);
-			}
-			
-			// Convert inline {php}{/php} tags to crayon tags, if needed
-			if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
-				$post->post_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $post->post_content);
-			}
-
-			// Convert [plain] tags into <pre><code></code></pre>, if needed
-			if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
-				$post->post_content = preg_replace_callback('#(?<!\$)\[plain\](.*?)\[/plain\]#msi', 'CrayonFormatter::plain_code', $post->post_content);
-			}
-			
-			// Convert `` backquote tags into <code></code>, if needed
-			if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
-				$post->post_content = preg_replace('#(?<!\\\\)`(.*?)`#msi', '<code>\1</code>', $post->post_content);
-			}
-			
-			// Add IDs to the Crayons
-			$post->post_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $post->post_content);
-			
-			// Only include if a post exists with Crayon tag
-			preg_match_all(self::regex(), $post->post_content, $matches);
-			
-			if ( count($matches[0]) != 0 ) {
-				// Crayons found! Load settings first to ensure global settings loaded
-				CrayonSettingsWP::load_settings();
-				
-				$full_matches = $matches[0];
-				$closed_ids = $matches[1];
-				$closed_atts = $matches[2];
-				$open_ids = $matches[3];
-				$open_atts = $matches[4];
-				$contents = $matches[5];
-				
-				// Make sure we enqueue the styles/scripts
-				$enqueue = TRUE;
-				
-				for ($i = 0; $i < count($full_matches); $i++) {
-					// Get attributes
-					if ( !empty($closed_atts[$i]) ) {
-						$atts = $closed_atts[$i];
-					} else if ( !empty($open_atts[$i]) ) {
-						$atts = $open_atts[$i];
-					} else {
-						$atts = '';
-					}
-					
-					// Capture attributes
-					preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')(.*?)\2#', $atts, $att_matches);
-					
-					$atts_array = array();
-					if ( count($att_matches[0]) != 0 ) {
-						for ($j = 0; $j < count($att_matches[1]); $j++) {
-							$atts_array[trim(strtolower($att_matches[1][$j]))] = trim($att_matches[3][$j]);
-						}
-					}
-					
-					// Capture theme
-					$theme_id = array_key_exists(CrayonSettings::THEME, $atts_array) ? $atts_array[CrayonSettings::THEME] : '';
-					$theme = CrayonResources::themes()->get($theme_id);
-					// If theme not found, use fallbacks
-					if (!$theme) {
-						// Given theme is invalid, try global setting
-						$theme_id = CrayonGlobalSettings::val(CrayonSettings::THEME);
-						$theme = CrayonResources::themes()->get($theme_id);
-						if (!$theme) {
-							// Global setting is invalid, fall back to default
-							$theme = CrayonResources::themes()->get_default();
-							$theme_id = CrayonThemes::DEFAULT_THEME;
-						}
-					}
-					// If theme is now valid, change the array
-					if ($theme) {
-						$atts_array[CrayonSettings::THEME] = $theme_id;
-						$theme->used(TRUE);
-					}
-					
-					// Capture font
-					$font_id = array_key_exists(CrayonSettings::FONT, $atts_array) ? $atts_array[CrayonSettings::FONT] : '';
-					$font = CrayonResources::fonts()->get($font_id);
-					// If font not found, use fallbacks
-					if (!$font) {
-						// Given font is invalid, try global setting
-						$font_id = CrayonGlobalSettings::val(CrayonSettings::FONT);
-						$font = CrayonResources::fonts()->get($font_id);
-						if (!$font) {
-							// Global setting is invalid, fall back to default
-							$font = CrayonResources::fonts()->get_default();
-							$font_id = CrayonFonts::DEFAULT_FONT;
-						}
-					}
-					// If font is now valid, change the array
-					if ($font/* != NULL && $font_id != CrayonFonts::DEFAULT_FONT*/) {
-						$atts_array[CrayonSettings::FONT] = $font_id;
-						$font->used(TRUE);
-					}
-					
-					// Add array of atts and content to post queue with key as post ID
-					$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
-					$code = self::crayon_remove_ignore($contents[$i]);
-					self::$post_queue[strval($post->ID)][$id] = array('post_id'=>$post->ID, 'atts'=>$atts_array, 'code'=>$code);
+			// Search for shortcode in comments
+			$comments = get_comments(array('post_id' => $post->ID));
+		    foreach ($comments as $comment) {
+			    $id_str = strval($comment->comment_ID);
+				if ( isset(self::$comment_queue[$id_str]) ) {
+					// Don't capture twice
+					continue;
 				}
-			}
-			
-			$post->post_content = self::crayon_remove_ignore($post->post_content);
+				// Capture comment Crayons
+		        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
+		        foreach ($captures['capture'] as $capture_id=>$capture_content) {
+		        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
+		        }
+		        self::$comment_captures[$id_str] = $captures['content'];
+		    }
 		}
 		
 		if (!is_admin() && $enqueue && !self::$enqueued) {
@@ -366,6 +407,9 @@ class CrayonWP {
 		if ( array_key_exists($post_id, self::$post_queue) ) {
 			// XXX We want the plain post content, no formatting
 			$the_content_original = $the_content;
+			// Replace with IDs now that we need to
+			// TODO may replace text changed by other plugins, so not using for now
+//			$the_content = self::$post_captures[$post_id];
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $id=>$v) {
@@ -387,7 +431,39 @@ class CrayonWP {
 				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
 			}
 		}
+		
 		return $the_content;
+	}
+
+	public static function comment_text($text) {
+		global $comment;
+		
+		$comment_id = strval($comment->comment_ID);
+		
+	// Find if this post has Crayons
+		if ( array_key_exists($comment_id, self::$comment_queue) ) {
+			// XXX We want the plain post content, no formatting
+			$the_content_original = $text;
+			// Loop through Crayons
+			$post_in_queue = self::$comment_queue[$comment_id];
+			// Replace with IDs now that we need to
+			$text = self::$comment_captures[$comment_id];
+			
+			foreach ($post_in_queue as $id=>$v) {
+				$atts = $v['atts'];
+				$content = $v['code']; // The code we replace post content with
+				$crayon = self::shortcode($atts, $content, $id);
+				$crayon_formatted = $crayon->output(TRUE, FALSE);
+				// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them if needed
+				if (!$crayon->is_inline()) { 
+					$text = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $text);
+				}
+				// Replace the code with the Crayon
+				$text = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $text, 1, $text);
+			}
+		}
+		
+		return $text;
 	}
 	
 	public static function add_paragraphs($capture) {
@@ -555,10 +631,14 @@ if (defined('ABSPATH')) {
 		add_action('wp', 'CrayonWP::wp');
 	} else {
 		add_filter('the_posts', 'CrayonWP::the_posts');
+//		add_filter('the_posts', 'CrayonWP::the_comments');
 	}
 	
 	// XXX Some themes like to play with the content, make sure we replace after they're done
 	add_filter('the_content', 'CrayonWP::the_content', 100);
+	
+	add_filter('comment_text', 'CrayonWP::comment_text', 100);
+	
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');
 }

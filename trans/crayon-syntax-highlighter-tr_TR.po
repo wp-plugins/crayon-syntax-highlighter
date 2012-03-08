@@ -702,27 +702,27 @@ msgstr "%s ile Kopyala, %s ile Yapıştır"
 #: crayon_settings_wp.class.php:226
 #@ crayon-syntax-highlighter
 msgid "Tags"
-msgstr ""
+msgstr "Etiketler"
 
 #: crayon_settings_wp.class.php:468
 #@ crayon-syntax-highlighter
 msgid "Inline Margin"
-msgstr ""
+msgstr "Inline Marjı"
 
 #: crayon_settings_wp.class.php:609
 #@ crayon-syntax-highlighter
 msgid "Capture Inline Tags like {php}{/php} inside sentences."
-msgstr ""
+msgstr "Cümleler içinde {php} {/php} gibi Inline Etiketler yakalayın."
 
 #: crayon_settings_wp.class.php:611
 #@ crayon-syntax-highlighter
 msgid "Capture `backquotes` as &lt;code&gt;"
-msgstr ""
+msgstr "&lt;code&gt; `Backquotes` yakalayın"
 
 #: crayon_settings_wp.class.php:630
 #@ crayon-syntax-highlighter
 msgid "Allow Crayons inside comments"
-msgstr ""
+msgstr "Yorumları içerisinde Tebeşir İzin"
 
 #. translators: plugin header field 'Version'
 #: crayon_wp.class.php:0
@@ -733,5 +733,5 @@ msgstr ""
 #: crayon_settings_wp.class.php:610
 #@ crayon-syntax-highlighter
 msgid "Wrap Inline Tags"
-msgstr ""
+msgstr "Wrap Inline Etiketler"
 

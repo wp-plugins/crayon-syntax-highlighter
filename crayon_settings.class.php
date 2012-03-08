@@ -82,6 +82,7 @@ class CrayonSettings {
 	const INLINE_TAG = 'inline-tag';
 	const INLINE_MARGIN = 'inline-margin';
 	const BACKQUOTE = 'backquote';
+	const COMMENTS = 'comments';
 	
 	private static $cache_array;
 	
@@ -193,6 +194,7 @@ class CrayonSettings {
 			new CrayonSetting(self::INLINE_TAG, TRUE),
 			new CrayonSetting(self::INLINE_MARGIN, 5),
 			new CrayonSetting(self::BACKQUOTE, TRUE),
+			new CrayonSetting(self::COMMENTS, TRUE),
 		);
 		
 		$this->set($settings);

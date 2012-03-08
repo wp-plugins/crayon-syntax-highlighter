@@ -329,20 +329,22 @@ class CrayonWP {
 			self::$post_captures[$id_str] = $captures['content']; 
 			
 			// Search for shortcode in comments
-			$comments = get_comments(array('post_id' => $post->ID));
-		    foreach ($comments as $comment) {
-			    $id_str = strval($comment->comment_ID);
-				if ( isset(self::$comment_queue[$id_str]) ) {
-					// Don't capture twice
-					continue;
-				}
-				// Capture comment Crayons
-		        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
-		        foreach ($captures['capture'] as $capture_id=>$capture_content) {
-		        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
-		        }
-		        self::$comment_captures[$id_str] = $captures['content'];
-		    }
+			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
+				$comments = get_comments(array('post_id' => $post->ID));
+			    foreach ($comments as $comment) {
+				    $id_str = strval($comment->comment_ID);
+					if ( isset(self::$comment_queue[$id_str]) ) {
+						// Don't capture twice
+						continue;
+					}
+					// Capture comment Crayons
+			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
+			        foreach ($captures['capture'] as $capture_id=>$capture_content) {
+			        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
+			        }
+			        self::$comment_captures[$id_str] = $captures['content'];
+			    }
+			}
 		}
 		
 		if (!is_admin() && $enqueue && !self::$enqueued) {
@@ -437,10 +439,8 @@ class CrayonWP {
 
 	public static function comment_text($text) {
 		global $comment;
-		
 		$comment_id = strval($comment->comment_ID);
-		
-	// Find if this post has Crayons
+		// Find if this post has Crayons
 		if ( array_key_exists($comment_id, self::$comment_queue) ) {
 			// XXX We want the plain post content, no formatting
 			$the_content_original = $text;
@@ -462,7 +462,6 @@ class CrayonWP {
 				$text = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $text, 1, $text);
 			}
 		}
-		
 		return $text;
 	}
 	
@@ -631,13 +630,14 @@ if (defined('ABSPATH')) {
 		add_action('wp', 'CrayonWP::wp');
 	} else {
 		add_filter('the_posts', 'CrayonWP::the_posts');
-//		add_filter('the_posts', 'CrayonWP::the_comments');
 	}
 	
 	// XXX Some themes like to play with the content, make sure we replace after they're done
 	add_filter('the_content', 'CrayonWP::the_content', 100);
 	
-	add_filter('comment_text', 'CrayonWP::comment_text', 100);
+	if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
+		add_filter('comment_text', 'CrayonWP::comment_text', 100);
+	}
 	
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');

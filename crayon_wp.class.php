@@ -527,8 +527,8 @@ class CrayonWP {
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
 			self::init_mini_tags();
-			$the_content = preg_replace('#\$\[('. self::$alias_regex .')#', '[$1', $the_content);
-			$the_content = preg_replace('#('. self::$alias_regex .')\]\$#', '$1]', $the_content);
+			$the_content = preg_replace('#\$([\[\{])('. self::$alias_regex .')#', '$1$2', $the_content);
+			$the_content = preg_replace('#('. self::$alias_regex .')([\[\{])\$#', '$1$2', $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
 			$the_content = str_ireplace('\\`', '`', $the_content);

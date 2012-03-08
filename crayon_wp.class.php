@@ -169,7 +169,7 @@ class CrayonWP {
 	
 	public static function capture_crayons($wp_id, $wp_content) {
 		// Will contain captured crayons and altered $wp_content
-		$capture = array('capture' => array(), 'content' => '');
+		$capture = array('capture' => array(), 'content' => '', 'has_captured' => FALSE);
 		
 		// If we get query for a page, then that page might have a template and load more posts containing Crayons
 		// By this state, we would be unable to enqueue anything (header already written).
@@ -228,6 +228,9 @@ class CrayonWP {
 			
 			// Make sure we enqueue the styles/scripts
 			$enqueue = TRUE;
+			
+			$capture['has_captured'] = TRUE;
+			$capture['content'] = self::crayon_remove_ignore($wp_content);
 			
 			for ($i = 0; $i < count($full_matches); $i++) {
 				// Get attributes
@@ -294,9 +297,8 @@ class CrayonWP {
 				$code = self::crayon_remove_ignore($contents[$i]);
 				$capture['capture'][$id] = array('post_id'=>$wp_id, 'atts'=>$atts_array, 'code'=>$code);
 			}
+			
 		}
-		
-		$capture['content'] = self::crayon_remove_ignore($wp_content);
 		
 		return $capture;
 	}
@@ -325,8 +327,10 @@ class CrayonWP {
 				self::$post_queue[$id_str][$capture_id] = $capture_content;
 			}
 			// TODO improve by using capture, but careful not to undo changes by other plugins
-			$post->post_content = $captures['content'];
-			self::$post_captures[$id_str] = $captures['content']; 
+			if ($captures['has_captured'] === TRUE) {
+				$post->post_content = $captures['content'];
+				self::$post_captures[$id_str] = $captures['content'];
+			} 
 			
 			// Search for shortcode in comments
 			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
@@ -339,10 +343,12 @@ class CrayonWP {
 					}
 					// Capture comment Crayons
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
-			        foreach ($captures['capture'] as $capture_id=>$capture_content) {
-			        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
+			        if ($captures['has_captured'] === TRUE) {
+				        foreach ($captures['capture'] as $capture_id=>$capture_content) {
+				        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
+				        }
+				        self::$comment_captures[$id_str] = $captures['content'];
 			        }
-			        self::$comment_captures[$id_str] = $captures['content'];
 			    }
 			}
 		}
@@ -379,7 +385,9 @@ class CrayonWP {
 			$aliases = CrayonResources::langs()->ids_and_aliases();
 			for ($i = 0; $i < count($aliases); $i++) {
 				$alias = $aliases[$i];
+				// Support for both block and inline tags
 				self::$search_tags[] = '[' . $alias;
+				self::$search_tags[] = '{' . $alias;
 				
 				$alias_regex = CrayonUtil::esc_hash(CrayonUtil::esc_regex($alias));
 				if ($i != count($aliases) - 1) {

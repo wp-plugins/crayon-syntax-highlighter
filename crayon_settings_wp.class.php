@@ -607,6 +607,7 @@ class CrayonSettingsWP {
 	public static function tags() {
 		self::checkbox(array(CrayonSettings::CAPTURE_MINI_TAG, crayon__('Capture Mini Tags like [php][/php] as Crayons.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::INLINE_TAG, crayon__('Capture Inline Tags like {php}{/php} inside sentences.') . ' <a href="http://bit.ly/yFafFL" target="_blank">' . crayon__('Learn More') . '</a>'));
+		self::checkbox(array(CrayonSettings::INLINE_WRAP, crayon__('Wrap Inline Tags') . ' <a href="http://bit.ly/yFafFL" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::BACKQUOTE, crayon__('Capture `backquotes` as &lt;code&gt;') . ' <a href="http://bit.ly/yFafFL" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::PLAIN_TAG, crayon__('Enable [plain][/plain] tag.') . ' <a href="http://bit.ly/rRZuzk" target="_blank">' . crayon__('Learn More') . '</a>'));

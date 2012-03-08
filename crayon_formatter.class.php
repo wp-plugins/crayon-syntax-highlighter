@@ -108,16 +108,10 @@ class CrayonFormatter {
 			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
 			$font_height = ($font_size + 4) . 'px !important;';
 			$toolbar_height = ($font_size + 8) . 'px !important;';
-			$inline_block = $hl->is_inline() ? 'display: inline-block;' : '';
-			$font_style .= "#$uid * {
-									font-size: $font_size
-									line-height: $font_height
-									$inline_block
-									/* <= IE 7 */
-									zoom:1;
-									*display: inline;
-									_height: $font_height }";
-			if (!$hl->is_inline()) {
+			$font_style .= "#$uid * { font-size: $font_size line-height: $font_height }";
+			if ($hl->is_inline()) {
+				$font_style .= "#$uid { font-size: $font_size }\n";
+			} else {
 				$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
 				$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
 			}
@@ -137,8 +131,9 @@ class CrayonFormatter {
 		
 		// This will return from function with inline print
 		if ($hl->is_inline()) {
+			$wrap = !$hl->setting_val(CrayonSettings::INLINE_WRAP) ? 'crayon-syntax-inline-nowrap' : '';
 			$output .= '
-			<span id="'.$uid.'" class="crayon-syntax crayon-syntax-inline crayon-theme-'.$theme_id_dashed.' crayon-theme-'.$theme_id_dashed.'-inline crayon-font-'.$font_id_dashed.'">' .
+			<span id="'.$uid.'" class="crayon-syntax crayon-syntax-inline '.$wrap.' crayon-theme-'.$theme_id_dashed.' crayon-theme-'.$theme_id_dashed.'-inline crayon-font-'.$font_id_dashed.'">' .
 				'<span class="crayon-pre">' . $code . '</span>' . 
 			'</span>';
 			return $output;

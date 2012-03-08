@@ -248,7 +248,18 @@ coloring etc.
     padding: 0 5px;
 }
 
+.crayon-syntax-inline .crayon-pre,
+.crayon-syntax-inline pre {
+	white-space: normal;
+}
+
+.crayon-syntax-inline-nowrap .crayon-pre,
+.crayon-syntax-inline-nowrap pre {
+	white-space: pre;
+}
+
 /* Default Font */
+.crayon-syntax,
 .crayon-syntax * {
     font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;
 	font-size: 12px;

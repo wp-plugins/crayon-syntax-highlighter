@@ -81,6 +81,7 @@ class CrayonSettings {
 	const SAFE_ENQUEUE = 'safe-enqueue';
 	const INLINE_TAG = 'inline-tag';
 	const INLINE_MARGIN = 'inline-margin';
+	const INLINE_WRAP = 'inline-wrap';
 	const BACKQUOTE = 'backquote';
 	const COMMENTS = 'comments';
 	
@@ -193,6 +194,7 @@ class CrayonSettings {
 			new CrayonSetting(self::SAFE_ENQUEUE, TRUE),
 			new CrayonSetting(self::INLINE_TAG, TRUE),
 			new CrayonSetting(self::INLINE_MARGIN, 5),
+			new CrayonSetting(self::INLINE_WRAP, TRUE),
 			new CrayonSetting(self::BACKQUOTE, TRUE),
 			new CrayonSetting(self::COMMENTS, TRUE),
 		);

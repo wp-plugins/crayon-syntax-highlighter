@@ -59,7 +59,7 @@ jQuery.fn.style = function(styleName, value, priority) {
 		return;
 	}
 	// CSSStyleDeclaration
-	var style = this.get(0).style;
+	var style = node.style;
 	// Getter/Setter
 	if (typeof styleName != 'undefined') {
 		if (typeof value != 'undefined') {

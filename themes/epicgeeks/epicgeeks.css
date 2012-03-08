@@ -12,6 +12,12 @@ Author URI: http://epicgeeks.net/
     background: #ffffe1 !important;
 }
 
+/* Inline Style */
+.crayon-theme-epicgeeks-inline {
+	border: 1px solid #e1e1e1 !important;
+	background: #ffffe1 !important;
+}
+
 .crayon-theme-epicgeeks .crayon-nums {
     background: #ffff9f !important;
     color: #333333 !important;

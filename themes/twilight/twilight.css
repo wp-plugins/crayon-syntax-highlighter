@@ -14,6 +14,12 @@ Author URI: http://ak.net84.net/
     color: #fff;
 }
 
+/* Inline Style */
+.crayon-theme-twilight-inline {
+	border: 1px solid #333 !important;
+	background: #4d4d4d !important;
+}
+
 .crayon-theme-twilight span {
     color: #999 !important;
 }

@@ -55,7 +55,7 @@ class CrayonWP {
 	private static $search_tags = array('[crayon', '<pre', '[plain');
 	// String to store the regex for capturing mini tags
 	private static $alias_regex = '';
-	private static $is_mini_tag_init = FALSE;  
+	private static $is_special_tag_init = FALSE;  
 	
 	// Used to detect the shortcode
 	const REGEX_CLOSED = '(?:\[crayon(?:-(\w+))?\b([^\]]*)/\])'; // [crayon atts="" /]
@@ -312,7 +312,7 @@ class CrayonWP {
 		$enqueue = FALSE;
 		CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
 		
-		self::init_mini_tags();
+		self::init_special_tags();
 		
 		// Search for shortcode in posts
 		foreach ($posts as $post) {
@@ -381,8 +381,11 @@ class CrayonWP {
 		self::$enqueued = TRUE;
 	}
 	
-	private static function init_mini_tags() {
-		if (!self::$is_mini_tag_init && CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
+	private static function init_special_tags() {
+		if (!self::$is_special_tag_init &&
+			( CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG) ||
+			  CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG) )
+			) {
 			$aliases = CrayonResources::langs()->ids_and_aliases();
 			for ($i = 0; $i < count($aliases); $i++) {
 				$alias = $aliases[$i];
@@ -396,7 +399,10 @@ class CrayonWP {
 				}
 				self::$alias_regex .= $alias_regex;
 			}
-			self::$is_mini_tag_init = TRUE;
+			// Add plain and backquote
+			self::$search_tags[] = '[plain';
+			self::$search_tags[] = '`';
+			self::$is_special_tag_init = TRUE;
 		}
 	}
 	
@@ -528,7 +534,7 @@ class CrayonWP {
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG) ||
 			CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
-			self::init_mini_tags();			
+			self::init_special_tags();			
 			$the_content = preg_replace('#\$([\[\{])('. self::$alias_regex .')#', '$1$2', $the_content);
 			$the_content = preg_replace('#('. self::$alias_regex .')([\[\{])\$#', '$1$2', $the_content);
 		}

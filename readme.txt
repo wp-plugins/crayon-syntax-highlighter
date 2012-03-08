@@ -22,6 +22,9 @@ It also supports some neat features like:
 * Remote request caching
 * <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting</a> in a single Crayon
 * <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags</a> like [php][/php]
+* <a href="http://bit.ly/yFafFL" target="_blank">Inline Tags</a> floating in sentences
+* Crayons in comments
+* `Backquotes` become &lt;code&gt;
 * Plain Tag ([plain]...[/plain]) for quick &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;
 * &lt;pre&gt; tag support
 * Mobile/touchscreen device detection
@@ -91,6 +94,7 @@ These are helpful for discovering new features.
 
 * <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting in Crayon</a>
 * <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags And Plain Tags In Crayon</a>
+* <a href="http://ak.net84.net/crayon/inline-crayons/" target="_blank">Inline Tags</a>
 * <a href="http://ak.net84.net/projects/enqueuing-themes-and-fonts-in-crayon/" target="_blank">Enqueuing Themes and Fonts in Crayon</a> 
 
 **Planned Features**

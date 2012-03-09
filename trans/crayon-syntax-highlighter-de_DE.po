@@ -702,27 +702,27 @@ msgstr "Drücken Sie %s zum Kopieren, %s zum Einfügen"
 #: crayon_settings_wp.class.php:226
 #@ crayon-syntax-highlighter
 msgid "Tags"
-msgstr "Stichworte"
+msgstr "Tags"
 
 #: crayon_settings_wp.class.php:468
 #@ crayon-syntax-highlighter
 msgid "Inline Margin"
-msgstr "Inline-Marge"
+msgstr "Inline Rand"
 
 #: crayon_settings_wp.class.php:609
 #@ crayon-syntax-highlighter
 msgid "Capture Inline Tags like {php}{/php} inside sentences."
-msgstr "Erfassen Sie Inline-Tags wie {php} {/php} in Sätzen."
+msgstr "Tags wie {php} {/php} innerhalb Sätzen erkennen."
 
 #: crayon_settings_wp.class.php:611
 #@ crayon-syntax-highlighter
 msgid "Capture `backquotes` as &lt;code&gt;"
-msgstr "Nehmen Sie `backquotes` als &lt;code&gt;"
+msgstr "`backquotes` als &lt;code&gt; behandeln"
 
 #: crayon_settings_wp.class.php:630
 #@ crayon-syntax-highlighter
 msgid "Allow Crayons inside comments"
-msgstr "Erlauben Sie Crayons innerhalb von Kommentaren"
+msgstr "Crayons innerhalb von Kommentaren erlauben"
 
 #. translators: plugin header field 'Version'
 #: crayon_wp.class.php:0
@@ -733,5 +733,5 @@ msgstr ""
 #: crayon_settings_wp.class.php:610
 #@ crayon-syntax-highlighter
 msgid "Wrap Inline Tags"
-msgstr "Wrap Inline-Tags"
+msgstr "Inline-Tags umbrechen"
 

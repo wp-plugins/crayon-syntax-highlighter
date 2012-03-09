@@ -24,7 +24,7 @@ It also supports some neat features like:
 * <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags</a> like [php][/php]
 * <a href="http://bit.ly/yFafFL" target="_blank">Inline Tags</a> floating in sentences
 * Crayons in comments
-* `Backquotes` become &lt;code&gt;
+* &#96;Backquotes&#96; become &lt;code&gt;
 * Plain Tag ([plain]...[/plain]) for quick &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;
 * &lt;pre&gt; tag support
 * Mobile/touchscreen device detection

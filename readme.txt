@@ -65,6 +65,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * PowerShell
 * Python
 * Ruby
+* Scheme (thanks to <a href="https://github.com/harry75369" target="_blank">https://github.com/harry75369</a>)
 * Shell (Unix)
 * Visual Basic
 * YAML

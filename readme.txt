@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: trunk
+Stable tag: 1.8.3
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -136,6 +136,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 3. Mixed Language Highlighting.
 
 == Changelog ==
+
+= 1.8.4
+* Added Scheme language thanks to https://github.com/harry75369
+* Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 
 = 1.8.3 =
 * Added inline support for Crayons using the inline="true" attribute or even cooler with {php}...{/php} style tags.

@@ -235,7 +235,7 @@ class CrayonParser {
 					$css_str .= $c . ' ';
 				}
 			}
-			return $css_str;
+			return trim($css_str);
 		} else {
 			return '';
 		}

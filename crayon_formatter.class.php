@@ -61,8 +61,10 @@ class CrayonFormatter {
 			if ($captured_element->name() == CrayonParser::CRAYON_ELEMENT) {
 				return $matches[0]; // Return as is
 			} else {
-				// Separate lines and add css class.
-				$css = $captured_element->css() . CrayonLangs::known_elements($captured_element->fallback());
+				// Separate lines and add css class, keep extended class last to allow overriding
+				$fallback_css = CrayonLangs::known_elements($captured_element->fallback());
+				$element_css = $captured_element->css();
+				$css = !empty($fallback_css) ? $fallback_css . ' ' . $element_css : $element_css ;
 				return self::split_lines($matches[0], $css);
 			}
 		} else {

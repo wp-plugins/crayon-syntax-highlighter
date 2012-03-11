@@ -117,7 +117,7 @@ You can change settings and view help under <strong>Settings > Crayon</strong> i
 
 You can use &lt;pre&gt;:
 
-<code>&lt;pre lang="php"&gt; your code &lt;/crayon&gt;</code>
+<code>&lt;pre lang="php"&gt; your code &lt;/pre&gt;</code>
 
 You can also use Mini Tags:
 

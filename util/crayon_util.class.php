@@ -155,6 +155,10 @@ class CrayonUtil {
 	public static function html_entity_decode($str) {
 		return html_entity_decode($str, ENT_NOQUOTES, 'UTF-8');
 	}
+	
+	public static function htmlspecialchars($str) {
+		return htmlspecialchars($str, ENT_NOQUOTES, 'UTF-8');
+	}
 
 	// Sets a variable to an int if valid
 	public static function num(&$var, $num) {

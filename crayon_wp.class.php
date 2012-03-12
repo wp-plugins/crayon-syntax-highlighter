@@ -187,6 +187,8 @@ class CrayonWP {
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
 			$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
+			// XXX For encoded <pre></pre> tags
+			$wp_content = preg_replace('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
 		}
 		
 		// Convert mini [php][/php] tags to crayon tags, if needed
@@ -324,14 +326,14 @@ class CrayonWP {
 			// Capture post Crayons
 			$captures = self::capture_crayons($post->ID, $post->post_content);
 			self::$post_queue[$id_str] = array();
-			foreach ($captures['capture'] as $capture_id=>$capture_content) {
-				self::$post_queue[$id_str][$capture_id] = $capture_content;
-			}
-			// TODO improve by using capture, but careful not to undo changes by other plugins
-			$post->post_content = $captures['content'];
 			if ($captures['has_captured'] === TRUE) {
-				self::$post_captures[$id_str] = $captures['content'];
-			} 
+				foreach ($captures['capture'] as $capture_id=>$capture_content) {
+					self::$post_queue[$id_str][$capture_id] = $capture_content;
+				}
+				// TODO improve by using capture, but careful not to undo changes by other plugins
+				$post->post_content = $captures['content'];
+				self::$post_captures[$id_str] = $captures['content']; 
+			}
 			
 			// Search for shortcode in comments
 			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
@@ -344,8 +346,9 @@ class CrayonWP {
 					}
 					// Capture comment Crayons
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
-			        self::$comment_captures[$id_str] = $captures['content'];
+			        self::$comment_queue[$id_str] = array();
 			        if ($captures['has_captured'] === TRUE) {
+			        	self::$comment_captures[$id_str] = $captures['content'];
 				        foreach ($captures['capture'] as $capture_id=>$capture_content) {
 				        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
 				        }
@@ -631,8 +634,8 @@ class CrayonWP {
 	
 }
 
-// Only if WP is loaded
-if (defined('ABSPATH')) {
+// Only if WP is loaded and not in admin
+if (defined('ABSPATH') && !is_admin()) {
 	register_activation_hook(__FILE__, 'CrayonWP::install');
 	register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
 	

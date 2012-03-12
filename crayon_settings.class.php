@@ -85,6 +85,7 @@ class CrayonSettings {
 	const BACKQUOTE = 'backquote';
 	const COMMENTS = 'comments';
 	const DECODE = 'decode';
+	const DECODE_ATTRIBUTES = 'decode-attributes';
 	
 	private static $cache_array;
 	
@@ -199,6 +200,7 @@ class CrayonSettings {
 			new CrayonSetting(self::BACKQUOTE, TRUE),
 			new CrayonSetting(self::COMMENTS, TRUE),
 			new CrayonSetting(self::DECODE, FALSE),
+			new CrayonSetting(self::DECODE_ATTRIBUTES, TRUE),
 		);
 		
 		$this->set($settings);
@@ -332,7 +334,7 @@ class CrayonSettings {
 		if (($setting = CrayonGlobalSettings::get($name)) != FALSE) {
 			// Booleans settings that are sent as string are allowed to have "false" == false
 			if (is_string($value) && is_bool($setting->def())) {
-				$value = trim(str_replace(array('no', 'false'), '0', $value));
+				$value = CrayonUtil::str_to_bool($value);
 			}
 			// Ensure we don't cast integer settings to 0 because $value doesn't have any numbers in it
 			if (is_string($value) && is_int($setting->def())) {

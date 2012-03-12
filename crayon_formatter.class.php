@@ -193,8 +193,12 @@ class CrayonFormatter {
 		} else if ( empty($line_numbers) ) {
 			$print_nums = FALSE;
 		}
-		// Determine whether to print title
+		// Determine whether to print title, encode characters
 		$title = $hl->title();
+		// Decode if needed
+		if ($hl->setting_val(CrayonSettings::DECODE_ATTRIBUTES)) {
+			$title = CrayonUtil::html_entity_decode($title);
+		}
 		$print_title = ($hl->setting_val(CrayonSettings::SHOW_TITLE) && $title ? '<span class="crayon-title">' . $title . '</span>' : '');
 		// Determine whether to print language
 		$print_lang = '';
@@ -286,8 +290,7 @@ class CrayonFormatter {
 			}
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
-
-			$print_plus = $hl->is_mixed() && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
+			$print_plus = $hl->setting_val(CrayonSettings::MIXED) && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
 			$buttons = $print_plus.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
 			$button_preload = '';
 			foreach (array('nums', 'copy', 'popup', 'plain') as $name) {
@@ -460,6 +463,7 @@ class CrayonFormatter {
 	}
 	
 	public static function delim_to_internal($matches) {
+		// Mark as mixed so we can show (+)
 		self::$curr->is_mixed(TRUE);
 		$capture_group = count($matches) - 2;
 		$capture_groups = array_keys(self::$delimiters);
@@ -483,7 +487,7 @@ class CrayonFormatter {
 			return $code;
 		}
 		/* Convert <, > and & characters to entities, as these can appear as HTML tags and entities. */
-		$code = htmlspecialchars($code, ENT_NOQUOTES);
+		$code = CrayonUtil::htmlspecialchars($code);
 		// Replace 2 spaces with html escaped characters
 		$code = preg_replace('|	 |', '&nbsp;&nbsp;', $code);
 		// Replace tabs with 4 spaces
@@ -497,7 +501,6 @@ class CrayonFormatter {
 			// When used as a preg_replace_callback
 			$code = $code[1];
 		}
-		// TODO: add ability to first decode?
 		$code = CrayonUtil::htmlentities($code);
 		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
 			$code = trim($code);

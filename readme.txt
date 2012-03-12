@@ -140,8 +140,11 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.8.4
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
+* Added ability to decode attributes, which is enabled by default to avoid seeing encoded strings in the title, and also to allow encoded angle/square brackets in the title that would otherwise clash with the Crayon tag brackets if left unencoded.
 * Added Scheme language thanks to https://github.com/harry75369
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
+* Prevented capturing Crayons in the admin
+* Fixed a bug causing case insensitive Boolean settings to fail at times 
 
 = 1.8.3 =
 * Added inline support for Crayons using the inline="true" attribute or even cooler with {php}...{/php} style tags.

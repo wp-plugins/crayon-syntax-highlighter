@@ -56,6 +56,9 @@ class CrayonHighlighter {
 		/*	Try to replace the URL with an absolute path if it is local, used to prevent scripts
 		 from executing when they are loaded. */
 		$url = $this->url;
+		if ($this->setting_val(CrayonSettings::DECODE_ATTRIBUTES)) {
+			$url = CrayonUtil::html_entity_decode($url);
+		}
 		$url = CrayonUtil::pathf($url);
 		$local = FALSE; // Whether to read locally
 		$site_http = CrayonGlobalSettings::site_http();
@@ -97,7 +100,7 @@ class CrayonHighlighter {
 					$content = $cached;
 					$http_code = 200;
 				} else {
-					$response = wp_remote_get($url, array('sslverify' => false, 'timeout' => 20));
+					$response = @wp_remote_get($url, array('sslverify' => false, 'timeout' => 20));
 					$content = wp_remote_retrieve_body($response);
 					$http_code = wp_remote_retrieve_response_code($response);
 					$cache = $this->setting_val(CrayonSettings::CACHE);
@@ -128,7 +131,7 @@ class CrayonHighlighter {
 			} else {
 				if (empty($this->code)) {
 					// If code is also given, just use that
-					$this->error("The provided URL ('$this->url') could not be accessed locally or remotely.");
+					$this->error("The provided URL ('$this->url'), parsed as ('$url'), could not be accessed locally or remotely.");
 				}
 			}
 		}
@@ -240,11 +243,17 @@ class CrayonHighlighter {
 	}
 
 	function url($url = NULL) {
-		if (CrayonUtil::str($this->url, $url)) {
-			$this->needs_load = TRUE;
-		} else {
+		if ($url === NULL) {
 			return $this->url;
+		} else {
+			$this->url = $url;
 		}
+		
+//		if (CrayonUtil::str($this->url, $url)) {
+//			$this->needs_load = TRUE;
+//		} else {
+//			return $this->url;
+//		}
 	}
 
 	function title($title = NULL) {

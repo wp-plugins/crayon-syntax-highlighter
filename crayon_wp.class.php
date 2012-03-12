@@ -131,6 +131,7 @@ class CrayonWP {
 		}
 		// Set attributes, should be set after URL to allow language auto detection
 		$crayon->language($lang);
+		
 		$crayon->title($title);
 		$crayon->marked($mark);
 		$crayon->is_inline($inline);

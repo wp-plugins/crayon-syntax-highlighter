@@ -599,6 +599,7 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::SCROLL, crayon__('Always display scrollbars')));
 		echo crayon__('Tab size in spaces'),': ';
 		self::textbox(array('name' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
+		self::checkbox(array(CrayonSettings::DECODE, crayon__('Decode HTML entities')));
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));
 		self::checkbox(array(CrayonSettings::MIXED, crayon__('Allow Mixed Language Highlighting with delimiters and tags.') . ' <a href="http://bit.ly/ukwts2" target="_blank">' . crayon__('Learn More') . '</a>'));
 		self::checkbox(array(CrayonSettings::SHOW_MIXED, crayon__('Show Mixed Language Icon (+)')));

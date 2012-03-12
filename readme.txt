@@ -139,6 +139,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.8.4
+* Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
 * Added Scheme language thanks to https://github.com/harry75369
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 

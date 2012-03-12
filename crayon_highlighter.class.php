@@ -164,6 +164,10 @@ class CrayonHighlighter {
 						$code = trim($code);
 					}
 				}
+				// Decode html entities (e.g. if using visual editor or manually encoding)
+				if ($this->setting_val(CrayonSettings::DECODE)) {
+					$code = CrayonUtil::html_entity_decode($code);
+				} 
 				// Allow mixed if langauge supports it and setting is set
 				if (!$this->setting_val(CrayonSettings::MIXED) || !$this->language->mode(CrayonParser::ALLOW_MIXED)) {
 					// Format the code with the generated regex and elements
@@ -195,7 +199,7 @@ class CrayonHighlighter {
 			// If no errors have occured, print the formatted code
 			$ret = CrayonFormatter::print_code($this, $this->formatted_code, $show_lines, $print);
 		} else {
-			$ret = CrayonFormatter::print_error($this, $this->error, /*'ERROR'*/'', $print);
+			$ret = CrayonFormatter::print_error($this, $this->error, '', $print);
 		}
 		// Reset the error message at the end of the print session
 		$this->error = '';

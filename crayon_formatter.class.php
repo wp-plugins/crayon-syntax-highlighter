@@ -23,7 +23,7 @@ class CrayonFormatter {
 	// Methods ================================================================
 	private function __construct() {}
 
-	/* Formats the code using the regex and stores the elements for later use. */
+	/* Formats the code using the parsed language elements. */
 	public static function format_code($code, $language, $hl = NULL, $highlight = TRUE) {
 		// Ensure the language is defined
 		if ($language != NULL && $highlight) {
@@ -482,7 +482,7 @@ class CrayonFormatter {
 		if (empty($code)) {
 			return $code;
 		}
-		/* Replace <, > and & characters, as these can appear as HTML tags and entities. */
+		/* Convert <, > and & characters to entities, as these can appear as HTML tags and entities. */
 		$code = htmlspecialchars($code, ENT_NOQUOTES);
 		// Replace 2 spaces with html escaped characters
 		$code = preg_replace('|	 |', '&nbsp;&nbsp;', $code);
@@ -497,6 +497,7 @@ class CrayonFormatter {
 			// When used as a preg_replace_callback
 			$code = $code[1];
 		}
+		// TODO: add ability to first decode?
 		$code = CrayonUtil::htmlentities($code);
 		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
 			$code = trim($code);

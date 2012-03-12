@@ -84,6 +84,7 @@ class CrayonSettings {
 	const INLINE_WRAP = 'inline-wrap';
 	const BACKQUOTE = 'backquote';
 	const COMMENTS = 'comments';
+	const DECODE = 'decode';
 	
 	private static $cache_array;
 	
@@ -166,7 +167,7 @@ class CrayonSettings {
 			new CrayonSetting(self::TAB_SIZE, 4), 
 			new CrayonSetting(self::FALLBACK_LANG, CrayonLangs::DEFAULT_LANG), 
 			new CrayonSetting(self::LOCAL_PATH, ''), 
-			new CrayonSetting(self::SCROLL, FALSE),//array(crayon__('On MouseOver'), crayon__('Always'))), 
+			new CrayonSetting(self::SCROLL, FALSE), 
 			new CrayonSetting(self::PLAIN, TRUE),
 			new CrayonSetting(self::PLAIN_TOGGLE, TRUE),
 			new CrayonSetting(self::SHOW_PLAIN_DEFAULT, FALSE),
@@ -197,6 +198,7 @@ class CrayonSettings {
 			new CrayonSetting(self::INLINE_WRAP, TRUE),
 			new CrayonSetting(self::BACKQUOTE, TRUE),
 			new CrayonSetting(self::COMMENTS, TRUE),
+			new CrayonSetting(self::DECODE, FALSE),
 		);
 		
 		$this->set($settings);

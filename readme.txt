@@ -144,6 +144,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
 * Added ability to decode attributes, which is enabled by default to avoid seeing encoded strings in the title, and also to allow encoded angle/square brackets in the title that would otherwise clash with the Crayon tag brackets if left unencoded.
 * Added ability to use the class attribute in &lt;pre&gt; tags for specifying settings like url, mark, lang, toolbar and all other valid settings like in a normal [crayon] tag. This will ensure your &lt;pre&gt; tags remain valid XHTML markup even with Crayon disabled.
+* Added ability to specify hyphen-separated-values in the class attribute of a &lt;pre&gt; tag to make them look like actual class selectors. E.g. &lt;pre class="lang-objc toolbar-false"&gt;...&lt;/pre&gt;. Only the last block of the hyphenated series is the value, the start is the setting name.  
 * Added Scheme language thanks to https://github.com/harry75369
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin

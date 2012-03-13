@@ -186,10 +186,16 @@ class CrayonWP {
 		
 		// Convert <pre> tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
+			
+			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre(?=(?:([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*))?)([^>]*)>(.*?)<\s*/\s*pre\s*>#msi', 'CrayonWP::pre_tag', $wp_content);
+			
+			
+			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(?=(?:(.*?)\bclass\s*=\s*(["\'])(.*?)\2(.*?))?)(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;#msi', 'CrayonWP::pre_tag', $wp_content);
+			
 			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
-			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre([^\>]*)>(.*?)<\s*/\s*pre\s*>(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
+//			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre([^\>]*)>(.*?)<\s*/\s*pre\s*>(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
 			// XXX For encoded <pre></pre> tags
-			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
+//			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
 			
 			// TODO works, sort of
 			//$wp_content = preg_replace_callback('#(?<!\$)<pre([^\>]*?)(\bclass\s*=\s*(["\'])(.*?)\3)([^\>]*)>#msi', 'CrayonWP::pre_tag', $wp_content);
@@ -535,10 +541,21 @@ class CrayonWP {
 		return $the_excerpt;
 	}
 	
+	/* Capture pre tag and extract settings from the class attribute, if present */
 	public static function pre_tag($matches) {
-		$atts = $matches[1];
-		$atts = preg_replace('#\bclass\s*=\s*(["\'])(.*?)\1#msi', ' $2 ', $atts);
-		return '[crayon ' . $atts . ']' . $matches[2] . '[/crayon]';
+		$pre_class = $matches[1];
+		$quotes = $matches[2];
+		$class = $matches[3];
+		$post_class = $matches[4];
+		$atts = $matches[5];
+		$content = $matches[6];
+		if (!empty($class)) {
+			// Allow hyphenated "setting-value" style settings in the class attribute
+			$class = preg_replace('#\b([\w-]+)-(\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
+			return "[crayon $pre_class $class $post_class] $content [/crayon]";
+		} else {
+			return "[crayon $atts] $content [/crayon]";
+		}
 	}
 	
 	// Check if the $[crayon]...[/crayon] notation has been used to ignore [crayon] tags within posts

@@ -6,13 +6,14 @@
     VERSION             1.8.0
 
     COMMENT             \<!--.*?--\>
+    # !!! Text containing "" are not strings
+    TEXT:IDENTIFIER     (?<=\>)[^\<\>]*(?=\<)
     ATT_STR:STRING      (((?<!\\)".*?(?<!\\)")|((?<!\\)'.*?(?<!\\)'))
     NOTATION            <!.*?>
     
     HTML_TAG:RESERVED	(</?\s*[^<\s>]+\s*>?)|(\s*/?>)
 
     ATTR:ENTITY         [\w-]+(?=\s*=\s*["'])
-    TEXT:IDENTIFIER     (?<=\>)[^\<\>]*(?=\<)
 	OPERATOR            (?default)
     SYMBOL              (?default)
 

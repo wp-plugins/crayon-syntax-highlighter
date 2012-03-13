@@ -58,20 +58,20 @@ class CrayonWP {
 	private static $is_special_tag_init = FALSE;  
 	
 	// Used to detect the shortcode
-	const REGEX_CLOSED = '(?:\[crayon(?:-(\w+))?\b([^\]]*)/\])'; // [crayon atts="" /]
-	const REGEX_TAG =    '(?:\[crayon(?:-(\w+))?\b([^\]]*)\][\r\n]*?(.*?)[\r\n]*?\[/crayon\])'; // [crayon atts=""] ... [/crayon]
+	const REGEX_CLOSED = '(?:\[\s*crayon(?:-(\w+))?\b([^\]]*)/\s*\])'; // [crayon atts="" /]
+	const REGEX_TAG =    '(?:\[\s*crayon(?:-(\w+))?\b([^\]]*)\][\r\n]*?(.*?)[\r\n]*?\[\s*/\s*crayon\s*\])'; // [crayon atts=""] ... [/crayon]
 	
-	const REGEX_CLOSED_NO_CAPTURE = '(?:\[crayon\b[^\]]*/\])';
-	const REGEX_TAG_NO_CAPTURE =    '(?:\[crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\])';
+	const REGEX_CLOSED_NO_CAPTURE = '(?:\[\s*crayon\b[^\]]*/\])';
+	const REGEX_TAG_NO_CAPTURE =    '(?:\[\s*crayon\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\])';
 	
-	const REGEX_QUICK_CAPTURE = '(?:\[crayon[^\]]*\].*?\[/crayon\])|(?:\[crayon[^\]]*/\])';
+	const REGEX_QUICK_CAPTURE = '(?:\[\s*crayon[^\]]*\].*?\[\s*/\s*crayon\s*\])|(?:\[\s*crayon[^\]]*/\s*\])';
 	
-	const REGEX_BETWEEN_PARAGRAPH = '<p[^<]*>(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*((?:\[crayon[^\]]*\].*?\[/crayon\])|(?:\[crayon[^\]]*/\]))(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*</p[^<]*>';
+	const REGEX_BETWEEN_PARAGRAPH = '<p[^<]*>(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*((?:\[\s*crayon[^\]]*\].*?\[\s*/\s*crayon\s*\])|(?:\[\s*crayon[^\]]*/\s*\]))(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*</p[^<]*>';
 	const REGEX_BETWEEN_PARAGRAPH_SIMPLE = '(<p(?:\s+[^>]*)?>)(.*?)(</p(?:\s+[^>]*)?>)';
-	const REGEX_BR_BEFORE = '<br\s*/?>\s*(\[crayon)';
-	const REGEX_BR_AFTER = '(\[/crayon\])\s*<br\s*/?>';
+	const REGEX_BR_BEFORE = '<br\s*/?>\s*(\[\s*crayon)';
+	const REGEX_BR_AFTER = '(\[\s*/\s*crayon\s*\])\s*<br\s*/?>';
 	
-	const REGEX_ID = '#(?<!\$)\[crayon#i';
+	const REGEX_ID = '#(?<!\$)\[\s*crayon#i';
 	
 	const MODE_NORMAL = 0, MODE_JUST_CODE = 1, MODE_PLAIN_CODE = 2;
 
@@ -84,7 +84,7 @@ class CrayonWP {
 	}
 	
 	public static function regex_with_id($id) {
-		return '#(?<!\$)(?:(?:\[crayon-'.$id.'\b[^\]]*/\])|(?:\[crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[/crayon\]))(?!\$)#s';
+		return '#(?<!\$)(?:(?:\[\s*crayon-'.$id.'\b[^\]]*/\s*\])|(?:\[\s*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[\s*/\s*crayon\s*\]))(?!\$)#s';
 	}
 	
 	public static function regex_no_capture() {
@@ -187,14 +187,22 @@ class CrayonWP {
 		// Convert <pre> tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
-			$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
+			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre([^\>]*)>(.*?)<\s*/\s*pre\s*>(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
 			// XXX For encoded <pre></pre> tags
-			$wp_content = preg_replace('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
+			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
+			
+			// TODO works, sort of
+			//$wp_content = preg_replace_callback('#(?<!\$)<pre([^\>]*?)(\bclass\s*=\s*(["\'])(.*?)\3)([^\>]*)>#msi', 'CrayonWP::pre_tag', $wp_content);
+			
+			// XXX old versions
+			//$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
+			//$wp_content = preg_replace('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
 		}
 		
 		// Convert mini [php][/php] tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
-			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[/(?:\1)\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[\s*/\s*(?:\1)\s*\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
 		}
 		
 		// Convert inline {php}{/php} tags to crayon tags, if needed
@@ -326,8 +334,8 @@ class CrayonWP {
 			}
 			// Capture post Crayons
 			$captures = self::capture_crayons($post->ID, $post->post_content);
-			self::$post_queue[$id_str] = array();
 			if ($captures['has_captured'] === TRUE) {
+				self::$post_queue[$id_str] = array();
 				foreach ($captures['capture'] as $capture_id=>$capture_content) {
 					self::$post_queue[$id_str][$capture_id] = $capture_content;
 				}
@@ -347,9 +355,9 @@ class CrayonWP {
 					}
 					// Capture comment Crayons
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
-			        self::$comment_queue[$id_str] = array();
 			        if ($captures['has_captured'] === TRUE) {
 			        	self::$comment_captures[$id_str] = $captures['content'];
+			        	self::$comment_queue[$id_str] = array();
 				        foreach ($captures['capture'] as $capture_id=>$capture_content) {
 				        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
 				        }
@@ -525,6 +533,12 @@ class CrayonWP {
 		}
 		self::$is_excerpt = FALSE;
 		return $the_excerpt;
+	}
+	
+	public static function pre_tag($matches) {
+		$atts = $matches[1];
+		$atts = preg_replace('#\bclass\s*=\s*(["\'])(.*?)\1#msi', ' $2 ', $atts);
+		return '[crayon ' . $atts . ']' . $matches[2] . '[/crayon]';
 	}
 	
 	// Check if the $[crayon]...[/crayon] notation has been used to ignore [crayon] tags within posts

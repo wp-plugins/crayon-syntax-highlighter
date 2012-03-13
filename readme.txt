@@ -114,7 +114,7 @@ You can change settings and view help under <strong>Settings > Crayon</strong> i
 
 <code>[crayon lang="php"] your code [/crayon]</code>
 <code>[crayon url="http://example.com/code.txt" /]</code>
-<code>[crayon url="/local-path-defined-in-settings/code.java" /]</code>
+<code>[crayon url="/relative-path-added-to-local-path-defined-in-settings/code.java" /]</code>
 
 You can use &lt;pre&gt;:
 
@@ -124,7 +124,9 @@ You can also use Mini Tags:
 
 <code>[php theme="twilight"]your code[/php]</code>
 
-Please see the contextual help under <strong>Settings > Crayon</strong> for quick info about languages, themes, etc.
+<code>[php url="https://raw.github.com/somefile.php" /]</code>
+
+Please see the <a href="http://bit.ly/crayonsyntax" target="_blank">documentation</a> for more details.
 
 = I need help, now! =
 
@@ -141,13 +143,17 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.8.4
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
 * Added ability to decode attributes, which is enabled by default to avoid seeing encoded strings in the title, and also to allow encoded angle/square brackets in the title that would otherwise clash with the Crayon tag brackets if left unencoded.
+* Added ability to use the class attribute in &lt;pre&gt; tags for specifying settings like url, mark, lang, toolbar and all other valid settings like in a normal [crayon] tag. This will ensure your &lt;pre&gt; tags remain valid XHTML markup even with Crayon disabled.
 * Added Scheme language thanks to https://github.com/harry75369
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...
-* Fixed a bug causing case insensitive Boolean settings to fail at times 
+* Fixed a bug causing case insensitive Boolean settings to fail at times
+* Added ability to use closed Mini Tags like [php ... \] when you're just giving a URL
+* Added lenient spaces for closed tags
+* Fixed element content text in XHTML to avoid capturing "" as strings
 
 = 1.8.3 =
 * Added inline support for Crayons using the inline="true" attribute or even cooler with {php}...{/php} style tags.

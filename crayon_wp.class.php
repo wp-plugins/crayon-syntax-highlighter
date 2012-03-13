@@ -131,7 +131,6 @@ class CrayonWP {
 		}
 		// Set attributes, should be set after URL to allow language auto detection
 		$crayon->language($lang);
-		
 		$crayon->title($title);
 		$crayon->marked($mark);
 		$crayon->is_inline($inline);
@@ -197,13 +196,13 @@ class CrayonWP {
 		
 		// Convert mini [php][/php] tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
-			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)\](.*?)\[\s*/\s*(?:\1)\s*\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
-			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')\b([^\]]*)\](.*?)\[\s*/\s*(?:\1)\s*\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')\b([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
 		}
 		
 		// Convert inline {php}{/php} tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
-			$wp_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')\b([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
 		}
 		
 		// Convert [plain] tags into <pre><code></code></pre>, if needed

@@ -154,6 +154,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...
 * Fixed a bug causing case insensitive Boolean settings to fail at times
+* Fixed a bug causing a [crayon ... /] tags to be recognised as [c ... /] tags (added a \b) 
 * Added ability to use closed Mini Tags like [php ... \] when you're just giving a URL
 * Added lenient spaces for closed tags
 * Fixed element content text in XHTML to avoid capturing "" as strings

@@ -131,7 +131,7 @@ class CrayonHighlighter {
 			} else {
 				if (empty($this->code)) {
 					// If code is also given, just use that
-					$this->error("The provided URL ('$this->url'), parsed as ('$url'), could not be accessed locally or remotely.");
+					$this->error("The provided URL ('$this->url'), parsed remotely as ('$url'), could not be accessed.");
 				}
 			}
 		}
@@ -151,6 +151,7 @@ class CrayonHighlighter {
 			// Disable highlighting for errors and empty code
 			return;
 		}
+		
 		if ($this->language === NULL) {
 			$this->language($this->setting_val(CrayonSettings::FALLBACK_LANG));
 		}

@@ -551,7 +551,7 @@ class CrayonWP {
 		$content = $matches[6];
 		if (!empty($class)) {
 			// Allow hyphenated "setting-value" style settings in the class attribute
-			$class = preg_replace('#\b([\w-]+)-(\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
+			$class = preg_replace('#\b([A-Za-z-]+)-(\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
 			return "[crayon $pre_class $class $post_class] $content [/crayon]";
 		} else {
 			return "[crayon $atts] $content [/crayon]";

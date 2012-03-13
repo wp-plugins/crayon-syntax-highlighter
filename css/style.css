@@ -319,9 +319,8 @@ coloring etc.
 	box-shadow: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
+	white-space: nowrap;
 	overflow: auto;
-	/*white-space: pre-wrap;*/
-	white-space: pre;
 	color: #000;
     background: #FFF;
 	resize: none;

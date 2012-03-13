@@ -146,6 +146,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added ability to use the class attribute in &lt;pre&gt; tags for specifying settings like url, mark, lang, toolbar and all other valid settings like in a normal [crayon] tag. This will ensure your &lt;pre&gt; tags remain valid XHTML markup even with Crayon disabled.
 * Added ability to specify hyphen-separated-values in the class attribute of a &lt;pre&gt; tag to make them look like actual class selectors. E.g. &lt;pre class="lang-objc toolbar-false"&gt;...&lt;/pre&gt;. The setting name is made up of letters and hyphens ONLY, the value is whatever is left between the last hyphen and the next whitespace character.  
 * Added Scheme language thanks to https://github.com/harry75369
+* Added ABAP language with help from Christian Fein
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup

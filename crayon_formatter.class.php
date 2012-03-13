@@ -79,6 +79,8 @@ class CrayonFormatter {
 		
 		// We can print either block or inline, inline is treated differently, factor out common stuff here
 		$output = '';
+		// Used for style tag
+		$main_style = $code_style = $toolbar_style = $info_style = $font_style = $line_style = '';
 		// Unique ID for this instance of Crayon
 		$uid = 'crayon-' . $hl->id();
 		// Print theme id
@@ -100,43 +102,52 @@ class CrayonFormatter {
 		// Inline margin
 		if ($hl->is_inline()) {
 			$inline_margin = $hl->setting_val(CrayonSettings::INLINE_MARGIN) . 'px !important;';
-			$output .= '<style type="text/css" media="all">' . "#$uid { margin: 0 {$inline_margin} }</style>";
+			//$output .= '<style type="text/css" media="all">' . "#$uid { margin: 0 {$inline_margin} }</style>";
 		}
 		
 		// Determine font size
 		// TODO improve logic
-		$font_style = '';
 		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
 			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
-			$font_height = ($font_size + 4) . 'px !important;';
-			$toolbar_height = ($font_size + 8) . 'px !important;';
-			$font_style .= "#$uid * { font-size: $font_size line-height: $font_height }";
+			$font_height = $font_size * 1.2 . 'px !important;';
+			$toolbar_height = $font_size * 1.2 . 'px !important;';
+			$info_height = $font_size * 1.2 . 'px !important;';
+			//$font_style .= "#$uid * { font-size: $font_size line-height: $font_height }";
+			
+			$font_style .= "font-size: $font_size line-height: $font_height";
+//			$inline_font_style .= "font-size: $font_size line-height: $font_height";
+			$line_style .= "height: $font_height";
+			
 			if ($hl->is_inline()) {
-				$font_style .= "#$uid { font-size: $font_size }\n";
+				//$font_style .= "#$uid { font-size: $font_size }\n";
+				$font_style .= "font-size: $font_size";
 			} else {
-				$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
-				$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
+				//$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
+				$toolbar_style .= "height: $toolbar_height line-height: $toolbar_height";
+				$info_style .= "min-height: $info_height line-height: $info_height";
+//				$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
 			}
 		} else if (!$hl->is_inline()) {
 			if (($font_size = CrayonGlobalSettings::get(CrayonSettings::FONT_SIZE)) !== FALSE) {
 				$font_size = $font_size->def() . 'px !important;';
 				$font_height = ($font_size + 4) . 'px !important;';
 				// Correct font CSS for WP 3.3
-				$font_style .= "#$uid .crayon-plain { font-size: $font_size line-height: $font_height }";
+//				$font_style .= "#$uid .crayon-plain { font-size: $font_size line-height: $font_height }";
 			}
 		}
 		
 		// Produce style for individual crayon
+		// TODO
 		if (!empty($font_style)) {
-			$output .= '<style type="text/css" media="all">'.$font_style.'</style>';
+			//$output .= '<style type="text/css" media="all">'.$font_style.'</style>';
 		}
 		
 		// This will return from function with inline print
 		if ($hl->is_inline()) {
 			$wrap = !$hl->setting_val(CrayonSettings::INLINE_WRAP) ? 'crayon-syntax-inline-nowrap' : '';
 			$output .= '
-			<span id="'.$uid.'" class="crayon-syntax crayon-syntax-inline '.$wrap.' crayon-theme-'.$theme_id_dashed.' crayon-theme-'.$theme_id_dashed.'-inline crayon-font-'.$font_id_dashed.'">' .
-				'<span class="crayon-pre">' . $code . '</span>' . 
+			<span id="'.$uid.'" class="crayon-syntax crayon-syntax-inline '.$wrap.' crayon-theme-'.$theme_id_dashed.' crayon-theme-'.$theme_id_dashed.'-inline crayon-font-'.$font_id_dashed.'" style="'.$font_style.'">' .
+				'<span class="crayon-pre" style="'.$font_style.'">' . $code . '</span>' . 
 			'</span>';
 			return $output;
 		}
@@ -182,9 +193,9 @@ class CrayonFormatter {
 			}
 			// Generate the lines
 			$line_num = $start_line + $i - 1;
-			$print_code .= '<div class="crayon-line' . $marked_line . $striped_line . '" id="line-' . $line_num . '">' . $code_line . '</div>';
+			$print_code .= '<div class="crayon-line' . $marked_line . $striped_line . '" id="line-' . $line_num . '" style="'.$line_style.'">' . $code_line . '</div>';
 			if (!is_string($line_numbers)) {
-				$print_nums .= '<div class="crayon-num' . $marked_num . $striped_num . '">' . $line_num . '</div>';
+				$print_nums .= '<div class="crayon-num' . $marked_num . $striped_num . '" style="'.$line_style.'">' . $line_num . '</div>';
 			}
 		}
 		// If $line_numbers is a string, display it
@@ -272,10 +283,10 @@ class CrayonFormatter {
 				$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
 				$readonly = $touch ? '' : 'readonly';
 				$print_plain = $print_plain_button = '';
-				$print_plain = '<textarea class="crayon-plain" settings="' . $plain_settings . '" '. $readonly .'  wrap="off" style="' . $plain_style .'">' . self::clean_code($hl->code()) . '</textarea>';
+				$print_plain = '<textarea class="crayon-plain" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
 				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="'.crayon__('Toggle Plain Code').'"></a>' : '';
 				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
-					'<a class="crayon-copy-button crayon-button" show_txt="'.crayon__('Press %s to Copy, %s to Paste').'" title="'.crayon__('Copy Plain Code').'"></a>' : '';
+					'<a class="crayon-copy-button crayon-button" data-text="'.crayon__('Press %s to Copy, %s to Paste').'" title="'.crayon__('Copy Plain Code').'"></a>' : '';
 			} else {
 				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = '';
 			}
@@ -297,16 +308,13 @@ class CrayonFormatter {
 				$button_preload .= '<a class="crayon-'.$name.'-button crayon-button crayon-pressed crayon-invisible"></a>';
 			}
 			$toolbar = '
-			<div class="crayon-toolbar" settings="'.$toolbar_settings.'">'.$print_title.'
+			<div class="crayon-toolbar" data-settings="'.$toolbar_settings.'" style="'.$toolbar_style.'">'.$print_title.'
 			<div class="crayon-tools">'.$buttons.$button_preload.'</div>
-			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info"></div>';
+			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info" style="'.$info_style.'"></div>';
 
 		} else {
 			$toolbar = $buttons = $plain_settings = '';
 		}
-		
-		// Print strings
-		$main_style = $code_style = '';
 		
 		// Line numbers visibility
 		$num_vis = $num_settings = '';
@@ -384,21 +392,21 @@ class CrayonFormatter {
 		
 		// Produce output
 		$output .= '
-		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.'" crayon-os="'.$crayon_os.'" settings="'.$code_settings.'" style="'.$code_style.'">
+		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.'" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
 		'.$toolbar.'
 			<div class="crayon-main" style="'.$main_style.'">
-				<table class="crayon-table" cellspacing="0" cellpadding="0">
+				<table class="crayon-table">
 					<tr class="crayon-row">';
 
 		if ($print_nums !== FALSE) {
 		$output .= '
-				<td class="crayon-nums '.$num_vis.'" settings="'.$num_settings.'">
+				<td class="crayon-nums '.$num_vis.'" data-settings="'.$num_settings.'" style="'.$font_style.'">
 					<div class="crayon-nums-content">'.$print_nums.'</div>
 				</td>';
 		}
 		// XXX
 		$output .= '
-						<td class="crayon-code"><div class="crayon-pre">'.$print_code.'</div></td>
+						<td class="crayon-code"><div class="crayon-pre" style="'.$font_style.'">'.$print_code.'</div></td>
 					</tr>
 				</table>
 			</div>

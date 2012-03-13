@@ -42,29 +42,17 @@ coloring etc.
     overflow: auto;
 }
 
-.crayon-popup {
-	/*position: static !important;*/
-}
-
-.crayon-popup .crayon-plain {
-	display: block !important;
-	width: 100% !important;
-	height: 100% !important;
-	opacity: 100 !important;
-	position: relative !important;
-}
-
-.crayon-popup .crayon-main,
+/*.crayon-popup .crayon-main,
 .crayon-popup .crayon-table {
-	/*max-width: 0;
+	max-width: 0;
 	max-height: 0;
 	display: block !important;
 	opacity: 100 !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	width: 100% !important;
-	height: auto !important;*/
-}
+	height: auto !important;
+}*/
 
 .crayon-syntax,
 .crayon-syntax .crayon-main,
@@ -86,7 +74,13 @@ coloring etc.
 	margin-right: 0px !important;
 	margin-bottom: 0px !important;
 	width: auto !important;
+	border-spacing: 0 !important;
 	/* left margin needed for nums toggle */
+}
+
+.crayon-syntax .crayon-table .td
+.crayon-syntax .crayon-table .tr {
+	padding: 0 !important;
 }
 
 .crayon-syntax td {
@@ -106,6 +100,20 @@ coloring etc.
 }
 /* End General ===================== */
 
+/* Popup ========================= */
+.crayon-popup {
+	/*position: static !important;*/
+}
+
+.crayon-popup .crayon-plain {
+	display: block !important;
+	width: 100% !important;
+	height: 100% !important;
+	opacity: 100 !important;
+	position: relative !important;
+}
+/* End Popup ========================= */
+
 /* Line Numbers ==================== */
 .crayon-syntax .crayon-num {
     text-align: center;
@@ -124,12 +132,13 @@ coloring etc.
 	overflow: hidden;
 	display: none;
 	z-index: 3;
-	min-height: 20px;
 	padding: 0px;
-	line-height: 20px;
+	/* Must be able to expand! */
+	min-height: 18px;
+	line-height: 18px;
 }
 .crayon-syntax .crayon-info div {
-	padding: 4px !important;
+	padding: 2px !important;
 	text-align: center;
 }
 
@@ -151,13 +160,13 @@ coloring etc.
 
 	background-repeat: no-repeat;
 	background-position: center;
-    height: 16px;
+    /*height: 16px;*/
     line-height: 16px;
-    margin: 2px 2px !important;
+    padding: 0px 2px !important;
     border: none;
-    border-radius: 5px;
+    /*border-radius: 5px;
     -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
+    -moz-border-radius: 5px;*/
     text-decoration: none;
 }
 
@@ -214,19 +223,19 @@ coloring etc.
 	background-image: url('images/toolbar/plus.png');
 	background-position: center;
 	background-repeat: no-repeat;
-	margin: 0px 4px;
 	float: left;
+	min-width: 15px;
 }
 
 /* Language */
 .crayon-syntax .crayon-toolbar .crayon-language {
-	padding-right: 3px !important; 
+	padding-right: 4px !important; 
 }
 
 /* Tools */
-.crayon-syntax .crayon-toolbar .crayon-tools {
+/*.crayon-syntax .crayon-toolbar .crayon-tools {
 	padding-right: 2px !important; 
-}
+}*/
 
 .crayon-syntax .crayon-title {
     float: left;
@@ -259,17 +268,40 @@ coloring etc.
 }
 
 /* Default Font */
-.crayon-syntax,
-.crayon-syntax * {
+.crayon-syntax /*,
+.crayon-syntax **/ {
     font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;
-	font-size: 12px;
-    line-height: 16px;
     font-weight: 500;
+}
+.crayon-syntax,
+.crayon-syntax .crayon-nums,
+.crayon-syntax .crayon-pre {
+	font-size: 12px;
+	line-height: 16px;
 }
 .crayon-syntax .crayon-num,
 .crayon-syntax .crayon-line {
-    height: 16px;
+	height: 16px;
 }
+
+.crayon-syntax .crayon-num,
+.crayon-syntax .crayon-line,
+.crayon-syntax .crayon-toolbar *,
+.crayon-syntax .crayon-pre * {
+	font-family: inherit;
+	font-size: inherit !important;
+	line-height: inherit !important;
+	font-weight: inherit !important;
+}
+.crayon-syntax .crayon-toolbar .crayon-tools,
+.crayon-syntax .crayon-toolbar .crayon-tools * {
+	height: inherit !important;
+}
+
+/*.crayon-syntax .crayon-num,
+.crayon-syntax .crayon-line {
+    height: 16px;
+}*/
 
 .crayon-syntax .crayon-plain {
 	width: 100%;
@@ -292,6 +324,7 @@ coloring etc.
 	color: #000;
     background: #FFF;
 	resize: none;
+	border-radius: 0;
 }
 /* End Code ======================== */
 

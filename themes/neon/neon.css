@@ -17,7 +17,7 @@ Author URI: http://ak.net84.net/
 /* Inline Style */
 .crayon-theme-neon-inline {
 	border: 1px solid #333 !important;
-	background: #4d4d4d !important;
+	background: #333 !important;
 }
 
 .crayon-theme-neon span {
@@ -122,14 +122,14 @@ Author URI: http://ak.net84.net/
 }
 .crayon-theme-neon a.crayon-button:hover,
 .crayon-theme-neon a.crayon-button.crayon-pressed:hover {
-	background-color: #ddd;
+	background-color: #ccc;
     color: #666;
 }
 /* :active MUST come after :hover */
 .crayon-theme-neon a.crayon-button.crayon-pressed,
 .crayon-theme-neon a.crayon-button.crayon-pressed:active,
 .crayon-theme-neon a.crayon-button:active {
-	background-color: #777;
+	background-color: #999;
     color: #ccc;
 }
 /* End Code Style ================== */

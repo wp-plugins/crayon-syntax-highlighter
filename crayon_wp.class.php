@@ -186,20 +186,10 @@ class CrayonWP {
 		
 		// Convert <pre> tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
-			
-			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre(?=(?:([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*))?)([^>]*)>(.*?)<\s*/\s*pre\s*>#msi', 'CrayonWP::pre_tag', $wp_content);
-			
-			
-			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(?=(?:(.*?)\bclass\s*=\s*(["\'])(.*?)\2(.*?))?)(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;#msi', 'CrayonWP::pre_tag', $wp_content);
-			
 			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
-//			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre([^\>]*)>(.*?)<\s*/\s*pre\s*>(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
+			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre(?=(?:([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*))?)([^>]*)>(.*?)<\s*/\s*pre\s*>#msi', 'CrayonWP::pre_tag', $wp_content);
 			// XXX For encoded <pre></pre> tags
-//			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', 'CrayonWP::pre_tag', $wp_content);
-			
-			// TODO works, sort of
-			//$wp_content = preg_replace_callback('#(?<!\$)<pre([^\>]*?)(\bclass\s*=\s*(["\'])(.*?)\3)([^\>]*)>#msi', 'CrayonWP::pre_tag', $wp_content);
-			
+			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(?=(?:(.*?)\bclass\s*=\s*(["\'])(.*?)\2(.*?))?)(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;#msi', 'CrayonWP::pre_tag', $wp_content);
 			// XXX old versions
 			//$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
 			//$wp_content = preg_replace('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);

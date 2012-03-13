@@ -148,6 +148,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup
+* Line numbers now use UID in id to avoid duplicates
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...
 * Fixed a bug causing case insensitive Boolean settings to fail at times

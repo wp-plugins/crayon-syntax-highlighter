@@ -109,9 +109,9 @@ class CrayonFormatter {
 		// TODO improve logic
 		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
 			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
-			$font_height = $font_size * 1.2 . 'px !important;';
-			$toolbar_height = $font_size * 1.2 . 'px !important;';
-			$info_height = $font_size * 1.2 . 'px !important;';
+			$font_height = $font_size * 1.25 . 'px !important;';
+			$toolbar_height = $font_size * 1.5 . 'px !important;';
+			$info_height = $font_size * 1.25 . 'px !important;';
 			//$font_style .= "#$uid * { font-size: $font_size line-height: $font_height }";
 			
 			$font_style .= "font-size: $font_size line-height: $font_height";

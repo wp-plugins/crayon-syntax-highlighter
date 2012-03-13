@@ -144,8 +144,8 @@ coloring etc.
 
 .crayon-syntax .crayon-toolbar,
 .crayon-syntax .crayon-toolbar * {
-    height: 20px;
-    line-height: 20px;
+    height: 18px;
+    line-height: 18px;
     padding: 0px;
 }
 
@@ -161,7 +161,7 @@ coloring etc.
 	background-repeat: no-repeat;
 	background-position: center;
     /*height: 16px;*/
-    line-height: 16px;
+    line-height: 15px;
     padding: 0px 2px !important;
     border: none;
     /*border-radius: 5px;
@@ -229,7 +229,7 @@ coloring etc.
 
 /* Language */
 .crayon-syntax .crayon-toolbar .crayon-language {
-	padding-right: 4px !important; 
+	padding-right: 8px !important; 
 }
 
 /* Tools */
@@ -275,13 +275,14 @@ coloring etc.
 }
 .crayon-syntax,
 .crayon-syntax .crayon-nums,
+.crayon-syntax .crayon-plain,
 .crayon-syntax .crayon-pre {
 	font-size: 12px;
-	line-height: 16px;
+	line-height: 15px;
 }
 .crayon-syntax .crayon-num,
 .crayon-syntax .crayon-line {
-	height: 16px;
+	height: 15px;
 }
 
 .crayon-syntax .crayon-num,

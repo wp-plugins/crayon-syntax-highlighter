@@ -26,7 +26,9 @@ It also supports some neat features like:
 * Crayons in comments
 * &#96;Backquotes&#96; become &lt;code&gt;
 * Plain Tag ([plain]...[/plain]) for quick &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;
-* &lt;pre&gt; tag support
+* &lt;pre&gt; tag support, option to use <code>setting-value</code> in the class attribute
+* Valid HTML 5 markup
+* <a href="#" target="_blank">Visual & HTML editor compatible</a> 
 * Mobile/touchscreen device detection
 * Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Tab sizes
@@ -47,6 +49,7 @@ Languages are defined in language files using Regular Expressions to capture ele
 See http://ak.net84.net/projects/crayon-language-file-specification/ to learn how to make your own.
 
 * Default Langauge (one size fits all, highlights generic code)
+* ABAP
 * ActionScript
 * Apache
 * AutoIt
@@ -100,7 +103,6 @@ These are helpful for discovering new features.
 
 **Planned Features**
 
-* Visual Editor Support
 * Theme Editor
 
 == Installation ==

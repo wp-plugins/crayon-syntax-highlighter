@@ -38,11 +38,20 @@ class CrayonTinyMCEDialog {
 		$tag_id = 'crayon-tinymce-'.$id.'-check';
 		echo '<input type="checkbox" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-tinymce-check" data-id="'.$id.'" />';
 	}
+	
+	public static function textbox($id) {
+		$tag_id = 'crayon-tinymce-'.$id.'-input';
+		echo '<input type="text" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-tinymce-input" data-id="'.$id.'" />';
+	}
 }
 
 ?>
 
 	<table id="crayon-tinymce-table" class="describe">
+		<tr>
+			<th>Title</th>
+			<td><?php CrayonTinyMCEDialog::textbox('title'); ?></td>
+		</tr>
 		<tr>
 			<th>Language</th>
 			<td><?php CrayonTinyMCEDialog::select_resource('lang', $langs, $curr_lang); ?></td>

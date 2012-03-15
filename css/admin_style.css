@@ -259,6 +259,10 @@
 	background-color: #f4f4f4;
 }
 
+#crayon-tinymce-title-input {
+	width: 100%;
+}
+
 #TB_ajaxContent.crayon-tinymce-ajax {
 	overflow: auto !important;
 	padding: 0 !important;

@@ -146,8 +146,18 @@ var CrayonTinyMCE = function() {
                 		} else {
                 			crayon_tinymce_warning.hide();
                 		}
-            			var shortcode = br_before + '<pre class="crayon-syntax-pre ';
+            			var shortcode = br_before + '<pre ';
+            			
+            			// Add title if given
+            			jQuery('.crayon-tinymce-input[data-id="title"]').each(function() {
+            				var value = jQuery(this).val();
+            				if (value.length > 0) {
+            					shortcode += 'title="' + value + '" ';
+            				}
+            			});
+            			
             			var atts = {};
+            			shortcode += 'class="crayon-syntax-pre '; 
             			
             			// Always add language
             			jQuery('.crayon-tinymce-input[data-id="lang"]').each(function() {
@@ -178,6 +188,8 @@ var CrayonTinyMCE = function() {
             			content = content.replace(/([^\t\r\n]+)/gm,'<code class="crayon-code-line">$1</code>');
             			content = content.replace(/^([\s]*?)$/gm,'<code class="crayon-code-line"></code>');
             			shortcode += ' decode-true">\n' + content + '\n</pre>' + br_after;
+            			
+            			console.log(shortcode);
             			
             			// Insert the tag and hide dialog
             			tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);

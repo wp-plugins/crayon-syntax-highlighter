@@ -12,7 +12,7 @@ class CrayonTinyMCEWP {
 	public static function init_tinymce($init) {
 //		$init['content_css'] .= ', http://localhost/crayon/wp-content/plugins/crayon-syntax-highlighter/css/admin_style.css?ver=1.8.3';
 //		$init['theme_advanced_blockformats'] = 'p,div,h1,h2,h3,h4,h5,h6,pre,code';
-//		$init['extended_valid_elements'] = 'pre[*],code[*],iframe[*]';
+		$init['extended_valid_elements'] .= ',pre[*],code[*],iframe[*]';
 		// TODO load settings?
 		CrayonSettingsWP::load_settings(TRUE);
 		$init['crayon_used'] = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED);
@@ -21,6 +21,7 @@ class CrayonTinyMCEWP {
 		$line_break = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_LINE_BREAK);
 		$init['crayon_br_after'] = $line_break == 0 || $line_break == 1;
 		$init['crayon_br_before'] = $line_break == 0 || $line_break == 2;
+		
 //		$init['crayon_add_overridden'] = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_ADD_OVERRIDDEN);
 		return $init;
 	}

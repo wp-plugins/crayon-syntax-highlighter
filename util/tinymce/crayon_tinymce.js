@@ -149,6 +149,12 @@ var CrayonTinyMCE = function() {
             			var shortcode = br_before + '<pre class="crayon-syntax-pre ';
             			var atts = {};
             			
+            			// Always add language
+            			jQuery('.crayon-tinymce-input[data-id="lang"]').each(function() {
+            				var value = jQuery(this).val();
+            				atts['lang'] = value;
+            			});
+            			
             			// Grab overides
                     	jQuery('.crayon-tinymce-check[data-id]').each(function() {
                     		var id = jQuery(this).attr('data-id');
@@ -159,12 +165,11 @@ var CrayonTinyMCE = function() {
                         			var value = input.val();
                         			atts[id] = value;
                         		}
-                        		console.log('id ' + id + ' value ' + value);
                     		}
                     	});
             			
             			for (var att in atts) {
-            				shortcode += att + '-' + atts[att] + ' ';
+            				shortcode += att + '_' + atts[att] + ' ';
             			}
             			
             			var content = jQuery('#crayon-tinymce-code');

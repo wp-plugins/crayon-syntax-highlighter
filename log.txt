@@ -1,0 +1,12 @@
+==============================================================================
+Crayon Syntax Highlighter Log Entry
+==============================================================================
+4:07:20 AM - 15 Mar 2012
+string(170) "The provided URL ('http://en.wikipedia.org/wiki/ABAP#.22Helloworld.22'), parsed remotely as ('http://en.wikipedia.org/wiki/ABAP#.22Helloworld.22'), could not be accessed."
+------------------------------------------------------------------------------
+==============================================================================
+Crayon Syntax Highlighter Log Entry
+==============================================================================
+4:07:23 AM - 15 Mar 2012
+string(170) "The provided URL ('http://en.wikipedia.org/wiki/ABAP#.22Helloworld.22'), parsed remotely as ('http://en.wikipedia.org/wiki/ABAP#.22Helloworld.22'), could not be accessed."
+------------------------------------------------------------------------------

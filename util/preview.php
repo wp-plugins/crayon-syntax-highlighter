@@ -1,9 +1,7 @@
 <?php
 
 require_once (dirname(dirname(__FILE__)) . '/crayon_wp.class.php');
-
-$wp_root_path = str_replace('wp-content/plugins/' . CRAYON_DIR, '', CRAYON_ROOT_PATH);
-require_once ($wp_root_path . 'wp-load.php');
+require_once (CrayonWP::wp_load_path());
 
 echo '<link rel="stylesheet" href="', plugins_url(CRAYON_STYLE, dirname(__FILE__)),
 	'?ver=', $CRAYON_VERSION, '" type="text/css" media="all" />';

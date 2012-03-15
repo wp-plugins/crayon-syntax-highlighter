@@ -143,6 +143,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.8.4
+* Added a brand new Tag Editor in the Visual Editor toolbar! <strong>Greatly</strong> simplifies adding code to posts in the Visual Editor. You can also switch between Visual and HTML modes to verify your code before posting!
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
 * Added ability to decode attributes, which is enabled by default to avoid seeing encoded strings in the title, and also to allow encoded angle/square brackets in the title that would otherwise clash with the Crayon tag brackets if left unencoded.
 * Added ability to use the class attribute in &lt;pre&gt; tags for specifying settings like url, mark, lang, toolbar and all other valid settings like in a normal [crayon] tag. This will ensure your &lt;pre&gt; tags remain valid XHTML markup even with Crayon disabled.
@@ -152,6 +153,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup
+* Improved ajax handling
 * Line numbers now use UID in id to avoid duplicates
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...

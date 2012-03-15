@@ -171,7 +171,9 @@ class CrayonHighlighter {
 				// Decode html entities (e.g. if using visual editor or manually encoding)
 				if ($this->setting_val(CrayonSettings::DECODE)) {
 					$code = CrayonUtil::html_entity_decode($code);
-				} 
+				}
+				// Save code so output is plain output is the same
+				$this->code = $code;
 				// Allow mixed if langauge supports it and setting is set
 				if (!$this->setting_val(CrayonSettings::MIXED) || !$this->language->mode(CrayonParser::ALLOW_MIXED)) {
 					// Format the code with the generated regex and elements

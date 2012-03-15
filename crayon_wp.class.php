@@ -25,6 +25,7 @@ License: GPL2
 */
 require_once ('global.php');
 require_once (CRAYON_HIGHLIGHTER_PHP);
+require_once ('util/crayon_tinymce_wp.class.php');
 require_once ('crayon_settings_wp.class.php');
 
 if (defined('ABSPATH')) {
@@ -538,12 +539,14 @@ class CrayonWP {
 		$post_class = $matches[4];
 		$atts = $matches[5];
 		$content = $matches[6];
+		// Strip internal code lines used in Visual Editor
+		$content = preg_replace('#<\s*code\b.*?\bclass\s*=\s*"\s*crayon-code-line\s*"[^>]*>(.*?)<\s*/\s*code\s*>#msi', '$1', $content);
 		if (!empty($class)) {
 			// Allow hyphenated "setting-value" style settings in the class attribute
 			$class = preg_replace('#\b([A-Za-z-]+)-(\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
-			return "[crayon $pre_class $class $post_class] $content [/crayon]";
+			return "[crayon $pre_class $class $post_class]{$content}[/crayon]";
 		} else {
-			return "[crayon $atts] $content [/crayon]";
+			return "[crayon $atts]{$content}[/crayon]";
 		}
 	}
 	
@@ -653,6 +656,11 @@ class CrayonWP {
 		return plugin_basename(__FILE__);
 	}
 	
+	public static function wp_load_path() {
+		$wp_root_path = str_replace('wp-content/plugins/' . CRAYON_DIR, '', CRAYON_ROOT_PATH);
+		return $wp_root_path . 'wp-load.php';
+	}
+	
 }
 
 // Only if WP is loaded and not in admin
@@ -681,6 +689,10 @@ if (defined('ABSPATH') && !is_admin()) {
 	
 	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 	add_action('template_redirect', 'CrayonWP::wp_head');
+}
+
+if (defined('ABSPATH')) {
+	add_action('init', 'CrayonTinyMCEWP::init');
 }
 
 ?>

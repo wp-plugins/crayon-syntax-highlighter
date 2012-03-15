@@ -65,6 +65,7 @@ define('CRAYON_HELP_FILE', CRAYON_UTIL_PATH . 'help.htm');
 define('CRAYON_JQUERY_POPUP', CRAYON_JS_DIR . 'jquery.popup.js');
 define('CRAYON_JS', CRAYON_JS_DIR . 'crayon.js');
 define('CRAYON_JS_ADMIN', CRAYON_JS_DIR . 'crayon_admin.js');
+define('CRAYON_TINYMCE_JS', CRAYON_UTIL_DIR . 'tinymce/crayon_tinymce.js');
 define('CRAYON_STYLE', CRAYON_CSS_DIR . 'style.css');
 define('CRAYON_STYLE_ADMIN', CRAYON_CSS_DIR . 'admin_style.css');
 define('CRAYON_LOGO', CRAYON_CSS_DIR . 'images/crayon_logo.png');

@@ -213,4 +213,100 @@
 	padding: 0;
 }
 
+/* TinyMCE */
 
+#crayon-tinymce-content,
+#crayon-tinymce-table {
+	width: 100%;
+}
+
+#crayon-tinymce-code {
+	width: 100% !important;
+	height: 200px;
+	white-space: pre;
+	/*white-space: nowrap;
+	overflow: auto;*/
+}
+
+.wp_themeSkin span.mce_crayon_tinymce {
+	background: url(images/crayon_tinymce.png);
+}
+
+.mce_crayon_tinymce_highlight {
+	border: 1px solid #7c9dde !important;
+}
+
+.mce_crayon_tinymce_highlight span.mce_crayon_tinymce,
+.wp_themeSkin .mceButtonEnabled:hover span.mce_crayon_tinymce, .wp_themeSkin .mceButtonActive span.mce_crayon_tinymce {
+	background-position: -20px 0;
+}
+
+#crayon-tinymce-table {
+	padding: 10px;
+}
+
+#crayon-tinymce-table th {
+	width: 100px;
+}
+
+#crayon-tinymce-table span {
+	margin-left: 4px;
+}
+
+#crayon-tinymce-clear {
+	margin-left: 10px;
+	color: #666;
+	background-color: #f4f4f4;
+}
+
+#TB_ajaxContent.crayon-tinymce-ajax {
+	overflow: auto !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	width: 100% !important;
+/*	height: auto !important;*/
+}
+
+#crayon-tinymce-clear {
+	display: none;
+}
+
+.crayon-syntax-pre {
+	background: red;
+	white-space: pre;
+	overflow: auto;
+	display: block;
+	word-wrap: break-word;
+}
+
+.crayon-question {
+	padding: 1px 4px;
+	/*background: url(images/circle.png) center no-repeat*/;
+	background: #83b3cb;
+	text-decoration: none;
+	color: white;
+	/*color: transparent*/;
+	/*overflow:hidden;
+	text-indent: -999px;*/
+	border-radius: 10px;
+	height: 15px;
+	width: 15px;
+}
+
+.crayon-question:hover {
+	color: white;
+	background: #a6d6ef;
+}
+
+#crayon-tinymce-warning {
+	display: none;
+}
+
+.crayon-tinymce-info {
+	padding: 5px !important;
+	margin: 2px 0 !important;
+}
+
+#crayon-tinymce-submit {
+	margin-bottom: 5px;
+}

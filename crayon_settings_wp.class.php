@@ -562,7 +562,9 @@ class CrayonSettingsWP {
 		}
 		// Preview Box
 		echo '<div id="crayon-preview" url="', plugins_url(CRAYON_PREVIEW_PHP, __FILE__), '"></div>';
+		echo '<div id="crayon-preview-info">';
 		printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>');
+		echo '</div>';
 		// Preview checkbox
 		echo '<div style="height:10px;"></div>';
 		self::checkbox(array(CrayonSettings::PREVIEW, crayon__('Enable Live Preview')), FALSE, FALSE);

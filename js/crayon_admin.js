@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
 var CrayonSyntaxAdmin = new function() {
 	
 	// Preview
-	var preview, preview_cbox, preview_url, preview_height, preview_timer, preview_delay_timer, preview_get;
+	var preview, preview_info, preview_cbox, preview_url, preview_height, preview_timer, preview_delay_timer, preview_get;
 	// The DOM object ids that trigger a preview update
 	var preview_obj_names = [];
 	// The jQuery objects for these objects
@@ -78,6 +78,7 @@ var CrayonSyntaxAdmin = new function() {
 		
 		// Preview
 		preview = jQuery('#crayon-preview');
+		preview_info = jQuery('#crayon-preview-info');
 		preview_url = preview.attr('url');
 		preview_cbox = jQuery('#preview');
 		preview_register();
@@ -186,9 +187,11 @@ var CrayonSyntaxAdmin = new function() {
 		crayon_log('preview_toggle');
 	    if ( preview_cbox.is(':checked') ) {
 	    	preview.show();
+	    	preview_info.show();
 	    	preview_update();
 	    } else {
 	    	preview.hide();
+	    	preview_info.hide();
 	    }
 	}
 	

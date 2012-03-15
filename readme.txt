@@ -154,6 +154,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup
 * Improved ajax handling
+* Cleaned up the settings screen
 * Line numbers now use UID in id to avoid duplicates
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...

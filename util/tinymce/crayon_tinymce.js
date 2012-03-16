@@ -1,50 +1,37 @@
 
 console.log('load tiny');
 
-// Must load after CrayonVisualEditor
-
 var CrayonTinyMCE = new function() {
 	
 	// TinyMCE specific
 	var name = 'crayon_tinymce';
-	var btn = name + '_btn';
-	var crayon_used, crayon_ajax, crayon_used_setting, crayon_br_before, crayon_br_after, crayon_br;
-	var crayon_code, crayon_clear, crayon_tinymce_warning;
+	// A copy of the settings
+	var settings = CrayonTagEditorSettings;
+//	var btn = name + '_btn';
+//	var crayon_used, crayon_ajax, crayon_used_setting, crayon_br_before, crayon_br_after, crayon_br;
+//	var crayon_code, crayon_clear, crayon_tinymce_warning;
 	
 	this.loadTinyMCE = function() {
 	    tinymce.PluginManager.requireLangPack(name);
 	 
 	    tinymce.create('tinymce.plugins.Crayon', {
 	        init : function(ed, url) {
-	        	
-	        	// Load settings
-	        	crayon_used = tinyMCE.activeEditor.settings.crayon_used;
-	        	crayon_ajax = tinyMCE.activeEditor.settings.crayon_ajax;
-	        	crayon_used_setting = tinyMCE.activeEditor.settings.crayon_used_setting;
-	        	crayon_br_before = tinyMCE.activeEditor.settings.crayon_br_before;
-	        	crayon_br_after = tinyMCE.activeEditor.settings.crayon_br_after;
-	        	crayon_br = '<p>&nbsp;</p>';
-	        	
-	        	var args = {
-	        			url : url,
-	        			used : crayon_used,
-	        			br_before : crayon_br_before,
-	        			br_after : crayon_br_after,
-	        			br : crayon_br
-	        			};
-	    		jQuery(function() {CrayonVisualEditor.load(args)});
+
+	    		jQuery(function() {
+	    			CrayonTagEditor.load();
+	    			if (settings.used) {
+	    				jQuery('#content_crayon_tinymce').addClass('mce_crayon_tinymce_highlight');
+	    			}
+	        	});
 	    		
 	            ed.addCommand('showCrayon', function() {
-	            	// Load back the args
-	            	CrayonVisualEditor.settings(args);
-	            	
-	            	CrayonVisualEditor.dialog(function(shortcode) {
+	            	CrayonTagEditor.dialog(function(shortcode) {
 	            		tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-	            	});
+	            	}, 'tinymce');
 	            	// Remove highlight
-	            	if (crayon_ajax && !crayon_used) {
+	            	if (settings.ajax_url && !settings.used) {
 	            		// TODO
-	            		var used_url = crayon_ajax + '?' + crayon_used_setting + '=1';
+	            		var used_url = settings.ajax_url + '?' + settings.used_setting + '=1';
 	            		jQuery.get(used_url, function(data) {
 	            			jQuery('#content_crayon_tinymce').removeClass('mce_crayon_tinymce_highlight');
 	            		});

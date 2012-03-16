@@ -87,7 +87,7 @@ class CrayonSettings {
 	const DECODE = 'decode';
 	const DECODE_ATTRIBUTES = 'decode-attributes';
 	const TINYMCE_USED = 'tinymce-used';
-	const TINYMCE_LINE_BREAK = 'tinymce-line-break';
+//	const TINYMCE_LINE_BREAK = 'tinymce-line-break';
 //	const TINYMCE_ADD_OVERRIDDEN = 'tinymce-add-overridden';
 	
 	private static $cache_array;
@@ -205,7 +205,7 @@ class CrayonSettings {
 			new CrayonSetting(self::DECODE, FALSE),
 			new CrayonSetting(self::DECODE_ATTRIBUTES, TRUE),
 			new CrayonSetting(self::TINYMCE_USED, FALSE),
-			new CrayonSetting(self::TINYMCE_LINE_BREAK, array(crayon__('Before & After'), crayon__('After'), crayon__('Before'), crayon__('None'))),
+//			new CrayonSetting(self::TINYMCE_LINE_BREAK, array(crayon__('Before & After'), crayon__('After'), crayon__('Before'), crayon__('None'))),
 //			new CrayonSetting(self::TINYMCE_ADD_OVERRIDDEN, TRUE),
 		);
 		

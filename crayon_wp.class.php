@@ -664,35 +664,35 @@ class CrayonWP {
 }
 
 // Only if WP is loaded and not in admin
-if (defined('ABSPATH') && !is_admin()) {
-	register_activation_hook(__FILE__, 'CrayonWP::install');
-	register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
-	
-	// Filters and Actions
-	add_filter('init', 'CrayonWP::init');
-	
-	// TODO find a better way to handle updates
-	CrayonWP::update();
-	CrayonSettingsWP::load_settings(TRUE);
-	if (CrayonGlobalSettings::val(CrayonSettings::MAIN_QUERY)) {
-		add_action('wp', 'CrayonWP::wp');
-	} else {
-		add_filter('the_posts', 'CrayonWP::the_posts');
-	}
-	
-	// XXX Some themes like to play with the content, make sure we replace after they're done
-	add_filter('the_content', 'CrayonWP::the_content', 100);
-	
-	if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
-		add_filter('comment_text', 'CrayonWP::comment_text', 100);
-	}
-	
-	add_filter('the_excerpt', 'CrayonWP::the_excerpt');
-	add_action('template_redirect', 'CrayonWP::wp_head');
-}
-
 if (defined('ABSPATH')) {
-	add_action('init', 'CrayonTinyMCEWP::init');
+	if (!is_admin()) {
+		register_activation_hook(__FILE__, 'CrayonWP::install');
+		register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
+		
+		// Filters and Actions
+		add_filter('init', 'CrayonWP::init');
+		
+		// TODO find a better way to handle updates
+		CrayonWP::update();
+		CrayonSettingsWP::load_settings(TRUE);
+		if (CrayonGlobalSettings::val(CrayonSettings::MAIN_QUERY)) {
+			add_action('wp', 'CrayonWP::wp');
+		} else {
+			add_filter('the_posts', 'CrayonWP::the_posts');
+		}
+		
+		// XXX Some themes like to play with the content, make sure we replace after they're done
+		add_filter('the_content', 'CrayonWP::the_content', 100);
+		
+		if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
+			add_filter('comment_text', 'CrayonWP::comment_text', 100);
+		}
+		
+		add_filter('the_excerpt', 'CrayonWP::the_excerpt');
+		add_action('template_redirect', 'CrayonWP::wp_head');
+	} else {
+		add_action('init', 'CrayonTagEditorWP::init');
+	}
 }
 
 ?>

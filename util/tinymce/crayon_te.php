@@ -1,4 +1,4 @@
-<div id="crayon-tinymce-content">
+<div id="crayon-te-content">
 
 <?php 
 
@@ -21,8 +21,8 @@ class CrayonTinyMCEDialog {
 	public static function select_resource($id, $resources, $current, $disabled = FALSE) {
 		if (count($resources) > 0) {
 			$disabled = $disabled ? ' disabled="true"' : '';
-			$tag_id = 'crayon-tinymce-'.$id.'-input';
-			echo '<select id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-tinymce-input" data-id="'.$id.'" data-current="'.$current.'"'.$disabled.'>';
+			$tag_id = 'crayon-te-'.$id.'-input';
+			echo '<select id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-te-input" data-id="'.$id.'" data-current="'.$current.'"'.$disabled.'>';
 				foreach ($resources as $resource) {
 					$asterisk = $current == $resource->id() ? ' *' : '';
 					echo '<option value="'.$resource->id().'" '.selected($current, $resource->id()).' >'.$resource->name().$asterisk.'</option>';
@@ -30,24 +30,24 @@ class CrayonTinyMCEDialog {
 			echo '</select>';
 		} else {
 			// None found, default to text box
-			echo '<input type="text" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-tinymce-input" data-id="'.$id.'" data-current="'.$current.'" />';
+			echo '<input type="text" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-te-input" data-id="'.$id.'" data-current="'.$current.'" />';
 		}
 	}
 	
 	public static function checkbox($id) {
-		$tag_id = 'crayon-tinymce-'.$id.'-check';
-		echo '<input type="checkbox" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-tinymce-check" data-id="'.$id.'" />';
+		$tag_id = 'crayon-te-'.$id.'-check';
+		echo '<input type="checkbox" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-te-check" data-id="'.$id.'" />';
 	}
 	
 	public static function textbox($id) {
-		$tag_id = 'crayon-tinymce-'.$id.'-input';
-		echo '<input type="text" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-tinymce-input" data-id="'.$id.'" />';
+		$tag_id = 'crayon-te-'.$id.'-input';
+		echo '<input type="text" id="'.$tag_id.'" name="'.$tag_id.'" class="crayon-te-input" data-id="'.$id.'" />';
 	}
 }
 
 ?>
 
-	<table id="crayon-tinymce-table" class="describe">
+	<table id="crayon-te-table" class="describe">
 		<tr>
 			<th>Title</th>
 			<td><?php CrayonTinyMCEDialog::textbox('title'); ?></td>
@@ -57,8 +57,8 @@ class CrayonTinyMCEDialog {
 			<td><?php CrayonTinyMCEDialog::select_resource('lang', $langs, $curr_lang); ?></td>
 		</tr>
 		<tr>
-			<th>Code <input type="button" id="crayon-tinymce-clear" class="secondary-primary" value="Clear" name="clear" /></th>
-			<td><textarea id="crayon-tinymce-code" name="code"></textarea></td>
+			<th>Code <input type="button" id="crayon-te-clear" class="secondary-primary" value="Clear" name="clear" /></th>
+			<td><textarea id="crayon-te-code" name="code"></textarea></td>
 		</tr>
 		<tr>
 			<th><?php CrayonTinyMCEDialog::checkbox(CrayonSettings::THEME) ?><span>Theme</span></th>
@@ -70,14 +70,14 @@ class CrayonTinyMCEDialog {
 		</tr>
 		<tr>
 			<td colspan="2" style="text-align: center;">
-				<input type="button" id="crayon-tinymce-submit" class="button-primary" value="Add Code" name="submit" />
+				<input type="button" id="crayon-te-submit" class="button-primary" value="Add Code" name="submit" />
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2"><div id="crayon-tinymce-warning" class="updated crayon-tinymce-info"></div></td>
+			<td colspan="2"><div id="crayon-te-warning" class="updated crayon-te-info"></div></td>
 		</tr>
 		<tr>
-			<td colspan="2"><div id="crayon-tinymce-settings-info" class="crayon-tinymce-info">
+			<td colspan="2"><div id="crayon-te-settings-info" class="crayon-te-info">
 			Choose which global settings to override from their current values (*) using the checkboxes.<br/>
 			Changes to the global settings under <code>Crayon > Settings</code> will not affect these settings. 
 			<?php

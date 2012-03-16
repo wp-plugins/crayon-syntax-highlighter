@@ -229,7 +229,7 @@ class CrayonSettingsWP {
 		self::add_field(self::GENERAL, crayon__('Tags'), 'tags');
 		self::add_field(self::GENERAL, crayon__('Languages'), 'langs');
 		self::add_field(self::GENERAL, crayon__('Files'), 'files');
-		self::add_field(self::GENERAL, crayon__('Tag Editor'), 'tag_editor');
+//		self::add_field(self::GENERAL, crayon__('Tag Editor'), 'tag_editor');
 		self::add_field(self::GENERAL, crayon__('Misc'), 'misc');
 		// Debug
 
@@ -639,8 +639,8 @@ class CrayonSettingsWP {
 	
 	public static function tag_editor() {
 //		self::checkbox(array(CrayonSettings::TINYMCE_ADD_OVERRIDDEN, crayon__('Only add overriden settings to generated tags')));
-		echo '<span>'.crayon__('Add line breaks'), '</span> ';
-		self::dropdown(CrayonSettings::TINYMCE_LINE_BREAK);
+//		echo '<span>'.crayon__('Add line breaks'), '</span> ';
+//		self::dropdown(CrayonSettings::TINYMCE_LINE_BREAK);
 	}
 
 	public static function misc() {

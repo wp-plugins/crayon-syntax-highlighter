@@ -88,7 +88,7 @@ var CrayonSyntaxAdmin = new function() {
 		preview_cbox.change(function() { preview_toggle(); });
 		
 		// Alignment
-		align_drop = jQuery('#h_align');
+		align_drop = jQuery('#h-align');
 		float = jQuery('#crayon-float');
 		align_drop.change(function() { float_toggle(); });
 		align_drop.ready(function() { float_toggle(); });

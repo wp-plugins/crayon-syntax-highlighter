@@ -169,7 +169,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...
 * Fixed a bug causing case insensitive Boolean settings to fail at times
 * Fixed a bug causing a [crayon ... /] tags to be recognised as [c ... /] tags (added a \b)
-* Fixed a bug preventing highlight="false" from working 
+* Fixed a bug preventing highlight="false" from working
+* Fixed a bug preventing mouse events for showing plain code when toolbar is always hidden 
 * Added ability to use closed Mini Tags like [php ... \] when you're just giving a URL
 * Added lenient spaces for closed tags
 * Fixed element content text in XHTML to avoid capturing "" as strings

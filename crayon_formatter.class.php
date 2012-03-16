@@ -239,7 +239,7 @@ class CrayonFormatter {
 			$code_settings .= ' touchscreen';
 		}
 		// Draw the plain code and toolbar
-		$toolbar_settings = '';
+		$toolbar_settings = $print_plain_button = $print_copy_button = '';
 		if (empty($error) && $hl->setting_index(CrayonSettings::TOOLBAR) != 2) {
 			// Enable mouseover setting for toolbar
 			if ($hl->setting_index(CrayonSettings::TOOLBAR) == 0 && !$touch) {
@@ -260,37 +260,10 @@ class CrayonFormatter {
 			} else {
 				$toolbar_settings .= '';
 			}
-			if ($hl->setting_val(CrayonSettings::PLAIN)) {
-				// Different events to display plain code
-				switch ($hl->setting_index(CrayonSettings::SHOW_PLAIN)) {
-					case 0 :
-						$plain_settings = 'dblclick';
-						break;
-					case 1 :
-						$plain_settings = 'click';
-						break;
-					case 2 :
-						$plain_settings = 'mouseover';
-						break;
-					default :
-						$plain_settings = '';
-				}
-				if ($hl->setting_val(CrayonSettings::SHOW_PLAIN_DEFAULT)) {
-					$plain_settings .= ' show-plain-default';
-				}
-				$tab = $hl->setting_val(CrayonSettings::TAB_SIZE);
-				// TODO doesn't seem to work at the moment
-				$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
-				$readonly = $touch ? '' : 'readonly';
-				$print_plain = $print_plain_button = '';
-				$print_plain = '<textarea class="crayon-plain" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
-				$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="'.crayon__('Toggle Plain Code').'"></a>' : '';
-				$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
-					'<a class="crayon-copy-button crayon-button" data-text="'.crayon__('Press %s to Copy, %s to Paste').'" title="'.crayon__('Copy Plain Code').'"></a>' : '';
-			} else {
-				$print_plain = $plain_settings = $print_plain_button = $print_copy_button = '';
-			}
 			
+			$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="'.crayon__('Toggle Plain Code').'"></a>' : '';
+			$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
+				'<a class="crayon-copy-button crayon-button" data-text="'.crayon__('Press %s to Copy, %s to Paste').'" title="'.crayon__('Copy Plain Code').'"></a>' : '';
 			$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
 				'<a class="crayon-popup-button crayon-button" title="'.crayon__('Open Code In New Window').'" onclick="return false;"></a>' : '';
 			
@@ -309,11 +282,39 @@ class CrayonFormatter {
 			}
 			$toolbar = '
 			<div class="crayon-toolbar" data-settings="'.$toolbar_settings.'" style="'.$toolbar_style.'">'.$print_title.'
-			<div class="crayon-tools">'.$buttons.$button_preload.'</div>
-			</div><div>'.$print_plain.'</div>'.'<div class="crayon-info" style="'.$info_style.'"></div>';
+			<div class="crayon-tools">'.$buttons.$button_preload.'</div></div>
+			<div class="crayon-info" style="'.$info_style.'"></div>';
 
 		} else {
 			$toolbar = $buttons = $plain_settings = '';
+		}
+		
+		if ($hl->setting_val(CrayonSettings::PLAIN)) {
+			// Different events to display plain code
+			switch ($hl->setting_index(CrayonSettings::SHOW_PLAIN)) {
+				case 0 :
+					$plain_settings = 'dblclick';
+					break;
+				case 1 :
+					$plain_settings = 'click';
+					break;
+				case 2 :
+					$plain_settings = 'mouseover';
+					break;
+				default :
+					$plain_settings = '';
+			}
+			if ($hl->setting_val(CrayonSettings::SHOW_PLAIN_DEFAULT)) {
+				$plain_settings .= ' show-plain-default';
+			}
+			$tab = $hl->setting_val(CrayonSettings::TAB_SIZE);
+			// TODO doesn't seem to work at the moment
+			$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
+			$readonly = $touch ? '' : 'readonly';
+			$print_plain = $print_plain_button = '';
+			$print_plain = '<textarea class="crayon-plain" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
+		} else {
+			$print_plain = $plain_settings = $plain_settings = '';
 		}
 		
 		// Line numbers visibility
@@ -394,6 +395,7 @@ class CrayonFormatter {
 		$output .= '
 		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.'" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
 		'.$toolbar.'
+			<div>'.$print_plain.'</div>'.'
 			<div class="crayon-main" style="'.$main_style.'">
 				<table class="crayon-table">
 					<tr class="crayon-row">';

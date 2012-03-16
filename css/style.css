@@ -126,6 +126,7 @@ coloring etc.
 .crayon-syntax .crayon-toolbar {
     position: relative;
     overflow: hidden;
+    z-index: 4;
 }
 .crayon-syntax .crayon-info {
 	position: absolute;

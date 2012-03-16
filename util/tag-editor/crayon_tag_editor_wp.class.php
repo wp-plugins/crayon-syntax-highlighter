@@ -6,25 +6,30 @@ require_once (CRAYON_ROOT_PATH . 'crayon_settings_wp.class.php');
 class CrayonTagEditorWP {
 
 	private static $settings = null;
-	const CRAYON_PRE_CSS = 'crayon-syntax-pre';
-	const CRAYON_CODE_CSS = 'crayon-code-line';
+//	const CRAYON_PRE_CSS = 'crayon-syntax-pre';
+//	const CRAYON_CODE_CSS = 'crayon-code-line';
+//	const CRAYON_TE_CSS = '#crayon-te-code';
 	
 	public static function init() {
 		// Add settings
 		CrayonSettingsWP::load_settings(TRUE);
 //		$line_break = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_LINE_BREAK);
-		self::$settings = array('url' => 'http://localhost/crayon/wp-content/plugins/crayon-syntax-highlighter/util/tag-editor/crayon_te_content.php', // TODO
+		self::$settings = array('url' => plugins_url(CRAYON_TE_PHP, __FILE__),
+								'home_url' => home_url(),
 								'css' => 'crayon-te',
 								'used' => CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED),
 								'used_setting' => CrayonSettings::TINYMCE_USED,
-								'ajax_url' => plugins_url(CRAYON_AJAX_PHP, dirname(__FILE__)),
+								'ajax_url' => plugins_url(CRAYON_AJAX_PHP, dirname(dirname(__FILE__))),
 		
 								// This is decoded, so we need to encode twice
 //								'br_after' => $line_break == 0 || $line_break == 1,
 //								'br_before' => $line_break == 0 || $line_break == 2,
-								'pre_css' => self::CRAYON_PRE_CSS,
-								'code_css' => self::CRAYON_CODE_CSS,
-								'css_code' => '#crayon-te-code',
+								'pre_css' => 'crayon-syntax-pre',
+//								'code_css' => self::CRAYON_CODE_CSS,
+								'code_css' => '#crayon-te-code',
+								'lang_css' => '#crayon-lang',
+								'title_css' => '#crayon-title',
+								'mark_css' => '#crayon-mark',
 								'attr_sep' => ':'
 								// TODO css
 							);
@@ -37,6 +42,23 @@ class CrayonTagEditorWP {
 	
 	public static function init_tinymce($init) {
 		$init['extended_valid_elements'] .= ',pre[*],code[*],iframe[*]';
+		
+//		$init['convert_newlines_to_brs'] = TRUE;
+//		$init['remove_linebreaks'] = false;
+//		$init['wpautop'] = false;
+
+//		$init['forced_root_block'] = false;
+//		$init['force_p_newlines'] = false;
+//		$init['remove_linebreaks'] = false;
+//		$init['remove_trailing_nbsp'] = false;
+//		$init['verify_html'] = false;
+//		$init['force_br_newlines'] = true;
+		
+		
+
+		
+//		protect
+		
 		
 //		$init['crayon_used'] = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED);
 //		$init['crayon_ajax'] = plugins_url(CRAYON_AJAX_PHP, dirname(__FILE__));
@@ -64,6 +86,7 @@ class CrayonTagEditorWP {
 	
 	public static function admin_scripts() {
 		global $CRAYON_VERSION;
+		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_UTIL_JS, dirname(dirname(__FILE__))), NULL, $CRAYON_VERSION);
 		wp_enqueue_script('crayon_te_js', plugins_url(CRAYON_TE_JS, __FILE__), array('jquery'), $CRAYON_VERSION);
 		wp_localize_script('crayon_te_js', 'CrayonTagEditorSettings', self::$settings);
 		wp_enqueue_script('crayon_quicktags_js', plugins_url(CRAYON_QUICKTAGS_JS, __FILE__), array('quicktags'), $CRAYON_VERSION, TRUE);
@@ -77,6 +100,7 @@ class CrayonTagEditorWP {
 	// Load the TinyMCE plugin : editor_plugin.js (wp2.5)
 	public static function add_plugin($plugin_array) {
 		$plugin_array['crayon_tinymce'] = plugins_url(CRAYON_TINYMCE_JS, __FILE__);
+//		$plugin_array['preelementfix'] = 'http://localhost/crayon/wp-includes/js/tinymce/plugins/preelementfix/editor_plugin.js';
 		return $plugin_array;
 	}
 

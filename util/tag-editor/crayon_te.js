@@ -9,8 +9,7 @@ CrayonTagEditorSettings.setUsed = function(is_used) {
 		if (this.ajax_url && !this.used) {
 			is_used = is_used ? '1' : '0';
 			var used_url = this.ajax_url + '?' + this.used_setting + '=' + is_used;
-			jQuery.get(used_url, function(data) {
-			});
+			jQuery.get(used_url);
 		}
 	}
 }
@@ -23,11 +22,15 @@ var CrayonTagEditor = new function() {
 	var editor_name;
 	var ajax_class_timer = null;
 	var ajax_class_timer_count = 0;
+	// Generated in WP and contains the settings
+	var settings = CrayonTagEditorSettings;
 	
 //	var br_before, br_after;
 	
 	// CSS
-	var tag_editor, warning, code, clear;
+	var tag_editor, code, clear;
+	// True if editing an existing Crayon
+	var editing = false;
 	
     // Creates needed resources
     this.load = function() {    	
@@ -38,58 +41,95 @@ var CrayonTagEditor = new function() {
     		return;
     	}
     	
-    	// Generated in WP and contains the settings
-    	var settings = CrayonTagEditorSettings;
 //    	br_before = settings.br_before ? '<p>&nbsp;</p>\n' : '';
 //    	br_after = settings.br_after ? '\n<p>&nbsp;</p>\n' : '\n';
     	
         // Load the editor content 
         jQuery.get(settings.url, function(data) {
-        	tag_editor = jQuery('<div id="'+CrayonTagEditorSettings.css+'"></div>');
+        	tag_editor = jQuery('<div id="'+settings.css+'"></div>');
             tag_editor.appendTo('body').hide();
         	tag_editor.html(data);
         	
-        	code = jQuery(settings.css_code);
+        	code = jQuery(settings.code_css);
         	clear = jQuery('#crayon-te-clear');
-        	code.change(function() {
-        		if ( code.val().length > 0 ) {
+        	var code_refresh = function () {
+        		var clear_visible = clear.is(":visible");
+//        		alert(code.val().length);
+        		if (code.val().length > 0 && !clear_visible) {
         			clear.show();
-        			warning.hide();
-        		} else if ( clear.is(":visible") ) {
+        			code.removeClass('crayon-setting-selected');
+        		} else if (code.val().length <= 0) {
         			clear.hide();
         		}
-        	});
+        	}
+//        	var delayed_code_refresh = function () {
+//        		alert(code.val().length);
+//        		setTimeout(code_refresh, 100);
+//        	};
+        	code.keyup(code_refresh);
+        	code.change(code_refresh);
         	clear.click(function() {
         		code.val('');
-        		warning.hide();
+        		code.removeClass('crayon-setting-selected');
+//        		warning.hide();
         		code.focus();
         	});
         	
-        	// Set up overides.
-        	// When checkbox is selected, input element is enabled
-        	jQuery('.crayon-te-check[data-id]').each(function() {
-        		jQuery(this).change(function() {
-        			var id = jQuery(this).attr('data-id');
-        			var checked = jQuery(this).is(':checked');
-        			var input = jQuery('.crayon-te-input[data-id='+id+']');
-            		if (typeof input != 'undefined') {
-            			// Toggle disable
-            			input.prop('disabled', !checked);
-            		}
-        		});
-        	});
+        	// Load specific inputs from settings page and inject
+//        	var injected = CrayonTagEditor.injectSettings();
+//        	console.log(injected);
         	
-        	warning = jQuery('#crayon-te-warning');
-        	warning.html('Please type some code first...');
+        	var setting_change = function() {
+    			var me = jQuery(this);
+    			var id = jQuery(this).attr('id');
+        		var orig_value = jQuery(this).attr('data-orig-value');
+        		if (typeof orig_value == 'undefined') {
+        			orig_value = '';
+        		}
+        		// Depends on type
+        		var value = '';
+        		var highlight = null;
+    			if (me.is('input[type=checkbox]')) {
+    				value = me.is(':checked') ? '1' : '0';
+    				highlight = me.next('span'); 
+    			} else {
+    				value = me.val();
+    			}
+    			if (typeof value == 'undefined') {
+    				value = '';
+        		}
+    			
+    			if (orig_value == value) {
+    				// No change
+    				me.removeClass('crayon-setting-changed');
+    				if (highlight) {
+    					highlight.removeClass('crayon-setting-changed');
+    				}
+    			} else {
+    				// Changed
+    				me.addClass('crayon-setting-changed');
+    				if (highlight) {
+    					highlight.addClass('crayon-setting-changed');
+    				}
+    			}
+    			// Save the value for later
+    			me.attr('data-value', value);
+    		};
+        	jQuery('.crayon-setting[id]').each(function() {
+        		jQuery(this).change(setting_change);
+        		jQuery(this).keyup(setting_change);
+        	});
         	
         	// Create the Crayon Tag
         	tag_editor.find('#crayon-te-submit').click(function() {
         		if (code.val().length == 0) {
-        			warning.show();
+//        			warning.show();
+        			code.addClass('crayon-setting-selected');
         			code.focus();
         			return false;
         		} else {
-        			warning.hide();
+        			code.removeClass('crayon-setting-selected');
+//        			warning.hide();
         		}
         		
 //        		var br = editor_name == 'html' ? '\n' : '<p>&nbsp;</p>';
@@ -105,47 +145,52 @@ var CrayonTagEditor = new function() {
         		
     			var shortcode = br_before + '<pre ';
     			
-    			// Add title if given
-    			jQuery('.crayon-te-input[data-id="title"]').each(function() {
-    				var value = jQuery(this).val();
-    				if (value.length > 0) {
-    					shortcode += 'title="' + value + '" ';
-    				}
-    			});
-    			
     			var atts = {};
     			shortcode += 'class="'+settings.pre_css+' '; 
     			
+    			// Grab settings as attributes
+    			jQuery('.crayon-setting-changed[id],.crayon-setting-changed[data-value]').each(function() {
+            		var id = jQuery(this).attr('id');
+            		var value = jQuery(this).attr('data-value');
+            		atts[id] = value;
+            		console.log(id + ' ' + value);
+            	});
+    			
     			// Always add language
-    			jQuery('.crayon-te-input[data-id="lang"]').each(function() {
-    				var value = jQuery(this).val();
-    				atts['lang'] = value;
+    			jQuery(settings.lang_css).each(function() {
+    				var value = jQuery(this).val() || '';
+    				atts[settings.lang_css] = value;
     			});
     			
-    			// Grab overides
-            	jQuery('.crayon-te-check[data-id]').each(function() {
-            		var id = jQuery(this).attr('data-id');
-            		var checked = jQuery(this).is(':checked');
-            		if (checked) {
-            			var input = jQuery('.crayon-te-input[data-id='+id+']');
-                		if (typeof input != 'undefined') {
-                			var value = input.val();
-                			atts[id] = value;
-                		}
-            		}
-            	});
+    			// Ensure mark has no whitespace
+    			jQuery(settings.mark_css).each(function() {
+    				var value = jQuery(this).val();
+    				if (value.length != 0) {
+	    				atts[settings.mark_css] = value.replace(/\s/g, '');
+    				}
+    			});
     			
             	atts['decode'] = 'true';
     			for (var att in atts) {
-    				shortcode += att + settings.attr_sep + atts[att] + ' ';
+            		// Remove prefix, if exists
+            		var id = att.replace(/^#?crayon-/, '');
+            		var value = atts[att];
+    				shortcode += id + settings.attr_sep + value + ' ';
     			}
     			
-    			var content = jQuery('#crayon-te-code');
-    			content = typeof content != 'undefined' ? content.val() : ''; 
+    			var title = jQuery(settings.title_css).val();
+    			if (typeof title != 'undefined') {
+    				// Don't forget to close quote for class
+    				shortcode += '" title="' + title + '" ';
+    			}
+    			
+    			var content = jQuery(settings.code_css).val();
+    			content = typeof content != 'undefined' ? content : ''; 
     			// Convert all non-whitespace <code>, including spaces
-    			content = content.replace(/([^\t\r\n]+)/gm,'<code class="'+settings.code_css+'">$1</code>');
-    			content = content.replace(/^([\s]*?)$/gm,'<code class="'+settings.code_css+'"></code>');
-    			shortcode += '">' + content + '</pre>' + br_after;
+    			// TODO don't use again!
+    			//content = content.replace(/([^\t\r\n]+)/gm,'<code class="'+settings.code_css+'">$1</code>');
+    			//content = content.replace(/^([\s]*?)$/gm,'<code class="'+settings.code_css+'"></code>');
+    			shortcode += '>' + content + '</pre>' + br_after;
     			
     			// Insert the tag and hide dialog
     			insertCallback(shortcode);
@@ -159,9 +204,51 @@ var CrayonTagEditor = new function() {
         });
     };
 	
+    // Depreciated
+    this.injectSettings = function() {
+    	if (typeof settings.home_url == 'undefined') {
+    		return '';
+    	}
+    	// This is painful, but whatever
+    	var settings_url = settings.home_url + '/wp-admin/options-general.php?page=crayon_settings';
+    	return settings_url;
+    }
+    
     // Displays the dialog
-	this.dialog = function(callback, editor_str) {
-    	tb_show('Add Crayon Code', '#TB_inline?inlineId=' + CrayonTagEditorSettings.css);
+	this.dialog = function(callback, editor_str, ed) {
+		
+		// If we have selected a Crayon, load in the contents
+		var currNode = ed.selection.getNode();
+		if (currNode.nodeName == 'PRE') {
+			currCrayon = jQuery(currNode);
+			editing = currCrayon.hasClass(settings.pre_css); 
+			if (editing) {
+				var class_ = currCrayon.attr('class');
+				var attr_regex = new RegExp('\\b([A-Za-z-]+)'+settings.attr_sep+'(\\S+)', 'gim');
+				var matches = attr_regex.execAll(class_);
+				var atts = {};
+				for (var i in matches) {
+					var id = matches[i][1];
+					var value = matches[i][2];
+					atts[id] = value;
+				}
+				// Only read title, don't let other atts in, no need
+				var title = currCrayon.attr('title');
+				if (title) {
+					atts['title'] = title;
+				}
+				
+				// Load in attributes
+				for (var att in atts) {
+					jQuery('#' + att + '.' + 'crayon-setting').val(atts[att]);
+					console.log(att + ' ' + atts[att]);
+				}
+				
+				code.val(currCrayon.html());
+			}
+		}
+		
+    	tb_show('Add Crayon Code', '#TB_inline?inlineId=' + settings.css);
     	code.focus();
     	insertCallback = callback;
     	editor_name = editor_str;
@@ -183,7 +270,10 @@ var CrayonTagEditor = new function() {
         	ajax_class_timer_count++;
     	}, 40);
     	
-    	CrayonTagEditorSettings.setUsed(true);
+    	settings.setUsed(true);
+    	
+    	// Stupid draw artifacts when showing
+    	
     };
 	
 };

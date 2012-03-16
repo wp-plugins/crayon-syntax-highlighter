@@ -57,7 +57,6 @@ class CrayonSettingsWP {
 	public static function admin_styles() {
 		global $CRAYON_VERSION;
 		wp_enqueue_style('crayon_admin_style', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_style('crayon_quicktags_script', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), $CRAYON_VERSION);
 	}
 
 	public static function admin_scripts() {
@@ -219,9 +218,10 @@ class CrayonSettingsWP {
 		self::load_settings();
 		// General
 
+		// Some of these will the $editor arguments, if TRUE it will alter for use in the Tag Editor 
 		self::add_section(self::GENERAL, crayon__('General'));
-		self::add_field(self::GENERAL, crayon__('Theme'), 'themes');
-		self::add_field(self::GENERAL, crayon__('Font'), 'fonts');
+		self::add_field(self::GENERAL, crayon__('Theme'), 'theme');
+		self::add_field(self::GENERAL, crayon__('Font'), 'font');
 		self::add_field(self::GENERAL, crayon__('Metrics'), 'metrics');
 		self::add_field(self::GENERAL, crayon__('Toolbar'), 'toolbar');
 		self::add_field(self::GENERAL, crayon__('Lines'), 'lines');
@@ -368,8 +368,8 @@ class CrayonSettingsWP {
 		}
 		$name = $size = $margin = $preview = $break = '';
 		extract($args);
-		echo '<input id="', $name, '" name="', self::OPTIONS, '[', $name, ']" size="', $size, '" type="text" value="',
-			self::$options[$name], '" style="margin-left: ', $margin, '" crayon-preview="', ($preview ? 1 : 0), '" />', $break;
+		echo '<input id="', $name, '" name="', self::OPTIONS, '[', $name, ']" class="crayon-setting" size="', $size, '" type="text" value="',
+			self::$options[$name], '" data-orig-value="', self::$options[$name], '" style="margin-left: ', $margin, '" crayon-preview="', ($preview ? 1 : 0), '" />', $break;
 	}
 
 	private static function checkbox($args, $line_break = TRUE, $preview = TRUE) {
@@ -378,9 +378,11 @@ class CrayonSettingsWP {
 		}
 		$name = $args[0];
 		$text = $args[1];
-		$checked = (!array_key_exists($name, self::$options)) ? '' : checked(TRUE, self::$options[$name], FALSE);
-		echo '<input id="', $name, '" name="', self::OPTIONS, '[', $name, ']" type="checkbox" value="1"', $checked,
-			' crayon-preview="', ($preview ? 1 : 0), '" /> ', '<span>', $text, '</span>', ($line_break ? CRAYON_BR : '');
+		$checked = (!array_key_exists($name, self::$options)) ? FALSE : self::$options[$name] == TRUE;
+		$checked_str = $checked ? ' checked="checked"' : ''; 
+//		$checked = (!array_key_exists($name, self::$options)) ? '' : checked(TRUE, self::$options[$name], FALSE);
+		echo '<input id="', $name, '" name="', self::OPTIONS, '[', $name, ']" type="checkbox" class="crayon-setting" value="1"', $checked_str,
+			' crayon-preview="', ($preview ? 1 : 0), '" data-orig-value="', strval(intval($checked)), '" /> ', '<span>', $text, '</span>', ($line_break ? CRAYON_BR : '');
 	}
 
 	// Draws a dropdown by loading the default value (an array) from a setting
@@ -391,7 +393,7 @@ class CrayonSettingsWP {
 		$opts = CrayonGlobalSettings::get($name)->def();
 		$return = '';
 		if (is_array($opts)) {
-			$return .= '<select id="'.$name.'" name="'.self::OPTIONS.'['.$name.']" crayon-preview="'.($preview ? 1 : 0).'">';
+			$return .= '<select id="'.$name.'" name="'.self::OPTIONS.'['.$name.']" class="crayon-setting" data-orig-value="'. self::$options[$name]. '" crayon-preview="'.($preview ? 1 : 0).'">';
 			for ($i = 0; $i < count($opts); $i++) {
 				$return .='<option value="'.$i.'" '.selected(self::$options[$name], $i, FALSE).'>'.$opts[$i].'</option>';
 			}
@@ -402,6 +404,14 @@ class CrayonSettingsWP {
 		} else {
 			return $return;
 		}
+	}
+	
+	private static function info_span($name, $text) {
+		echo '<span id="', $name, '-info">', $text,'</span>';
+	}
+	
+	private static function span($text) {
+		echo '<span>', $text,'</span>';
 	}
 
 	// General Fields =========================================================
@@ -489,7 +499,7 @@ class CrayonSettingsWP {
 	}
 
 	public static function toolbar() {
-		echo crayon__('Display the Toolbar'), ' ';
+		self::span(crayon__('Display the Toolbar').' ');
 		self::dropdown(CrayonSettings::TOOLBAR);
 		echo '<div id="' . CrayonSettings::TOOLBAR_OVERLAY . '">';
 		self::checkbox(array(CrayonSettings::TOOLBAR_OVERLAY, crayon__('Overlay the toolbar on code rather than push it down when possible')));
@@ -497,7 +507,7 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::TOOLBAR_DELAY, crayon__('Delay hiding the toolbar on MouseOut')));
 		echo '</div>';
 		self::checkbox(array(CrayonSettings::SHOW_TITLE, crayon__('Display the title when provided')));
-		echo crayon__('Display the language'), ' ';
+		self::span(crayon__('Display the language').' ');
 		self::dropdown(CrayonSettings::SHOW_LANG);
 	}
 
@@ -506,7 +516,7 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::MARKING, crayon__('Enable line marking for important lines')));
 		self::checkbox(array(CrayonSettings::NUMS, crayon__('Display line numbers by default')));
 		self::checkbox(array(CrayonSettings::NUMS_TOGGLE, crayon__('Enable line number toggling')));
-		echo crayon__('Start line numbers from'), ' ';
+		self::span(crayon__('Start line numbers from').' ');
 		self::textbox(array('name' => CrayonSettings::START_LINE, 'size' => 2, 'break' => TRUE));
 	}
 
@@ -549,7 +559,7 @@ class CrayonSettingsWP {
 		}
 	}
 
-	public static function themes() {
+	public static function theme($editor = FALSE) {
 		$db_theme = self::$options[CrayonSettings::THEME]; // Theme name from db
 		if (!array_key_exists(CrayonSettings::THEME, self::$options)) {
 			$db_theme = '';
@@ -562,6 +572,9 @@ class CrayonSettingsWP {
 			echo '<option value="', $theme->id(), '" ', selected($db_theme, $theme->id()), '>', $title, '</option>';
 		}
 		echo '</select><span class="crayon-span-5"></span>';
+		if ($editor) {
+			return;
+		}
 		// Theme editor
 		if (CRAYON_THEME_EDITOR) {
 			echo '<a id="crayon-theme-editor-button" class="button-primary crayon-admin-button" loading="'. crayon__('Loading...') .'" loaded="'. crayon__('Theme Editor') .'" >'. crayon__('Theme Editor') .'</a></br>';
@@ -582,7 +595,7 @@ class CrayonSettingsWP {
 		}
 	}
 
-	public static function fonts() {
+	public static function font($editor = FALSE) {
 		$db_font = self::$options[CrayonSettings::FONT]; // Theme name from db
 		if (!array_key_exists(CrayonSettings::FONT, self::$options)) {
 			$db_font = '';
@@ -591,7 +604,6 @@ class CrayonSettingsWP {
 		$fonts = CrayonResources::fonts()->get();
 		echo '<select id="', $name, '" name="', self::OPTIONS, '[', $name, ']" crayon-preview="1">';
 		foreach ($fonts as $font) {
-//			$title = $font->id() != CrayonFonts::DEFAULT_FONT ? $font->name() : crayon__('Theme Default');
 			$title = $font->name();
 			echo '<option value="', $font->id(), '" ', selected($db_font, $font->id()), '>', $title, '</option>';
 		}
@@ -599,9 +611,12 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size').' '), FALSE);
 		self::textbox(array('name' => CrayonSettings::FONT_SIZE, 'size' => 2));
 		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span></br>';
-		if (/*$db_font != CrayonFonts::DEFAULT_FONT &&*/ (!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
+		if ((!CrayonResources::fonts()->is_loaded($db_font) || !CrayonResources::fonts()->exists($db_font))) {
 			// Default font doesn't actually exist as a file, it means do not override default theme font
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected font with id %s could not be loaded'), '<strong>'.$db_font.'</strong>'), '. </span><br/>';
+		}
+		if ($editor) {
+			return;
 		}
 		echo '<div style="height:10px;"></div>';
 		self::checkbox(array(CrayonSettings::ENQUEUE_FONTS, crayon__('Enqueue fonts in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
@@ -617,7 +632,7 @@ class CrayonSettingsWP {
 		echo '</span>';
 		self::checkbox(array(CrayonSettings::POPUP, crayon__('Enable opening code in a window')));
 		self::checkbox(array(CrayonSettings::SCROLL, crayon__('Always display scrollbars')));
-		echo crayon__('Tab size in spaces'),': ';
+		self::span(crayon__('Tab size in spaces').': ');
 		self::textbox(array('name' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
 		self::checkbox(array(CrayonSettings::DECODE, crayon__('Decode HTML entities in code')));
 		self::checkbox(array(CrayonSettings::DECODE_ATTRIBUTES, crayon__('Decode HTML entities in attributes')));

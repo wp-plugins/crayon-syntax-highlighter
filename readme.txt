@@ -101,6 +101,15 @@ These are helpful for discovering new features.
 * <a href="http://ak.net84.net/crayon/inline-crayons/" target="_blank">Inline Tags</a>
 * <a href="http://ak.net84.net/projects/enqueuing-themes-and-fonts-in-crayon/" target="_blank">Enqueuing Themes and Fonts in Crayon</a> 
 
+**The Press**
+
+A handful of articles from others written about Crayon, thanks guys!
+
+* <a href="http://blog.boxedpages.net/2012/03/15/abap-syntaxhighlighting-in-wordpress/" target="_blank">ABAP Syntax Highlighting in WordPress (German)</a>
+* <a href="http://infodrug.ru/wordpress/kak-krasivo-vstavit-programmnyj-kod-v-wordpress-podsvetka-sintaksisa.html" target="_blank">Crayon Syntax Highlighter (Russian)</a>
+* <a href="http://n-wp.ru/11513" target="_blank">Crayon Syntax Highlighter (also Russian)</a>
+* <a href="http://kampungtoys.com/tag/crayon-syntax-highlighter/" target="_blank">How To Post Source Code</a>
+
 **Planned Features**
 
 * Theme Editor

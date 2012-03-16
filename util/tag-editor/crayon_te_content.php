@@ -79,7 +79,7 @@ class CrayonTinyMCEDialog {
 		<tr>
 			<td colspan="2"><div id="crayon-te-settings-info" class="crayon-te-info">
 			Choose which global settings to override from their current values (*) using the checkboxes.<br/>
-			Changes to the global settings under <code>Crayon > Settings</code> will not affect these settings. 
+			Changes to the global settings under <code>Crayon > Settings</code> will not affect overridden settings for this Crayon. 
 			<?php
 			/*
 			if ($add_overridden) {

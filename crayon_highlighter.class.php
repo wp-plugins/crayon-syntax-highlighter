@@ -180,7 +180,7 @@ class CrayonHighlighter {
 					$this->formatted_code = CrayonFormatter::format_code($code, $this->language, $this, $this->is_highlighted);
 				} else {
 					// Format the code with Mixed Highlighting
-					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this);					
+					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this, $this->is_highlighted);					
 				}
 			} catch (Exception $e) {
 				$this->error($e->message());

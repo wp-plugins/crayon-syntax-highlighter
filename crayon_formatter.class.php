@@ -443,7 +443,7 @@ class CrayonFormatter {
 
 	// Delimiters =============================================================
 	
-	public static function format_mixed_code($code, $language, $hl) {
+	public static function format_mixed_code($code, $language, $hl, $highlight = TRUE) {
 		self::$curr = $hl;
 		self::$delim_pieces = array();
 		// Remove crayon internal element from INPUT code
@@ -462,7 +462,7 @@ class CrayonFormatter {
 		$internal_code = preg_replace_callback(self::$delim_regex, 'CrayonFormatter::delim_to_internal', $code);
 		
 		// Format with given language
-		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl, TRUE);
+		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl, $highlight);
 		
 		// Replace internal elements with delimited pieces
 		$formatted_code = preg_replace_callback('#\{\{crayon-internal:(\d+)\}\}#', 'CrayonFormatter::internal_to_code', $formatted_code);

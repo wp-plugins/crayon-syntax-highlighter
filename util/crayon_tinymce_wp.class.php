@@ -7,13 +7,11 @@ class CrayonTinyMCEWP {
 	public static function init() {
 		self::addbuttons();
 		add_filter('tiny_mce_before_init', 'CrayonTinyMCEWP::init_tinymce');
+		add_action("admin_print_scripts-post.php", 'CrayonTinyMCEWP::admin_scripts');
 	}
 	
 	public static function init_tinymce($init) {
-//		$init['content_css'] .= ', http://localhost/crayon/wp-content/plugins/crayon-syntax-highlighter/css/admin_style.css?ver=1.8.3';
-//		$init['theme_advanced_blockformats'] = 'p,div,h1,h2,h3,h4,h5,h6,pre,code';
 		$init['extended_valid_elements'] .= ',pre[*],code[*],iframe[*]';
-		// TODO load settings?
 		CrayonSettingsWP::load_settings(TRUE);
 		$init['crayon_used'] = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED);
 		$init['crayon_ajax'] = plugins_url(CRAYON_AJAX_PHP, dirname(__FILE__));
@@ -37,6 +35,12 @@ class CrayonTinyMCEWP {
 			add_filter('mce_external_plugins', 'CrayonTinyMCEWP::add_plugin');
 			add_filter('mce_buttons', 'CrayonTinyMCEWP::register_buttons');
 		}
+	}
+	
+	public static function admin_scripts() {
+		global $CRAYON_VERSION;
+		wp_enqueue_script('crayon_ve_js', plugins_url(CRAYON_VE_JS, dirname(__FILE__)), array('jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_quicktags_js', plugins_url(CRAYON_QUICKTAGS_JS, dirname(__FILE__)), array('quicktags'), $CRAYON_VERSION, TRUE);
 	}
 	 
 	public static function register_buttons($buttons) {

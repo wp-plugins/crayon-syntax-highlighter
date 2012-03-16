@@ -44,7 +44,7 @@ class CrayonSettingsWP {
 		add_action("admin_head-$admin_page", 'CrayonSettingsWP::admin_init');
 		// Register settings for post edit page
 		add_action("admin_print_styles-post.php", 'CrayonSettingsWP::admin_styles');
-		
+				
 		// TODO depreciated since WP 3.3, remove eventually
 		global $wp_version;
 		if ($wp_version >= '3.3') {

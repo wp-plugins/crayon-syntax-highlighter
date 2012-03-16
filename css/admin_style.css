@@ -232,8 +232,21 @@
 	background: url(images/crayon_tinymce.png);
 }
 
-.mce_crayon_tinymce_highlight {
+.mce_crayon_tinymce_highlight,
+.qt_crayon_highlight {
 	border: 1px solid #7c9dde !important;
+}
+
+.qt_crayon_highlight {
+	background-image: -ms-linear-gradient(bottom,#daf2ff,white) !important;
+	background-image: -moz-linear-gradient(bottom,#daf2ff,white) !important;
+	background-image: -o-linear-gradient(bottom,#daf2ff,white) !important;
+	background-image: -webkit-linear-gradient(bottom,#daf2ff,white) !important;
+	background-image: linear-gradient(bottom,#daf2ff,white) !important;
+}
+
+.qt_crayon_highlight:hover{
+	background:#ddebf2 !important;
 }
 
 .mce_crayon_tinymce_highlight span.mce_crayon_tinymce,

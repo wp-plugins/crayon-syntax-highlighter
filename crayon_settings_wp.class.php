@@ -229,7 +229,7 @@ class CrayonSettingsWP {
 		self::add_field(self::GENERAL, crayon__('Tags'), 'tags');
 		self::add_field(self::GENERAL, crayon__('Languages'), 'langs');
 		self::add_field(self::GENERAL, crayon__('Files'), 'files');
-//		self::add_field(self::GENERAL, crayon__('Tag Editor'), 'tag_editor');
+		self::add_field(self::GENERAL, crayon__('Tag Editor'), 'tag_editor');
 		self::add_field(self::GENERAL, crayon__('Misc'), 'misc');
 		// Debug
 
@@ -384,17 +384,23 @@ class CrayonSettingsWP {
 	}
 
 	// Draws a dropdown by loading the default value (an array) from a setting
-	private static function dropdown($name, $line_break = TRUE, $preview = TRUE) {
+	private static function dropdown($name, $line_break = TRUE, $preview = TRUE, $echo = TRUE) {
 		if (!array_key_exists($name, self::$options)) {
 			return;
 		}
 		$opts = CrayonGlobalSettings::get($name)->def();
+		$return = '';
 		if (is_array($opts)) {
-			echo '<select id="', $name, '" name="', self::OPTIONS, '[', $name, ']" crayon-preview="', ($preview ? 1 : 0), '">';
+			$return .= '<select id="'.$name.'" name="'.self::OPTIONS.'['.$name.']" crayon-preview="'.($preview ? 1 : 0).'">';
 			for ($i = 0; $i < count($opts); $i++) {
-				echo '<option value="', $i,'" ', selected(self::$options[$name], $i), '>', $opts[$i], '</option>';
+				$return .='<option value="'.$i.'" '.selected(self::$options[$name], $i, FALSE).'>'.$opts[$i].'</option>';
 			}
-			echo '</select>', ($line_break ? CRAYON_BR : '');
+			$return .= '</select>'.($line_break ? CRAYON_BR : '');
+		}
+		if ($echo) {
+			echo $return;
+		} else {
+			return $return;
 		}
 	}
 
@@ -638,6 +644,12 @@ class CrayonSettingsWP {
 	}
 	
 	public static function tag_editor() {
+		
+		$sep = sprintf(crayon__('Use %s to separate setting names from values in the &lt;pre&gt; class attribute'),
+						self::dropdown(CrayonSettings::ATTR_SEP, FALSE, FALSE, FALSE));
+		
+		echo '<span>', $sep, ' <a href="#" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span>';
+//		self::dropdown(CrayonSettings::SHOW_PLAIN);
 //		self::checkbox(array(CrayonSettings::TINYMCE_ADD_OVERRIDDEN, crayon__('Only add overriden settings to generated tags')));
 //		echo '<span>'.crayon__('Add line breaks'), '</span> ';
 //		self::dropdown(CrayonSettings::TINYMCE_LINE_BREAK);

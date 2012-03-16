@@ -413,7 +413,14 @@ class CrayonUtil {
 				return TRUE;
 			}
 		}
-		
+	}
+	
+	public static function bool_to_str($bool, $strict = FALSE) {
+		if ($strict) {
+			return $bool === TRUE  ? 'true' : 'false';
+		} else {
+			return $bool ? 'true' : 'false';
+		}
 	}
 	
 	public static function tlower($str) {

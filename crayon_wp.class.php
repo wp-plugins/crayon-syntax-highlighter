@@ -25,7 +25,7 @@ License: GPL2
 */
 require_once ('global.php');
 require_once (CRAYON_HIGHLIGHTER_PHP);
-require_once ('util/crayon_tinymce_wp.class.php');
+require_once ('util/tag-editor/crayon_tag_editor_wp.class.php');
 require_once ('crayon_settings_wp.class.php');
 
 if (defined('ABSPATH')) {
@@ -543,7 +543,7 @@ class CrayonWP {
 		$content = preg_replace('#<\s*code\b.*?\bclass\s*=\s*"\s*crayon-code-line\s*"[^>]*>(.*?)<\s*/\s*code\s*>#msi', '$1', $content);
 		if (!empty($class)) {
 			// Allow hyphenated "setting-value" style settings in the class attribute
-			$class = preg_replace('#\b([A-Za-z-]+)_(\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
+			$class = preg_replace('#\b([A-Za-z-]+)[_:](\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
 			return "[crayon $pre_class $class $post_class]{$content}[/crayon]";
 		} else {
 			return "[crayon $atts]{$content}[/crayon]";

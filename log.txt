@@ -1020,3 +1020,22 @@
 [Crayon Syntax Highlighter Log Entry - 8:24:15 AM - 17 Mar 2012]
 
  [DEBUG] str "init"
+
+[Crayon Syntax Highlighter Log Entry - 8:45:51 AM - 17 Mar 2012]
+
+ [DEBUG] str "init"
+ [DEBUG] str "wp (global)"
+ [DEBUG] str "the_posts"
+ [DEBUG] str "capture for id 1059"
+ [DEBUG] str "capture ignore for id 1059 : 176 vs 176"
+ [DEBUG] str "CAPTURED FOR ID 1059"
+ [DEBUG] str "enqueue"
+ [DEBUG] str "head"
+ [DEBUG] str "the_content"
+ [DEBUG] str "shortcode"
+ [DEBUG] str "instance"
+ [DEBUG] str "the_content: id 1059 pre-p-len 208"
+ [DEBUG] str "add_paragraphs 1059"
+ [DEBUG] str "the_content: id 1059 post-p-len 202"
+ [DEBUG] str "the_content: id 1059 has UID 4f644f4186cf8 : 1"
+ [DEBUG] str "the_content: replaced for id 1059 from len 208 to 3213"

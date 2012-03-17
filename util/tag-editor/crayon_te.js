@@ -34,7 +34,7 @@ var CrayonTagEditor = new function() {
 	// True if editing an existing Crayon
 	var editing = false;
 	
-    // Creates needed resources
+	// XXX Loads dialog contents
     this.loadDialog = function() {    	
     	// Loaded once url is given
     	if (!loaded) {
@@ -42,9 +42,6 @@ var CrayonTagEditor = new function() {
     	} else {
     		return;
     	}
-    	
-//    	br_before = settings.br_before ? '<p>&nbsp;</p>\n' : '';
-//    	br_after = settings.br_after ? '\n<p>&nbsp;</p>\n' : '\n';
     	
         // Load the editor content 
         jQuery.get(settings.url, function(data) {
@@ -56,7 +53,6 @@ var CrayonTagEditor = new function() {
         	clear = jQuery('#crayon-te-clear');
         	var code_refresh = function () {
         		var clear_visible = clear.is(":visible");
-//        		alert(code.val().length);
         		if (code.val().length > 0 && !clear_visible) {
         			clear.show();
         			code.removeClass('crayon-setting-selected');
@@ -64,16 +60,12 @@ var CrayonTagEditor = new function() {
         			clear.hide();
         		}
         	}
-//        	var delayed_code_refresh = function () {
-//        		alert(code.val().length);
-//        		setTimeout(code_refresh, 100);
-//        	};
+
         	code.keyup(code_refresh);
         	code.change(code_refresh);
         	clear.click(function() {
         		code.val('');
         		code.removeClass('crayon-setting-selected');
-//        		warning.hide();
         		code.focus();
         	});
         	
@@ -124,7 +116,6 @@ var CrayonTagEditor = new function() {
     };
     
     // XXX Displays the dialog
-    
 	this.showDialog = function(callback, editor_str, ed) {
 		// If we have selected a Crayon, load in the contents
 		var currNode = ed.selection.getNode();
@@ -156,6 +147,8 @@ var CrayonTagEditor = new function() {
 				code.val(currCrayon.html());
 			}
 		}
+		
+		// Show the dialog
 		
     	tb_show('Add Crayon Code', '#TB_inline?inlineId=' + settings.css);
     	code.focus();
@@ -194,7 +187,6 @@ var CrayonTagEditor = new function() {
     };
     
     // XXX Add Crayon to editor
-    
     this.addCrayon =  function() {
 		if (code.val().length == 0) {
 			code.addClass('crayon-setting-selected');

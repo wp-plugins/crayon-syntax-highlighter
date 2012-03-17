@@ -39,7 +39,6 @@ var CrayonTinyMCE = new function() {
 				});
 	    		
 	    		ed.onInit.add(function(ed) {
-	    			console.log(tinyMCE.activeEditor.settings.wpautop);
     				CrayonTinyMCE.setHighlight(!settings.used);
 	    	    });
 	    		

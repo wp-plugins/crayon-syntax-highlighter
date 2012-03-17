@@ -1016,3 +1016,7 @@
 [Crayon Syntax Highlighter Log Entry - 7:41:25 AM - 17 Mar 2012]
 
  [DEBUG] str "init"
+
+[Crayon Syntax Highlighter Log Entry - 8:24:15 AM - 17 Mar 2012]
+
+ [DEBUG] str "init"

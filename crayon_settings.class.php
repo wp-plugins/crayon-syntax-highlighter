@@ -13,6 +13,9 @@ class CrayonSettings {
 	// Plugin data
 	const VERSION = 'version';
 
+	// Added when used in HTML to avoid id conflicts
+	const PREFIX = 'crayon-';
+	
 	// Global names for settings
 	const THEME = 'theme';
 	const FONT = 'font';

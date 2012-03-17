@@ -58,6 +58,10 @@ var CrayonSyntaxAdmin = new function() {
 		return jQuery(id);
 	}
 	
+	this.removePrefixFromID = function(id) {
+		return id.replace(/^#?crayon-/,'');
+	}
+	
 	this.init = function() {
 		crayon_log('admin init');
 		
@@ -267,7 +271,7 @@ var CrayonSyntaxAdmin = new function() {
 			var obj = jQuery(this);
 			var id = obj.attr('id');
 			// XXX Remove prefix
-			id = id.replace(/^crayon-/,'');
+			id = me.removePrefixFromID(id);
 			preview_obj_names[i] = id;
 			preview_objs[i] = obj;
 			// To capture key up events when typing

@@ -111,7 +111,9 @@ var CrayonTagEditor = new function() {
         	});
         	
         	// Create the Crayon Tag
-        	dialog.find('#crayon-te-submit').click(te.addCrayon());
+        	dialog.find('#crayon-te-submit').click(function () {
+        		te.addCrayon()
+        	});
         });
     };
     
@@ -130,6 +132,7 @@ var CrayonTagEditor = new function() {
 				for (var i in matches) {
 					var id = matches[i][1];
 					var value = matches[i][2];
+					// These don't contain prefix 
 					atts[id] = value;
 				}
 				// Only read title, don't let other atts in, no need
@@ -138,9 +141,9 @@ var CrayonTagEditor = new function() {
 					atts['title'] = title;
 				}
 				
-				// Load in attributes
+				// Load in attributes, add prefix
 				for (var att in atts) {
-					jQuery('#' + att + '.' + 'crayon-setting').val(atts[att]);
+					jQuery('#' + 'crayon-' + att + '.' + 'crayon-setting').val(atts[att]);
 					console.log(att + ' ' + atts[att]);
 				}
 				
@@ -212,6 +215,8 @@ var CrayonTagEditor = new function() {
 		jQuery('.crayon-setting-changed[id],.crayon-setting-changed[data-value]').each(function() {
     		var id = jQuery(this).attr('id');
     		var value = jQuery(this).attr('data-value');
+    		// Remove prefix
+    		id = CrayonSyntaxAdmin.removePrefixFromID(id);
     		atts[id] = value;
     		console.log(id + ' ' + value);
     	});
@@ -233,7 +238,7 @@ var CrayonTagEditor = new function() {
     	atts['decode'] = 'true';
 		for (var att in atts) {
     		// Remove prefix, if exists
-    		var id = att.replace(/^#?crayon-/, '');
+    		var id = CrayonSyntaxAdmin.removePrefixFromID(att);
     		var value = atts[att];
     		console.log('att: id: '+id+' value: '+value);
 			shortcode += id + settings.attr_sep + value + ' ';

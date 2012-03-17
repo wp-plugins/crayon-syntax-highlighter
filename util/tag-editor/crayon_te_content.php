@@ -19,7 +19,7 @@ $curr_font = CrayonGlobalSettings::val(CrayonSettings::FONT);
 class CrayonTEContent {
 	
 	public static function select_resource($id, $resources, $current, $set_class = TRUE) {
-		$id .= 'crayon-';
+		$id = CrayonSettings::PREFIX . $id;
 		if (count($resources) > 0) {
 			$class = $set_class ? 'class="crayon-setting-special"' : ''; 
 			echo '<select id="'.$id.'" name="'.$id.'" '.$class.'>';
@@ -35,12 +35,12 @@ class CrayonTEContent {
 	}
 	
 	public static function checkbox($id) {
-		$id .= 'crayon-';
+		$id = CrayonSettings::PREFIX . $id;
 		echo '<input type="checkbox" id="'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
 	}
 	
 	public static function textbox($id, $atts = array(), $set_class = TRUE) {
-		$id .= 'crayon-';
+		$id = CrayonSettings::PREFIX . $id;
 		$atts_str = '';
 		$class = $set_class ? 'class="crayon-setting-special"' : '';
 		foreach ($atts as $k=>$v) {

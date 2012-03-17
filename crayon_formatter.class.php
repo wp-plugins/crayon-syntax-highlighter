@@ -289,7 +289,7 @@ class CrayonFormatter {
 			$toolbar = $buttons = $plain_settings = '';
 		}
 		
-		if ($hl->setting_val(CrayonSettings::PLAIN)) {
+		if (empty($error) && $hl->setting_val(CrayonSettings::PLAIN)) {
 			// Different events to display plain code
 			switch ($hl->setting_index(CrayonSettings::SHOW_PLAIN)) {
 				case 0 :
@@ -312,7 +312,8 @@ class CrayonFormatter {
 			$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
 			$readonly = $touch ? '' : 'readonly';
 			$print_plain = $print_plain_button = '';
-			$print_plain = '<textarea class="crayon-plain" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
+			// TODO remove wrap
+			$print_plain = '<textarea wrap="off" class="crayon-plain" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
 		} else {
 			$print_plain = $plain_settings = $plain_settings = '';
 		}
@@ -389,13 +390,13 @@ class CrayonFormatter {
 		// Determine if operating system is mac
 		$crayon_os = CrayonUtil::is_mac() ? 'mac' : 'pc';
 		
-		
+//		var_dump(1);
 		
 		// Produce output
 		$output .= '
 		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.'" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
 		'.$toolbar.'
-			<div>'.$print_plain.'</div>'.'
+			<div class="crayon-plain-wrap">'.$print_plain.'</div>'.'
 			<div class="crayon-main" style="'.$main_style.'">
 				<table class="crayon-table">
 					<tr class="crayon-row">';
@@ -439,7 +440,7 @@ class CrayonFormatter {
 		if ($hl->setting_val(CrayonSettings::ERROR_MSG_SHOW)) {
 			$error = $hl->setting_val(CrayonSettings::ERROR_MSG);
 		}
-		$error = self::split_lines(trim($error), 'error');
+		$error = self::split_lines(trim($error), 'crayon-error');
 		return self::print_code($hl, $error, $line_numbers, $print);
 	}
 

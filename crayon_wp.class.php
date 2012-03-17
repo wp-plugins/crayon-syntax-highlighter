@@ -102,13 +102,16 @@ class CrayonWP {
 		// Load attributes from shortcode
 		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL, 'inline' => NULL);
 		$filtered_atts = shortcode_atts($allowed_atts, $atts);
-		$filtered_atts['lang'] = strtolower($filtered_atts['lang']);
+//		$filtered_atts['lang'] = strtolower($filtered_atts['lang']);
 		
 		// Clean attributes
 		$keys = array_keys($filtered_atts);
 		for ($i = 0; $i < count($keys); $i++) {
 			$key = $keys[$i];
-			$filtered_atts[$key] = trim(strip_tags($filtered_atts[$key]));
+			$value = $filtered_atts[$key];
+			if ($value !== NULL) {
+				$filtered_atts[$key] = trim(strip_tags($value));
+			}
 		}
 		
 		// Contains all other attributes not found in allowed, used to override global settings
@@ -123,13 +126,8 @@ class CrayonWP {
 		$crayon = self::instance($extra_attr, $id);
 		
 		// Set URL
-		$url = isset($url) ? $url : '';
-		if (!empty($url)) {
-			$crayon->url($url);
-		}
-		if (!empty($content)) {
-			$crayon->code($content);
-		}
+		$crayon->url($url);
+		$crayon->code($content);
 		// Set attributes, should be set after URL to allow language auto detection
 		$crayon->language($lang);
 		$crayon->title($title);
@@ -163,6 +161,8 @@ class CrayonWP {
 	
 	/* Uses the main query */
 	public static function wp() {
+		CrayonLog::debug('wp (global)');
+		
 		global $wp_the_query;
 		$posts = $wp_the_query->posts;
 		self::the_posts($posts);
@@ -183,6 +183,8 @@ class CrayonWP {
 		if (CrayonUtil::strposa($wp_content, self::$search_tags, TRUE) === FALSE) {
 			return $capture;
 		}
+		
+		CrayonLog::debug('capture for id ' . $wp_id);
 		
 		// Convert <pre> tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
@@ -224,11 +226,14 @@ class CrayonWP {
 		
 		// We need to escape ignored Crayons, since they won't be captured
 		$capture['content'] = self::crayon_remove_ignore($wp_content);
+		CrayonLog::debug('capture ignore for id ' . $wp_id . ' : ' . strlen($capture['content']) . ' vs ' . strlen($wp_content));
 		
 		if ( count($matches[0]) != 0 ) {
 			// Crayons found! Load settings first to ensure global settings loaded
 			CrayonSettingsWP::load_settings();
 			$capture['has_captured'] = TRUE;
+			
+			CrayonLog::debug('CAPTURED FOR ID ' . $wp_id);
 			
 			$full_matches = $matches[0];
 			$closed_ids = $matches[1];
@@ -331,6 +336,8 @@ class CrayonWP {
 			// Capture post Crayons
 			$captures = self::capture_crayons($post->ID, $post->post_content);
 			if ($captures['has_captured'] === TRUE) {
+//				var_dump(strlen($post->post_content) . ' ' .  $post->ID);
+				$enqueue = TRUE;
 				self::$post_queue[$id_str] = array();
 				foreach ($captures['capture'] as $capture_id=>$capture_content) {
 					self::$post_queue[$id_str][$capture_id] = $capture_content;
@@ -352,6 +359,7 @@ class CrayonWP {
 					// Capture comment Crayons
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
 			        if ($captures['has_captured'] === TRUE) {
+			        	$enqueue = TRUE;
 			        	self::$comment_captures[$id_str] = $captures['content'];
 			        	self::$comment_queue[$id_str] = array();
 				        foreach ($captures['capture'] as $capture_id=>$capture_content) {
@@ -416,9 +424,16 @@ class CrayonWP {
 	
 	// Add Crayon into the_content
 	public static function the_content($the_content) {
-		CrayonLog::debug('the_content');
+		CrayonLog::debug('the_content'); 
+		
+		// Some themes make redundant queries and don't need extra work...
+		if (strlen($the_content) == 0) {
+			CrayonLog::debug('the_content blank');
+			return $the_content;
+		}
 		
 		global $post;
+		
 		// Go through queued posts and find crayons		
 		$post_id = strval($post->ID);
 		
@@ -448,12 +463,17 @@ class CrayonWP {
 					// Apply shortcode to the content
 					$crayon_formatted = $crayon->output(TRUE, FALSE);
 				}
+				CrayonLog::debug('the_content: id '.$post_id. ' pre-p-len ' . strlen($the_content));
 				// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them if needed
 				if (!$crayon->is_inline()) { 
+					CrayonLog::debug('add_paragraphs ' . $post_id);
 					$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
 				}
+				CrayonLog::debug('the_content: id '.$post_id. ' post-p-len ' . strlen($the_content));
 				// Replace the code with the Crayon
+				CrayonLog::debug('the_content: id '.$post_id. ' has UID ' . $id . ' : ' . intval(stripos($the_content, $id) !== 0) ); 
 				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
+				CrayonLog::debug('the_content: replaced for id '.$post_id. ' from len ' . strlen($the_content_original) . ' to ' . strlen($the_content));
 			}
 		}
 		
@@ -489,7 +509,9 @@ class CrayonWP {
 	}
 	
 	public static function add_paragraphs($capture) {
+//		CrayonLog::debug('add_paragraphs');
 		if (count($capture) != 4) {
+			CrayonLog::debug('add_paragraphs: 0');
 			return $capture[0];
 		}
 		
@@ -555,6 +577,7 @@ class CrayonWP {
 		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 			$the_content = str_ireplace(array('$<pre', 'pre>$'), array('<pre', 'pre>'), $the_content);
+			$the_content = str_ireplace(array('$&lt;pre', 'pre&gt;$'), array('&lt;pre', 'pre&gt;'), $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
 			$the_content = str_ireplace(array('$[plain', 'plain]$'), array('[plain', 'plain]'), $the_content);
@@ -576,9 +599,11 @@ class CrayonWP {
 		
 		self::$wp_head = TRUE;
 		if (!self::$enqueued) {
+			CrayonLog::debug('head: missed enqueue');
 			// We have missed our chance to check before enqueuing. Use setting to either load always or only in the_post
 			CrayonSettingsWP::load_settings(TRUE); // Ensure settings are loaded
 			if (!CrayonGlobalSettings::val(CrayonSettings::EFFICIENT_ENQUEUE)) {
+				CrayonLog::debug('head: force enqueue');
 				// Efficient enqueuing disabled, always load despite enqueuing or not in the_post
 				self::enqueue_resources();
 			}
@@ -674,6 +699,7 @@ if (defined('ABSPATH')) {
 		
 		// TODO find a better way to handle updates
 		CrayonWP::update();
+		
 		CrayonSettingsWP::load_settings(TRUE);
 		if (CrayonGlobalSettings::val(CrayonSettings::MAIN_QUERY)) {
 			add_action('wp', 'CrayonWP::wp');

@@ -162,6 +162,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup
+* I'm still sticking to the wrap="off" for no-wrapping preformatted styling - CSS doesn't do the trick yet: http://stackoverflow.com/questions/657795/how-remove-wordwrap-from-textarea
 * Improved ajax handling
 * Cleaned up the settings screen
 * Line numbers now use UID in id to avoid duplicates
@@ -170,7 +171,11 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed a bug causing case insensitive Boolean settings to fail at times
 * Fixed a bug causing a [crayon ... /] tags to be recognised as [c ... /] tags (added a \b)
 * Fixed a bug preventing highlight="false" from working
-* Fixed a bug preventing mouse events for showing plain code when toolbar is always hidden 
+* Fixed a bug preventing mouse events for showing plain code when toolbar is always hidden
+* Fixed a bug preventing smart enqueuing from detecting if a Crayon was present before enqueuing resources.
+* Fixed removing $ in font of ignored crayons like $&lt;pre...
+* Cleaned up code for specifying attributes, NULL attributes are not passed as empty strings anymore. 
+* The log looks cleaner now
 * Added ability to use closed Mini Tags like [php ... \] when you're just giving a URL
 * Added lenient spaces for closed tags
 * Fixed element content text in XHTML to avoid capturing "" as strings

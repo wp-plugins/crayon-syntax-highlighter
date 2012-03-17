@@ -300,10 +300,9 @@ coloring etc.
 	height: inherit !important;
 }
 
-/*.crayon-syntax .crayon-num,
-.crayon-syntax .crayon-line {
-    height: 16px;
-}*/
+.crayon-syntax .crayon-plain-wrap {
+
+}
 
 .crayon-syntax .crayon-plain {
 	width: 100%;
@@ -312,7 +311,6 @@ coloring etc.
 	opacity: 0;
 	padding: 0 5px;
 	margin: 0px;
-	resize: none; /* vertical */
 	border: none;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -320,12 +318,13 @@ coloring etc.
 	box-shadow: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
-	white-space: nowrap;
+	/*white-space: pre-wrap;*/
+	white-space: pre;
+	word-wrap: normal;
 	overflow: auto;
+	resize: none;
 	color: #000;
     background: #FFF;
-	resize: none;
-	border-radius: 0;
 }
 
 /* End Code ======================== */

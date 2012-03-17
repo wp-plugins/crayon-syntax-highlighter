@@ -10,7 +10,8 @@ require_once (CRAYON_LANGS_PHP);
 class CrayonHighlighter {
 	// Properties and Constants ===============================================
 	private $id = '';
-	private $url = '';
+	// URL is initially NULL, meaning none provided
+	private $url = NULL;
 	private $code = '';
 	private $formatted_code = '';
 	private $title = '';
@@ -18,8 +19,8 @@ class CrayonHighlighter {
 	private $marked_lines = array();
 	private $error = '';
 	// Determine whether the code needs to be loaded, parsed or formatted
-	private $needs_load = TRUE;
-	private $needs_format = TRUE;
+	private $needs_load = FALSE;
+	private $needs_format = FALSE;
 	// Record the script run times
 	private $runtime = array();
 	// Whether the code is mixed
@@ -36,6 +37,7 @@ class CrayonHighlighter {
 	
 	// Methods ================================================================
 	function __construct($url = NULL, $language = NULL, $id = NULL) {
+//		var_dump($url);
 		if ($url !== NULL) {
 			$this->url($url);
 		}
@@ -159,7 +161,6 @@ class CrayonHighlighter {
 			$tmr->start();
 			try {
 				// Parse before hand to read modes
-				CrayonParser::parse($this->language->id());
 				$code = $this->code;
 				// If inline, then combine lines into one
 				if ($this->is_inline) {
@@ -222,9 +223,11 @@ class CrayonHighlighter {
 			if ($this->setting_val(CrayonSettings::TRIM_WHITESPACE)) {
 				$code = preg_replace("#(?:^\\s*\\r?\\n)|(?:\\r?\\n\\s*$)#", '', $code);
 			}
-			$this->code = $code;
-			$this->needs_load = FALSE; // No need to load, code provided
-			$this->needs_format = TRUE;
+			if (!empty($code)) {
+				$this->code = $code;
+				$this->needs_load = FALSE; // No need to load, code provided
+				$this->needs_format = TRUE;
+			}
 		}
 	}
 
@@ -243,6 +246,9 @@ class CrayonHighlighter {
 			}
 			$this->language = CrayonResources::langs()->detect($this->url, $this->setting_val(CrayonSettings::FALLBACK_LANG));
 		}
+		
+		// Prepare the language for use, even if we have no code, we need the name
+		CrayonParser::parse($this->language->id());
 	}
 
 	function url($url = NULL) {
@@ -250,6 +256,7 @@ class CrayonHighlighter {
 			return $this->url;
 		} else {
 			$this->url = $url;
+			$this->needs_load = TRUE;
 		}
 		
 //		if (CrayonUtil::str($this->url, $url)) {

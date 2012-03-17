@@ -35,9 +35,11 @@ class CrayonTagEditorWP {
 							);
 		
 		// Hooks
-		self::addbuttons();
-		add_filter('tiny_mce_before_init', 'CrayonTagEditorWP::init_tinymce');
-		add_action("admin_print_scripts-post.php", 'CrayonTagEditorWP::admin_scripts');
+		if (CRAYON_TAG_EDITOR) {
+			self::addbuttons();
+			add_filter('tiny_mce_before_init', 'CrayonTagEditorWP::init_tinymce');
+			add_action("admin_print_scripts-post.php", 'CrayonTagEditorWP::admin_scripts');
+		}
 	}
 	
 	public static function init_tinymce($init) {

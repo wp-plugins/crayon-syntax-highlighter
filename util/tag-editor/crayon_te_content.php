@@ -19,9 +19,10 @@ $curr_font = CrayonGlobalSettings::val(CrayonSettings::FONT);
 class CrayonTEContent {
 	
 	public static function select_resource($id, $resources, $current, $set_class = TRUE) {
+		$id .= 'crayon-';
 		if (count($resources) > 0) {
 			$class = $set_class ? 'class="crayon-setting-special"' : ''; 
-			echo '<select id="crayon-'.$id.'" name="'.$id.'" '.$class.'>';
+			echo '<select id="'.$id.'" name="'.$id.'" '.$class.'>';
 				foreach ($resources as $resource) {
 					$asterisk = $current == $resource->id() ? ' *' : '';
 					echo '<option value="'.$resource->id().'" '.selected($current, $resource->id()).' >'.$resource->name().$asterisk.'</option>';
@@ -29,21 +30,23 @@ class CrayonTEContent {
 			echo '</select>';
 		} else {
 			// None found, default to text box
-			echo '<input type="text" id="crayon-'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
+			echo '<input type="text" id="'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
 		}
 	}
 	
 	public static function checkbox($id) {
-		echo '<input type="checkbox" id="crayon-'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
+		$id .= 'crayon-';
+		echo '<input type="checkbox" id="'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
 	}
 	
 	public static function textbox($id, $atts = array(), $set_class = TRUE) {
+		$id .= 'crayon-';
 		$atts_str = '';
 		$class = $set_class ? 'class="crayon-setting-special"' : '';
 		foreach ($atts as $k=>$v) {
 			$atts_str = $k.'="'.$v.'" ';
 		}
-		echo '<input type="text" id="crayon-'.$id.'" name="'.$id.'" '.$class.' '.$atts_str.' />';
+		echo '<input type="text" id="'.$id.'" name="'.$id.'" '.$class.' '.$atts_str.' />';
 	}
 	
 }

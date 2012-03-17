@@ -4,6 +4,7 @@ var CrayonTinyMCE = new function() {
 	var name = 'crayon_tinymce';
 	var settings = CrayonTagEditorSettings;
 	var isHighlighted = false;
+	var currPre = null;
 //	var wasHighlighted = false;
 	
 	this.setHighlight = function(highlight) {
@@ -21,13 +22,17 @@ var CrayonTinyMCE = new function() {
 	    tinymce.create('tinymce.plugins.Crayon', {
 	        init : function(ed, url) {
 	    		jQuery(function() {
-	    			CrayonTagEditor.load();
+	    			CrayonTagEditor.loadDialog();
 	        	});
+	    		
+	    		ed.onInit.add(function(ed) {
+	    			ed.dom.loadCSS(url + '/crayon_te.css');
+				});
 				
 	    		// Prevent <p> on enter, turn into \n
 				ed.onKeyDown.add(function( ed, e ) {
 					var selection = ed.selection;
-					if ( e.keyCode == 13 && selection.getNode().nodeName === 'PRE' ) {
+					if ( e.keyCode == 13 && selection.getNode().nodeName == 'PRE' ) {
 						selection.setContent('\n', {format : 'raw'});
 						return tinymce.dom.Event.cancel(e);
 					}
@@ -39,19 +44,30 @@ var CrayonTinyMCE = new function() {
 	    	    });
 	    		
 	            ed.addCommand('showCrayon', function() {
-	            	CrayonTagEditor.dialog(function(shortcode) {
+	            	CrayonTagEditor.showDialog(function(shortcode) {
 	            		tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	            	}, 'tinymce', ed);
 	            	CrayonTinyMCE.setHighlight(false);
 	            });
 	            
 	            ed.onNodeChange.add(function(ed, cm, n, co) {
-	            	if (n.nodeName == 'PRE') {
-	            		CrayonTinyMCE.setHighlight(true);
-	            	} else {
-	            		CrayonTinyMCE.setHighlight(!settings.used);
+	            	if (n != currPre) {
+	            		// We don't care if we select the same object
+	            		if (currPre) {
+			            	// If we have a previous pre, remove it
+		        			jQuery(currPre).removeClass(settings.pre_css_selected);
+		        			currPre = null;
+		        		}
+		            	if (n.nodeName == 'PRE') {
+		            		// Add new pre
+		            		currPre = n;
+		            		jQuery(n).addClass(settings.pre_css_selected);
+		            		CrayonTinyMCE.setHighlight(true);
+		            	} else {
+		            		// No pre selected
+		            		CrayonTinyMCE.setHighlight(!settings.used);
+		            	}
 	            	}
-	            	
 				});
 	            
 	            ed.addButton(name, {

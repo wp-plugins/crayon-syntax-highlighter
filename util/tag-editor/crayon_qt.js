@@ -1,8 +1,8 @@
 var CrayonQuickTags = function() {
-	jQuery(function() {CrayonTagEditor.load()});
+	jQuery(function() {CrayonTagEditor.loadDialog()});
 	
 	QTags.addButton( 'crayon_quicktag', 'crayon', function() {
-		CrayonTagEditor.dialog(function(shortcode) {
+		CrayonTagEditor.showDialog(function(shortcode) {
 			QTags.insertContent(shortcode);
 		}, 'html');
 		jQuery('#qt_content_crayon_quicktag').removeClass('qt_crayon_highlight');

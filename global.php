@@ -5,7 +5,7 @@
 define('CRAYON_DEBUG', TRUE);
 
 // TODO remove once done
-define('CRAYON_TAG_EDITOR', false);
+define('CRAYON_TAG_EDITOR', true);
 define('CRAYON_THEME_EDITOR', false);
 
 // Constants
@@ -71,7 +71,7 @@ define('CRAYON_UTIL_JS', CRAYON_JS_DIR . 'util.js');
 define('CRAYON_TE_JS', 'crayon_te.js');
 define('CRAYON_TE_PHP', 'crayon_te_content.php');
 define('CRAYON_TINYMCE_JS', 'crayon_tinymce.js');
-define('CRAYON_QUICKTAGS_JS', 'crayon_quicktags.js');
+define('CRAYON_QUICKTAGS_JS', 'crayon_qt.js');
 define('CRAYON_STYLE', CRAYON_CSS_DIR . 'style.css');
 define('CRAYON_STYLE_ADMIN', CRAYON_CSS_DIR . 'admin_style.css');
 define('CRAYON_LOGO', CRAYON_CSS_DIR . 'images/crayon_logo.png');

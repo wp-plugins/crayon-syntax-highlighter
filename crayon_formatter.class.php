@@ -390,8 +390,6 @@ class CrayonFormatter {
 		// Determine if operating system is mac
 		$crayon_os = CrayonUtil::is_mac() ? 'mac' : 'pc';
 		
-//		var_dump(1);
-		
 		// Produce output
 		$output .= '
 		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.'" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">

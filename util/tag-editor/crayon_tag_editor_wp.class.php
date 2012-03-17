@@ -5,37 +5,10 @@ require_once (CRAYON_ROOT_PATH . 'crayon_settings_wp.class.php');
 
 class CrayonTagEditorWP {
 
-	private static $settings = null;
-//	const CRAYON_PRE_CSS = 'crayon-syntax-pre';
-//	const CRAYON_CODE_CSS = 'crayon-code-line';
-//	const CRAYON_TE_CSS = '#crayon-te-code';
+	public static $settings = null;
 	
 	public static function init() {
-		// Add settings
-		CrayonSettingsWP::load_settings(TRUE);
-//		$line_break = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_LINE_BREAK);
-		self::$settings = array('url' => plugins_url(CRAYON_TE_PHP, __FILE__),
-								'home_url' => home_url(),
-								'css' => 'crayon-te',
-								'used' => CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED),
-								'used_setting' => CrayonSettings::TINYMCE_USED,
-								'ajax_url' => plugins_url(CRAYON_AJAX_PHP, dirname(dirname(__FILE__))),
-		
-								// This is decoded, so we need to encode twice
-//								'br_after' => $line_break == 0 || $line_break == 1,
-//								'br_before' => $line_break == 0 || $line_break == 2,
-								'pre_css' => 'crayon-syntax-pre',
-								'pre_css_selected' => 'crayon-syntax-pre-selected',
-//								'code_css' => self::CRAYON_CODE_CSS,
-								'code_css' => '#crayon-te-code',
-								'lang_css' => '#crayon-lang',
-								'title_css' => '#crayon-title',
-								'mark_css' => '#crayon-mark',
-								//'prefix' => CrayonSettings::PREFIX,
-								'attr_sep' => ':'
-								// TODO css
-							);
-		
+		self::init_settings();
 		// Hooks
 		if (CRAYON_TAG_EDITOR) {
 			self::addbuttons();
@@ -43,6 +16,32 @@ class CrayonTagEditorWP {
 			add_action("admin_print_scripts-post.php", 'CrayonTagEditorWP::admin_scripts');
 			// Must come after
 			add_action("admin_print_scripts-post.php", 'CrayonSettingsWP::init_js_settings');
+		}
+	}
+	
+	public static function init_settings() {
+		if (!self::$settings) {
+			// Add settings
+			CrayonSettingsWP::load_settings(TRUE);
+			self::$settings = array(
+					'url' => plugins_url(CRAYON_TE_PHP, __FILE__),
+					'home_url' => home_url(),
+					'css' => 'crayon-te',
+					'used' => CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED),
+					'used_setting' => CrayonSettings::TINYMCE_USED,
+					'ajax_url' => plugins_url(CRAYON_AJAX_PHP, dirname(dirname(__FILE__))),
+					'pre_css' => 'crayon-syntax-pre',
+					'pre_css_selected' => 'crayon-syntax-pre-selected',
+					'code_css' => '#crayon-te-code',
+					'lang_css' => '#crayon-lang',
+					'title_css' => '#crayon-title',
+					'mark_css' => '#crayon-mark',
+					'submit_css' => '#crayon-te-submit',
+					'attr_sep' => ':',
+					'dialog_title' => 'Add Crayon Code',
+					'submit_add' => 'Add Code',
+					'submit_edit' => 'Edit Code',
+			);
 		}
 	}
 	

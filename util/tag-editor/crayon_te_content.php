@@ -6,6 +6,7 @@ $root = dirname(dirname(dirname(__FILE__)));
 require_once ($root . '/crayon_wp.class.php');
 require_once (CrayonWP::wp_load_path());
 require_once ($root.'/crayon_settings_wp.class.php');
+require_once ('crayon_tag_editor_wp.class.php');
 require_once (CRAYON_PARSER_PHP);
 
 CrayonSettingsWP::load_settings();
@@ -15,6 +16,7 @@ $themes = CrayonResources::themes()->get();
 $curr_theme = CrayonGlobalSettings::val(CrayonSettings::THEME);
 $fonts = CrayonResources::fonts()->get();
 $curr_font = CrayonGlobalSettings::val(CrayonSettings::FONT);
+CrayonTagEditorWP::init_settings();
 
 class CrayonTEContent {
 	
@@ -80,7 +82,7 @@ class CrayonTEContent {
 		</tr>
 		--><tr>
 			<td colspan="2" style="text-align: center;">
-				<input type="button" id="crayon-te-submit" class="button-primary" value="Add Code" name="submit" />
+				<input type="button" id="crayon-te-submit" class="button-primary" value="<?php echo CrayonTagEditorWP::$settings['submit_add']; ?>" name="submit" />
 			</td>
 		</tr>
 <!--		<tr>-->
@@ -91,7 +93,7 @@ class CrayonTEContent {
 			<hr />
 			<div><h2 class="crayon-te-heading">Settings</h2></div>
 			<div id="crayon-te-settings-info" class="crayon-te-info">
-				Change the following settings to override their global values. <span class="<?php CrayonSettings::SETTING_CHANGED ?>">Only changes (shown yellow) are applied.</span><br/>
+				Change the following settings to override their global values. <span class="<?php echo CrayonSettings::SETTING_CHANGED ?>">Only changes (shown yellow) are applied.</span><br/>
 				Future changes to the global settings under <code>Crayon > Settings</code> won't affect overridden settings. 
 			</div></td>
 		</tr>

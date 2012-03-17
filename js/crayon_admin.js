@@ -24,10 +24,11 @@ function crayon_escape(string) {
     }
 }
 
-jQuery(document).ready(function() {
-	crayon_log('admin loaded');
-	CrayonSyntaxAdmin.init();
-});
+//jQuery(document).ready(function() {
+//	crayon_log('admin loaded');
+//	alert();
+//	CrayonSyntaxAdmin.init();
+//});
 
 var CrayonSyntaxAdmin = new function() {
 	
@@ -98,11 +99,14 @@ var CrayonSyntaxAdmin = new function() {
 		preview_info = jQuery('#crayon-preview-info');
 		preview_url = preview.attr('url');
 		preview_cbox = me.cssElem('#preview');
-		preview_register();
-		preview.ready(function() {
-			preview_toggle();
-		});
+		if (preview.length != 0) {
+			// Preview not needed in Tag Editor
+			preview_register();
+			preview.ready(function() {
+				preview_toggle();
+			});
 		preview_cbox.change(function() { preview_toggle(); });
+		}
 		
 		// Alignment
 		align_drop = me.cssElem('#h-align');

@@ -71,7 +71,7 @@ var CrayonTinyMCE = new function() {
 	            
 	            ed.addButton(name, {
 	            	// TODO add translation
-	                title: 'Add Crayon Code',
+	                title: settings.dialog_title,
 	                cmd: 'showCrayon'
 	            });
 	        },

@@ -29,7 +29,7 @@ var CrayonTagEditor = new function() {
 	var te = this;
 	
 	// CSS
-	var dialog, code, clear;
+	var dialog, code, clear, submit;
 	// True if editing an existing Crayon
 	var editing = false;
 	
@@ -47,6 +47,11 @@ var CrayonTagEditor = new function() {
         	dialog = jQuery('<div id="'+s.css+'"></div>');
             dialog.appendTo('body').hide();
         	dialog.html(data);
+        	
+        	dialog.ready(function() {
+        		// Some settings have dependencies, need to load js for that
+        		CrayonSyntaxAdmin.init();
+        	});
         	
         	code = jQuery(s.code_css);
         	clear = jQuery('#crayon-te-clear');
@@ -110,7 +115,9 @@ var CrayonTagEditor = new function() {
         	});
         	
         	// Create the Crayon Tag
-        	dialog.find('#crayon-te-submit').click(function () {
+        	submit = dialog.find(s.submit_css);
+        	submit.val(s.submit_add);
+        	submit.click(function () {
         		te.addCrayon()
         	});
         });
@@ -124,6 +131,7 @@ var CrayonTagEditor = new function() {
 			currCrayon = jQuery(currNode);
 			editing = currCrayon.hasClass(s.pre_css); 
 			if (editing) {
+				// Read back settings for editing
 				var class_ = currCrayon.attr('class');
 				var attr_regex = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
 				var matches = attr_regex.execAll(class_);
@@ -146,13 +154,18 @@ var CrayonTagEditor = new function() {
 					console.log(att + ' ' + atts[att]);
 				}
 				
+				submit.val(s.submit_edit);
 				code.val(currCrayon.html());
+			} else {
+				// We are creating a new Crayon
+				submit.val(s.submit_add);
+				// TODO reset stuff
 			}
 		}
 		
 		// Show the dialog
 		
-    	tb_show('Add Crayon Code', '#TB_inline?inlineId=' + s.css);
+    	tb_show(s.dialog_title, '#TB_inline?inlineId=' + s.css);
     	code.focus();
     	insertCallback = callback;
     	editor_name = editor_str;

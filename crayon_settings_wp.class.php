@@ -95,6 +95,13 @@ class CrayonSettingsWP {
 		
 		?>
 
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		CrayonSyntaxAdmin.init();
+	});
+</script>
+
+		
 <div id="crayon-main-wrap" class="wrap">
 
 <div id="icon-options-general" class="icon32"><br>

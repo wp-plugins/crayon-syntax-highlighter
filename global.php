@@ -2,7 +2,7 @@
 
 // Switches
 
-define('CRAYON_DEBUG', TRUE);
+define('CRAYON_DEBUG', FALSE);
 
 // TODO remove once done
 define('CRAYON_TAG_EDITOR', true);
@@ -170,6 +170,10 @@ function crayon_set_info_key($key, $array, &$info) {
 	} else {
 		return FALSE;
 	}
+}
+
+function crayon_vargs(&$var, $default) {
+	$var = isset($var) ? $var: $default;
 }
 
 // LANGUAGE TRANSLATION FUNCTIONS

@@ -50,6 +50,13 @@ var CrayonSyntaxAdmin = new function() {
 	var main_wrap, theme_editor_wrap, editor_url, theme_editor_button;
 	var theme_editor_loaded = false;
 	var theme_editor_loading = false;
+
+	var me = this;
+	
+	this.cssElem = function(id) {
+		id = id.replace(/^([#.])(.*)$/, '$1crayon-$2');
+		return jQuery(id);
+	}
 	
 	this.init = function() {
 		crayon_log('admin init');
@@ -77,10 +84,10 @@ var CrayonSyntaxAdmin = new function() {
 		});
 		
 		// Preview
-		preview = jQuery('#crayon-preview');
+		preview = jQuery('#crayon-live-preview');
 		preview_info = jQuery('#crayon-preview-info');
 		preview_url = preview.attr('url');
-		preview_cbox = jQuery('#preview');
+		preview_cbox = me.cssElem('#preview');
 		preview_register();
 		preview.ready(function() {
 			preview_toggle();
@@ -88,25 +95,25 @@ var CrayonSyntaxAdmin = new function() {
 		preview_cbox.change(function() { preview_toggle(); });
 		
 		// Alignment
-		align_drop = jQuery('#h-align');
+		align_drop = me.cssElem('#h-align');
 		float = jQuery('#crayon-float');
 		align_drop.change(function() { float_toggle(); });
 		align_drop.ready(function() { float_toggle(); });
 		
 	    // Custom Error
-	    msg_cbox = jQuery('#error_msg_show');
-	    msg = jQuery('#error_msg');
+	    msg_cbox = me.cssElem('#error-msg-show');
+	    msg = me.cssElem('#error-msg');
 	    toggle_error();
 	    msg_cbox.change(function() { toggle_error(); });
 	
 	    // Toolbar
-	    overlay = jQuery('#toolbar_overlay');
-	    toolbar = jQuery('#toolbar');
+	    overlay = me.cssElem('#toolbar-overlay');
+	    toolbar = me.cssElem('#toolbar');
 	    toggle_toolbar();
 	    toolbar.change(function() { toggle_toolbar(); });
 	    
 	    // Copy
-	    plain = jQuery('#plain');
+	    plain = me.cssElem('#plain');
 	    copy = jQuery('#crayon-copy-check');
 	    plain.change(function() {
 	    	if (plain.is(':checked')) {
@@ -168,7 +175,7 @@ var CrayonSyntaxAdmin = new function() {
 	
 		// Load Preview
 		jQuery.get(preview_url + preview_get, function(data) {
-			//crayon_log(data);
+			crayon_log(1);
 			preview.html(data);
 			// Important! Calls the crayon.js init
 			CrayonSyntax.init();
@@ -245,8 +252,6 @@ var CrayonSyntaxAdmin = new function() {
 		
 		// Only updates when text is changed, but  callback
 		preview_txt_callback_delayed = function(event) {
-			//crayon_log('txt delayed');
-			
 			preview_txt_change(function() {
 				clearInterval(preview_delay_timer);
 				preview_delay_timer = setInterval(function() {
@@ -260,7 +265,10 @@ var CrayonSyntaxAdmin = new function() {
 		// Retreive preview objects
 		jQuery('[crayon-preview="1"]').each(function(i) {
 			var obj = jQuery(this);
-			preview_obj_names[i] = obj.attr('id');
+			var id = obj.attr('id');
+			// XXX Remove prefix
+			id = id.replace(/^crayon-/,'');
+			preview_obj_names[i] = id;
 			preview_objs[i] = obj;
 			// To capture key up events when typing
 			if (obj.attr('type') == 'text') {

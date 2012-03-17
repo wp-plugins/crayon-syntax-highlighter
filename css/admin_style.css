@@ -146,7 +146,7 @@
 	color: #77A000;
 }
 
-#crayon-preview,
+#crayon-live-preview,
 #crayon-log-wrapper {
 	padding: 5px;
 	width: 95%;
@@ -154,7 +154,7 @@
 	clear: both;
 }
 
-#crayon-preview {
+#crayon-live-preview {
 	float: none;
 	padding: 0;
 }

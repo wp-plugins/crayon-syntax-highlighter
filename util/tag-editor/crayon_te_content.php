@@ -21,7 +21,7 @@ class CrayonTEContent {
 	public static function select_resource($id, $resources, $current, $set_class = TRUE) {
 		$id = CrayonSettings::PREFIX . $id;
 		if (count($resources) > 0) {
-			$class = $set_class ? 'class="crayon-setting-special"' : ''; 
+			$class = $set_class ? 'class="'.CrayonSettings::SETTING_SPECIAL.'"' : ''; 
 			echo '<select id="'.$id.'" name="'.$id.'" '.$class.'>';
 				foreach ($resources as $resource) {
 					$asterisk = $current == $resource->id() ? ' *' : '';
@@ -30,19 +30,19 @@ class CrayonTEContent {
 			echo '</select>';
 		} else {
 			// None found, default to text box
-			echo '<input type="text" id="'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
+			echo '<input type="text" id="'.$id.'" name="'.$id.'" class="'.CrayonSettings::SETTING_SPECIAL.'" />';
 		}
 	}
 	
 	public static function checkbox($id) {
 		$id = CrayonSettings::PREFIX . $id;
-		echo '<input type="checkbox" id="'.$id.'" name="'.$id.'" class="crayon-setting-special" />';
+		echo '<input type="checkbox" id="'.$id.'" name="'.$id.'" class="'.CrayonSettings::SETTING_SPECIAL.'" />';
 	}
 	
 	public static function textbox($id, $atts = array(), $set_class = TRUE) {
 		$id = CrayonSettings::PREFIX . $id;
 		$atts_str = '';
-		$class = $set_class ? 'class="crayon-setting-special"' : '';
+		$class = $set_class ? 'class="'.CrayonSettings::SETTING_SPECIAL.'"' : '';
 		foreach ($atts as $k=>$v) {
 			$atts_str = $k.'="'.$v.'" ';
 		}
@@ -91,7 +91,7 @@ class CrayonTEContent {
 			<hr />
 			<div><h2 class="crayon-te-heading">Settings</h2></div>
 			<div id="crayon-te-settings-info" class="crayon-te-info">
-				Change the following settings to override their global values. <span class="crayon-setting-changed">Only changes (shown yellow) are applied.</span><br/>
+				Change the following settings to override their global values. <span class="<?php CrayonSettings::SETTING_CHANGED ?>">Only changes (shown yellow) are applied.</span><br/>
 				Future changes to the global settings under <code>Crayon > Settings</code> won't affect overridden settings. 
 			</div></td>
 		</tr>

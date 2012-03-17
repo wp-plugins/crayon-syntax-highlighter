@@ -80,8 +80,9 @@ class CrayonSettingsWP {
 			self::$js_settings = array(
 					'prefix' => CrayonSettings::PREFIX,
 					'setting' => CrayonSettings::SETTING,
-					'selected' => CrayonSettings::SETTING . '-selected',
-					'changed' => CrayonSettings::SETTING . '-changed',
+					'selected' => CrayonSettings::SETTING_SELECTED,
+					'changed' => CrayonSettings::SETTING_CHANGED,
+					'special' => CrayonSettings::SETTING_SPECIAL,
 					);
 			wp_localize_script('crayon_admin_js', 'CrayonSyntaxSettings', self::$js_settings);
 		}
@@ -387,7 +388,7 @@ class CrayonSettingsWP {
 		$break = FALSE;
 		extract($args); 
 		
-		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" class="crayon-setting" size="', $size, '" type="text" value="',
+		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" class="'.CrayonSettings::SETTING.'" size="', $size, '" type="text" value="',
 			self::$options[$id], '" data-orig-value="', self::$options[$id], '" style="margin-left: ', ($margin ? '20px' : ''), ';" crayon-preview="', ($preview ? 1 : 0), '" />', ($break ? CRAYON_BR : '');
 	}
 
@@ -400,24 +401,22 @@ class CrayonSettingsWP {
 		$checked = (!array_key_exists($id, self::$options)) ? FALSE : self::$options[$id] == TRUE;
 		$checked_str = $checked ? ' checked="checked"' : ''; 
 //		$checked = (!array_key_exists($id, self::$options)) ? '' : checked(TRUE, self::$options[$id], FALSE);
-		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" type="checkbox" class="crayon-setting" value="1"', $checked_str,
+		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" type="checkbox" class="'.CrayonSettings::SETTING.'" value="1"', $checked_str,
 			' crayon-preview="', ($preview ? 1 : 0), '" data-orig-value="', strval(intval($checked)), '" /> ', '<span>', $text, '</span>', ($line_break ? CRAYON_BR : '');
 	}
 
 	// Draws a dropdown by loading the default value (an array) from a setting
-	private static function dropdown($id, $line_break = TRUE, $preview = TRUE, $echo = TRUE) {
+	private static function dropdown($id, $line_break = TRUE, $preview = TRUE, $echo = TRUE, $resources = NULL) {
 		if (!array_key_exists($id, self::$options)) {
 			return;
 		}
-		$opts = CrayonGlobalSettings::get($id)->def();
-		$return = '';
-		if (is_array($opts)) {
-			$return .= '<select id="'.CrayonSettings::PREFIX.$id.'" name="'.self::OPTIONS.'['.$id.']" class="crayon-setting" data-orig-value="'. self::$options[$id]. '" crayon-preview="'.($preview ? 1 : 0).'">';
-			for ($i = 0; $i < count($opts); $i++) {
-				$return .='<option value="'.$i.'" '.selected(self::$options[$id], $i, FALSE).'>'.$opts[$i].'</option>';
-			}
-			$return .= '</select>'.($line_break ? CRAYON_BR : '');
+		$resources = $resources != NULL ? $resources : CrayonGlobalSettings::get($id)->def();
+		
+		$return = '<select id="'.CrayonSettings::PREFIX.$id.'" name="'.self::OPTIONS.'['.$id.']" class="'.CrayonSettings::SETTING.'" data-orig-value="'. self::$options[$id]. '" crayon-preview="'.($preview ? 1 : 0).'">';
+		foreach ($resources as $k=>$v) {
+			$return .='<option value="'.$k.'" '.selected(self::$options[$id], $k, FALSE).'>'.$v.'</option>';
 		}
+		$return .= '</select>'.($line_break ? CRAYON_BR : '');
 		if ($echo) {
 			echo $return;
 		} else {
@@ -544,10 +543,8 @@ class CrayonSettingsWP {
 		// Specialised dropdown for languages
 		if (array_key_exists(CrayonSettings::FALLBACK_LANG, self::$options)) {
 			if (($langs = CrayonParser::parse_all()) != FALSE) {
-				$name = CrayonSettings::FALLBACK_LANG;
-				echo crayon__('When no language is provided, use the fallback'), ': ', '<select id="', $name, '" name="', self::OPTIONS,
-					'[', $name, ']" crayon-preview="1">';
-				self::lang_dropdown($langs);
+				self::span(crayon__('When no language is provided, use the fallback').': ');
+				self::dropdown(CrayonSettings::FALLBACK_LANG,FALSE,TRUE,TRUE,$langs);
 				// Information about parsing
 				$parsed = CrayonResources::langs()->is_parsed();
 				$count = count($langs);
@@ -569,28 +566,14 @@ class CrayonSettingsWP {
 			}
 		}
 	}
-	
-	public static function lang_dropdown($langs) {
-		foreach ($langs as $lang) {
-			$title = $lang->name() . ' [' . $lang->id() . ']';
-			echo '<option value="', $lang->id(), '" ', selected(self::$options[CrayonSettings::FALLBACK_LANG],
-				$lang->id()), '>', $title, '</option>';
-		}
-	}
 
 	public static function theme($editor = FALSE) {
 		$db_theme = self::$options[CrayonSettings::THEME]; // Theme name from db
 		if (!array_key_exists(CrayonSettings::THEME, self::$options)) {
 			$db_theme = '';
 		}
-		$name = CrayonSettings::THEME;
-		$themes = CrayonResources::themes()->get();
-		echo '<select id="', $name, '" name="', self::OPTIONS, '[', $name, ']" crayon-preview="1">';
-		foreach ($themes as $theme) {
-			$title = $theme->name();
-			echo '<option value="', $theme->id(), '" ', selected($db_theme, $theme->id()), '>', $title, '</option>';
-		}
-		echo '</select><span class="crayon-span-5"></span>';
+		$themes_array = CrayonResources::themes()->get_array();
+		self::dropdown(CrayonSettings::THEME,FALSE,TRUE,TRUE,$themes_array);
 		if ($editor) {
 			return;
 		}
@@ -619,14 +602,9 @@ class CrayonSettingsWP {
 		if (!array_key_exists(CrayonSettings::FONT, self::$options)) {
 			$db_font = '';
 		}
-		$name = CrayonSettings::FONT;
-		$fonts = CrayonResources::fonts()->get();
-		echo '<select id="', $name, '" name="', self::OPTIONS, '[', $name, ']" crayon-preview="1">';
-		foreach ($fonts as $font) {
-			$title = $font->name();
-			echo '<option value="', $font->id(), '" ', selected($db_font, $font->id()), '>', $title, '</option>';
-		}
-		echo '</select><span class="crayon-span-10"></span>';
+		$fonts_array = CrayonResources::fonts()->get_array();
+		self::dropdown(CrayonSettings::FONT,FALSE,TRUE,TRUE,$fonts_array);
+		echo '<span class="crayon-span-10"></span>';
 		self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size').' '), FALSE);
 		self::textbox(array('id' => CrayonSettings::FONT_SIZE, 'size' => 2));
 		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span></br>';

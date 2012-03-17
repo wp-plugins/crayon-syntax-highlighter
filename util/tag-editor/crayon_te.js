@@ -34,7 +34,7 @@ var CrayonTagEditor = new function() {
 	var editing = false;
 	
 	// XXX Loads dialog contents
-    this.loadDialog = function() {    	
+    this.loadDialog = function() {
     	// Loaded once url is given
     	if (!loaded) {
     		loaded = true;

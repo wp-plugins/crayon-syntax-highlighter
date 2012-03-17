@@ -16,6 +16,9 @@ class CrayonSettings {
 	// Added when used in HTML to avoid id conflicts
 	const PREFIX = 'crayon-';
 	const SETTING = 'crayon-setting';
+	const SETTING_SELECTED = 'crayon-setting-selected';
+	const SETTING_CHANGED = 'crayon-setting-changed';
+	const SETTING_SPECIAL = 'crayon-setting-special';
 	
 	// Global names for settings
 	const THEME = 'theme';

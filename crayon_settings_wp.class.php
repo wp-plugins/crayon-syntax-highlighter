@@ -15,6 +15,8 @@ class CrayonSettingsWP {
 	private static $options = NULL;
 	// An array of cache names for use with Transients API
 	private static $cache = NULL;
+	// Array of settings to pass to js
+	private static $js_settings = NULL;
 	private static $admin_page = '';
 	private static $is_fully_loaded = FALSE;
 	
@@ -67,6 +69,21 @@ class CrayonSettingsWP {
 		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
 		if (CRAYON_THEME_EDITOR) {
 			wp_enqueue_script('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_JS, __FILE__), array('jquery'), $CRAYON_VERSION);
+		}
+		// Must come after
+		self::init_js_settings();
+	}
+	
+	public static function init_js_settings() {
+		// TODO Create a global CrayonSyntaxSettings object here
+		if (!self::$js_settings) {
+			self::$js_settings = array(
+					'prefix' => CrayonSettings::PREFIX,
+					'setting' => CrayonSettings::SETTING,
+					'selected' => CrayonSettings::SETTING . '-selected',
+					'changed' => CrayonSettings::SETTING . '-changed',
+					);
+			wp_localize_script('crayon_admin_js', 'CrayonSyntaxSettings', self::$js_settings);
 		}
 	}
 

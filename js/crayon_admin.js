@@ -51,15 +51,21 @@ var CrayonSyntaxAdmin = new function() {
 	var theme_editor_loaded = false;
 	var theme_editor_loading = false;
 
+	var settings = CrayonSyntaxSettings;
 	var me = this;
 	
 	this.cssElem = function(id) {
-		id = id.replace(/^([#.])(.*)$/, '$1crayon-$2');
-		return jQuery(id);
+		return jQuery(this.addPrefixToID(id));
+	}
+	
+	// Used in Tag Editor
+	this.addPrefixToID = function(id) {
+		return id.replace(/^([#.])(.*)$/, '$1'+settings.prefix+'$2');
 	}
 	
 	this.removePrefixFromID = function(id) {
-		return id.replace(/^#?crayon-/,'');
+		var re = new RegExp('^#?'+settings.prefix, 'i');
+		return id.replace(re,'');
 	}
 	
 	this.init = function() {

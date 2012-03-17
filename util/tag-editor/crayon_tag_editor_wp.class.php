@@ -41,6 +41,8 @@ class CrayonTagEditorWP {
 			self::addbuttons();
 			add_filter('tiny_mce_before_init', 'CrayonTagEditorWP::init_tinymce');
 			add_action("admin_print_scripts-post.php", 'CrayonTagEditorWP::admin_scripts');
+			// Must come after
+			add_action("admin_print_scripts-post.php", 'CrayonSettingsWP::init_js_settings');
 		}
 	}
 	
@@ -107,7 +109,11 @@ class CrayonTagEditorWP {
 		$plugin_array['crayon_tinymce'] = plugins_url(CRAYON_TINYMCE_JS, __FILE__);
 		return $plugin_array;
 	}
+	
+}
 
+if (defined('ABSPATH') && is_admin()) {
+	add_action('init', 'CrayonTagEditorWP::init');
 }
 
 ?>

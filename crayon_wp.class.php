@@ -716,8 +716,6 @@ if (defined('ABSPATH')) {
 		
 		add_filter('the_excerpt', 'CrayonWP::the_excerpt');
 		add_action('template_redirect', 'CrayonWP::wp_head');
-	} else {
-		add_action('init', 'CrayonTagEditorWP::init');
 	}
 }
 

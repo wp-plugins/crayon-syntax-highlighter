@@ -23,11 +23,10 @@ var CrayonTagEditor = new function() {
 	var ajax_class_timer = null;
 	var ajax_class_timer_count = 0;
 	// Generated in WP and contains the settings
-	var settings = CrayonTagEditorSettings;
+	var s = CrayonTagEditorSettings;
+	var gs = CrayonSyntaxSettings;
 	// For use in async functions
 	var te = this;
-	
-//	var br_before, br_after;
 	
 	// CSS
 	var dialog, code, clear;
@@ -44,18 +43,18 @@ var CrayonTagEditor = new function() {
     	}
     	
         // Load the editor content 
-        jQuery.get(settings.url, function(data) {
-        	dialog = jQuery('<div id="'+settings.css+'"></div>');
+        jQuery.get(s.url, function(data) {
+        	dialog = jQuery('<div id="'+s.css+'"></div>');
             dialog.appendTo('body').hide();
         	dialog.html(data);
         	
-        	code = jQuery(settings.code_css);
+        	code = jQuery(s.code_css);
         	clear = jQuery('#crayon-te-clear');
         	var code_refresh = function () {
         		var clear_visible = clear.is(":visible");
         		if (code.val().length > 0 && !clear_visible) {
         			clear.show();
-        			code.removeClass('crayon-setting-selected');
+        			code.removeClass(gs.selected);
         		} else if (code.val().length <= 0) {
         			clear.hide();
         		}
@@ -65,7 +64,7 @@ var CrayonTagEditor = new function() {
         	code.change(code_refresh);
         	clear.click(function() {
         		code.val('');
-        		code.removeClass('crayon-setting-selected');
+        		code.removeClass(gs.selected);
         		code.focus();
         	});
         	
@@ -91,21 +90,21 @@ var CrayonTagEditor = new function() {
     			
     			if (orig_value == value) {
     				// No change
-    				me.removeClass('crayon-setting-changed');
+    				me.removeClass(gs.changed);
     				if (highlight) {
-    					highlight.removeClass('crayon-setting-changed');
+    					highlight.removeClass(gs.changed);
     				}
     			} else {
     				// Changed
-    				me.addClass('crayon-setting-changed');
+    				me.addClass(gs.changed);
     				if (highlight) {
-    					highlight.addClass('crayon-setting-changed');
+    					highlight.addClass(gs.changed);
     				}
     			}
     			// Save the value for later
     			me.attr('data-value', value);
     		};
-        	jQuery('.crayon-setting[id]').each(function() {
+        	jQuery('.'+gs.setting+'[id]').each(function() {
         		jQuery(this).change(setting_change);
         		jQuery(this).keyup(setting_change);
         	});
@@ -123,10 +122,10 @@ var CrayonTagEditor = new function() {
 		var currNode = ed.selection.getNode();
 		if (currNode.nodeName == 'PRE') {
 			currCrayon = jQuery(currNode);
-			editing = currCrayon.hasClass(settings.pre_css); 
+			editing = currCrayon.hasClass(s.pre_css); 
 			if (editing) {
 				var class_ = currCrayon.attr('class');
-				var attr_regex = new RegExp('\\b([A-Za-z-]+)'+settings.attr_sep+'(\\S+)', 'gim');
+				var attr_regex = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
 				var matches = attr_regex.execAll(class_);
 				var atts = {};
 				for (var i in matches) {
@@ -143,7 +142,7 @@ var CrayonTagEditor = new function() {
 				
 				// Load in attributes, add prefix
 				for (var att in atts) {
-					jQuery('#' + 'crayon-' + att + '.' + 'crayon-setting').val(atts[att]);
+					jQuery('#' + gs.prefix + att + '.' + gs.setting).val(atts[att]);
 					console.log(att + ' ' + atts[att]);
 				}
 				
@@ -153,7 +152,7 @@ var CrayonTagEditor = new function() {
 		
 		// Show the dialog
 		
-    	tb_show('Add Crayon Code', '#TB_inline?inlineId=' + settings.css);
+    	tb_show('Add Crayon Code', '#TB_inline?inlineId=' + s.css);
     	code.focus();
     	insertCallback = callback;
     	editor_name = editor_str;
@@ -186,17 +185,17 @@ var CrayonTagEditor = new function() {
         	ajax_class_timer_count++;
     	}, 40);
     	
-    	settings.setUsed(true);
+    	s.setUsed(true);
     };
     
     // XXX Add Crayon to editor
     this.addCrayon =  function() {
 		if (code.val().length == 0) {
-			code.addClass('crayon-setting-selected');
+			code.addClass(gs.selected);
 			code.focus();
 			return false;
 		} else {
-			code.removeClass('crayon-setting-selected');
+			code.removeClass(gs.selected);
 		}
 		
 		var br_before = br_after = '';
@@ -209,10 +208,10 @@ var CrayonTagEditor = new function() {
 		var shortcode = br_before + '<pre ';
 		
 		var atts = {};
-		shortcode += 'class="'+settings.pre_css+' '; 
+		shortcode += 'class="'+s.pre_css+' '; 
 		
 		// Grab settings as attributes
-		jQuery('.crayon-setting-changed[id],.crayon-setting-changed[data-value]').each(function() {
+		jQuery('.'+gs.changed+'[id],.'+gs.changed+'[data-value]').each(function() {
     		var id = jQuery(this).attr('id');
     		var value = jQuery(this).attr('data-value');
     		// Remove prefix
@@ -222,16 +221,16 @@ var CrayonTagEditor = new function() {
     	});
 		
 		// Always add language
-		jQuery(settings.lang_css).each(function() {
+		jQuery(s.lang_css).each(function() {
 			var value = jQuery(this).val() || '';
-			atts[settings.lang_css] = value;
+			atts[s.lang_css] = value;
 		});
 		
 		// Ensure mark has no whitespace
-		jQuery(settings.mark_css).each(function() {
+		jQuery(s.mark_css).each(function() {
 			var value = jQuery(this).val();
 			if (value.length != 0) {
-				atts[settings.mark_css] = value.replace(/\s/g, '');
+				atts[s.mark_css] = value.replace(/\s/g, '');
 			}
 		});
 		
@@ -241,18 +240,18 @@ var CrayonTagEditor = new function() {
     		var id = CrayonSyntaxAdmin.removePrefixFromID(att);
     		var value = atts[att];
     		console.log('att: id: '+id+' value: '+value);
-			shortcode += id + settings.attr_sep + value + ' ';
+			shortcode += id + s.attr_sep + value + ' ';
 		}
 		// Don't forget to close quote for class
 		shortcode += '" ';
 		
-		var title = jQuery(settings.title_css).val();
+		var title = jQuery(s.title_css).val();
 		if (typeof title != 'undefined') {
 			
 			shortcode += 'title="' + title + '" ';
 		}
 		
-		var content = jQuery(settings.code_css).val();
+		var content = jQuery(s.code_css).val();
 		content = typeof content != 'undefined' ? content : '';
 		shortcode += '>' + content + '</pre>' + br_after;
 		

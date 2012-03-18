@@ -23,7 +23,7 @@ class CrayonTEContent {
 	public static function select_resource($id, $resources, $current, $set_class = TRUE) {
 		$id = CrayonSettings::PREFIX . $id;
 		if (count($resources) > 0) {
-			$class = $set_class ? 'class="'.CrayonSettings::SETTING_SPECIAL.'"' : ''; 
+			$class = $set_class ? 'class="'.CrayonSettings::SETTING.' '.CrayonSettings::SETTING_SPECIAL.'"' : ''; 
 			echo '<select id="'.$id.'" name="'.$id.'" '.$class.'>';
 				foreach ($resources as $resource) {
 					$asterisk = $current == $resource->id() ? ' *' : '';
@@ -32,19 +32,19 @@ class CrayonTEContent {
 			echo '</select>';
 		} else {
 			// None found, default to text box
-			echo '<input type="text" id="'.$id.'" name="'.$id.'" class="'.CrayonSettings::SETTING_SPECIAL.'" />';
+			echo '<input type="text" id="'.$id.'" name="'.$id.'" class="'.CrayonSettings::SETTING.' '.CrayonSettings::SETTING_SPECIAL.'" />';
 		}
 	}
 	
 	public static function checkbox($id) {
 		$id = CrayonSettings::PREFIX . $id;
-		echo '<input type="checkbox" id="'.$id.'" name="'.$id.'" class="'.CrayonSettings::SETTING_SPECIAL.'" />';
+		echo '<input type="checkbox" id="'.$id.'" name="'.$id.'" class="'.CrayonSettings::SETTING.' '.CrayonSettings::SETTING_SPECIAL.'" />';
 	}
 	
 	public static function textbox($id, $atts = array(), $set_class = TRUE) {
 		$id = CrayonSettings::PREFIX . $id;
 		$atts_str = '';
-		$class = $set_class ? 'class="'.CrayonSettings::SETTING_SPECIAL.'"' : '';
+		$class = $set_class ? 'class="'.CrayonSettings::SETTING.' '.CrayonSettings::SETTING_SPECIAL.'"' : '';
 		foreach ($atts as $k=>$v) {
 			$atts_str = $k.'="'.$v.'" ';
 		}

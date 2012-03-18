@@ -8,30 +8,38 @@ CrayonTagEditorSettings.setUsed = function(is_used) {
 	if (typeof this.ajax_url != 'undefined') {
 		if (this.ajax_url && !this.used) {
 			is_used = is_used ? '1' : '0';
+			this.used = is_used; // Save the setting
 			var used_url = this.ajax_url + '?' + this.used_setting + '=' + is_used;
 			jQuery.get(used_url);
 		}
 	}
-}
+};
 
 var CrayonTagEditor = new function() {
 	
 	// VE specific
 	var loaded = false;
-	var insertCallback;
-	var editor_name;
+	var editing = false;
+	var insertCallback = null;
+	var editCallback = null;
+	var editor_name = null;
 	var ajax_class_timer = null;
 	var ajax_class_timer_count = 0;
+	
+	// Current jQuery obj of pre node
+	var currCrayon = null;
+	// Classes from pre node, excl. settings
+	var currClasses = null;
+	
 	// Generated in WP and contains the settings
 	var s = CrayonTagEditorSettings;
 	var gs = CrayonSyntaxSettings;
+	var admin = CrayonSyntaxAdmin;
 	// For use in async functions
 	var te = this;
 	
 	// CSS
-	var dialog, code, clear, submit;
-	// True if editing an existing Crayon
-	var editing = false;
+	var dialog = code = clear = submit = null;
 	
 	// XXX Loads dialog contents
     this.loadDialog = function() {
@@ -50,7 +58,7 @@ var CrayonTagEditor = new function() {
         	
         	dialog.ready(function() {
         		// Some settings have dependencies, need to load js for that
-        		CrayonSyntaxAdmin.init();
+        		admin.init();
         	});
         	
         	code = jQuery(s.code_css);
@@ -63,7 +71,7 @@ var CrayonTagEditor = new function() {
         		} else if (code.val().length <= 0) {
         			clear.hide();
         		}
-        	}
+        	};
 
         	code.keyup(code_refresh);
         	code.change(code_refresh);
@@ -75,7 +83,6 @@ var CrayonTagEditor = new function() {
         	
         	var setting_change = function() {
     			var me = jQuery(this);
-    			var id = jQuery(this).attr('id');
         		var orig_value = jQuery(this).attr('data-orig-value');
         		if (typeof orig_value == 'undefined') {
         			orig_value = '';
@@ -109,7 +116,7 @@ var CrayonTagEditor = new function() {
     			// Save the value for later
     			me.attr('data-value', value);
     		};
-        	jQuery('.'+gs.setting+'[id]').each(function() {
+        	jQuery('.'+gs.setting+'[id]:not('+gs.special+')').each(function() {
         		jQuery(this).change(setting_change);
         		jQuery(this).keyup(setting_change);
         	});
@@ -118,13 +125,13 @@ var CrayonTagEditor = new function() {
         	submit = dialog.find(s.submit_css);
         	submit.val(s.submit_add);
         	submit.click(function () {
-        		te.addCrayon()
+        		te.addCrayon();
         	});
         });
     };
     
-    // XXX Displays the dialog
-	this.showDialog = function(callback, editor_str, ed) {
+    // XXX Displays the dialog.
+	this.showDialog = function(insert, edit, editor_str, ed) {
 		// If we have selected a Crayon, load in the contents
 		var currNode = ed.selection.getNode();
 		if (currNode.nodeName == 'PRE') {
@@ -132,19 +139,20 @@ var CrayonTagEditor = new function() {
 //			editing = currCrayon.hasClass(s.pre_css); 
 			if (currCrayon.length != 0) {
 				// Read back settings for editing
-				var class_ = currCrayon.attr('class');
-				var attr_regex = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
-				var matches = attr_regex.execAll(class_);
+				currClasses = currCrayon.attr('class');
+				var re = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
+				var matches = re.execAll(currClasses);
+				// Retain all other classes, remove settings
+				currClasses = jQuery.trim(currClasses.replace(re, ''));
+				console_log('classes:');
+				console_log(currClasses);
 				console_log('load match:');
 				console_log(matches);
 				var atts = {};
 				for (var i in matches) {
 					var id = matches[i][1];
 					var value = matches[i][2];
-					// Add prefix
-					id = CrayonSyntaxAdmin.addPrefixToID(id);
 					atts[id] = value;
-					console_log('loaded: ' + id + ':' + value);
 				}
 				// Only read title, don't let other atts in, no need
 				var title = currCrayon.attr('title');
@@ -155,17 +163,22 @@ var CrayonTagEditor = new function() {
 				// Load in attributes, add prefix
 				for (var att in atts) {
 					jQuery('#' + gs.prefix + att + '.' + gs.setting).val(atts[att]);
-					console.log(att + ' ' + atts[att]);
+					console_log('#' + gs.prefix + att + '.' + gs.setting);
+					console_log('loaded: ' + att + ':' + atts[att]);
 				}
 				
+				editing = true;
 				submit.val(s.submit_edit);
 				code.val(currCrayon.html());
 			} else {
 				console_log('cannot load currNode of type pre');
 			}
 		} else {
-			// We are creating a new Crayon
+			// We are creating a new Crayon, not editing
+			editing = false;
 			submit.val(s.submit_add);
+			currCrayon = null;
+			currClasses = null;
 			// TODO clear settings?
 		}
 		
@@ -173,7 +186,8 @@ var CrayonTagEditor = new function() {
 		
     	tb_show(s.dialog_title, '#TB_inline?inlineId=' + s.css);
     	code.focus();
-    	insertCallback = callback;
+    	insertCallback = insert;
+    	editCallback = edit;
     	editor_name = editor_str;
     	if (ajax_class_timer) {
     		clearInterval(ajax_class_timer);
@@ -188,7 +202,7 @@ var CrayonTagEditor = new function() {
     		var oldScroll = jQuery(window).scrollTop();
     		jQuery(window).scrollTop(oldScroll+10);
     		jQuery(window).scrollTop(oldScroll-10);
-    	}
+    	};
     	
     	ajax_class_timer = setInterval(function () {
         	if ( typeof ajax_window != 'undefined' && !ajax_window.hasClass('crayon-te-ajax') ) {
@@ -227,16 +241,16 @@ var CrayonTagEditor = new function() {
 		var shortcode = br_before + '<pre ';
 		
 		var atts = {};
-		shortcode += 'class="'; 
+		shortcode += 'class="';
 		
 		// Grab settings as attributes
 		jQuery('.'+gs.changed+'[id],.'+gs.changed+'[data-value]').each(function() {
     		var id = jQuery(this).attr('id');
     		var value = jQuery(this).attr('data-value');
     		// Remove prefix
-//    		id = CrayonSyntaxAdmin.removePrefixFromID(id);
+//    		id = admin.removePrefixFromID(id);
     		atts[id] = value;
-//    		console.log(id + ' ' + value);
+//    		console_log(id + ' ' + value);
     	});
 		
 		// Always add language
@@ -256,10 +270,15 @@ var CrayonTagEditor = new function() {
     	atts['decode'] = 'true';
 		for (var att in atts) {
     		// Remove prefix, if exists
-    		var id = CrayonSyntaxAdmin.removePrefixFromID(att);
+    		var id = admin.removePrefixFromID(att);
     		var value = atts[att];
-    		console.log('add '+id+':'+value);
+    		console_log('add '+id+':'+value);
 			shortcode += id + s.attr_sep + value + ' ';
+		}
+		
+		// Add currClasses, if exists
+		if (currClasses) {
+			shortcode += currClasses;
 		}
 		// Don't forget to close quote for class
 		shortcode += '" ';
@@ -274,14 +293,19 @@ var CrayonTagEditor = new function() {
 		content = typeof content != 'undefined' ? content : '';
 		shortcode += '>' + content + '</pre>' + br_after;
 		
-		// Insert the tag and hide dialog
-		insertCallback(shortcode);
+		if (editing) {
+			// Edit the current selected node
+			editCallback(shortcode);
+		} else {
+			// Insert the tag and hide dialog
+			insertCallback(shortcode);
+		}
 		
 		tb_remove();
 		var ajax = jQuery('#TB_ajaxContent');
     	if ( typeof ajax == 'undefined' ) {
     		ajax.removeClass('crayon-te-ajax');
     	}
-	}
+	};
 	
 };

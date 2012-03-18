@@ -14,7 +14,7 @@ var CrayonTinyMCE = new function() {
 			jQuery('#content_crayon_tinymce').removeClass('mce_crayon_tinymce_highlight');
 		}
 		isHighlighted = highlight;
-	}
+	};
 	
 	this.loadTinyMCE = function() {
 	    tinymce.PluginManager.requireLangPack(name);
@@ -44,16 +44,22 @@ var CrayonTinyMCE = new function() {
 	    		
 	            ed.addCommand('showCrayon', function() {
 	            	CrayonTagEditor.showDialog(function(shortcode) {
-	            		tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
+	            		ed.execCommand('mceInsertContent', 0, shortcode);
+	            	},
+	            	function(shortcode) {
+	            		jQuery(currPre).replaceWith(shortcode);
 	            	}, 'tinymce', ed);
+	            	
 	            	if (!currPre) {
+	            		// If no pre is selected, then button highlight depends on if it's used 
 	            		CrayonTinyMCE.setHighlight(!settings.used);
 	            	}
 	            });
 	            
+	            // Highlight selected 
 	            ed.onNodeChange.add(function(ed, cm, n, co) {
 	            	if (n != currPre) {
-	            		// We don't care if we select the same object
+	            		// We only care if we select another same object
 	            		if (currPre) {
 			            	// If we have a previous pre, remove it
 		        			jQuery(currPre).removeClass(settings.css_selected);

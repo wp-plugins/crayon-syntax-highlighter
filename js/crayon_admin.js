@@ -1,31 +1,24 @@
-<!--
 // Crayon Syntax Highlighter Admin JavaScript
-
-//jQuery(document).ready(function() {
-//	console_log('admin loaded');
-//	alert();
-//	CrayonSyntaxAdmin.init();
-//});
 
 var CrayonSyntaxAdmin = new function() {
 	
 	// Preview
-	var preview, preview_info, preview_cbox, preview_url, preview_height, preview_timer, preview_delay_timer, preview_get;
+	var preview = preview_info = preview_cbox = preview_url = preview_delay_timer = preview_get = null;
 	// The DOM object ids that trigger a preview update
 	var preview_obj_names = [];
 	// The jQuery objects for these objects
 	var preview_objs = [];
 	var preview_last_values = [];
 	// Alignment
-	var align_drop, float;
+	var align_drop = float = null;
 	// Toolbar
-	var overlay, toolbar;
+	var overlay = toolbar = null;
 	// Error
-	var msg_cbox, msg;
+	var msg_cbox = msg = null;
 	// Log
-	var log_button, log_text, log;
+	var log_button = log_text = null;
 	
-	var main_wrap, theme_editor_wrap, editor_url, theme_editor_button;
+	var main_wrap = theme_editor_wrap = editor_url = theme_editor_button = null;
 	var theme_editor_loaded = false;
 	var theme_editor_loading = false;
 
@@ -34,17 +27,17 @@ var CrayonSyntaxAdmin = new function() {
 	
 	this.cssElem = function(id) {
 		return jQuery(this.addPrefixToID(id));
-	}
+	};
 	
 	// Used in Tag Editor
 	this.addPrefixToID = function(id) {
-		return id.replace(/^([#.])(.*)$/, '$1'+settings.prefix+'$2');
-	}
+		return id.replace(/^([#.])?(.*)$/, '$1'+settings.prefix+'$2');
+	};
 	
 	this.removePrefixFromID = function(id) {
-		var re = new RegExp('^#?'+settings.prefix, 'i');
+		var re = new RegExp('^[#.]?'+settings.prefix, 'i');
 		return id.replace(re,'');
-	}
+	};
 	
 	this.init = function() {
 		console_log('admin init');
@@ -131,8 +124,7 @@ var CrayonSyntaxAdmin = new function() {
 	        log_button.val(text);
 	    });
 	    
-	    
-	}
+	};
 	
 	/* Whenever a control changes preview */
 	var preview_update = function() {
@@ -140,7 +132,7 @@ var CrayonSyntaxAdmin = new function() {
 		preview_get = '?';
 		var val = 0;
 		var obj;
-		for (i = 0; i < preview_obj_names.length; i++) {
+		for (var i = 0; i < preview_obj_names.length; i++) {
 			obj = preview_objs[i];
 			if (obj.attr('type') == 'checkbox') {
 				val = obj.is(':checked');
@@ -170,15 +162,7 @@ var CrayonSyntaxAdmin = new function() {
 			// Important! Calls the crayon.js init
 			CrayonSyntax.init();
 		});
-	}
-	
-	var bool_to_int = function(bool) {
-		if (bool == true) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
+	};
 	
 	var preview_toggle = function() {
 //		console_log('preview_toggle');
@@ -190,7 +174,7 @@ var CrayonSyntaxAdmin = new function() {
 	    	preview.hide();
 	    	preview_info.hide();
 	    }
-	}
+	};
 	
 	var float_toggle = function() {
 	    if ( align_drop.val() != 0 ) {
@@ -198,7 +182,7 @@ var CrayonSyntaxAdmin = new function() {
 	    } else {
 	    	float.hide();
 	    }
-	}
+	};
 	
 	// List of callbacks
 	var preview_callback;
@@ -210,13 +194,12 @@ var CrayonSyntaxAdmin = new function() {
 	// Register all event handlers for preview objects
 	var preview_register = function() {
 //		console_log('preview_register');
-		var obj;
 		preview_get = '?';
 	
 		// Instant callback
 		preview_callback = function() {
 			preview_update();
-		}
+		};
 		
 		// Checks if the text input is changed, if so, runs the callback with given event
 		preview_txt_change = function(callback, event) {
@@ -232,13 +215,13 @@ var CrayonSyntaxAdmin = new function() {
 				// Run callback with event
 				callback(event);
 			}
-		}
+		};
 		
 		// Only updates when text is changed
 		preview_txt_callback = function(event) {
 			//console_log('txt callback');
 			preview_txt_change(preview_update, event);
-		}
+		};
 		
 		// Only updates when text is changed, but  callback
 		preview_txt_callback_delayed = function(event) {
@@ -250,7 +233,7 @@ var CrayonSyntaxAdmin = new function() {
 					clearInterval(preview_delay_timer);
 				}, 500);
 			}, event);
-		}
+		};
 		
 		// Retreive preview objects
 		jQuery('[crayon-preview="1"]').each(function(i) {
@@ -270,7 +253,7 @@ var CrayonSyntaxAdmin = new function() {
 				obj.change(preview_callback);
 			}
 		});
-	}
+	};
 	
 	var toggle_error = function() {
 	    if ( msg_cbox.is(':checked') ) {
@@ -278,7 +261,7 @@ var CrayonSyntaxAdmin = new function() {
 	    } else {
 	        msg.hide();
 	    }
-	}
+	};
 	
 	var toggle_toolbar = function() {
 	    if ( toolbar.val() == 0 ) {
@@ -286,7 +269,7 @@ var CrayonSyntaxAdmin = new function() {
 	    } else {
 	        overlay.hide();
 	    }
-	}
+	};
 	
 	this.show_langs = function(url) {
 //		jQuery('#show-lang').hide();
@@ -295,15 +278,15 @@ var CrayonSyntaxAdmin = new function() {
 			jQuery('#lang-info').html(data);
 		});
 		return false;
-	}
+	};
 	
 	this.get_vars = function() {
 		var vars = {};
-		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
 			vars[key] = value;
 		});
 		return vars;
-	}
+	};
 	
 	// Changing wrap views
 	this.show_main = function() {
@@ -311,7 +294,7 @@ var CrayonSyntaxAdmin = new function() {
 		main_wrap.show();
 		jQuery(window).scrollTop(0);
 		return false;
-	}
+	};
 	
 	this.show_theme_editor_now = function() {
 		main_wrap.hide();
@@ -320,7 +303,7 @@ var CrayonSyntaxAdmin = new function() {
 		
 		theme_editor_loading = false;
 		theme_editor_button.html(theme_editor_button.attr('loaded'));
-	}
+	};
 	
 	this.show_theme_editor = function() {
 		if (theme_editor_loading) {
@@ -356,8 +339,6 @@ var CrayonSyntaxAdmin = new function() {
 			this.show_theme_editor_now();
 		}
 		return false;
-	}
+	};
 	
-}
-
-//-->
+};

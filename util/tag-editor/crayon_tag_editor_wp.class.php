@@ -43,8 +43,8 @@ class CrayonTagEditorWP {
 					'data_value' => 'data-value',
 					'attr_sep' => ':',
 					'dialog_title' => 'Add Crayon Code',
-					'submit_add' => 'Add Crayon',
-					'submit_edit' => 'Save Crayon',
+					'submit_add' => 'Add',
+					'submit_edit' => 'Save',
 			);
 		}
 	}

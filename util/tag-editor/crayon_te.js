@@ -99,6 +99,7 @@ var CrayonTagEditor = new function() {
         	});
         	
         	var setting_change = function() {
+        		console.log('change');
     			var setting = jQuery(this);
         		var orig_value = jQuery(this).attr(gs.orig_value);
         		if (typeof orig_value == 'undefined') {
@@ -179,6 +180,8 @@ var CrayonTagEditor = new function() {
 					var setting = jQuery('#' + gs.prefix + att + '.' + gs.setting);
 					var value = atts[att];
 					me.settingValue(setting, value);
+					// Update highlights
+					setting.change();
 //					console_log('#' + gs.prefix + att + '.' + gs.setting);
 					console_log('loaded: ' + att + ':' + atts[att]);
 				}
@@ -338,9 +341,12 @@ var CrayonTagEditor = new function() {
 	};
 	
 	this.resetSettings = function() {
-		jQuery('.'+gs.special).each(function() {
+		console.log('reset');
+		jQuery('.'+gs.setting).each(function() {
 			var setting = jQuery(this);
 			me.settingValue(setting, setting.attr(gs.orig_value));
+			// Update highlights
+			setting.change();
 		});
 	};
 	

@@ -1,4 +1,3 @@
-<!--
 // Crayon Syntax Highlighter JavaScript
 
 // Contants
@@ -762,4 +761,3 @@ var CrayonSyntax = new function() {
 	
 }
 
-// -->

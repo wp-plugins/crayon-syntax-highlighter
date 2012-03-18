@@ -51,9 +51,9 @@ class CrayonTEContent {
 		echo '<input type="text" id="'.$id.'" name="'.$id.'" '.$class.' '.$atts_str.' />';
 	}
 	
-	public static function submit($i) {
+	public static function submit() {
 		?>
-		<input type="button" id="<?php echo '#' . CrayonTagEditorWP::$settings['submit_css'] . '-' . $i; ?>" class="button-primary <?php echo CrayonTagEditorWP::$settings['submit_css']; ?>" value="<?php echo CrayonTagEditorWP::$settings['submit_add']; ?>" name="submit" />
+		<input type="button" class="button-primary <?php echo CrayonTagEditorWP::$settings['submit_css']; ?>" value="<?php echo CrayonTagEditorWP::$settings['submit_add']; ?>" name="submit" />
 		<?php
 	}
 }
@@ -78,8 +78,8 @@ class CrayonTEContent {
 			<td><textarea id="crayon-te-code" name="code" placeholder="Copy your code here, or type it in manually."></textarea></td>
 		</tr>
 		<tr>
-			<td colspan="2" style="text-align: center;">
-				<?php CrayonTEContent::submit(1); ?>
+			<td id="crayon-te-submit-wrapper" colspan="2" style="text-align: center;">
+				<?php CrayonTEContent::submit(); ?>
 			</td>
 		</tr>
 <!--		<tr>-->
@@ -102,11 +102,5 @@ class CrayonTEContent {
 				echo '</td></tr>';
 			}
 		?>
-		<tr>
-			<td colspan="2" style="text-align: center;">
-				<hr />
-				<?php CrayonTEContent::submit(2); ?>
-			</td>
-		</tr>
 	</table>
 </div>

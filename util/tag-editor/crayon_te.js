@@ -43,7 +43,8 @@ var CrayonTagEditor = new function() {
 	var me = this;
 	
 	// CSS
-	var dialog = code = clear = submits = null;
+	var dialog = code = clear = submit = null;
+	var shownOnce = false;
 	
 	// XXX Loads dialog contents
     this.loadDialog = function() {
@@ -134,13 +135,18 @@ var CrayonTagEditor = new function() {
         	});
         	
         	// Create the Crayon Tag
-        	submits = dialog.find('.'+s.submit_css);
-        	submits.each(function() {
-        		jQuery(this).click(function () {
-        			console.log(me);
-            		me.addCrayon();
-            	});
-        	});
+        	submit = dialog.find('.'+s.submit_css);
+        	submit.click(function () {
+    			me.addCrayon();
+    			me.hideDialog();
+    		});
+//        	submits = dialog.find('.'+s.submit_css);
+//        	submits.each(function() {
+//        		jQuery(this).click(function () {
+//        			console.log(me);
+//            		me.addCrayon();
+//            	});
+//        	});
         	me.setSubmitText(s.submit_add);
         });
     };
@@ -148,10 +154,10 @@ var CrayonTagEditor = new function() {
     // XXX Displays the dialog.
 	this.showDialog = function(insert, edit, editor_str, ed) {
 		// If we have selected a Crayon, load in the contents
+		// TODO put this in a separate function
 		var currNode = ed.selection.getNode();
 		if (currNode.nodeName == 'PRE') {
-			currCrayon = jQuery(currNode);
-//			editing = currCrayon.hasClass(s.pre_css); 
+			currCrayon = jQuery(currNode); 
 			if (currCrayon.length != 0) {
 				// Read back settings for editing
 				currClasses = currCrayon.attr('class');
@@ -213,6 +219,12 @@ var CrayonTagEditor = new function() {
     		clearInterval(ajax_class_timer);
     		ajax_class_timer_count = 0;
     	}
+    	
+    	// Position submit button
+//    	if (!shownOnce) {
+		jQuery('#TB_title').append(submit);
+//    		shownOnce = true;
+//    	}
     	
     	var ajax_window = jQuery('#TB_window');
     	ajax_window.hide();
@@ -323,12 +335,17 @@ var CrayonTagEditor = new function() {
 			// Insert the tag and hide dialog
 			insertCallback(shortcode);
 		}
-		
+	};
+	
+	this.hideDialog = function() {
+		// Hide dialog
 		tb_remove();
 		var ajax = jQuery('#TB_ajaxContent');
     	if ( typeof ajax == 'undefined' ) {
     		ajax.removeClass('crayon-te-ajax');
     	}
+    	// Title is destroyed, so move the submit out
+    	jQuery(submit_wrapper_css).append(submit);
 	};
 	
 	// XXX Auxiliary methods
@@ -348,6 +365,7 @@ var CrayonTagEditor = new function() {
 			// Update highlights
 			setting.change();
 		});
+		code.val('');
 	};
 	
 	this.settingValue = function(setting, value) {
@@ -385,11 +403,12 @@ var CrayonTagEditor = new function() {
 	};
 	
 	this.setSubmitText = function(text) {
-		if (submits) {
-			submits.each(function() {
-        		jQuery(this).val(text);
-        	});
-		}
+//		if (submits) {
+//			submits.each(function() {
+//        		jQuery(this).val(text);
+//        	});
+//		}
+		submit.val(text);
 	}; 
 	
 };

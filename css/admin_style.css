@@ -291,7 +291,7 @@
 	background-color: #f4f4f4;
 }
 
-#crayon-te-table #title {
+#crayon-title {
 	width: 100%;
 }
 
@@ -299,11 +299,27 @@
 	overflow: auto !important;
 }
 
+#TB_window.crayon-te-ajax,
+#TB_window.crayon-te-ajax #TB_ajaxContent,
+#TB_window.crayon-te-ajax #TB_title {
+	width: 680px !important;
+}
+
 #TB_window.crayon-te-ajax #TB_ajaxContent {
 	padding: 0 !important;
 	margin: 0 !important;
 	width: 100% !important;
 	height: auto !important;
+	margin-top: 28px !important;
+}
+
+#TB_window.crayon-te-ajax #TB_title {
+	position: fixed !important;
+}
+
+#TB_window.crayon-te-ajax #TB_title .crayon-te-submit {
+	margin-top: 3px !important;
+	float: right !important;
 }
 
 #crayon-te-clear {

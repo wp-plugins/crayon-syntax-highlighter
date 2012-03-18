@@ -176,6 +176,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed removing $ in font of ignored crayons like $&lt;pre...
 * Cleaned up code for specifying attributes, NULL attributes are not passed as empty strings anymore. 
 * The log looks cleaner now
+* Now crayons are replaced with [crayon-id/] in posts before being replaced with the actual Crayon 
 * If js ever fails to load, it won't affect styling, just functionality
 * Added ability to use closed Mini Tags like [php ... \] when you're just giving a URL
 * Added lenient spaces for closed tags

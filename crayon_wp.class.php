@@ -69,10 +69,12 @@ class CrayonWP {
 	
 	const REGEX_BETWEEN_PARAGRAPH = '<p[^<]*>(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*((?:\[\s*crayon[^\]]*\].*?\[\s*/\s*crayon\s*\])|(?:\[\s*crayon[^\]]*/\s*\]))(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*</p[^<]*>';
 	const REGEX_BETWEEN_PARAGRAPH_SIMPLE = '(<p(?:\s+[^>]*)?>)(.*?)(</p(?:\s+[^>]*)?>)';
-	const REGEX_BR_BEFORE = '<br\s*/?>\s*(\[\s*crayon)';
-	const REGEX_BR_AFTER = '(\[\s*/\s*crayon\s*\])\s*<br\s*/?>';
+	const REGEX_BR_BEFORE = '#<\s*br\s*/?\s*>\s*(\[\s*crayon)#msi';
+	const REGEX_BR_AFTER = '#((?:\[\s*/\s*crayon\s*\])|(?:\[\s*crayon[^\]]*\s*/\s*\]))\s*<\s*br\s*/?\s*>#msi';
 	
-	const REGEX_ID = '#(?<!\$)\[\s*crayon#i';
+	const REGEX_ID = '#(?<!\$)\[\s*crayon#mi';
+	//const REGEX_WITH_ID = '#(\[\s*crayon-\w+)\b([^\]]*["\'])(\s*/?\s*\])#mi';
+	const REGEX_WITH_ID = '#\[\s*(crayon-\w+)\b[^\]]*\s*/\s*\]#mi';
 	
 	const MODE_NORMAL = 0, MODE_JUST_CODE = 1, MODE_PLAIN_CODE = 2;
 
@@ -81,15 +83,16 @@ class CrayonWP {
 	private function __construct() {}
 	
 	public static function regex() {
-		return '#(?<!\$)(?:'. self::REGEX_CLOSED .'|'. self::REGEX_TAG .')(?!\$)#s';
+		return '#(?<!\$)(?:'. self::REGEX_CLOSED .'|'. self::REGEX_TAG .')(?!\$)#msi';
 	}
 	
 	public static function regex_with_id($id) {
-		return '#(?<!\$)(?:(?:\[\s*crayon-'.$id.'\b[^\]]*/\s*\])|(?:\[\s*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[\s*/\s*crayon\s*\]))(?!\$)#s';
+		return '#\[\s*(crayon-'.$id.')\b[^\]]*\]#msi';
+		//return '#(?<!\$)(?:(?:\[\s*crayon-'.$id.'\b[^\]]*/\s*\])|(?:\[\s*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[\s*/\s*crayon\s*\]))(?!\$)#msi';
 	}
 	
 	public static function regex_no_capture() {
-		return '#(?<!\$)(?:'. self::REGEX_CLOSED_NO_CAPTURE .'|'. self::REGEX_TAG_NO_CAPTURE .')(?!\$)#s';
+		return '#(?<!\$)(?:'. self::REGEX_CLOSED_NO_CAPTURE .'|'. self::REGEX_TAG_NO_CAPTURE .')(?!\$)#msi';
 	}
 	
 	/**
@@ -199,18 +202,18 @@ class CrayonWP {
 		
 		// Convert mini [php][/php] tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
-			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')\b([^\]]*)\](.*?)\[\s*/\s*(?:\1)\s*\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
-			$wp_content = preg_replace('#(?<!\$)\[('.self::$alias_regex.')\b([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\[\s*('.self::$alias_regex.')\b([^\]]*)\](.*?)\[\s*/\s*(?:\1)\s*\](?!\$)#msi', '[crayon lang="\1" \2]\3[/crayon]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\[\s*('.self::$alias_regex.')\b([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
 		}
 		
 		// Convert inline {php}{/php} tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
-			$wp_content = preg_replace('#(?<!\$)\{('.self::$alias_regex.')\b([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
+			$wp_content = preg_replace('#(?<!\$)\{\s*('.self::$alias_regex.')\b([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
 		}
 		
 		// Convert [plain] tags into <pre><code></code></pre>, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
-			$wp_content = preg_replace_callback('#(?<!\$)\[plain\](.*?)\[/plain\]#msi', 'CrayonFormatter::plain_code', $wp_content);
+			$wp_content = preg_replace_callback('#(?<!\$)\[\s*plain\s*\](.*?)\[\s*/\s*plain\s*\]#msi', 'CrayonFormatter::plain_code', $wp_content);
 		}
 		
 		// Convert `` backquote tags into <code></code>, if needed
@@ -218,19 +221,30 @@ class CrayonWP {
 			$wp_content = preg_replace('#(?<!\\\\)`(.*?)`#msi', '<code>\1</code>', $wp_content);
 		}
 		
+// 		var_dump($wp_content);
+		
 		// Add IDs to the Crayons
 		CrayonLog::debug('capture adding id ' . $wp_id . ' , now has len ' . strlen($wp_content));
 		$wp_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $wp_content);
 		CrayonLog::debug('capture added id ' . $wp_id . ' : ' . strlen($wp_content));
 		
+// 		var_dump($wp_content);
+		
 		// Only include if a post exists with Crayon tag
 		preg_match_all(self::regex(), $wp_content, $matches);
 		
+// 		var_dump($matches); exit;
+		
 		// We need to escape ignored Crayons, since they won't be captured
-		$capture['content'] = self::crayon_remove_ignore($wp_content);
+		$wp_content = self::crayon_remove_ignore($wp_content);
 		CrayonLog::debug('capture ignore for id ' . $wp_id . ' : ' . strlen($capture['content']) . ' vs ' . strlen($wp_content));
 		
+// 		var_dump($wp_content);
+		
 		if ( count($matches[0]) != 0 ) {
+			
+// 			var_dump($matches);
+			
 			// Crayons found! Load settings first to ensure global settings loaded
 			CrayonSettingsWP::load_settings();
 			$capture['has_captured'] = TRUE;
@@ -311,9 +325,23 @@ class CrayonWP {
 				$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
 				$code = self::crayon_remove_ignore($contents[$i]);
 				$capture['capture'][$id] = array('post_id'=>$wp_id, 'atts'=>$atts_array, 'code'=>$code);
+				
+				CrayonLog::debug('capture finished for post id ' . $wp_id . ' crayon-id ' . $id . ' atts: ' . count($atts_array) . ' code: ' . strlen($code));
+				
+// 				var_dump($wp_content);
+// 				$wp_content = preg_replace(self::REGEX_WITH_ID, '$1$3', $wp_content);
+
+				//var_dump($full_matches[$i]);
+				
+				$wp_content = str_replace($full_matches[$i], '[crayon-'.$id.'/]', $wp_content);
+				
+				// TODO remove all but the id
+// 				var_dump($wp_content);
 			}
 			
 		}
+		
+		$capture['content'] = $wp_content;
 		
 		return $capture;
 	}
@@ -381,8 +409,9 @@ class CrayonWP {
 	}
 	
 	private static function add_crayon_id($content) {
-		CrayonLog::debug('add_crayon_id ' . $content[0].'-'.uniqid());
-		return $content[0].'-'.uniqid();
+		$uid = $content[0].'-'.uniqid();
+		CrayonLog::debug('add_crayon_id ' . $uid);
+		return $uid;
 	}
 	
 	private static function get_crayon_id() {
@@ -476,7 +505,7 @@ class CrayonWP {
 				// Replace the code with the Crayon
 				CrayonLog::debug('the_content: id '.$post_id. ' has UID ' . $id . ' : ' . intval(stripos($the_content, $id) !== FALSE) ); 
 				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
-				CrayonLog::debug('the_content: replaced for id '.$post_id. ' from len ' . strlen($the_content_original) . ' to ' . strlen($the_content));
+				CrayonLog::debug('the_content: REPLACED for id '.$post_id. ' from len ' . strlen($the_content_original) . ' to ' . strlen($the_content));
 			}
 		}
 		
@@ -518,13 +547,23 @@ class CrayonWP {
 			return $capture[0];
 		}
 		
+// 		var_dump($capture);exit;
+
+		$capture[2] = preg_replace(self::REGEX_BR_BEFORE, '$1', $capture[2]);
+		$capture[2] = preg_replace(self::REGEX_BR_AFTER, '$1', $capture[2]);
+		
+		$capture[2] = preg_replace('#(\[\s*crayon)#msi', '</p>$1', $capture[2]);
+		$capture[2] = preg_replace('#(\[\s*/\s*crayon\s*])#msi', '$1<p>', $capture[2]);
+		$capture[2] = preg_replace('#(\[\s*crayon[^\]]*\s*/\s*\])#msi', '$1<p>', $capture[2]);
+		
+		return $capture[1].$capture[2].$capture[3];
+		
 		// Remove <br/>
-		$capture[2] = preg_replace('#' . self::REGEX_BR_BEFORE . '#msi', '$1', $capture[2]);
-		$capture[2] = preg_replace('#' . self::REGEX_BR_AFTER . '#msi', '$1', $capture[2]);
+		
 		// Add <p>
 		$capture[2] = trim($capture[2]);
 		
-		if (stripos($capture[2], '[crayon') !== 0) {
+		if (stripos($capture[2], '[crayon') !== FALSE) {
 			$capture[2] = preg_replace('#(\[crayon)#msi', '</p>$1', $capture[2]);
 		} else {
 			$capture[1] = '';

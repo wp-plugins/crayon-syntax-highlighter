@@ -363,6 +363,8 @@ class CrayonWP {
 			if ( isset(self::$post_queue[$id_str]) ) {
 				// Don't capture twice
 				// XXX post->post_content is reset each loop, replace content
+				// Doing this might cause content changed by other plugins between the last loop
+				// to fail, so be cautious 
 				$post->post_content = self::$post_captures[$id_str];
 				continue;
 			}

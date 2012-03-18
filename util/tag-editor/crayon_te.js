@@ -295,7 +295,7 @@ var CrayonTagEditor = new function() {
     	});
 		
 		// Language
-		atts['lang'] = jQuery(s.lang_css).val() || '';
+		atts['lang'] = jQuery(s.lang_css).val();
 		
 		// Ensure mark has no whitespace
 		atts['mark'] = jQuery(s.mark_css).val();

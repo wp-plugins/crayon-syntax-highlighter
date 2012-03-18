@@ -136,7 +136,7 @@ var CrayonTagEditor = new function() {
         	// Create the Crayon Tag
         	submit = dialog.find('.'+s.submit_css);
         	submit.click(function () {
-        		console.log('submit');
+        		console_log('submit');
     			if (me.addCrayon() != false) {
     				me.hideDialog();
     			}
@@ -153,20 +153,14 @@ var CrayonTagEditor = new function() {
 		// TODO put this in a separate function
 		var currNode = null;
 		if (typeof node != 'undefined' && node != null) {
-			console.log(0);
 			currNode = node;
 		} else {
 			// Get it from editor selection, not as precise
-			console.log(1);
 			currNode = ed != null ? ed.selection.getNode() : null;
 		}
-		console.log(currNode);
-		console.log(currNode != null);
-		console.log(currNode.nodeName);
 		if (currNode != null && currNode.nodeName == 'PRE') {
 			currCrayon = jQuery(currNode); 
 			if (currCrayon.length != 0) {
-				console.log(2);
 				// Read back settings for editing
 				currClasses = currCrayon.attr('class');
 				var re = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
@@ -236,7 +230,7 @@ var CrayonTagEditor = new function() {
     	}
     	
     	// Position submit button
-//		jQuery('#TB_title').append(submit);
+		jQuery('#TB_title').append(submit);
     	
     	var ajax_window = jQuery('#TB_window');
     	ajax_window.hide();
@@ -270,7 +264,6 @@ var CrayonTagEditor = new function() {
 		if (code.val().length == 0) {
 			code.addClass(gs.selected);
 			code.focus();
-			console.log('no code!');
 			return false;
 		} else {
 			code.removeClass(gs.selected);
@@ -343,8 +336,6 @@ var CrayonTagEditor = new function() {
 		content = typeof content != 'undefined' ? content : '';
 		shortcode += '>' + content + '</pre>' + br_after;
 		
-//		console.log('editing');
-		
 		if (editing) {
 			// Edit the current selected node, update refere
 			/*currPre =*/ editCallback(shortcode);
@@ -357,7 +348,7 @@ var CrayonTagEditor = new function() {
 	};
 	
 	this.hideDialog = function() {
-		console.log('hide');
+		console_log('hide');
 		// Hide dialog
 		tb_remove();
 		var ajax = jQuery('#TB_ajaxContent');
@@ -365,7 +356,7 @@ var CrayonTagEditor = new function() {
     		ajax.removeClass('crayon-te-ajax');
     	}
     	// Title is destroyed, so move the submit out
-//    	jQuery(s.submit_wrapper_css).append(submit);
+    	jQuery(s.submit_wrapper_css).append(submit);
 	};
 	
 	// XXX Auxiliary methods

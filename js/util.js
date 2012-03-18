@@ -12,3 +12,11 @@ RegExp.prototype.execAll = function(string) {
 	}
 	return matches;
 }
+
+var CRAYON_DEBUG = true;
+
+function console_log(string) {
+    if (typeof console != 'undefined' && CRAYON_DEBUG) {
+        console.log(string);
+    }
+}

@@ -1,18 +1,6 @@
 <!--
 // Crayon Syntax Highlighter Admin JavaScript
 
-if (typeof DEBUG == 'undefined') {
-	var DEBUG = false;
-}
-
-if (typeof crayon_log == 'undefined') {
-	function crayon_log(string) {
-	    if (typeof console != 'undefined' && DEBUG) {
-	        console.log(string);
-	    }
-	}
-}
-
 // Not used, # is left unencoded
 function crayon_escape(string) {
     if (typeof encodeURIComponent == 'function') {
@@ -25,7 +13,7 @@ function crayon_escape(string) {
 }
 
 //jQuery(document).ready(function() {
-//	crayon_log('admin loaded');
+//	console_log('admin loaded');
 //	alert();
 //	CrayonSyntaxAdmin.init();
 //});
@@ -70,7 +58,7 @@ var CrayonSyntaxAdmin = new function() {
 	}
 	
 	this.init = function() {
-		crayon_log('admin init');
+		console_log('admin init');
 		
 		// Wraps
 		main_wrap = jQuery('#crayon-main-wrap');
@@ -159,7 +147,7 @@ var CrayonSyntaxAdmin = new function() {
 	
 	/* Whenever a control changes preview */
 	var preview_update = function() {
-		crayon_log('preview_update');
+//		console_log('preview_update');
 		preview_get = '?';
 		var val = 0;
 		var obj;
@@ -189,7 +177,6 @@ var CrayonSyntaxAdmin = new function() {
 	
 		// Load Preview
 		jQuery.get(preview_url + preview_get, function(data) {
-			crayon_log(1);
 			preview.html(data);
 			// Important! Calls the crayon.js init
 			CrayonSyntax.init();
@@ -205,7 +192,7 @@ var CrayonSyntaxAdmin = new function() {
 	}
 	
 	var preview_toggle = function() {
-		crayon_log('preview_toggle');
+//		console_log('preview_toggle');
 	    if ( preview_cbox.is(':checked') ) {
 	    	preview.show();
 	    	preview_info.show();
@@ -233,7 +220,7 @@ var CrayonSyntaxAdmin = new function() {
 	
 	// Register all event handlers for preview objects
 	var preview_register = function() {
-		crayon_log('preview_register');
+//		console_log('preview_register');
 		var obj;
 		preview_get = '?';
 	
@@ -244,13 +231,13 @@ var CrayonSyntaxAdmin = new function() {
 		
 		// Checks if the text input is changed, if so, runs the callback with given event
 		preview_txt_change = function(callback, event) {
-			//crayon_log('checking if changed');
+			//console_log('checking if changed');
 			var obj = event.target;
 			var last = preview_last_values[obj.id];
-			//crayon_log('last' + preview_last_values[obj.id]);
+			//console_log('last' + preview_last_values[obj.id]);
 			
 			if (obj.value != last) {
-				//crayon_log('changed');
+				//console_log('changed');
 				// Update last value to current
 				preview_last_values[obj.id] = obj.value;
 				// Run callback with event
@@ -260,7 +247,7 @@ var CrayonSyntaxAdmin = new function() {
 		
 		// Only updates when text is changed
 		preview_txt_callback = function(event) {
-			//crayon_log('txt callback');
+			//console_log('txt callback');
 			preview_txt_change(preview_update, event);
 		}
 		
@@ -269,7 +256,7 @@ var CrayonSyntaxAdmin = new function() {
 			preview_txt_change(function() {
 				clearInterval(preview_delay_timer);
 				preview_delay_timer = setInterval(function() {
-					//crayon_log('delayed update');				
+					//console_log('delayed update');				
 					preview_update();
 					clearInterval(preview_delay_timer);
 				}, 500);

@@ -1,12 +1,12 @@
-.crayon-syntax-pre {
-	background: #F4F4F4;
-	border: 1px solid #CCC;
-	font: 12px/1.5 "Courier 10 Pitch", Courier, monospace;
-	margin-bottom: 1.5em;
-	padding: 0.3em 0.5em;
+pre {
+	background: #F4F4F4 !important;
+	border: 1px solid #CCC !important;
+	font: 80% !important;
+	margin-bottom: 1.5em !important;
+	padding: 0.3em 0.5em !important;
 }
 
-.crayon-syntax-pre-selected {
-	background: #cce4f5;
-	border: 1px solid #9dc8e6;
+pre.crayon-selected {
+	background: #cce4f5 !important;
+	border: 1px solid #9dc8e6 !important;
 }

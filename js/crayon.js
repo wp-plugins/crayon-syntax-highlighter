@@ -2,17 +2,17 @@
 // Crayon Syntax Highlighter JavaScript
 
 // Contants
-if (typeof DEBUG == 'undefined') {
-	var DEBUG = false;
-}
+//if (typeof DEBUG == 'undefined') {
+//	var DEBUG = false;
+//}
 
-if (typeof crayon_log == 'undefined') {
-	function crayon_log(string) {
-	    if (typeof console != 'undefined' && DEBUG) {
-	        console.log(string);
-	    }
-	}
-}
+//if (typeof console_log == 'undefined') {
+//	function console_log(string) {
+//	    if (typeof console != 'undefined' && DEBUG) {
+//	        console.log(string);
+//	    }
+//	}
+//}
 
 jQuery.fn.exists = function () {
     return this.length !== 0;
@@ -119,7 +119,7 @@ var CrayonSyntax = new function() {
 	        	uid += getUID();
 	        }
 	        jQuery(this).attr('id', uid);
-	        crayon_log(uid);
+	        console_log(uid);
 	        
 	        if (!make_uid(uid)) {
 	        	// Already a Crayon
@@ -192,7 +192,7 @@ var CrayonSyntax = new function() {
 	            // If nums hidden by default
 	            if (nums.filter('[data-settings~="hide"]').length != 0) {
 	            	nums_content.ready(function() {
-	            		crayon_log('function' + uid);
+	            		console_log('function' + uid);
 	            		CrayonSyntax.toggle_nums(uid, true, true);
 	            	});
 	            } else {
@@ -237,7 +237,7 @@ var CrayonSyntax = new function() {
 	    	}, function() {
 	    		code_popup(uid);
 	    	}, function() {
-	    		//crayon_log('after');
+	    		//console_log('after');
 	    	});
 
 	        plain.css('opacity', 0);
@@ -306,14 +306,14 @@ var CrayonSyntax = new function() {
 	}
 	
 	var make_uid = function(uid) {
-		crayon_log(crayon);
+		console_log(crayon);
 	    if (typeof crayon[uid] == 'undefined') {
 	        crayon[uid] = jQuery('#'+uid);
-	        crayon_log('make ' + uid);
+	        console_log('make ' + uid);
 	        return true;
 	    }
 	    
-	    crayon_log('no make ' + uid);
+	    console_log('no make ' + uid);
 	    return false;
 	}
 	

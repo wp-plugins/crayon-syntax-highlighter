@@ -46,7 +46,9 @@ var CrayonTinyMCE = new function() {
 	            	CrayonTagEditor.showDialog(function(shortcode) {
 	            		tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	            	}, 'tinymce', ed);
-	            	CrayonTinyMCE.setHighlight(false);
+	            	if (!currPre) {
+	            		CrayonTinyMCE.setHighlight(!settings.used);
+	            	}
 	            });
 	            
 	            ed.onNodeChange.add(function(ed, cm, n, co) {
@@ -54,13 +56,13 @@ var CrayonTinyMCE = new function() {
 	            		// We don't care if we select the same object
 	            		if (currPre) {
 			            	// If we have a previous pre, remove it
-		        			jQuery(currPre).removeClass(settings.pre_css_selected);
+		        			jQuery(currPre).removeClass(settings.css_selected);
 		        			currPre = null;
 		        		}
 		            	if (n.nodeName == 'PRE') {
 		            		// Add new pre
 		            		currPre = n;
-		            		jQuery(n).addClass(settings.pre_css_selected);
+		            		jQuery(n).addClass(settings.css_selected);
 		            		CrayonTinyMCE.setHighlight(true);
 		            	} else {
 		            		// No pre selected

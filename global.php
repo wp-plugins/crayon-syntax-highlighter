@@ -5,7 +5,7 @@
 define('CRAYON_DEBUG', FALSE);
 
 // TODO remove once done
-define('CRAYON_TAG_EDITOR', false);
+define('CRAYON_TAG_EDITOR', true);
 define('CRAYON_THEME_EDITOR', false);
 
 // Constants
@@ -67,7 +67,7 @@ define('CRAYON_HELP_FILE', CRAYON_UTIL_PATH . 'help.htm');
 define('CRAYON_JQUERY_POPUP', CRAYON_JS_DIR . 'jquery.popup.js');
 define('CRAYON_JS', CRAYON_JS_DIR . 'crayon.js');
 define('CRAYON_JS_ADMIN', CRAYON_JS_DIR . 'crayon_admin.js');
-define('CRAYON_UTIL_JS', CRAYON_JS_DIR . 'util.js');
+define('CRAYON_JS_UTIL', CRAYON_JS_DIR . 'util.js');
 define('CRAYON_TE_JS', 'crayon_te.js');
 define('CRAYON_TE_PHP', 'crayon_te_content.php');
 define('CRAYON_TINYMCE_JS', 'crayon_tinymce.js');

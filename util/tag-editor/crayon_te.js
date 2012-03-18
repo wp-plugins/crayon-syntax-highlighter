@@ -129,18 +129,22 @@ var CrayonTagEditor = new function() {
 		var currNode = ed.selection.getNode();
 		if (currNode.nodeName == 'PRE') {
 			currCrayon = jQuery(currNode);
-			editing = currCrayon.hasClass(s.pre_css); 
-			if (editing) {
+//			editing = currCrayon.hasClass(s.pre_css); 
+			if (currCrayon.length != 0) {
 				// Read back settings for editing
 				var class_ = currCrayon.attr('class');
 				var attr_regex = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
 				var matches = attr_regex.execAll(class_);
+				console_log('load match:');
+				console_log(matches);
 				var atts = {};
 				for (var i in matches) {
 					var id = matches[i][1];
 					var value = matches[i][2];
-					// These don't contain prefix 
+					// Add prefix
+					id = CrayonSyntaxAdmin.addPrefixToID(id);
 					atts[id] = value;
+					console_log('loaded: ' + id + ':' + value);
 				}
 				// Only read title, don't let other atts in, no need
 				var title = currCrayon.attr('title');
@@ -157,10 +161,12 @@ var CrayonTagEditor = new function() {
 				submit.val(s.submit_edit);
 				code.val(currCrayon.html());
 			} else {
-				// We are creating a new Crayon
-				submit.val(s.submit_add);
-				// TODO reset stuff
+				console_log('cannot load currNode of type pre');
 			}
+		} else {
+			// We are creating a new Crayon
+			submit.val(s.submit_add);
+			// TODO clear settings?
 		}
 		
 		// Show the dialog
@@ -221,16 +227,16 @@ var CrayonTagEditor = new function() {
 		var shortcode = br_before + '<pre ';
 		
 		var atts = {};
-		shortcode += 'class="'+s.pre_css+' '; 
+		shortcode += 'class="'; 
 		
 		// Grab settings as attributes
 		jQuery('.'+gs.changed+'[id],.'+gs.changed+'[data-value]').each(function() {
     		var id = jQuery(this).attr('id');
     		var value = jQuery(this).attr('data-value');
     		// Remove prefix
-    		id = CrayonSyntaxAdmin.removePrefixFromID(id);
+//    		id = CrayonSyntaxAdmin.removePrefixFromID(id);
     		atts[id] = value;
-    		console.log(id + ' ' + value);
+//    		console.log(id + ' ' + value);
     	});
 		
 		// Always add language
@@ -252,7 +258,7 @@ var CrayonTagEditor = new function() {
     		// Remove prefix, if exists
     		var id = CrayonSyntaxAdmin.removePrefixFromID(att);
     		var value = atts[att];
-    		console.log('att: id: '+id+' value: '+value);
+    		console.log('add '+id+':'+value);
 			shortcode += id + s.attr_sep + value + ' ';
 		}
 		// Don't forget to close quote for class

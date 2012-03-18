@@ -194,7 +194,7 @@ class CrayonWP {
 			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
 			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre(?=(?:([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*))?)([^>]*)>(.*?)<\s*/\s*pre\s*>#msi', 'CrayonWP::pre_tag', $wp_content);
 			// XXX For encoded <pre></pre> tags
-			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(?=(?:(.*?)\bclass\s*=\s*(["\'])(.*?)\2(.*?))?)(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;#msi', 'CrayonWP::pre_tag', $wp_content);
+// 			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(?=(?:(.*?)\bclass\s*=\s*(["\'])(.*?)\2(.*?))?)(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;#msi', 'CrayonWP::pre_tag', $wp_content);
 			// XXX old versions
 			//$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
 			//$wp_content = preg_replace('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
@@ -627,7 +627,7 @@ class CrayonWP {
 		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 			$the_content = str_ireplace(array('$<pre', 'pre>$'), array('<pre', 'pre>'), $the_content);
-			$the_content = str_ireplace(array('$&lt;pre', 'pre&gt;$'), array('&lt;pre', 'pre&gt;'), $the_content);
+// 			$the_content = str_ireplace(array('$&lt;pre', 'pre&gt;$'), array('&lt;pre', 'pre&gt;'), $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
 			$the_content = str_ireplace(array('$[plain', 'plain]$'), array('[plain', 'plain]'), $the_content);

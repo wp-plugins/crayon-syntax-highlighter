@@ -184,7 +184,7 @@ class CrayonWP {
 			return $capture;
 		}
 		
-		CrayonLog::debug('capture for id ' . $wp_id);
+		CrayonLog::debug('capture for id ' . $wp_id . ' len ' . strlen($wp_content));
 		
 		// Convert <pre> tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
@@ -219,7 +219,9 @@ class CrayonWP {
 		}
 		
 		// Add IDs to the Crayons
+		CrayonLog::debug('capture adding id ' . $wp_id . ' , now has len ' . strlen($wp_content));
 		$wp_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $wp_content);
+		CrayonLog::debug('capture added id ' . $wp_id . ' : ' . strlen($wp_content));
 		
 		// Only include if a post exists with Crayon tag
 		preg_match_all(self::regex(), $wp_content, $matches);
@@ -379,6 +381,7 @@ class CrayonWP {
 	}
 	
 	private static function add_crayon_id($content) {
+		CrayonLog::debug('add_crayon_id ' . $content[0].'-'.uniqid());
 		return $content[0].'-'.uniqid();
 	}
 	
@@ -471,7 +474,7 @@ class CrayonWP {
 				}
 				CrayonLog::debug('the_content: id '.$post_id. ' post-p-len ' . strlen($the_content));
 				// Replace the code with the Crayon
-				CrayonLog::debug('the_content: id '.$post_id. ' has UID ' . $id . ' : ' . intval(stripos($the_content, $id) !== 0) ); 
+				CrayonLog::debug('the_content: id '.$post_id. ' has UID ' . $id . ' : ' . intval(stripos($the_content, $id) !== FALSE) ); 
 				$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
 				CrayonLog::debug('the_content: replaced for id '.$post_id. ' from len ' . strlen($the_content_original) . ' to ' . strlen($the_content));
 			}

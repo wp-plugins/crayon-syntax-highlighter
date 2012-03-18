@@ -19,6 +19,7 @@ class CrayonSettings {
 	const SETTING_SELECTED = 'crayon-setting-selected';
 	const SETTING_CHANGED = 'crayon-setting-changed';
 	const SETTING_SPECIAL = 'crayon-setting-special';
+	const SETTING_ORIG_VALUE = 'data-orig-value';
 	
 	// Global names for settings
 	const THEME = 'theme';

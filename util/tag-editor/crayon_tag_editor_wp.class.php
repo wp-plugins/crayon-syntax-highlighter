@@ -39,6 +39,7 @@ class CrayonTagEditorWP {
 					'switch_html' => '#content-html',
 					'switch_tmce' => '#content-tmce',
 					'submit_css' => 'crayon-te-submit',
+					'data_value' => 'data-value',
 					'attr_sep' => ':',
 					'dialog_title' => 'Add Crayon Code',
 					'submit_add' => 'Add Crayon',

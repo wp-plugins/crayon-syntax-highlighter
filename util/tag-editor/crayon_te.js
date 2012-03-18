@@ -30,6 +30,8 @@ var CrayonTagEditor = new function() {
 	var currCrayon = null;
 	// Classes from pre node, excl. settings
 	var currClasses = null;
+	// Stores the default global settings
+//	var defaults = null;
 	
 	// Generated in WP and contains the settings
 	var s = CrayonTagEditorSettings;
@@ -61,6 +63,17 @@ var CrayonTagEditor = new function() {
         		admin.init();
         	});
         	
+        	// Save default global settings
+//        	defaults = [];
+//    		jQuery('.'+gs.setting+'[id]').each(function() {
+//        		var id = jQuery(this).attr('id');
+//        		var value = jQuery(this).attr(s.data_value);
+//        		// Remove prefix
+////        		id = admin.removePrefixFromID(id);
+//        		atts[id] = value;
+////        		console_log(id + ' ' + value);
+//        	});
+        	
         	code = jQuery(s.code_css);
         	clear = jQuery('#crayon-te-clear');
         	var code_refresh = function () {
@@ -82,39 +95,33 @@ var CrayonTagEditor = new function() {
         	});
         	
         	var setting_change = function() {
-    			var me = jQuery(this);
-        		var orig_value = jQuery(this).attr('data-orig-value');
+    			var setting = jQuery(this);
+        		var orig_value = jQuery(this).attr(gs.orig_value);
         		if (typeof orig_value == 'undefined') {
         			orig_value = '';
         		}
         		// Depends on type
-        		var value = '';
+        		var value = me.settingValue(setting);
         		var highlight = null;
-    			if (me.is('input[type=checkbox]')) {
-    				value = me.is(':checked') ? '1' : '0';
-    				highlight = me.next('span'); 
-    			} else {
-    				value = me.val();
+        		if (setting.is('input[type=checkbox]')) {
+    				highlight = setting.next('span'); 
     			}
-    			if (typeof value == 'undefined') {
-    				value = '';
-        		}
     			
     			if (orig_value == value) {
     				// No change
-    				me.removeClass(gs.changed);
+    				setting.removeClass(gs.changed);
     				if (highlight) {
     					highlight.removeClass(gs.changed);
     				}
     			} else {
     				// Changed
-    				me.addClass(gs.changed);
+    				setting.addClass(gs.changed);
     				if (highlight) {
     					highlight.addClass(gs.changed);
     				}
     			}
-    			// Save the value for later
-    			me.attr('data-value', value);
+    			// Save standardized value for later
+    			setting.attr(s.data_value, value);
     		};
         	jQuery('.'+gs.setting+'[id]:not(.'+gs.special+')').each(function() {
         		jQuery(this).change(setting_change);
@@ -165,7 +172,9 @@ var CrayonTagEditor = new function() {
 				
 				// Load in attributes, add prefix
 				for (var att in atts) {
-					jQuery('#' + gs.prefix + att + '.' + gs.setting).val(atts[att]);
+					var setting = jQuery('#' + gs.prefix + att + '.' + gs.setting);
+					var value = atts[att];
+					me.settingValue(setting, value);
 					console_log('#' + gs.prefix + att + '.' + gs.setting);
 					console_log('loaded: ' + att + ':' + atts[att]);
 				}
@@ -185,8 +194,10 @@ var CrayonTagEditor = new function() {
 			// TODO clear settings?
 		}
 		
-		// Show the dialog
+		// Need to reset all settings back to original, clear yellow highlighting
+		me.resetSettings();
 		
+		// Show the dialog
     	tb_show(s.dialog_title, '#TB_inline?inlineId=' + s.css);
     	code.focus();
     	insertCallback = insert;
@@ -252,7 +263,7 @@ var CrayonTagEditor = new function() {
 		// Grab settings as attributes
 		jQuery('.'+gs.changed+'[id],.'+gs.changed+'[data-value]').each(function() {
     		var id = jQuery(this).attr('id');
-    		var value = jQuery(this).attr('data-value');
+    		var value = jQuery(this).attr(s.data_value);
     		// Remove prefix
 //    		id = admin.removePrefixFromID(id);
     		atts[id] = value;
@@ -312,6 +323,51 @@ var CrayonTagEditor = new function() {
     	if ( typeof ajax == 'undefined' ) {
     		ajax.removeClass('crayon-te-ajax');
     	}
+	};
+	
+	// XXX Auxiliary methods
+	
+	this.resetSettings = function() {
+		jQuery('.'+gs.setting+'[id]:not(.'+gs.special+')').each(function() {
+			
+		});
+		jQuery('.'+gs.special).each(function() {
+			
+		});
+	};
+	
+	this.settingValue = function(setting, value) {
+		if (typeof val == 'undefined') {
+			// getter
+			value = '';
+			if (setting.is('input[type=checkbox]')) {
+				// Boolean is stored as string
+				value = setting.is(':checked') ? '1' : '0'; 
+			} else {
+				value = setting.val();
+			}
+			return value;
+		} else {
+			// setter
+			if (setting.is('input[type=checkbox]')) {
+				if (typeof value == 'string') {
+					value = value == '1' ? true : false;
+				}
+				setting.prop('checked', value);
+			} else {
+				setting.val(value);
+			}
+		}
+	};
+	
+	this.elemValue = function(obj) {
+		var value = null;
+		if (obj.is('input[type=checkbox]')) {
+			value = obj.is(':checked');
+		} else {
+			value = obj.val();
+		}
+		return value;
 	};
 	
 	this.setSubmitTest = function(text) {

@@ -155,8 +155,8 @@ var CrayonTagEditor = new function() {
 	this.showDialog = function(insert, edit, editor_str, ed) {
 		// If we have selected a Crayon, load in the contents
 		// TODO put this in a separate function
-		var currNode = ed.selection.getNode();
-		if (currNode.nodeName == 'PRE') {
+		var currNode = ed ? ed.selection.getNode() : null;
+		if (currNode && currNode.nodeName == 'PRE') {
 			currCrayon = jQuery(currNode); 
 			if (currCrayon.length != 0) {
 				// Read back settings for editing
@@ -209,7 +209,8 @@ var CrayonTagEditor = new function() {
 		}
 		
 		// Show the dialog
-    	tb_show(s.dialog_title, '#TB_inline?inlineId=' + s.css);
+		var dialog_title = editing ? s.dialog_title_edit : s.dialog_title_add;
+    	tb_show(dialog_title, '#TB_inline?inlineId=' + s.css);
     	code.focus();
     	code_refresh();
     	insertCallback = insert;
@@ -345,7 +346,7 @@ var CrayonTagEditor = new function() {
     		ajax.removeClass('crayon-te-ajax');
     	}
     	// Title is destroyed, so move the submit out
-    	jQuery(submit_wrapper_css).append(submit);
+    	jQuery(s.submit_wrapper_css).append(submit);
 	};
 	
 	// XXX Auxiliary methods

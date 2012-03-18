@@ -1,12 +1,15 @@
 var CrayonQuickTags = function() {
-	jQuery(function() {CrayonTagEditor.loadDialog()});
+	
+	jQuery(function() {CrayonTagEditor.loadDialog(); });
 	
 	QTags.addButton( 'crayon_quicktag', 'crayon', function() {
-		CrayonTagEditor.showDialog(function(shortcode) {
-			QTags.insertContent(shortcode);
-		}, 'html');
+		CrayonTagEditor.showDialog(
+			function(shortcode) {
+				QTags.insertContent(shortcode);
+			},
+			function(shortcode) {/* Can't edit */}, 'html', null);
 		jQuery('#qt_content_crayon_quicktag').removeClass('qt_crayon_highlight');
-	} );
+	});
 	
 	var qt_crayon;
 	var find_qt_crayon = setInterval(function() {
@@ -18,6 +21,7 @@ var CrayonQuickTags = function() {
 			clearInterval(find_qt_crayon);
 		}
 	}, 100);
-}
+	
+};
 
 CrayonQuickTags();

@@ -38,11 +38,13 @@ class CrayonTagEditorWP {
 					'mark_css' => '#crayon-mark',
 					'switch_html' => '#content-html',
 					'switch_tmce' => '#content-tmce',
+					'tinymce_button' => '#content_crayon_tinymce',
 					'submit_css' => 'crayon-te-submit',
 					'submit_wrapper_css' => '#crayon-te-submit-wrapper',
 					'data_value' => 'data-value',
 					'attr_sep' => ':',
-					'dialog_title' => 'Add Crayon Code',
+					'dialog_title_add' => 'Add Crayon Code',
+					'dialog_title_edit' => 'Edit Crayon Code',
 					'submit_add' => 'Add',
 					'submit_edit' => 'Save',
 			);
@@ -98,7 +100,7 @@ class CrayonTagEditorWP {
 		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, dirname(dirname(__FILE__))), NULL, $CRAYON_VERSION);
 		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, dirname(dirname(__FILE__))), array('jquery', 'crayon_util_js'), $CRAYON_VERSION, TRUE);
 		wp_enqueue_script('crayon_te_js', plugins_url(CRAYON_TE_JS, __FILE__), array('crayon_admin_js'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_qt_js', plugins_url(CRAYON_QUICKTAGS_JS, __FILE__), array('quicktags'. 'crayon_te_js'), $CRAYON_VERSION, TRUE);
+		wp_enqueue_script('crayon_qt_js', plugins_url(CRAYON_QUICKTAGS_JS, __FILE__), array('quicktags','crayon_te_js'), $CRAYON_VERSION, TRUE);
 		wp_localize_script('crayon_te_js', 'CrayonTagEditorSettings', self::$settings);
 	}
 	 

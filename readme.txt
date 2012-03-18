@@ -152,6 +152,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.8.4
+* This update is bigger than sliced bread and twice as fulfilling - highly recommended for all users.
 * Added a brand new Tag Editor in the Visual Editor toolbar! <strong>Greatly</strong> simplifies adding code to posts in the Visual Editor. You can also switch between Visual and HTML modes to verify your code before posting!
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
 * Added ability to decode attributes, which is enabled by default to avoid seeing encoded strings in the title, and also to allow encoded angle/square brackets in the title that would otherwise clash with the Crayon tag brackets if left unencoded.
@@ -168,6 +169,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Line numbers now use UID in id to avoid duplicates
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...
+* Fixed a MAJOR bug preventing previously captured Crayons from being applied to post content!
 * Fixed a bug causing case insensitive Boolean settings to fail at times
 * Fixed a bug causing a [crayon ... /] tags to be recognised as [c ... /] tags (added a \b)
 * Fixed a bug preventing highlight="false" from working
@@ -520,11 +522,13 @@ Make sure to upgrade to the latest release when possible, I usually fix bugs on 
 
 == Donations ==
 
-Thanks to all those who donate to my project!
+Thanks to all those who donate to my project, your support keeps the Crayons going!
 
-* Nick Weisser (http://www.openstream.ch/), Switzerland
-* Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom
-* Andrew McDonnell (http://blog.oldcomputerjunk.net/), Australia
-* Waimanu Solutions (http://daveblog.waimanu.web44.net/), USA
-* Greg Pettit (http://blog.monkey-house.ca/), Canada
+* eSnipe, Inc. (http://esnipe.com/), USA
 * Gerald Drouillard (http://www.drouillard.biz/), USA
+* Greg Pettit (http://blog.monkey-house.ca/), Canada
+* Waimanu Solutions (http://daveblog.waimanu.web44.net/), USA
+* Andrew McDonnell (http://blog.oldcomputerjunk.net/), Australia
+* Perry Bonewell (http://pointatthemoon.co.uk/), United Kingdom
+* Nick Weisser (http://www.openstream.ch/), Switzerland
+

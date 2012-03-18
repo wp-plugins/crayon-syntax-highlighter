@@ -359,8 +359,11 @@ class CrayonWP {
 		// Search for shortcode in posts
 		foreach ($posts as $post) {
 			$id_str = strval($post->ID);
+// 			var_dump($post->ID);
 			if ( isset(self::$post_queue[$id_str]) ) {
 				// Don't capture twice
+				// XXX post->post_content is reset each loop, replace content
+				$post->post_content = self::$post_captures[$id_str];
 				continue;
 			}
 			// Capture post Crayons
@@ -556,7 +559,11 @@ class CrayonWP {
 		$capture[2] = preg_replace('#(\[\s*/\s*crayon\s*])#msi', '$1<p>', $capture[2]);
 		$capture[2] = preg_replace('#(\[\s*crayon[^\]]*\s*/\s*\])#msi', '$1<p>', $capture[2]);
 		
-		return $capture[1].$capture[2].$capture[3];
+		// If [crayon appears right after <p> then we will generate <p></p>, remove all these
+		$paras = $capture[1].$capture[2].$capture[3];
+		$paras = str_replace('<p></p>', '', $paras);
+		
+		return $paras;
 		
 		// Remove <br/>
 		
@@ -581,7 +588,6 @@ class CrayonWP {
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
 		CrayonLog::debug('excerpt');
-		
 		self::$is_excerpt = TRUE;
 		global $post;
 		if (!empty($post->post_excerpt)) {
@@ -744,9 +750,9 @@ if (defined('ABSPATH')) {
 		
 		CrayonSettingsWP::load_settings(TRUE);
 		if (CrayonGlobalSettings::val(CrayonSettings::MAIN_QUERY)) {
-			add_action('wp', 'CrayonWP::wp');
+			add_action('wp', 'CrayonWP::wp', 100);
 		} else {
-			add_filter('the_posts', 'CrayonWP::the_posts');
+			add_filter('the_posts', 'CrayonWP::the_posts', 100);
 		}
 		
 		// XXX Some themes like to play with the content, make sure we replace after they're done
@@ -756,7 +762,8 @@ if (defined('ABSPATH')) {
 			add_filter('comment_text', 'CrayonWP::comment_text', 100);
 		}
 		
-		add_filter('the_excerpt', 'CrayonWP::the_excerpt');
+		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 100);
+		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 100);
 		add_action('template_redirect', 'CrayonWP::wp_head');
 	}
 }

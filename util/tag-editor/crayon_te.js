@@ -100,7 +100,6 @@ var CrayonTagEditor = new function() {
         	});
         	
         	var setting_change = function() {
-        		console.log('change');
     			var setting = jQuery(this);
         		var orig_value = jQuery(this).attr(gs.orig_value);
         		if (typeof orig_value == 'undefined') {
@@ -140,13 +139,6 @@ var CrayonTagEditor = new function() {
     			me.addCrayon();
     			me.hideDialog();
     		});
-//        	submits = dialog.find('.'+s.submit_css);
-//        	submits.each(function() {
-//        		jQuery(this).click(function () {
-//        			console.log(me);
-//            		me.addCrayon();
-//            	});
-//        	});
         	me.setSubmitText(s.submit_add);
         });
     };
@@ -359,7 +351,7 @@ var CrayonTagEditor = new function() {
 	};
 	
 	this.resetSettings = function() {
-		console.log('reset');
+		console_log('reset');
 		jQuery('.'+gs.setting).each(function() {
 			var setting = jQuery(this);
 			me.settingValue(setting, setting.attr(gs.orig_value));
@@ -404,11 +396,6 @@ var CrayonTagEditor = new function() {
 	};
 	
 	this.setSubmitText = function(text) {
-//		if (submits) {
-//			submits.each(function() {
-//        		jQuery(this).val(text);
-//        	});
-//		}
 		submit.val(text);
 	}; 
 	

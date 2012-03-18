@@ -398,7 +398,7 @@ class CrayonSettingsWP {
 		extract($args); 
 		
 		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" class="'.CrayonSettings::SETTING.'" size="', $size, '" type="text" value="',
-			self::$options[$id], '" ', CrayonSettings::SETTING_ORIG_VALUE , '="', self::$options[$id], '" style="margin-left: ', ($margin ? '20px' : ''), ';" crayon-preview="', ($preview ? 1 : 0), '" />', ($break ? CRAYON_BR : '');
+			self::$options[$id], '" style="margin-left: ', ($margin ? '20px' : ''), ';" crayon-preview="', ($preview ? 1 : 0), '" />', ($break ? CRAYON_BR : '');
 	}
 
 	private static function checkbox($args, $line_break = TRUE, $preview = TRUE) {
@@ -411,7 +411,7 @@ class CrayonSettingsWP {
 		$checked_str = $checked ? ' checked="checked"' : ''; 
 //		$checked = (!array_key_exists($id, self::$options)) ? '' : checked(TRUE, self::$options[$id], FALSE);
 		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" type="checkbox" class="'.CrayonSettings::SETTING.'" value="1"', $checked_str,
-			' crayon-preview="', ($preview ? 1 : 0), '" ', CrayonSettings::SETTING_ORIG_VALUE , '="', strval(intval($checked)), '" /> ', '<span>', $text, '</span>', ($line_break ? CRAYON_BR : '');
+			' crayon-preview="', ($preview ? 1 : 0), '" /> ', '<span>', $text, '</span>', ($line_break ? CRAYON_BR : '');
 	}
 
 	// Draws a dropdown by loading the default value (an array) from a setting
@@ -421,7 +421,7 @@ class CrayonSettingsWP {
 		}
 		$resources = $resources != NULL ? $resources : CrayonGlobalSettings::get($id)->def();
 		
-		$return = '<select id="'.CrayonSettings::PREFIX.$id.'" name="'.self::OPTIONS.'['.$id.']" class="'.CrayonSettings::SETTING.'" ' . CrayonSettings::SETTING_ORIG_VALUE . '="'. self::$options[$id]. '" crayon-preview="'.($preview ? 1 : 0).'">';
+		$return = '<select id="'.CrayonSettings::PREFIX.$id.'" name="'.self::OPTIONS.'['.$id.']" class="'.CrayonSettings::SETTING.'" crayon-preview="'.($preview ? 1 : 0).'">';
 		foreach ($resources as $k=>$v) {
 			$return .='<option value="'.$k.'" '.selected(self::$options[$id], $k, FALSE).'>'.$v.'</option>';
 		}

@@ -25,6 +25,8 @@ var CrayonTagEditor = new function() {
 	var editor_name = null;
 	var ajax_class_timer = null;
 	var ajax_class_timer_count = 0;
+	// Shows clear butotn
+	var code_refresh = null;
 	
 	// Current jQuery obj of pre node
 	var currCrayon = null;
@@ -63,6 +65,8 @@ var CrayonTagEditor = new function() {
         		admin.init();
         	});
         	
+        	me.setOrigValues();
+        	
         	// Save default global settings
 //        	defaults = [];
 //    		jQuery('.'+gs.setting+'[id]').each(function() {
@@ -76,7 +80,7 @@ var CrayonTagEditor = new function() {
         	
         	code = jQuery(s.code_css);
         	clear = jQuery('#crayon-te-clear');
-        	var code_refresh = function () {
+        	code_refresh = function () {
         		var clear_visible = clear.is(":visible");
         		if (code.val().length > 0 && !clear_visible) {
         			clear.show();
@@ -136,7 +140,7 @@ var CrayonTagEditor = new function() {
             		me.addCrayon();
             	});
         	});
-        	me.setSubmitTest(s.submit_add);
+        	me.setSubmitText(s.submit_add);
         });
     };
     
@@ -175,12 +179,12 @@ var CrayonTagEditor = new function() {
 					var setting = jQuery('#' + gs.prefix + att + '.' + gs.setting);
 					var value = atts[att];
 					me.settingValue(setting, value);
-					console_log('#' + gs.prefix + att + '.' + gs.setting);
+//					console_log('#' + gs.prefix + att + '.' + gs.setting);
 					console_log('loaded: ' + att + ':' + atts[att]);
 				}
 				
 				editing = true;
-				me.setSubmitTest(s.submit_edit);
+				me.setSubmitText(s.submit_edit);
 				code.val(currCrayon.html());
 			} else {
 				console_log('cannot load currNode of type pre');
@@ -188,18 +192,17 @@ var CrayonTagEditor = new function() {
 		} else {
 			// We are creating a new Crayon, not editing
 			editing = false;
-			me.setSubmitTest(s.submit_add);
+			me.setSubmitText(s.submit_add);
 			currCrayon = null;
 			currClasses = null;
-			// TODO clear settings?
+			// Need to reset all settings back to original, clear yellow highlighting
+			me.resetSettings();
 		}
-		
-		// Need to reset all settings back to original, clear yellow highlighting
-		me.resetSettings();
 		
 		// Show the dialog
     	tb_show(s.dialog_title, '#TB_inline?inlineId=' + s.css);
     	code.focus();
+    	code_refresh();
     	insertCallback = insert;
     	editCallback = edit;
     	editor_name = editor_str;
@@ -236,7 +239,7 @@ var CrayonTagEditor = new function() {
     };
     
     // XXX Add Crayon to editor
-    this.addCrayon =  function() {
+    this.addCrayon = function() {
 		if (code.val().length == 0) {
 			code.addClass(gs.selected);
 			code.focus();
@@ -327,17 +330,22 @@ var CrayonTagEditor = new function() {
 	
 	// XXX Auxiliary methods
 	
-	this.resetSettings = function() {
-		jQuery('.'+gs.setting+'[id]:not(.'+gs.special+')').each(function() {
-			
+	this.setOrigValues = function() {
+		jQuery('.'+gs.setting+'[id]').each(function() {
+			var setting = jQuery(this);
+			setting.attr(gs.orig_value, me.settingValue(setting));
 		});
+	};
+	
+	this.resetSettings = function() {
 		jQuery('.'+gs.special).each(function() {
-			
+			var setting = jQuery(this);
+			me.settingValue(setting, setting.attr(gs.orig_value));
 		});
 	};
 	
 	this.settingValue = function(setting, value) {
-		if (typeof val == 'undefined') {
+		if (typeof value == 'undefined') {
 			// getter
 			value = '';
 			if (setting.is('input[type=checkbox]')) {
@@ -370,7 +378,7 @@ var CrayonTagEditor = new function() {
 		return value;
 	};
 	
-	this.setSubmitTest = function(text) {
+	this.setSubmitText = function(text) {
 		if (submits) {
 			submits.each(function() {
         		jQuery(this).val(text);

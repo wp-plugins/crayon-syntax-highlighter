@@ -24,7 +24,7 @@ class CrayonTEContent {
 		$id = CrayonSettings::PREFIX . $id;
 		if (count($resources) > 0) {
 			$class = $set_class ? 'class="'.CrayonSettings::SETTING.' '.CrayonSettings::SETTING_SPECIAL.'"' : ''; 
-			echo '<select id="'.$id.'" name="'.$id.'" '.$class.'>';
+			echo '<select id="'.$id.'" name="'.$id.'" '.$class.' '.CrayonSettings::SETTING_ORIG_VALUE.'="'.$current.'">';
 				foreach ($resources as $resource) {
 					$asterisk = $current == $resource->id() ? ' *' : '';
 					echo '<option value="'.$resource->id().'" '.selected($current, $resource->id()).' >'.$resource->name().$asterisk.'</option>';
@@ -103,8 +103,8 @@ class CrayonTEContent {
 			}
 		?>
 		<tr>
-			<hr />
 			<td colspan="2" style="text-align: center;">
+				<hr />
 				<?php CrayonTEContent::submit(2); ?>
 			</td>
 		</tr>

@@ -116,7 +116,7 @@ var CrayonTagEditor = new function() {
     			// Save the value for later
     			me.attr('data-value', value);
     		};
-        	jQuery('.'+gs.setting+'[id]:not('+gs.special+')').each(function() {
+        	jQuery('.'+gs.setting+'[id]:not(.'+gs.special+')').each(function() {
         		jQuery(this).change(setting_change);
         		jQuery(this).keyup(setting_change);
         	});

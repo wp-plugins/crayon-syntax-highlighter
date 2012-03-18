@@ -41,8 +41,8 @@ class CrayonTagEditorWP {
 					'submit_css' => '#crayon-te-submit',
 					'attr_sep' => ':',
 					'dialog_title' => 'Add Crayon Code',
-					'submit_add' => 'Add Code',
-					'submit_edit' => 'Edit Code',
+					'submit_add' => 'Add Crayon',
+					'submit_edit' => 'Save Crayon',
 			);
 		}
 	}

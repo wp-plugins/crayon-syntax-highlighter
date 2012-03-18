@@ -36,6 +36,7 @@ class CrayonTagEditorWP {
 					'lang_css' => '#crayon-lang',
 					'title_css' => '#crayon-title',
 					'mark_css' => '#crayon-mark',
+					'hl_css' => '#crayon-highlight',
 					'switch_html' => '#content-html',
 					'switch_tmce' => '#content-tmce',
 					'tinymce_button' => '#content_crayon_tinymce',

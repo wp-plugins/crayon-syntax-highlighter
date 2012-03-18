@@ -136,8 +136,10 @@ var CrayonTagEditor = new function() {
         	// Create the Crayon Tag
         	submit = dialog.find('.'+s.submit_css);
         	submit.click(function () {
-    			me.addCrayon();
-    			me.hideDialog();
+        		console.log('submit');
+    			if (me.addCrayon() != false) {
+    				me.hideDialog();
+    			}
     		});
         	me.setSubmitText(s.submit_add);
         });
@@ -145,28 +147,36 @@ var CrayonTagEditor = new function() {
     
     // XXX Displays the dialog.
 	this.showDialog = function(insert, edit, editor_str, ed, node) {
+		// Need to reset all settings back to original, clear yellow highlighting
+		me.resetSettings();
 		// If we have selected a Crayon, load in the contents
 		// TODO put this in a separate function
 		var currNode = null;
-		if (typeof node != 'undefined') {
+		if (typeof node != 'undefined' && node != null) {
+			console.log(0);
 			currNode = node;
 		} else {
 			// Get it from editor selection, not as precise
+			console.log(1);
 			currNode = ed != null ? ed.selection.getNode() : null;
 		}
+		console.log(currNode);
+		console.log(currNode != null);
+		console.log(currNode.nodeName);
 		if (currNode != null && currNode.nodeName == 'PRE') {
 			currCrayon = jQuery(currNode); 
 			if (currCrayon.length != 0) {
+				console.log(2);
 				// Read back settings for editing
 				currClasses = currCrayon.attr('class');
 				var re = new RegExp('\\b([A-Za-z-]+)'+s.attr_sep+'(\\S+)', 'gim');
 				var matches = re.execAll(currClasses);
 				// Retain all other classes, remove settings
 				currClasses = jQuery.trim(currClasses.replace(re, ''));
-				console_log('classes:');
-				console_log(currClasses);
-				console_log('load match:');
-				console_log(matches);
+//				console_log('classes:');
+//				console_log(currClasses);
+//				console_log('load match:');
+//				console_log(matches);
 				var atts = {};
 				for (var i in matches) {
 					var id = matches[i][1];
@@ -178,6 +188,14 @@ var CrayonTagEditor = new function() {
 				if (title) {
 					atts['title'] = title;
 				}
+				
+				// Inverted settings
+				if (typeof atts['highlight'] != 'undefined') {
+					atts['highlight'] = '0' ? '1' : '0';
+				}
+				
+				// Validate the attributes
+				atts = me.validate(atts);
 				
 				// Load in attributes, add prefix
 				for (var att in atts) {
@@ -202,8 +220,6 @@ var CrayonTagEditor = new function() {
 			me.setSubmitText(s.submit_add);
 			currCrayon = null;
 			currClasses = null;
-			// Need to reset all settings back to original, clear yellow highlighting
-			me.resetSettings();
 		}
 		
 		// Show the dialog
@@ -220,10 +236,7 @@ var CrayonTagEditor = new function() {
     	}
     	
     	// Position submit button
-//    	if (!shownOnce) {
-		jQuery('#TB_title').append(submit);
-//    		shownOnce = true;
-//    	}
+//		jQuery('#TB_title').append(submit);
     	
     	var ajax_window = jQuery('#TB_window');
     	ajax_window.hide();
@@ -257,6 +270,7 @@ var CrayonTagEditor = new function() {
 		if (code.val().length == 0) {
 			code.addClass(gs.selected);
 			code.focus();
+			console.log('no code!');
 			return false;
 		} else {
 			code.removeClass(gs.selected);
@@ -282,30 +296,32 @@ var CrayonTagEditor = new function() {
     		var id = jQuery(this).attr('id');
     		var value = jQuery(this).attr(s.data_value);
     		// Remove prefix
-//    		id = admin.removePrefixFromID(id);
+    		id = admin.removePrefixFromID(id);
     		atts[id] = value;
 //    		console_log(id + ' ' + value);
     	});
 		
-		// Always add language
-		jQuery(s.lang_css).each(function() {
-			var value = jQuery(this).val() || '';
-			atts[s.lang_css] = value;
-		});
+		// Language
+		atts['lang'] = jQuery(s.lang_css).val() || '';
 		
 		// Ensure mark has no whitespace
-		jQuery(s.mark_css).each(function() {
-			var value = jQuery(this).val();
-			if (value.length != 0) {
-				atts[s.mark_css] = value.replace(/\s/g, '');
-			}
-		});
+		atts['mark'] = jQuery(s.mark_css).val();
 		
+		// XXX Code highlighting, checked means 0!
+		if (jQuery(s.hl_css).is(':checked')) {
+			atts['highlight'] = '0';
+		}
+		
+		// XXX Very important when working with editor
     	atts['decode'] = 'true';
-		for (var att in atts) {
+    	
+    	// Validate the attributes
+		atts = me.validate(atts);
+    	
+		for (var id in atts) {
     		// Remove prefix, if exists
-    		var id = admin.removePrefixFromID(att);
-    		var value = atts[att];
+//    		var id = admin.removePrefixFromID(att);
+    		var value = atts[id];
     		console_log('add '+id+':'+value);
 			shortcode += id + s.attr_sep + value + ' ';
 		}
@@ -327,16 +343,21 @@ var CrayonTagEditor = new function() {
 		content = typeof content != 'undefined' ? content : '';
 		shortcode += '>' + content + '</pre>' + br_after;
 		
+//		console.log('editing');
+		
 		if (editing) {
-			// Edit the current selected node
-			editCallback(shortcode);
+			// Edit the current selected node, update refere
+			/*currPre =*/ editCallback(shortcode);
 		} else {
 			// Insert the tag and hide dialog
 			insertCallback(shortcode);
 		}
+		
+		return true;
 	};
 	
 	this.hideDialog = function() {
+		console.log('hide');
 		// Hide dialog
 		tb_remove();
 		var ajax = jQuery('#TB_ajaxContent');
@@ -344,7 +365,7 @@ var CrayonTagEditor = new function() {
     		ajax.removeClass('crayon-te-ajax');
     	}
     	// Title is destroyed, so move the submit out
-    	jQuery(s.submit_wrapper_css).append(submit);
+//    	jQuery(s.submit_wrapper_css).append(submit);
 	};
 	
 	// XXX Auxiliary methods
@@ -389,6 +410,13 @@ var CrayonTagEditor = new function() {
 				setting.val(value);
 			}
 		}
+	};
+	
+	this.validate = function(atts) {
+		if (typeof atts['mark'] != 'undefined') {
+			atts['mark'] = atts['mark'].replace(/\s/g, '');
+		}
+		return atts;
 	};
 	
 	this.elemValue = function(obj) {

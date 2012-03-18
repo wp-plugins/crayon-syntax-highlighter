@@ -72,7 +72,9 @@ var CrayonTinyMCE = new function() {
 		            		// This will change the currPre object
 		            		var newPre = jQuery(shortcode);
 		            		jQuery(currPre).replaceWith(newPre);
-		            		currPre = newPre;
+		            		currPre = newPre[0];
+		            		// XXX editor still refs old, send new
+//		            		return currPre;
 		            	}, 'tinymce', ed, currPre);
 	            	
 	            	if (!currPre) {

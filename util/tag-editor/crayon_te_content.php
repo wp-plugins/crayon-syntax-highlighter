@@ -71,11 +71,15 @@ class CrayonTEContent {
 				<?php CrayonTEContent::select_resource('lang', $langs, $curr_lang); ?>
 				<span class="crayon-te-section">Marked Lines</span>
 				<?php CrayonTEContent::textbox('mark', array('placeholder'=>'(e.g. 1,2,3-5)')); ?>
+				<span id="crayon-te-section-hl">
+					<?php CrayonTEContent::checkbox('highlight'); ?>
+					<span class="crayon-te-section">Disable Highlighting</span>
+				</span>
 			</td>
 		</tr>
 		<tr class="crayon-tr-center">
 			<th>Code <input type="button" id="crayon-te-clear" class="secondary-primary" value="Clear" name="clear" /></th>
-			<td><textarea id="crayon-te-code" name="code" placeholder="Copy your code here, or type it in manually."></textarea></td>
+			<td><textarea id="crayon-te-code" name="code" placeholder="Paste your code here, or type it in manually."></textarea></td>
 		</tr>
 		<tr>
 			<td id="crayon-te-submit-wrapper" colspan="2" style="text-align: center;">

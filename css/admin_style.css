@@ -239,6 +239,14 @@
 	padding: 0 10px;
 }
 
+#crayon-te-section-hl {
+	margin-left: 10px;
+}
+#crayon-te-section-hl .crayon-te-section {
+	font-weight: normal;
+	padding: 0;
+}
+
 #crayon-te-code {
 	width: 100% !important;
 	height: 200px;
@@ -320,6 +328,10 @@
 #TB_window.crayon-te-ajax #TB_title .crayon-te-submit {
 	margin-top: 3px !important;
 	float: right !important;
+}
+
+#crayon-te-submit-wrapper {
+	display: none;
 }
 
 #crayon-te-clear {

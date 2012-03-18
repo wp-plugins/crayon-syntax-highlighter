@@ -144,11 +144,17 @@ var CrayonTagEditor = new function() {
     };
     
     // XXX Displays the dialog.
-	this.showDialog = function(insert, edit, editor_str, ed) {
+	this.showDialog = function(insert, edit, editor_str, ed, node) {
 		// If we have selected a Crayon, load in the contents
 		// TODO put this in a separate function
-		var currNode = ed ? ed.selection.getNode() : null;
-		if (currNode && currNode.nodeName == 'PRE') {
+		var currNode = null;
+		if (typeof node != 'undefined') {
+			currNode = node;
+		} else {
+			// Get it from editor selection, not as precise
+			currNode = ed != null ? ed.selection.getNode() : null;
+		}
+		if (currNode != null && currNode.nodeName == 'PRE') {
 			currCrayon = jQuery(currNode); 
 			if (currCrayon.length != 0) {
 				// Read back settings for editing

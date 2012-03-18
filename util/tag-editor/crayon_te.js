@@ -36,10 +36,10 @@ var CrayonTagEditor = new function() {
 	var gs = CrayonSyntaxSettings;
 	var admin = CrayonSyntaxAdmin;
 	// For use in async functions
-	var te = this;
+	var me = this;
 	
 	// CSS
-	var dialog = code = clear = submit = null;
+	var dialog = code = clear = submits = null;
 	
 	// XXX Loads dialog contents
     this.loadDialog = function() {
@@ -122,11 +122,14 @@ var CrayonTagEditor = new function() {
         	});
         	
         	// Create the Crayon Tag
-        	submit = dialog.find(s.submit_css);
-        	submit.val(s.submit_add);
-        	submit.click(function () {
-        		te.addCrayon();
+        	submits = dialog.find('.'+s.submit_css);
+        	submits.each(function() {
+        		jQuery(this).click(function () {
+        			console.log(me);
+            		me.addCrayon();
+            	});
         	});
+        	me.setSubmitTest(s.submit_add);
         });
     };
     
@@ -168,7 +171,7 @@ var CrayonTagEditor = new function() {
 				}
 				
 				editing = true;
-				submit.val(s.submit_edit);
+				me.setSubmitTest(s.submit_edit);
 				code.val(currCrayon.html());
 			} else {
 				console_log('cannot load currNode of type pre');
@@ -176,7 +179,7 @@ var CrayonTagEditor = new function() {
 		} else {
 			// We are creating a new Crayon, not editing
 			editing = false;
-			submit.val(s.submit_add);
+			me.setSubmitTest(s.submit_add);
 			currCrayon = null;
 			currClasses = null;
 			// TODO clear settings?
@@ -232,10 +235,13 @@ var CrayonTagEditor = new function() {
 		}
 		
 		var br_before = br_after = '';
-		if (editor_name == 'html') {
-			br_after = br_before = '\n'; 
-		} else {
-			br_after = '<p>&nbsp;</p>';
+		if (!editing) {
+			// Don't add spaces if editting
+			if (editor_name == 'html') {
+				br_after = br_before = '\n'; 
+			} else {
+				br_after = '<p>&nbsp;</p>';
+			}
 		}
 		
 		var shortcode = br_before + '<pre ';
@@ -307,5 +313,13 @@ var CrayonTagEditor = new function() {
     		ajax.removeClass('crayon-te-ajax');
     	}
 	};
+	
+	this.setSubmitTest = function(text) {
+		if (submits) {
+			submits.each(function() {
+        		jQuery(this).val(text);
+        	});
+		}
+	}; 
 	
 };

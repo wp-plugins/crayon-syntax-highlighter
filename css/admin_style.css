@@ -319,17 +319,13 @@
 }
 
 .crayon-question {
-	padding: 1px 4px;
-	/*background: url(images/circle.png) center no-repeat*/;
-	background: #83b3cb;
-	text-decoration: none;
-	color: white;
-	/*color: transparent*/;
-	/*overflow:hidden;
-	text-indent: -999px;*/
-	border-radius: 10px;
-	height: 15px;
-	width: 15px;
+	padding: 1px 4px !important;
+	background: #83b3cb !important;
+	text-decoration: none !important;
+	color: white !important;
+	border-radius: 10px !important;
+	height: 15px !important;
+	width: 15px !important;
 }
 
 .crayon-setting {

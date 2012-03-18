@@ -20,3 +20,14 @@ function console_log(string) {
         console.log(string);
     }
 }
+
+//# is left unencoded
+function crayon_escape(string) {
+    if (typeof encodeURIComponent == 'function') {
+    	return encodeURIComponent(string);
+    } else if (typeof escape != 'function') {
+    	return escape(string);
+    } else {
+    	return string;
+    }
+}

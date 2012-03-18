@@ -1,17 +1,6 @@
 <!--
 // Crayon Syntax Highlighter Admin JavaScript
 
-// Not used, # is left unencoded
-function crayon_escape(string) {
-    if (typeof encodeURIComponent == 'function') {
-    	return encodeURIComponent(string);
-    } else if (typeof escape != 'function') {
-    	return escape(string);
-    } else {
-    	return string;
-    }
-}
-
 //jQuery(document).ready(function() {
 //	console_log('admin loaded');
 //	alert();

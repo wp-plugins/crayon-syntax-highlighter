@@ -5,6 +5,10 @@ var CrayonTinyMCE = new function() {
 	var settings = CrayonTagEditorSettings;
 	var isHighlighted = false;
 	var currPre = null;
+	// Switch events
+	var switch_html_click = switch_tmce_click = null;
+	
+	var me = this;
 //	var wasHighlighted = false;
 	
 	this.setHighlight = function(highlight) {
@@ -16,9 +20,26 @@ var CrayonTinyMCE = new function() {
 		isHighlighted = highlight;
 	};
 	
+	this.selectPreCSS = function(selected) {
+		if (currPre) {
+			if (selected) {
+				jQuery(currPre).addClass(settings.css_selected);
+			} else {
+				jQuery(currPre).removeClass(settings.css_selected);
+			}
+    	}
+	};
+	
+	this.isPreSelectedCSS = function() {
+		if (currPre) {
+			return jQuery(currPre).hasClass(settings.css_selected);
+		}
+		return false;
+	};
+	
 	this.loadTinyMCE = function() {
 	    tinymce.PluginManager.requireLangPack(name);
-	    
+
 	    tinymce.create('tinymce.plugins.Crayon', {
 	        init : function(ed, url) {
 	    		jQuery(function() {
@@ -39,7 +60,7 @@ var CrayonTinyMCE = new function() {
 				});
 	    		
 	    		ed.onInit.add(function(ed) {
-    				CrayonTinyMCE.setHighlight(!settings.used);
+    				me.setHighlight(!settings.used);
 	    	    });
 	    		
 	            ed.addCommand('showCrayon', function() {
@@ -47,13 +68,40 @@ var CrayonTinyMCE = new function() {
 	            		ed.execCommand('mceInsertContent', 0, shortcode);
 	            	},
 	            	function(shortcode) {
-	            		jQuery(currPre).replaceWith(shortcode);
+	            		// This will change the currPre object
+	            		var newPre = jQuery(shortcode);
+	            		jQuery(currPre).replaceWith(newPre);
+	            		currPre = newPre;
 	            	}, 'tinymce', ed);
 	            	
 	            	if (!currPre) {
 	            		// If no pre is selected, then button highlight depends on if it's used 
-	            		CrayonTinyMCE.setHighlight(!settings.used);
+	            		me.setHighlight(!settings.used);
 	            	}
+	            });
+	            
+	            // Remove onclick and call ourselves
+	            var switch_html = jQuery(settings.switch_html);
+//	            switch_html_click = switch_html.prop('onclick');
+	            switch_html.prop('onclick', null);
+	            switch_html.click(function() {
+	            	// Remove selected pre class when switching to HTML editor
+	            	me.selectPreCSS(false);
+	            	switchEditors.go('content','html');
+//	            	switch_html_click();
+	            });
+	            
+	            // Remove onclick and call ourselves
+	            var switch_tmce = jQuery(settings.switch_tmce);
+//	            switch_tmce_click = switch_tmce.prop('onclick');
+	            switch_tmce.prop('onclick', null);
+	            switch_tmce.click(function() {
+	            	// Add selected pre class when switching to back to TinyMCE
+//	            	if (!me.isPreSelectedCSS()) {
+//	            		me.selectPreCSS(true);
+//	            	}
+	            	switchEditors.go('content','tmce');
+//	            	switch_tmce_click();
 	            });
 	            
 	            // Highlight selected 
@@ -62,17 +110,17 @@ var CrayonTinyMCE = new function() {
 	            		// We only care if we select another same object
 	            		if (currPre) {
 			            	// If we have a previous pre, remove it
-		        			jQuery(currPre).removeClass(settings.css_selected);
+	            			me.selectPreCSS(false);
 		        			currPre = null;
 		        		}
 		            	if (n.nodeName == 'PRE') {
 		            		// Add new pre
 		            		currPre = n;
-		            		jQuery(n).addClass(settings.css_selected);
-		            		CrayonTinyMCE.setHighlight(true);
+		            		me.selectPreCSS(true);
+		            		me.setHighlight(true);
 		            	} else {
 		            		// No pre selected
-		            		CrayonTinyMCE.setHighlight(!settings.used);
+		            		me.setHighlight(!settings.used);
 		            	}
 	            	}
 				});

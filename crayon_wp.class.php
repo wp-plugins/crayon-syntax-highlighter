@@ -612,11 +612,19 @@ class CrayonWP {
 		$post_class = $matches[4];
 		$atts = $matches[5];
 		$content = $matches[6];
-		// Strip internal code lines used in Visual Editor
-//		$content = preg_replace('#<\s*code\b.*?\bclass\s*=\s*"\s*crayon-code-line\s*"[^>]*>(.*?)<\s*/\s*code\s*>#msi', '$1', $content);
+		
 		if (!empty($class)) {
-			// Allow hyphenated "setting-value" style settings in the class attribute
+			// "setting[:_]value" style settings in the class attribute
 			$class = preg_replace('#\b([A-Za-z-]+)[_:](\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
+		}
+		// If we find a crayon=false in the attributes, or a crayon[:_]false in the class, then we should not capture
+		$ignore_regex = '#crayon\s*=\s*(["\'])\s*(false|no|0)\s*\1#msi';
+		if (preg_match($ignore_regex, $atts) !== 0 ||
+			preg_match($ignore_regex, $class) !== 0 ) {
+			return $matches[0];
+		}
+		
+		if (!empty($class)) {
 			return "[crayon $pre_class $class $post_class]{$content}[/crayon]";
 		} else {
 			return "[crayon $atts]{$content}[/crayon]";

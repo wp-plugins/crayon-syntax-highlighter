@@ -151,7 +151,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.8.4
+= 1.9.0
 * This update is bigger than sliced bread and twice as fulfilling - highly recommended for all users.
 * Added a brand new Tag Editor in the Visual Editor toolbar! <strong>Greatly</strong> simplifies adding code to posts in the Visual Editor. You can also switch between Visual and HTML modes to verify your code before posting!
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
@@ -160,6 +160,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added ability to specify hyphen-separated-values in the class attribute of a &lt;pre&gt; tag to make them look like actual class selectors. E.g. &lt;pre class="lang-objc toolbar-false"&gt;...&lt;/pre&gt;. The setting name is made up of letters and hyphens ONLY, the value is whatever is left between the last hyphen and the next whitespace character.  
 * Added Scheme language thanks to https://github.com/harry75369
 * Added ABAP language with help from Christian Fein
+* Added a new setting: crayon="false/no/0" as an attribute or crayon:false in the class tag of a &lt;pre&gt;. This will ignore the &lt;pre&gt; tag and not turn it into a Crayon for those rare cases you don't want to use the plugin.
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup

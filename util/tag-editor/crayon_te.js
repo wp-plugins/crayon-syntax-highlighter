@@ -31,9 +31,9 @@ var CrayonTagEditor = new function() {
 	// Current jQuery obj of pre node
 	var currCrayon = null;
 	// Classes from pre node, excl. settings
-	var currClasses = null;
-	// Stores the default global settings
-//	var defaults = null;
+	var currClasses = '';
+	// Whether to make span or pre
+	var is_inline = false;
 	
 	// Generated in WP and contains the settings
 	var s = CrayonTagEditorSettings;
@@ -67,6 +67,8 @@ var CrayonTagEditor = new function() {
         	});
         	
         	me.setOrigValues();
+        	
+        	submit = dialog.find('.'+s.submit_css);
         	
         	// Save default global settings
 //        	defaults = [];
@@ -132,16 +134,6 @@ var CrayonTagEditor = new function() {
         		jQuery(this).change(setting_change);
         		jQuery(this).keyup(setting_change);
         	});
-        	
-        	// Create the Crayon Tag
-        	submit = dialog.find('.'+s.submit_css);
-        	submit.click(function () {
-        		console_log('submit');
-    			if (me.addCrayon() != false) {
-    				me.hideDialog();
-    			}
-    		});
-        	me.setSubmitText(s.submit_add);
         });
     };
     
@@ -152,13 +144,22 @@ var CrayonTagEditor = new function() {
 		// If we have selected a Crayon, load in the contents
 		// TODO put this in a separate function
 		var currNode = null;
+		is_inline = false;
 		if (typeof node != 'undefined' && node != null) {
 			currNode = node;
 		} else {
 			// Get it from editor selection, not as precise
 			currNode = ed != null ? ed.selection.getNode() : null;
 		}
-		if (currNode != null && currNode.nodeName == 'PRE') {
+		
+    	// Unbind submit
+    	submit.unbind();
+    	submit.click(function() {
+    		me.submitButton();
+    	});
+    	me.setSubmitText(s.submit_add);
+		
+		if (me.isCrayon(currNode)) {
 			currCrayon = jQuery(currNode); 
 			if (currCrayon.length != 0) {
 				// Read back settings for editing
@@ -187,6 +188,10 @@ var CrayonTagEditor = new function() {
 				if (typeof atts['highlight'] != 'undefined') {
 					atts['highlight'] = '0' ? '1' : '0';
 				}
+
+				// Inline
+				is_inline = currCrayon.hasClass(s.inline_css);
+				atts['inline'] = is_inline ? '1' : '0';
 				
 				// Validate the attributes
 				atts = me.validate(atts);
@@ -213,8 +218,35 @@ var CrayonTagEditor = new function() {
 			editing = false;
 			me.setSubmitText(s.submit_add);
 			currCrayon = null;
-			currClasses = null;
+			currClasses = '';
 		}
+		
+		// Inline
+		var inline = jQuery('#' + s.inline_css);
+		inline.change(function() {
+			console_log('test');
+			is_inline = jQuery(this).is(':checked');
+			var inline_hide = jQuery('.' + s.inline_hide_css);
+			var inline_single = jQuery('.' + s.inline_hide_only_css);
+			var mark = jQuery(s.mark_css);
+			var title = jQuery(s.title_css);
+			mark.attr('disabled', is_inline);
+			title.attr('disabled', is_inline);
+			if (is_inline) {
+				inline_hide.hide();
+				inline_single.hide();
+				inline_hide.closest('tr').hide();
+				mark.addClass('crayon-disabled');
+				title.addClass('crayon-disabled');
+			} else {
+				inline_hide.show();
+				inline_single.show();
+				inline_hide.closest('tr').show();
+				mark.removeClass('crayon-disabled');
+				title.removeClass('crayon-disabled');
+			}
+		});
+		inline.change();
 		
 		// Show the dialog
 		var dialog_title = editing ? s.dialog_title_edit : s.dialog_title_add;
@@ -269,20 +301,46 @@ var CrayonTagEditor = new function() {
 			code.removeClass(gs.selected);
 		}
 		
+		// Add inline for matching with CSS
+		var inline = jQuery('#' + s.inline_css);
+		is_inline = inline.length != 0 && inline.is(':checked');
+		
+		// Spacing only for <pre>
 		var br_before = br_after = '';
 		if (!editing) {
 			// Don't add spaces if editting
-			if (editor_name == 'html') {
-				br_after = br_before = '\n'; 
+			if (!is_inline) {
+				if (editor_name == 'html') {
+					br_after = br_before = '\n'; 
+				} else {
+					br_after = '<p>&nbsp;</p>';
+				}
 			} else {
-				br_after = '<p>&nbsp;</p>';
+				// Add a space after
+				if (editor_name == 'html') {
+					br_after = br_before = ' '; 
+				} else {
+					br_after = '&nbsp;';
+				}
 			}
 		}
 		
-		var shortcode = br_before + '<pre ';
+		var tag = (is_inline ? 'span' : 'pre');
+		var shortcode = br_before + '<' + tag + ' ';
 		
 		var atts = {};
 		shortcode += 'class="';
+		
+		var inline_re = new RegExp('\\b' + s.inline_css + '\\b', 'gim');
+		if (is_inline) {
+			// If don't have inline class, add it
+			if (inline_re.exec(currClasses) == null) {
+				currClasses += ' ' + s.inline_css + ' ';
+			}
+		} else {
+			// Remove inline css if it exists
+			currClasses = currClasses.replace(inline_re,'');
+		}
 		
 		// Grab settings as attributes
 		jQuery('.'+gs.changed+'[id],.'+gs.changed+'[data-value]').each(function() {
@@ -294,11 +352,12 @@ var CrayonTagEditor = new function() {
 //    		console_log(id + ' ' + value);
     	});
 		
-		// Language
+		// Settings
 		atts['lang'] = jQuery(s.lang_css).val();
-		
-		// Ensure mark has no whitespace
-		atts['mark'] = jQuery(s.mark_css).val();
+		var mark = jQuery(s.mark_css).val();
+		if (mark.length != 0 && !is_inline) {
+			atts['mark'] = mark;			
+		}
 		
 		// XXX Code highlighting, checked means 0!
 		if (jQuery(s.hl_css).is(':checked')) {
@@ -319,22 +378,19 @@ var CrayonTagEditor = new function() {
 			shortcode += id + s.attr_sep + value + ' ';
 		}
 		
-		// Add currClasses, if exists
-		if (currClasses) {
-			shortcode += currClasses;
-		}
+		// Add classes
+		shortcode += currClasses;
 		// Don't forget to close quote for class
 		shortcode += '" ';
 		
 		var title = jQuery(s.title_css).val();
-		if (typeof title != 'undefined') {
-			
+		if (title.length != 0 && !is_inline) {
 			shortcode += 'title="' + title + '" ';
 		}
 		
 		var content = jQuery(s.code_css).val();
 		content = typeof content != 'undefined' ? content : '';
-		shortcode += '>' + content + '</pre>' + br_after;
+		shortcode += '>' + content + '</' + tag + '>' + br_after;
 		
 		if (editing) {
 			// Edit the current selected node, update refere
@@ -345,6 +401,13 @@ var CrayonTagEditor = new function() {
 		}
 		
 		return true;
+	};
+	
+	this.submitButton = function() {
+		console_log('submit');
+		if (me.addCrayon() != false) {
+			me.hideDialog();
+		}
 	};
 	
 	this.hideDialog = function() {
@@ -408,6 +471,11 @@ var CrayonTagEditor = new function() {
 			atts['mark'] = atts['mark'].replace(/\s/g, '');
 		}
 		return atts;
+	};
+	
+	this.isCrayon = function(node) {
+		return node != null &&
+			(node.nodeName == 'PRE' || (node.nodeName == 'SPAN' && jQuery(node).hasClass(s.inline_css)));
 	};
 	
 	this.elemValue = function(obj) {

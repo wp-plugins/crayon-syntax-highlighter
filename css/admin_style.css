@@ -239,10 +239,10 @@
 	padding: 0 10px;
 }
 
-#crayon-te-section-hl {
+#crayon-te-sub-section {
 	margin-left: 10px;
 }
-#crayon-te-section-hl .crayon-te-section {
+#crayon-te-sub-section .crayon-te-section {
 	font-weight: normal;
 	padding: 0;
 }
@@ -253,6 +253,10 @@
 	white-space: pre;
 	/*white-space: nowrap;
 	overflow: auto;*/
+}
+
+.crayon-disabled {
+	background: #EEE !important;
 }
 
 .wp_themeSkin span.mce_crayon_tinymce {
@@ -300,7 +304,7 @@
 }
 
 #crayon-title {
-	width: 100%;
+	width: 360px;
 }
 
 #TB_window.crayon-te-ajax {

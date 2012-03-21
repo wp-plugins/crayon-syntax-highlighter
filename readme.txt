@@ -526,6 +526,8 @@ Make sure to upgrade to the latest release when possible, I usually fix bugs on 
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Jeremy Worboys (http://complexcompulsions.com/), Australia
+* Steve McGough, Spider Creations, LLC. (http://spidercreations.net/), USA
 * eSnipe, Inc. (http://esnipe.com/), USA
 * Gerald Drouillard (http://www.drouillard.biz/), USA
 * Greg Pettit (http://blog.monkey-house.ca/), Canada

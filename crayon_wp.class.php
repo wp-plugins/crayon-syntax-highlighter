@@ -53,7 +53,7 @@ class CrayonWP {
 	// Used to keep Crayon IDs
 	private static $next_id = 0;
 	// Array of tag search strings
-	private static $search_tags = array('[crayon', '<pre', '[plain');
+	private static $search_tags = array('[crayon', '<pre', '[plain', '<span');
 	// String to store the regex for capturing mini tags
 	private static $alias_regex = '';
 	private static $is_special_tag_init = FALSE;  
@@ -196,11 +196,6 @@ class CrayonWP {
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 			// XXX This will fail if <pre></pre> is used inside another <pre></pre>
 			$wp_content = preg_replace_callback('#(?<!\$)<\s*pre(?=(?:([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*))?)([^>]*)>(.*?)<\s*/\s*pre\s*>#msi', 'CrayonWP::pre_tag', $wp_content);
-			// XXX For encoded <pre></pre> tags
-// 			$wp_content = preg_replace_callback('#(?<!\$)&lt;\s*pre(?=(?:(.*?)\bclass\s*=\s*(["\'])(.*?)\2(.*?))?)(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;#msi', 'CrayonWP::pre_tag', $wp_content);
-			// XXX old versions
-			//$wp_content = preg_replace('#(?<!\$)<pre([^\>]*)>(.*?)</pre>(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
-			//$wp_content = preg_replace('#(?<!\$)&lt;\s*pre(.*?)&gt;(.*?)&lt;\s*/\s*pre\s*&gt;(?!\$)#msi', '[crayon\1]\2[/crayon]', $wp_content);
 		}
 		
 		// Convert mini [php][/php] tags to crayon tags, if needed
@@ -212,6 +207,8 @@ class CrayonWP {
 		// Convert inline {php}{/php} tags to crayon tags, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
 			$wp_content = preg_replace('#(?<!\$)\{\s*('.self::$alias_regex.')\b([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
+			// Convert <span class="crayon-inline"> tags to inline crayon tags
+			$wp_content = preg_replace_callback('#(?<!\$)<\s*span([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*)>(.*?)<\s*/\s*span\s*>#msi', 'CrayonWP::span_tag', $wp_content);
 		}
 		
 		// Convert [plain] tags into <pre><code></code></pre>, if needed
@@ -607,8 +604,9 @@ class CrayonWP {
 		return $the_excerpt;
 	}
 	
-	/* Capture pre tag and extract settings from the class attribute, if present */
-	public static function pre_tag($matches) {
+	// Refactored, used to capture pre and span tags which have settings in class attribute
+	public static function class_tag($matches) {
+		// If class exists, atts is not captured
 		$pre_class = $matches[1];
 		$quotes = $matches[2];
 		$class = $matches[3];
@@ -617,13 +615,15 @@ class CrayonWP {
 		$content = $matches[6];
 		
 		if (!empty($class)) {
+			// crayon-inline is turned into inline="1"
+			$class = preg_replace('#\bcrayon-inline\b#mi', 'inline="1"', $class);
 			// "setting[:_]value" style settings in the class attribute
 			$class = preg_replace('#\b([A-Za-z-]+)[_:](\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
 		}
 		// If we find a crayon=false in the attributes, or a crayon[:_]false in the class, then we should not capture
 		$ignore_regex = '#crayon\s*=\s*(["\'])\s*(false|no|0)\s*\1#msi';
 		if (preg_match($ignore_regex, $atts) !== 0 ||
-			preg_match($ignore_regex, $class) !== 0 ) {
+				preg_match($ignore_regex, $class) !== 0 ) {
 			return $matches[0];
 		}
 		
@@ -632,6 +632,26 @@ class CrayonWP {
 		} else {
 			return "[crayon $atts]{$content}[/crayon]";
 		}
+	}
+	
+	// Capture span tag and extract settings from the class attribute, if present.
+	public static function span_tag($matches) {
+// 		$pre_class = $matches[1];
+// 		$quotes = $matches[2];
+// 		$class = $matches[3];
+// 		$post_class = $matches[4];
+// 		// $atts not used
+// 		$content = $matches[5];
+		
+		// no $atts
+		$matches[6] = $matches[5];
+		$matches[5] = '';
+		return self::class_tag($matches);
+	}
+	
+	// Capture pre tag and extract settings from the class attribute, if present.
+	public static function pre_tag($matches) {
+		return self::class_tag($matches);
 	}
 	
 	// Check if the $[crayon]...[/crayon] notation has been used to ignore [crayon] tags within posts

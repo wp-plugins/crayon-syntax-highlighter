@@ -3,6 +3,7 @@ var CrayonTinyMCE = new function() {
 	// TinyMCE specific
 	var name = 'crayon_tinymce';
 	var s = CrayonTagEditorSettings;
+	var te = CrayonTagEditor;
 	var isHighlighted = false;
 	var currPre = null;
 	// Switch events
@@ -43,7 +44,7 @@ var CrayonTinyMCE = new function() {
 	    tinymce.create('tinymce.plugins.Crayon', {
 	        init : function(ed, url) {
 	    		jQuery(function() {
-	    			CrayonTagEditor.loadDialog();
+	    			te.loadDialog();
 	        	});
 	    		
 	    		ed.onInit.add(function(ed) {
@@ -53,9 +54,15 @@ var CrayonTinyMCE = new function() {
 	    		// Prevent <p> on enter, turn into \n
 				ed.onKeyDown.add(function( ed, e ) {
 					var selection = ed.selection;
-					if ( e.keyCode == 13 && selection.getNode().nodeName == 'PRE' ) {
-						selection.setContent('\n', {format : 'raw'});
-						return tinymce.dom.Event.cancel(e);
+					if ( e.keyCode == 13) {
+						var node = selection.getNode();
+						if (node.nodeName == 'PRE') {
+							selection.setContent('\n', {format : 'raw'});
+							return tinymce.dom.Event.cancel(e);
+						} else if (te.isCrayon(node)) {
+							// Only triggers for inline <span>, ignore enter in inline 
+							return tinymce.dom.Event.cancel(e);
+						}
 					}
 				});
 	    		
@@ -64,7 +71,7 @@ var CrayonTinyMCE = new function() {
 	    	    });
 	    		
 	            ed.addCommand('showCrayon', function() {
-	            	CrayonTagEditor.showDialog(
+	            	te.showDialog(
 		            	function(shortcode) {
 		            		ed.execCommand('mceInsertContent', 0, shortcode);
 		            	},
@@ -115,7 +122,7 @@ var CrayonTinyMCE = new function() {
 	            			me.selectPreCSS(false);
 		        			currPre = null;
 		        		}
-		            	if (n.nodeName == 'PRE') {
+		            	if (te.isCrayon(n)) {
 		            		// Add new pre
 		            		currPre = n;
 		            		me.selectPreCSS(true);

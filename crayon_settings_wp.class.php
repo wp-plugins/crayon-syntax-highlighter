@@ -490,6 +490,7 @@ class CrayonSettingsWP {
 	}
 
 	public static function metrics() {
+		echo '<div id="crayon-section-metrics" class="crayon-hide-inline">';
 		self::checkbox(array(CrayonSettings::HEIGHT_SET, '<span class="crayon-span-50">'.crayon__('Height').' </span>'), FALSE);
 		self::dropdown(CrayonSettings::HEIGHT_MODE, FALSE);
 		echo ' ';
@@ -523,9 +524,11 @@ class CrayonSettingsWP {
 		echo '<span class="crayon-span-100">' . crayon__('Inline Margin') . '</span>';
 		self::textbox(array('id' => CrayonSettings::INLINE_MARGIN, 'size' => 2));
 		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span>';
+		echo '</div>';
 	}
 
 	public static function toolbar() {
+		echo '<div id="crayon-section-toolbar" class="crayon-hide-inline">';
 		self::span(crayon__('Display the Toolbar').' ');
 		self::dropdown(CrayonSettings::TOOLBAR);
 		echo '<div id="' . CrayonSettings::TOOLBAR_OVERLAY . '">';
@@ -536,15 +539,18 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::SHOW_TITLE, crayon__('Display the title when provided')));
 		self::span(crayon__('Display the language').' ');
 		self::dropdown(CrayonSettings::SHOW_LANG);
+		echo '</div>';
 	}
 
 	public static function lines() {
+		echo '<div id="crayon-section-lines" class="crayon-hide-inline">';
 		self::checkbox(array(CrayonSettings::STRIPED, crayon__('Display striped code lines')));
 		self::checkbox(array(CrayonSettings::MARKING, crayon__('Enable line marking for important lines')));
 		self::checkbox(array(CrayonSettings::NUMS, crayon__('Display line numbers by default')));
 		self::checkbox(array(CrayonSettings::NUMS_TOGGLE, crayon__('Enable line number toggling')));
 		self::span(crayon__('Start line numbers from').' ');
 		self::textbox(array('id' => CrayonSettings::START_LINE, 'size' => 2, 'break' => TRUE));
+		echo '</div>';
 	}
 
 	public static function langs() {
@@ -629,6 +635,7 @@ class CrayonSettingsWP {
 	}
 
 	public static function code($editor = FALSE) {
+		echo '<div id="crayon-section-code-interaction" class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::PLAIN, crayon__('Enable plain code view and display').' '), FALSE);
 		self::dropdown(CrayonSettings::SHOW_PLAIN);
 		echo '<span id="crayon-copy-check">';
@@ -640,13 +647,19 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::SCROLL, crayon__('Always display scrollbars')));
 		self::span(crayon__('Tab size in spaces').': ');
 		self::textbox(array('id' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
+		echo '</div>';
+		
 		if (!$editor) {
 			self::checkbox(array(CrayonSettings::DECODE, crayon__('Decode HTML entities in code')));
 		}
 		self::checkbox(array(CrayonSettings::DECODE_ATTRIBUTES, crayon__('Decode HTML entities in attributes')));
+		echo '<div class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));
+		echo '</div>';
 		self::checkbox(array(CrayonSettings::MIXED, crayon__('Allow Mixed Language Highlighting with delimiters and tags.') . ' <a href="http://bit.ly/ukwts2" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
+		echo '<div class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::SHOW_MIXED, crayon__('Show Mixed Language Icon (+)')));
+		echo '</div>';
 	}
 	
 	public static function tags() {

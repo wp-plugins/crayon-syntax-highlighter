@@ -63,7 +63,13 @@ class CrayonTEContent {
 	<table id="crayon-te-table" class="describe">
 		<tr class="crayon-tr-center">
 			<th>Title</th>
-			<td><?php CrayonTEContent::textbox('title', array('placeholder'=>'A short description')); ?></td>
+			<td>
+				<?php CrayonTEContent::textbox('title', array('placeholder'=>'A short description')); ?>
+				<span id="crayon-te-sub-section">
+					<?php CrayonTEContent::checkbox('inline'); ?>
+					<span class="crayon-te-section">Inline</span>
+				</span>
+			</td>
 		</tr>
 		<tr class="crayon-tr-center">
 			<th>Language</th>
@@ -71,7 +77,7 @@ class CrayonTEContent {
 				<?php CrayonTEContent::select_resource('lang', $langs, $curr_lang); ?>
 				<span class="crayon-te-section">Marked Lines</span>
 				<?php CrayonTEContent::textbox('mark', array('placeholder'=>'(e.g. 1,2,3-5)')); ?>
-				<span id="crayon-te-section-hl">
+				<span id="crayon-te-sub-section">
 					<?php CrayonTEContent::checkbox('highlight'); ?>
 					<span class="crayon-te-section">Disable Highlighting</span>
 				</span>

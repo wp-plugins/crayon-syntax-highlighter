@@ -796,8 +796,9 @@ if (defined('ABSPATH')) {
 			add_filter('comment_text', 'CrayonWP::comment_text', 100);
 		}
 		
-		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 100);
-		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 100);
+		// We want to allow others to define excerpt length etc later, so low priority
+		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 1);
+		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 1);
 		add_action('template_redirect', 'CrayonWP::wp_head');
 	}
 }

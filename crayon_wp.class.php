@@ -69,8 +69,10 @@ class CrayonWP {
 	
 	const REGEX_BETWEEN_PARAGRAPH = '<p[^<]*>(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*((?:\[\s*crayon[^\]]*\].*?\[\s*/\s*crayon\s*\])|(?:\[\s*crayon[^\]]*/\s*\]))(?:[^<]*<(?!/?p(\s+[^>]*)?>)[^>]+(\s+[^>]*)?>)*[^<]*</p[^<]*>';
 	const REGEX_BETWEEN_PARAGRAPH_SIMPLE = '(<p(?:\s+[^>]*)?>)(.*?)(</p(?:\s+[^>]*)?>)';
-	const REGEX_BR_BEFORE = '#<\s*br\s*/?\s*>\s*(\[\s*crayon)#msi';
-	const REGEX_BR_AFTER = '#((?:\[\s*/\s*crayon\s*\])|(?:\[\s*crayon[^\]]*\s*/\s*\]))\s*<\s*br\s*/?\s*>#msi';
+	
+	// For [crayon-id/]
+	const REGEX_BR_BEFORE = '#<\s*br\s*/?\s*>\s*(\[\s*crayon-\w+\])#msi';
+	const REGEX_BR_AFTER = '#(\[\s*crayon-\w+\])\s*<\s*br\s*/?\s*>#msi';
 	
 	const REGEX_ID = '#(?<!\$)\[\s*crayon#mi';
 	//const REGEX_WITH_ID = '#(\[\s*crayon-\w+)\b([^\]]*["\'])(\s*/?\s*\])#mi';
@@ -135,6 +137,7 @@ class CrayonWP {
 		$crayon->language($lang);
 		$crayon->title($title);
 		$crayon->marked($mark);
+		
 		$crayon->is_inline($inline);
 		
 		// Determine if we should highlight
@@ -273,7 +276,6 @@ class CrayonWP {
 				
 				// Capture attributes
 				preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')(.*?)\2#', $atts, $att_matches);
-				
 				$atts_array = array();
 				if ( count($att_matches[0]) != 0 ) {
 					for ($j = 0; $j < count($att_matches[1]); $j++) {
@@ -333,7 +335,8 @@ class CrayonWP {
 
 				//var_dump($full_matches[$i]);
 				
-				$wp_content = str_replace($full_matches[$i], '[crayon-'.$id.'/]', $wp_content);
+				$is_inline = isset($atts_array['inline']) && CrayonUtil::str_to_bool($atts_array['inline'], FALSE) ? '-i' : '';
+				$wp_content = str_replace($full_matches[$i], '[crayon-'.$id.$is_inline.'/]', $wp_content);
 				
 				// TODO remove all but the id
 // 				var_dump($wp_content);
@@ -488,6 +491,9 @@ class CrayonWP {
 			// Replace with IDs now that we need to
 			// TODO may replace text changed by other plugins, so not using for now
 //			$the_content = self::$post_captures[$post_id];
+
+			// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them if needed
+			$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
 			foreach ($post_in_queue as $id=>$v) {
@@ -503,10 +509,11 @@ class CrayonWP {
 				}
 				CrayonLog::debug('the_content: id '.$post_id. ' pre-p-len ' . strlen($the_content));
 				// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them if needed
-				if (!$crayon->is_inline()) { 
-					CrayonLog::debug('add_paragraphs ' . $post_id);
-					$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
-				}
+// 				var_dump($the_content); exit;
+// 				if (!$crayon->is_inline()) {
+// 					CrayonLog::debug('add_paragraphs ' . $post_id);
+// 					$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
+// 				}
 				CrayonLog::debug('the_content: id '.$post_id. ' post-p-len ' . strlen($the_content));
 				// Replace the code with the Crayon
 				CrayonLog::debug('the_content: id '.$post_id. ' has UID ' . $id . ' : ' . intval(stripos($the_content, $id) !== FALSE) ); 
@@ -552,15 +559,11 @@ class CrayonWP {
 			CrayonLog::debug('add_paragraphs: 0');
 			return $capture[0];
 		}
-		
-// 		var_dump($capture);exit;
 
-		$capture[2] = preg_replace(self::REGEX_BR_BEFORE, '$1', $capture[2]);
-		$capture[2] = preg_replace(self::REGEX_BR_AFTER, '$1', $capture[2]);
+// 		$capture[2] = preg_replace(self::REGEX_BR_BEFORE, '$1', $capture[2]);
+// 		$capture[2] = preg_replace(self::REGEX_BR_AFTER, '$1', $capture[2]);
 		
-		$capture[2] = preg_replace('#(\[\s*crayon)#msi', '</p>$1', $capture[2]);
-		$capture[2] = preg_replace('#(\[\s*/\s*crayon\s*])#msi', '$1<p>', $capture[2]);
-		$capture[2] = preg_replace('#(\[\s*crayon[^\]]*\s*/\s*\])#msi', '$1<p>', $capture[2]);
+		$capture[2] = preg_replace('#(\[\s*crayon-\w+/\])#msi', '</p>$1</p>', $capture[2]);
 		
 		// If [crayon appears right after <p> then we will generate <p></p>, remove all these
 		$paras = $capture[1].$capture[2].$capture[3];

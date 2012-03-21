@@ -313,7 +313,7 @@ class CrayonFormatter {
 			$readonly = $touch ? '' : 'readonly';
 			$print_plain = $print_plain_button = '';
 			// TODO remove wrap
-			$print_plain = '<textarea wrap="off" class="crayon-plain" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
+			$print_plain = '<textarea wrap="off" class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
 		} else {
 			$print_plain = $plain_settings = $plain_settings = '';
 		}
@@ -392,7 +392,7 @@ class CrayonFormatter {
 		
 		// Produce output
 		$output .= '
-		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.'" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
+		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.' print-yes" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
 		'.$toolbar.'
 			<div class="crayon-plain-wrap">'.$print_plain.'</div>'.'
 			<div class="crayon-main" style="'.$main_style.'">

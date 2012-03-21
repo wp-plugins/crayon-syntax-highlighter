@@ -75,20 +75,16 @@ coloring etc.
 	margin-bottom: 0px !important;
 	width: auto !important;
 	border-spacing: 0 !important;
-	/* left margin needed for nums toggle */
+	border-collapse: collapse !important;
 }
 
-.crayon-syntax .crayon-table .td
-.crayon-syntax .crayon-table .tr {
+.crayon-syntax .crayon-table td,
+.crayon-syntax .crayon-table tr {
 	padding: 0 !important;
-}
-
-.crayon-syntax td {
-	background: none !important;
+	border: none;
+	background: none;
     vertical-align: top !important;
-    padding: 0px !important;
-    margin: 0px !important;
-	border: none !important;
+    margin: 0 !important;
 }
 
 .crayon-syntax .crayon-invisible {

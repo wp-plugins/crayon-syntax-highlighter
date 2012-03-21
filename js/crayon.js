@@ -15,7 +15,7 @@
 
 jQuery.fn.exists = function () {
     return this.length !== 0;
-}
+};
 
 // For those who need them (< IE 9), add support for CSS functions
 var isStyleFuncSupported = null;
@@ -33,21 +33,21 @@ if (typeof(CSSStyleDeclaration) != 'undefined') {
 				var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*' + RegExp.escape(value) + '(\\s*;)?', 'gmi');
 				this.cssText = this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
 	        } 
-	    }
+	    };
 	    CSSStyleDeclaration.prototype.removeProperty = function(a) {
 	        return this.removeAttribute(a);
-	    }
+	    };
 	    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
 	    	var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?', 'gmi');
 	        return rule.test(this.cssText) ? 'important' : '';
-	    }
+	    };
 	}
 }
 
 // Escape regex chars with \
 RegExp.escape = function(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
+};
 
 // The style function
 jQuery.fn.style = function(styleName, value, priority) {
@@ -73,7 +73,7 @@ jQuery.fn.style = function(styleName, value, priority) {
 		// Get CSSStyleDeclaration
 		return style;
 	}
-}
+};
 
 
 
@@ -168,18 +168,18 @@ var CrayonSyntax = new function() {
                 max_height: main_style.maxHeight || '',
                 min_height: main_style.minHeight || '',
                 width: main_style.width || ''
-	        }
+	        };
 	        
 	        var load_timer;
-	        var last_num_width = nums.width();
+//	        var last_num_width = nums.width();
 	        var i = 0;
 	        crayon[uid].loading = true;
 	        crayon[uid].scroll_block_fix = false;
 	        
 	        // Register click events
-	        nums_button.click(function() { CrayonSyntax.toggle_nums(uid) });
-	        plain_button.click(function() { CrayonSyntax.toggle_plain(uid) });
-	        copy_button.click(function() { CrayonSyntax.copy_plain(uid) });
+	        nums_button.click(function() { CrayonSyntax.toggle_nums(uid); });
+	        plain_button.click(function() { CrayonSyntax.toggle_plain(uid); });
+	        copy_button.click(function() { CrayonSyntax.copy_plain(uid); });
 	        
 	        var load_func = function() {
 	        	if (main.height() < 30) {
@@ -302,7 +302,7 @@ var CrayonSyntax = new function() {
 	        // Determine if Mac
 	        crayon[uid].mac = (jQuery(this).hasClass('crayon-os-mac').length != 0); 
 	    });
-	}
+	};
 	
 	var make_uid = function(uid) {
 		console_log(crayon);
@@ -314,11 +314,11 @@ var CrayonSyntax = new function() {
 	    
 	    console_log('no make ' + uid);
 	    return false;
-	}
+	};
 	
 	var getUID = function() {
 		return currUID++;
-	}
+	};
 	
 	var code_popup = function(uid) {
 		if (typeof crayon[uid] == 'undefined') {
@@ -331,25 +331,25 @@ var CrayonSyntax = new function() {
 		if (typeof settings == 'undefined') {
 			return;
 		}
-	}
+	};
 	
 	var get_jquery_str = function(object) {
 		return jQuery('<div>').append(object.clone()).remove().html();
-	}
+	};
 	
 	var remove_css_inline = function(string) {
 		return string.replace(/style\s*=\s*["'][^"]+["']/gmi, '');
-	}
+	};
 	
 	// Get all CSS on the page as a string
 	var get_all_css = function() {
-		var css_str = ''
+		var css_str = '';
 		css = jQuery('link[rel="stylesheet"]').each(function() {
 			var string = get_jquery_str(jQuery(this));
 			css_str += string;
 		});
 		return css_str;
-	}
+	};
 	
 	this.copy_plain = function(uid, hover) {
 		if (typeof crayon[uid] == 'undefined') {
@@ -367,7 +367,7 @@ var CrayonSyntax = new function() {
 		text = text.replace(/%s/, key + '+V');
 		crayon_info(uid, text);
 		return false;
-	}
+	};
 	
 	var crayon_info = function(uid, text, show) {
 		if (typeof crayon[uid] == 'undefined') {
@@ -397,7 +397,7 @@ var CrayonSyntax = new function() {
 			crayon_slide(uid, info, false);
 		}
 	
-	}
+	};
 	
 	var crayon_is_slide_hidden = function(object) {
 		var object_neg_height = '-' + object.height() + 'px';	
@@ -406,7 +406,7 @@ var CrayonSyntax = new function() {
 	    } else {
 	        return false;            
 	    }
-	}
+	};
 	
 	var crayon_slide = function(uid, object, show, anim_time, hide_delay) {
 		var object_neg_height = '-' + object.height() + 'px';
@@ -445,7 +445,7 @@ var CrayonSyntax = new function() {
 	            object.hide();
 	        });
 	    }
-	}
+	};
 	
 	this.toggle_plain = function(uid, hover, select) {
 		if (typeof crayon[uid] == 'undefined') {
@@ -454,7 +454,7 @@ var CrayonSyntax = new function() {
 	    
 	    var main = crayon[uid].main;
 	    var plain = crayon[uid].plain;
-	    var plain_button = crayon[uid].plain_button;
+//	    var plain_button = crayon[uid].plain_button;
 	    
 	    if ( (main.is(':animated') || plain.is(':animated')) && typeof hover == 'undefined' ) {
 	        return;
@@ -545,7 +545,7 @@ var CrayonSyntax = new function() {
 	    // Hide toolbar if possible
 	    toolbar_toggle(uid, false);
 	    return false;
-	}
+	};
 	
 	this.toggle_nums = function(uid, hide, instant) {
 		if (typeof crayon[uid] == 'undefined') {
@@ -604,14 +604,14 @@ var CrayonSyntax = new function() {
 	        }
 	    });
 	    return false;
-	}
+	};
 	
 	var fix_table_width = function(uid) {
 		if (typeof crayon[uid] == 'undefined') {
 			make_uid(uid);
 		    return false;
 		}
-	}
+	};
 	
 	// Convert '-10px' to -10
 	var px_to_int = function(pixels) {
@@ -624,7 +624,7 @@ var CrayonSyntax = new function() {
 		} else {
 			return parseInt(result);
 		}
-	}
+	};
 	
 	var update_nums_button = function(uid) {
 		if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].nums_visible == 'undefined') {
@@ -638,7 +638,7 @@ var CrayonSyntax = new function() {
 			crayon[uid].nums_button.removeClass(PRESSED);
 			crayon[uid].nums_button.addClass(UNPRESSED);
 		}
-	}
+	};
 	
 	var update_plain_button = function(uid) {
 		if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].plain_visible == 'undefined') {
@@ -653,7 +653,7 @@ var CrayonSyntax = new function() {
 			crayon[uid].plain_button.removeClass(PRESSED);
 			crayon[uid].plain_button.addClass(UNPRESSED);
 		}
-	}
+	};
 	
 	var toolbar_toggle = function(uid, show, anim_time, hide_delay) {
 	    if (typeof crayon[uid] == 'undefined') {
@@ -662,14 +662,14 @@ var CrayonSyntax = new function() {
 	    	return;
 	    }
 	    var toolbar = crayon[uid].toolbar;
-	    var delay = crayon[uid].toolbar_delay;
+//	    var delay = crayon[uid].toolbar_delay;
 	    
 	    if (typeof hide_delay == 'undefined') {
 	    	hide_delay = crayon[uid].toolbar_delay;
 	    }
 	    
 	    crayon_slide(uid, toolbar, show, anim_time, hide_delay);
-	}
+	};
 	
 	var toggle_scroll = function(uid, show) {
 	    if (typeof crayon[uid] == 'undefined') {
@@ -723,7 +723,7 @@ var CrayonSyntax = new function() {
 		// Register that overflow has changed
 		crayon[uid].scroll_changed = true;
 		fix_scroll_blank(uid);
-	}
+	};
 	
 	/* Fix weird draw error, causes blank area to appear where scrollbar once was. */
 	var fix_scroll_blank = function(uid) {
@@ -733,13 +733,13 @@ var CrayonSyntax = new function() {
 			crayon[uid].table.style('width', '');
 			clearInterval(redraw);
 		}, 10);
-	}
+	};
 	
 	var reconsile_dimensions = function(uid) {
 		// Reconsile dimensions
 		crayon[uid].plain.height(crayon[uid].main.height());
 		//crayon[uid].plain.width(crayon[uid].main.width());
-	}
+	};
 	
 	var animt = function(x, uid) {
 	    if (x == 'fast') {
@@ -753,11 +753,11 @@ var CrayonSyntax = new function() {
 	        }
 	    }
 	    return x * crayon[uid].time;
-	}
+	};
 	
 	var isNumber = function(x) {
 	    return typeof x == 'number';
-	}
+	};
 	
-}
+};
 

@@ -62,30 +62,30 @@ class CrayonTEContent {
 
 	<table id="crayon-te-table" class="describe">
 		<tr class="crayon-tr-center">
-			<th>Title</th>
+			<th><?php crayon_e('Title'); ?></th>
 			<td>
 				<?php CrayonTEContent::textbox('title', array('placeholder'=>'A short description')); ?>
 				<span id="crayon-te-sub-section">
 					<?php CrayonTEContent::checkbox('inline'); ?>
-					<span class="crayon-te-section">Inline</span>
+					<span class="crayon-te-section"><?php crayon_e('Inline'); ?></span>
 				</span>
 			</td>
 		</tr>
 		<tr class="crayon-tr-center">
-			<th>Language</th>
+			<th><?php crayon_e('Language'); ?></th>
 			<td>
 				<?php CrayonTEContent::select_resource('lang', $langs, $curr_lang); ?>
-				<span class="crayon-te-section">Marked Lines</span>
+				<span class="crayon-te-section"><?php crayon_e('Marked Lines'); ?></span>
 				<?php CrayonTEContent::textbox('mark', array('placeholder'=>'(e.g. 1,2,3-5)')); ?>
 				<span id="crayon-te-sub-section">
 					<?php CrayonTEContent::checkbox('highlight'); ?>
-					<span class="crayon-te-section">Disable Highlighting</span>
+					<span class="crayon-te-section"><?php crayon_e('Disable Highlighting'); ?></span>
 				</span>
 			</td>
 		</tr>
 		<tr class="crayon-tr-center">
-			<th>Code <input type="button" id="crayon-te-clear" class="secondary-primary" value="Clear" name="clear" /></th>
-			<td><textarea id="crayon-te-code" name="code" placeholder="Paste your code here, or type it in manually."></textarea></td>
+			<th><?php crayon_e('Code'); ?> <input type="button" id="crayon-te-clear" class="secondary-primary" value="<?php crayon_e('Clear'); ?>" name="clear" /></th>
+			<td><textarea id="crayon-te-code" name="code" placeholder="<?php crayon_e('Paste your code here, or type it in manually.'); ?>"></textarea></td>
 		</tr>
 		<tr>
 			<td id="crayon-te-submit-wrapper" colspan="2" style="text-align: center;">
@@ -98,10 +98,15 @@ class CrayonTEContent {
 		<tr>
 			<td colspan="2">
 			<hr />
-			<div><h2 class="crayon-te-heading">Settings</h2></div>
+			<div><h2 class="crayon-te-heading"><?php crayon_e('Settings'); ?></h2></div>
 			<div id="crayon-te-settings-info" class="crayon-te-info">
-				Change the following settings to override their global values. <span class="<?php echo CrayonSettings::SETTING_CHANGED ?>">Only changes (shown yellow) are applied.</span><br/>
-				Future changes to the global settings under <code>Crayon > Settings</code> won't affect overridden settings. 
+			<?php
+				crayon_e('Change the following settings to override their global values.');
+				echo '<span class="', CrayonSettings::SETTING_CHANGED, '">';
+				crayon__('Only changes (shown yellow) are applied.');
+				echo '</span><br/>';
+				sprintf(crayon_e('Future changes to the global settings under %sCrayon > Settings%s won\'t affect overridden settings.'), '<code>', '</code>');
+			?>
 			</div></td>
 		</tr>
 		<?php

@@ -1,56 +1,50 @@
 // Crayon Syntax Highlighter JavaScript
 
-// Contants
-//if (typeof DEBUG == 'undefined') {
-//	var DEBUG = false;
-//}
-
-//if (typeof console_log == 'undefined') {
-//	function console_log(string) {
-//	    if (typeof console != 'undefined' && DEBUG) {
-//	        console.log(string);
-//	    }
-//	}
-//}
+// BEGIN AUXILIARY FUNCTIONS
 
 jQuery.fn.exists = function () {
     return this.length !== 0;
 };
 
-// For those who need them (< IE 9), add support for CSS functions
-var isStyleFuncSupported = null;
-if (typeof(CSSStyleDeclaration) != 'undefined') {
-	isStyleFuncSupported = CSSStyleDeclaration.prototype.getPropertyValue != null;
-	if (!isStyleFuncSupported) {
-		CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
-	        return this.getAttribute(a);
-	    };
-	    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
-	        this.setAttribute(styleName,value);
-	        var priority = typeof priority != 'undefined' ? priority : '';
-	        if (priority != '') {
-		        // Add priority manually
-				var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*' + RegExp.escape(value) + '(\\s*;)?', 'gmi');
-				this.cssText = this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
-	        } 
-	    };
-	    CSSStyleDeclaration.prototype.removeProperty = function(a) {
-	        return this.removeAttribute(a);
-	    };
-	    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
-	    	var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?', 'gmi');
-	        return rule.test(this.cssText) ? 'important' : '';
-	    };
+// This makes IE < 9 doesn't support CSSStyleDeclaration, can't use this
+var CrayonSyntaxUnused = function () {
+	// For those who need them (< IE 9), add support for CSS functions
+	var isStyleFuncSupported = null;
+	if (typeof(CSSStyleDeclaration) != 'undefined') {
+		isStyleFuncSupported = CSSStyleDeclaration.prototype.getPropertyValue != null;
+		if (!isStyleFuncSupported) {
+			CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
+		        return this.getAttribute(a);
+		    };
+		    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
+		        this.setAttribute(styleName,value);
+		        var priority = typeof priority != 'undefined' ? priority : '';
+		        if (priority != '') {
+			        // Add priority manually
+					var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*' + RegExp.escape(value) + '(\\s*;)?', 'gmi');
+					this.cssText = this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
+		        } 
+		    };
+		    CSSStyleDeclaration.prototype.removeProperty = function(a) {
+		        return this.removeAttribute(a);
+		    };
+		    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
+		    	var rule = new RegExp(RegExp.escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?', 'gmi');
+		        return rule.test(this.cssText) ? 'important' : '';
+		    };
+		}
 	}
-}
+};
 
 // Escape regex chars with \
 RegExp.escape = function(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
 
-// The style function
+
+var hasCSSStyleDeclaration = typeof(CSSStyleDeclaration) != 'undefined';
 jQuery.fn.style = function(styleName, value, priority) {
+	console_log('style called');
 	// DOM node
 	var node = this.get(0);
 	// Ensure we have a DOM node 
@@ -64,10 +58,18 @@ jQuery.fn.style = function(styleName, value, priority) {
 		if (typeof value != 'undefined') {
 			// Set style property
 			var priority = typeof priority != 'undefined' ? priority : '';
-			style.setProperty(styleName, value, priority);
+			if (hasCSSStyleDeclaration) {
+				style.setProperty(styleName, value, priority);
+			} else {
+				style.styleName = value + ' ' + priority;
+			}
 		} else {
 			// Get style property
-			return style.getPropertyValue(styleName);
+			if (hasCSSStyleDeclaration) {
+				return style.getPropertyValue(styleName);
+			} else {
+				return style.styleName;
+			}
 		}
 	} else {
 		// Get CSSStyleDeclaration
@@ -75,10 +77,7 @@ jQuery.fn.style = function(styleName, value, priority) {
 	}
 };
 
-
-
-
-
+// END AUXILIARY FUNCTIONS
 
 var PRESSED = 'crayon-pressed';
 var UNPRESSED = '';
@@ -102,7 +101,6 @@ jQuery(document).ready(function() {
 });
 
 var CrayonSyntax = new function() {
-
 	var crayon = new Object();
 	var currUID = 0;
 	
@@ -161,17 +159,15 @@ var CrayonSyntax = new function() {
 	        jQuery(CRAYON_PLAIN).css('z-index', 0);
 	        
 	        // XXX Remember CSS dimensions
-	        var main_style = crayon[uid].main.style();
-	        
+	        var main_style = main.style();
 	        crayon[uid].main_style = {
-	        	height: main_style.height || '',
-                max_height: main_style.maxHeight || '',
-                min_height: main_style.minHeight || '',
-                width: main_style.width || ''
+	        	height: main_style && main_style.height || '',
+                max_height: main_style && main_style.maxHeight || '',
+                min_height: main_style && main_style.minHeight || '',
+                width: main_style && main_style.width || ''
 	        };
 	        
 	        var load_timer;
-//	        var last_num_width = nums.width();
 	        var i = 0;
 	        crayon[uid].loading = true;
 	        crayon[uid].scroll_block_fix = false;
@@ -454,7 +450,6 @@ var CrayonSyntax = new function() {
 	    
 	    var main = crayon[uid].main;
 	    var plain = crayon[uid].plain;
-//	    var plain_button = crayon[uid].plain_button;
 	    
 	    if ( (main.is(':animated') || plain.is(':animated')) && typeof hover == 'undefined' ) {
 	        return;
@@ -662,7 +657,6 @@ var CrayonSyntax = new function() {
 	    	return;
 	    }
 	    var toolbar = crayon[uid].toolbar;
-//	    var delay = crayon[uid].toolbar_delay;
 	    
 	    if (typeof hide_delay == 'undefined') {
 	    	hide_delay = crayon[uid].toolbar_delay;

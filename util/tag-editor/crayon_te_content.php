@@ -105,7 +105,7 @@ class CrayonTEContent {
 				echo '<span class="', CrayonSettings::SETTING_CHANGED, '">';
 				crayon__('Only changes (shown yellow) are applied.');
 				echo '</span><br/>';
-				sprintf(crayon_e('Future changes to the global settings under %sCrayon > Settings%s won\'t affect overridden settings.'), '<code>', '</code>');
+				echo sprintf(crayon__('Future changes to the global settings under %sCrayon &gt; Settings%s won\'t affect overridden settings.'), '<code>', '</code>');
 			?>
 			</div></td>
 		</tr>

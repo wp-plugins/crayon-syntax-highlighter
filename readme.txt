@@ -161,6 +161,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added Scheme language thanks to https://github.com/harry75369
 * Added ABAP language with help from Christian Fein
 * Added a new setting: crayon="false/no/0" as an attribute or crayon:false in the class tag of a &lt;pre&gt;. This will ignore the &lt;pre&gt; tag and not turn it into a Crayon for those rare cases you don't want to use the plugin.
+* Improved the method of finding posts with Crayons - now it will search through all posts for Crayons and save the ids in the options db. When the_posts is called, it won't need to do any extra searching on page loading and will already know which post has Crayons. Like before, pages which might use page templates will turn off enqueuing of fonts and themes to ensure they are always printed.
 * Overriden Language File elements are now put first in the CSS class name, so the extended element can override in a theme
 * Prevented capturing Crayons in the admin
 * Crayons now use HTML5 valid markup

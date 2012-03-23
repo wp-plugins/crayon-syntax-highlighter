@@ -13,6 +13,8 @@ class CrayonSettingsWP {
 
 	// A copy of the current options in db
 	private static $options = NULL;
+	// Posts containing crayons in db
+	private static $crayon_posts = NULL;
 	// An array of cache names for use with Transients API
 	private static $cache = NULL;
 	// Array of settings to pass to js
@@ -23,6 +25,7 @@ class CrayonSettingsWP {
 	const SETTINGS = 'crayon_fields';
 	const FIELDS = 'crayon_settings';
 	const OPTIONS = 'crayon_options';
+	const POSTS = 'crayon_posts';
 	const CACHE = 'crayon_cache';
 	const GENERAL = 'crayon_general';
 	const DEBUG = 'crayon_debug';
@@ -94,6 +97,9 @@ class CrayonSettingsWP {
 		if (!current_user_can('manage_options')) {
 			wp_die(crayon__('You do not have sufficient permissions to access this page.'));
 		}
+		
+		// Go through and find all Crayons in posts on each reload
+		self::scan_and_save_posts();
 		
 		?>
 
@@ -188,6 +194,50 @@ class CrayonSettingsWP {
 			$settings = CrayonGlobalSettings::get_array();
 		}
 		update_option(self::OPTIONS, $settings);
+	}
+	
+	// Crayons posts
+	public static function load_posts() {
+		if (self::$crayon_posts === NULL) {
+			// Load from db
+			if (!(self::$crayon_posts = get_option(self::POSTS))) {
+				// Posts don't exist! Scan for them. This will fill self::$crayon_posts
+				self::$crayon_posts = CrayonWP::scan_posts();
+				update_option(self::POSTS, self::$crayon_posts);
+			}
+		}
+		return self::$crayon_posts;
+	}
+	
+	public static function scan_and_save_posts() {
+		self::save_posts(CrayonWP::scan_posts());
+	}
+	
+	public static function save_posts($posts = NULL) {
+		if ($posts === NULL) {
+			$posts = self::$crayon_posts;
+		}
+		update_option(self::POSTS, $posts);
+		self::load_posts();
+	}
+	
+	public static function add_post($id) {
+		self::load_posts();
+		if (!in_array($id, self::$crayon_posts)) {
+			self::$crayon_posts[] = $id;
+		}
+		self::save_posts();
+	}
+	
+	public static function remove_post($id) {
+		self::load_posts();
+		for ($i = 0; $i < count(self::$crayon_posts); $i++) {
+			if (self::$crayon_posts[$i] == $id) {
+				unset(self::$crayon_posts[$i]);
+				break;
+			}
+		}
+		self::save_posts();
 	}
 	
 	// Cache
@@ -287,8 +337,6 @@ class CrayonSettingsWP {
 	// Validates all the settings passed from the form in $inputs
 
 	public static function settings_validate($inputs) {
-		//return array();
-		
 		// Load current settings from db
 		self::load_settings(TRUE);
 		
@@ -337,12 +385,6 @@ class CrayonSettingsWP {
 				$inputs[$setting->name()] = CrayonGlobalSettings::val($setting->name());
 				continue;				
 			}
-//			foreach ($ignored as $ignore) {
-//				if ($setting->name() == $ignore) {
-//					$inputs[$ignore] = CrayonGlobalSettings::val($ignore);
-//					continue;
-//				}
-//			}
 			
 			// If boolean setting is not in input, then it is set to FALSE in the form
 			if (!array_key_exists($setting->name(), $inputs)) {
@@ -369,26 +411,7 @@ class CrayonSettingsWP {
 	public static function blank() {} // Used for required callbacks with blank content
 
 	// Input Drawing ==========================================================
-
-	// Used to read args and validate for input tags
-// 	private static function input($args) {
-// 		if (empty($args) || !is_array($args)) {
-// 			return FALSE;
-// 		}
-// 		extract($args);
-// 		$name = (!empty($name) ? $name : '');
-// 		$size = (!empty($size) && is_numeric($size) ? $size : 40);
-// 		$break = (!empty($break) && $break ? CRAYON_BR : '');
-// 		$margin = (!empty($margin) && $margin ? '20px' : 0);
-// 		// By default, inputs will trigger preview refresh
-// 		$preview = (!empty($preview) && !$preview ? 0 : 1);
-// 		//$options = get_option(self::OPTIONS);
-// 		if (!array_key_exists($name, self::$options)) {
-// 			return array();
-// 		}
-// 		return compact('name', 'size', 'break', 'margin', 'preview', 'options');
-// 	}
-
+	
 	private static function textbox($args) {
 		$id = '';
 		$size = 40;
@@ -409,7 +432,6 @@ class CrayonSettingsWP {
 		$text = $args[1];
 		$checked = (!array_key_exists($id, self::$options)) ? FALSE : self::$options[$id] == TRUE;
 		$checked_str = $checked ? ' checked="checked"' : ''; 
-//		$checked = (!array_key_exists($id, self::$options)) ? '' : checked(TRUE, self::$options[$id], FALSE);
 		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" type="checkbox" class="'.CrayonSettings::SETTING.'" value="1"', $checked_str,
 			' crayon-preview="', ($preview ? 1 : 0), '" /> ', '<span>', $text, '</span>', ($line_break ? CRAYON_BR : '');
 	}
@@ -680,15 +702,9 @@ class CrayonSettingsWP {
 	}
 	
 	public static function tag_editor() {
-		
 		$sep = sprintf(crayon__('Use %s to separate setting names from values in the &lt;pre&gt; class attribute'),
 						self::dropdown(CrayonSettings::ATTR_SEP, FALSE, FALSE, FALSE));
-		
 		echo '<span>', $sep, ' <a href="#" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span>';
-//		self::dropdown(CrayonSettings::SHOW_PLAIN);
-//		self::checkbox(array(CrayonSettings::TINYMCE_ADD_OVERRIDDEN, crayon__('Only add overriden settings to generated tags')));
-//		echo '<span>'.crayon__('Add line breaks'), '</span> ';
-//		self::dropdown(CrayonSettings::TINYMCE_LINE_BREAK);
 	}
 
 	public static function misc() {

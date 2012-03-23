@@ -286,6 +286,18 @@ class CrayonSettings {
 		}
 	}
 	
+	function val_str($name) {
+		if (($setting = self::get($name)) != FALSE) {
+			$def = $setting->def();
+			$index = $setting->value();
+			if (array_key_exists($index, $def)) {
+				return $def[$index];
+			} else {
+				return NULL;
+			}
+		}
+	}
+	
 	function get_array() {
 		$array = array();
 		foreach ($this->settings as $setting) {
@@ -539,6 +551,10 @@ class CrayonGlobalSettings {
 
 	public static function val($name = NULL) {
 		return self::$global->val($name);
+	}
+	
+	public static function val_str($name = NULL) {
+		return self::$global->val_str($name);
 	}
 
 	public static function set($name, $value = NULL, $replace = FALSE) {

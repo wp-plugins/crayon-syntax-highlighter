@@ -178,6 +178,7 @@ var CrayonTagEditor = new function() {
 					var value = matches[i][2];
 					atts[id] = value;
 				}
+				
 				// Only read title, don't let other atts in, no need
 				var title = currCrayon.attr('title');
 				if (title) {
@@ -192,6 +193,18 @@ var CrayonTagEditor = new function() {
 				// Inline
 				is_inline = currCrayon.hasClass(s.inline_css);
 				atts['inline'] = is_inline ? '1' : '0';
+				
+				// Ensure language goes to fallback if invalid
+				var avail_langs = [];
+				jQuery(s.lang_css + ' option').each(function(){
+					var value = jQuery(this).val();
+					if (value) {
+						avail_langs.push(value);
+					}
+				});
+				if (jQuery.inArray(atts['lang'], avail_langs) == -1) {
+					atts['lang'] = s.fallback_lang;
+				}
 				
 				// Validate the attributes
 				atts = me.validate(atts);

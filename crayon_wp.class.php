@@ -536,11 +536,10 @@ class CrayonWP {
 		if (count($capture) != 4) {
 			CrayonLog::debug('add_paragraphs: 0');
 			return $capture[0];
-		}		
-		$capture[2] = preg_replace('#(\[\s*crayon-\w+/\])#msi', '</p>$1</p>', $capture[2]);
+		}
+		$capture[2] = preg_replace('#(?:<\s*br\s*/\s*>\s*)?(\[\s*crayon-\w+/\])(?:<\s*br\s*/\s*>\s*)?#msi', '</p>$1<p>', $capture[2]);
 		// If [crayon appears right after <p> then we will generate <p></p>, remove all these
 		$paras = $capture[1].$capture[2].$capture[3];
-		$paras = str_replace('<p></p>', '', $paras);
 		return $paras;
 	}
 	

@@ -8,7 +8,6 @@ class CrayonTagEditorWP {
 	public static $settings = null;
 	
 	public static function init() {
-		self::init_settings();
 		// Hooks
 		if (CRAYON_TAG_EDITOR) {
 			self::addbuttons();
@@ -30,7 +29,6 @@ class CrayonTagEditorWP {
 					'used' => CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED),
 					'used_setting' => CrayonSettings::TINYMCE_USED,
 					'ajax_url' => plugins_url(CRAYON_AJAX_PHP, dirname(dirname(__FILE__))),
-// 					'pre_css' => 'crayon-syntax-pre',
 					'css_selected' => 'crayon-selected',
 					'code_css' => '#crayon-te-code',
 					'lang_css' => '#crayon-lang',
@@ -59,32 +57,6 @@ class CrayonTagEditorWP {
 	
 	public static function init_tinymce($init) {
 		$init['extended_valid_elements'] .= ',pre[*],code[*],iframe[*]';
-		
-//		$init['convert_newlines_to_brs'] = TRUE;
-//		$init['remove_linebreaks'] = false;
-//		$init['wpautop'] = false;
-
-//		$init['forced_root_block'] = false;
-//		$init['force_p_newlines'] = false;
-//		$init['remove_linebreaks'] = false;
-//		$init['remove_trailing_nbsp'] = false;
-//		$init['verify_html'] = false;
-//		$init['force_br_newlines'] = true;
-		
-		
-
-		
-//		protect
-		
-		
-//		$init['crayon_used'] = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_USED);
-//		$init['crayon_ajax'] = plugins_url(CRAYON_AJAX_PHP, dirname(__FILE__));
-//		$init['crayon_used_setting'] = CrayonSettings::TINYMCE_USED;
-//		$line_break = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_LINE_BREAK);
-//		$init['crayon_br_after'] = $line_break == 0 || $line_break == 1;
-//		$init['crayon_br_before'] = $line_break == 0 || $line_break == 2;
-		
-//		$init['crayon_add_overridden'] = CrayonGlobalSettings::val(CrayonSettings::TINYMCE_ADD_OVERRIDDEN);
 		return $init;
 	}
 	
@@ -103,6 +75,7 @@ class CrayonTagEditorWP {
 	
 	public static function admin_scripts() {
 		global $CRAYON_VERSION;
+		self::init_settings();
 		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, dirname(dirname(__FILE__))), NULL, $CRAYON_VERSION);
 		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, dirname(dirname(__FILE__))), array('jquery', 'crayon_util_js'), $CRAYON_VERSION, TRUE);
 		wp_enqueue_script('crayon_te_js', plugins_url(CRAYON_TE_JS, __FILE__), array('crayon_admin_js'), $CRAYON_VERSION);

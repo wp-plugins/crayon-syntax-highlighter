@@ -324,7 +324,7 @@ var CrayonTagEditor = new function() {
 			// Don't add spaces if editting
 			if (!is_inline) {
 				if (editor_name == 'html') {
-					br_after = br_before = '\n'; 
+					br_after = br_before = ' \n'; 
 				} else {
 					br_after = '<p>&nbsp;</p>';
 				}

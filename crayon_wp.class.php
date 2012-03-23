@@ -654,6 +654,7 @@ class CrayonWP {
 	}
 	
 	public static function save_post($id, $post) {
+		CrayonSettingsWP::load_settings(TRUE);
 		if (wp_is_post_revision($id)) {
 			// Ignore revisions
 			return;

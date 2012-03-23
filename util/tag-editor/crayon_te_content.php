@@ -102,8 +102,8 @@ class CrayonTEContent {
 			<div id="crayon-te-settings-info" class="crayon-te-info">
 			<?php
 				crayon_e('Change the following settings to override their global values.');
-				echo '<span class="', CrayonSettings::SETTING_CHANGED, '">';
-				crayon__('Only changes (shown yellow) are applied.');
+				echo ' <span class="', CrayonSettings::SETTING_CHANGED, '">';
+				crayon_e('Only changes (shown yellow) are applied.');
 				echo '</span><br/>';
 				echo sprintf(crayon__('Future changes to the global settings under %sCrayon &gt; Settings%s won\'t affect overridden settings.'), '<code>', '</code>');
 			?>

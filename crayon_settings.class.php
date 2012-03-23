@@ -117,9 +117,6 @@ class CrayonSettings {
 	private static $default = NULL;
 
 	function __construct() {
-		self::$cache_array = array(crayon__('Hourly') => 3600, crayon__('Daily') => 86400,
-									crayon__('Weekly') => 604800, crayon__('Monthly') => 18144000,
-									crayon__('Immediately') => 1);
 		$this->init();
 	}
 	
@@ -137,6 +134,10 @@ class CrayonSettings {
 		global $CRAYON_VERSION;
 		
 		crayon_load_plugin_textdomain();
+		
+		self::$cache_array = array(crayon__('Hourly') => 3600, crayon__('Daily') => 86400,
+				crayon__('Weekly') => 604800, crayon__('Monthly') => 18144000,
+				crayon__('Immediately') => 1);
 		
 		$settings = array(
 			new CrayonSetting(self::VERSION, $CRAYON_VERSION, NULL, TRUE),

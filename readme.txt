@@ -152,7 +152,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.9.0
-* This update is bigger than sliced bread and twice as fulfilling - highly recommended for all users.
+* This update is the biggest update yet - highly recommended for all users.
 * Added a brand new Tag Editor in the Visual Editor toolbar! <strong>Greatly</strong> simplifies adding code to posts in the Visual Editor. You can also switch between Visual and HTML modes to verify your code before posting!
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.
 * Added ability to decode attributes, which is enabled by default to avoid seeing encoded strings in the title, and also to allow encoded angle/square brackets in the title that would otherwise clash with the Crayon tag brackets if left unencoded.

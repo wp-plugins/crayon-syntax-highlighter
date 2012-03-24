@@ -522,12 +522,13 @@ http://wordpress.org/support/topic/plugin-crayon-syntax-highlighter-this-plugin-
 
 == Upgrade Notice ==
 
-Make sure to upgrade to the latest release when possible, I usually fix bugs on the day and add new features quickly. 
+Make sure to upgrade to the latest release when possible to ensure you avoid bugs others have found and enjoy new features. 
 
 == Donations ==
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Aliseya Wright, (http://blog.xoxothemes.com/), USA
 * Jeremy Worboys (http://complexcompulsions.com/), Australia
 * Steve McGough, Spider Creations, LLC. (http://spidercreations.net/), USA
 * eSnipe, Inc. (http://esnipe.com/), USA

@@ -205,7 +205,7 @@ class CrayonWP {
 		
 		// Convert `` backquote tags into <code></code>, if needed
 		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
-			$wp_content = preg_replace('#(?<!\\\\)`[^`]*`#msi', '<code>\1</code>', $wp_content);
+			$wp_content = preg_replace('#(?<!\\\\)`([^`]*)`#msi', '<code>$1</code>', $wp_content);
 		}
 		
 		// Add IDs to the Crayons

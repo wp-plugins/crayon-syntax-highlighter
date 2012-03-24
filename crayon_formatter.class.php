@@ -514,7 +514,7 @@ class CrayonFormatter {
 		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
 			$code = trim($code);
 		}
-		return '<pre class="crayon-plain-tag"><code>'.$code.'</code></pre>';
+		return '<pre class="crayon-plain-tag">'.$code.'</pre>';
 	}
 
 	public static function split_lines($code, $class) {

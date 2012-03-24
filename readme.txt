@@ -171,6 +171,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Line numbers now use UID in id to avoid duplicates
 * Crayon CSS updated to use inline styles and never use style tags in the body
 * Simplified the toolbar buttons to suit the minimalistic design of the rest of Crayon. It'll look badass with an inset shadow in a future theme...
+* Plain tags are now just &lt;pre&gt; tags and don't contain the inline code tag since they are block tags.
 * Fixed a MAJOR bug preventing previously captured Crayons from being applied to post content!
 * Fixed a bug causing case insensitive Boolean settings to fail at times
 * Fixed a bug causing a [crayon ... /] tags to be recognised as [c ... /] tags (added a \b)

@@ -210,7 +210,10 @@ var CrayonTagEditor = new function() {
 					var value = atts[att];
 					me.settingValue(setting, value);
 					// Update highlights
-					setting.change();
+//					setting.change();
+					if (!setting.hasClass(gs.special)) {
+						setting.addClass(gs.changed);
+					}
 //					console_log('#' + gs.prefix + att + '.' + gs.setting);
 					console_log('loaded: ' + att + ':' + atts[att]);
 				}

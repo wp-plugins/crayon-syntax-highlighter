@@ -1,3 +1,8 @@
+if (typeof CrayonTagEditorSettings == 'undefined') {
+	// WP may have already added it
+	CrayonTagEditorSettings = {};
+}
+
 RegExp.prototype.execAll = function(string) {
 	var matches = [];
 	var match = null;
@@ -11,7 +16,7 @@ RegExp.prototype.execAll = function(string) {
 		matches.push(matchArray);
 	}
 	return matches;
-}
+};
 
 var CRAYON_DEBUG = true;
 

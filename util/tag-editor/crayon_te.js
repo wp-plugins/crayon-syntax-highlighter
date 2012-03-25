@@ -1,8 +1,3 @@
-if (typeof CrayonTagEditorSettings == 'undefined') {
-	// WP may have already added it
-	CrayonTagEditorSettings = {};
-}
-
 // Sets the TINYMCE_USED setting
 CrayonTagEditorSettings.setUsed = function(is_used) {
 	if (typeof this.ajax_url != 'undefined') {

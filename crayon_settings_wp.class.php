@@ -47,7 +47,8 @@ class CrayonSettingsWP {
 		// Register settings, second argument is option name stored in db
 		register_setting(self::FIELDS, self::OPTIONS, 'CrayonSettingsWP::settings_validate');
 		add_action("admin_head-$admin_page", 'CrayonSettingsWP::admin_init');
-		// Register settings for post edit page
+		// Register settings for post page
+		add_action("admin_print_styles-post-new.php", 'CrayonSettingsWP::admin_styles');
 		add_action("admin_print_styles-post.php", 'CrayonSettingsWP::admin_styles');
 				
 		// TODO depreciated since WP 3.3, remove eventually

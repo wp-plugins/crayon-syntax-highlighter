@@ -92,7 +92,6 @@ var CrayonSyntaxAdmin = new function() {
 	
 	    // Toolbar
 	    overlay = jQuery('#crayon-subsection-toolbar');
-	    console.log(overlay);
 	    toolbar = me.cssElem('#toolbar');
 	    toggle_toolbar();
 	    toolbar.change(function() { toggle_toolbar(); });

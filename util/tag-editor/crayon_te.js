@@ -12,7 +12,6 @@ CrayonTagEditorSettings.setUsed = function(is_used) {
 
 var CrayonTagEditor = new function() {
 	
-	// VE specific
 	var loaded = false;
 	var editing = false;
 	var insertCallback = null;
@@ -20,8 +19,8 @@ var CrayonTagEditor = new function() {
 	var editor_name = null;
 	var ajax_class_timer = null;
 	var ajax_class_timer_count = 0;
-	// Shows clear butotn
-	var code_refresh = null;
+	
+	var code_refresh = url_refresh = null;
 	
 	// Current jQuery obj of pre node
 	var currCrayon = null;
@@ -39,7 +38,6 @@ var CrayonTagEditor = new function() {
 	
 	// CSS
 	var dialog = code = clear = submit = null;
-	var shownOnce = false;
 	
 	// XXX Loads dialog contents
     this.loadDialog = function() {
@@ -95,6 +93,19 @@ var CrayonTagEditor = new function() {
         		code.removeClass(gs.selected);
         		code.focus();
         	});
+        	
+        	var url = jQuery(s.url_css);
+        	var url_info = jQuery(s.url_info_css);
+        	url_refresh = function () {
+        		if (url.val().length > 0 && !url_info.is(":visible")) {
+        			url_info.show();
+        			url.removeClass(gs.selected);
+        		} else if (url.val().length <= 0) {
+        			url_info.hide();
+        		}
+        	};
+        	url.keyup(url_refresh);
+        	url.change(url_refresh);
         	
         	var setting_change = function() {
     			var setting = jQuery(this);
@@ -174,10 +185,16 @@ var CrayonTagEditor = new function() {
 					atts[id] = value;
 				}
 				
-				// Only read title, don't let other atts in, no need
+				// Title
 				var title = currCrayon.attr('title');
 				if (title) {
 					atts['title'] = title;
+				}
+				
+				// URL
+				var url = currCrayon.attr('data-url');
+				if (url) {
+					atts['url'] = url;
 				}
 				
 				// Inverted settings
@@ -220,7 +237,10 @@ var CrayonTagEditor = new function() {
 				
 				editing = true;
 				me.setSubmitText(s.submit_edit);
+				
+				// Code 
 				code.val(currCrayon.html());
+				
 			} else {
 				console_log('cannot load currNode of type pre');
 			}
@@ -239,22 +259,41 @@ var CrayonTagEditor = new function() {
 			is_inline = jQuery(this).is(':checked');
 			var inline_hide = jQuery('.' + s.inline_hide_css);
 			var inline_single = jQuery('.' + s.inline_hide_only_css);
-			var mark = jQuery(s.mark_css);
-			var title = jQuery(s.title_css);
-			mark.attr('disabled', is_inline);
-			title.attr('disabled', is_inline);
+			var disabled = [s.mark_css, s.title_css, s.url_css];
+//			var mark = jQuery(s.mark_css);
+//			var title = jQuery(s.title_css);
+//			var url = jQuery(s.url_css);
+			
+			for (var i in disabled) {
+				var obj = jQuery(disabled[i]);
+				obj.attr('disabled', is_inline);
+			}
+			
+//			mark.attr('disabled', is_inline);
+//			title.attr('disabled', is_inline);
+//			url.attr('disabled', is_inline);
 			if (is_inline) {
 				inline_hide.hide();
 				inline_single.hide();
 				inline_hide.closest('tr').hide();
-				mark.addClass('crayon-disabled');
-				title.addClass('crayon-disabled');
+				for (var i in disabled) {
+					var obj = jQuery(disabled[i]);
+					obj.addClass('crayon-disabled');
+				}
+//				mark.addClass('crayon-disabled');
+//				title.addClass('crayon-disabled');
+//				url.addClass('crayon-disabled');
 			} else {
 				inline_hide.show();
 				inline_single.show();
 				inline_hide.closest('tr').show();
-				mark.removeClass('crayon-disabled');
-				title.removeClass('crayon-disabled');
+				for (var i in disabled) {
+					var obj = jQuery(disabled[i]);
+					obj.removeClass('crayon-disabled');
+				}
+//				mark.removeClass('crayon-disabled');
+//				title.removeClass('crayon-disabled');
+//				title.removeClass('crayon-disabled');
 			}
 		});
 		inline.change();
@@ -264,6 +303,7 @@ var CrayonTagEditor = new function() {
     	tb_show(dialog_title, '#TB_inline?inlineId=' + s.css);
     	code.focus();
     	code_refresh();
+    	url_refresh();
     	insertCallback = insert;
     	editCallback = edit;
     	editor_name = editor_str;
@@ -304,13 +344,13 @@ var CrayonTagEditor = new function() {
     
     // XXX Add Crayon to editor
     this.addCrayon = function() {
-		if (code.val().length == 0) {
+    	var url = jQuery(s.url_css);
+    	if (url.val().length == 0 && code.val().length == 0) {
 			code.addClass(gs.selected);
 			code.focus();
 			return false;
-		} else {
-			code.removeClass(gs.selected);
-		}
+    	}
+    	code.removeClass(gs.selected);
 		
 		// Add inline for matching with CSS
 		var inline = jQuery('#' + s.inline_css);
@@ -394,9 +434,17 @@ var CrayonTagEditor = new function() {
 		// Don't forget to close quote for class
 		shortcode += '" ';
 		
-		var title = jQuery(s.title_css).val();
-		if (title.length != 0 && !is_inline) {
-			shortcode += 'title="' + title + '" ';
+		if (!is_inline) {
+			// Title
+			var title = jQuery(s.title_css).val();
+			if (title.length != 0) {
+				shortcode += 'title="' + title + '" ';
+			}
+			// URL
+			var url = jQuery(s.url_css).val();
+			if (url.length != 0) {
+				shortcode += 'data-url="' + url + '" ';
+			}
 		}
 		
 		var content = jQuery(s.code_css).val();

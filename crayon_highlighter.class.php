@@ -37,7 +37,6 @@ class CrayonHighlighter {
 	
 	// Methods ================================================================
 	function __construct($url = NULL, $language = NULL, $id = NULL) {
-//		var_dump($url);
 		if ($url !== NULL) {
 			$this->url($url);
 		}
@@ -225,7 +224,7 @@ class CrayonHighlighter {
 			}
 			if (!empty($code)) {
 				$this->code = $code;
-				$this->needs_load = FALSE; // No need to load, code provided
+// 				$this->needs_load = FALSE; // No need to load, code provided
 				$this->needs_format = TRUE;
 			}
 		}

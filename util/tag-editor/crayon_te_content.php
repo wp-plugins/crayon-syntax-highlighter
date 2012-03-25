@@ -64,7 +64,7 @@ class CrayonTEContent {
 		<tr class="crayon-tr-center">
 			<th><?php crayon_e('Title'); ?></th>
 			<td>
-				<?php CrayonTEContent::textbox('title', array('placeholder'=>'A short description')); ?>
+				<?php CrayonTEContent::textbox('title', array('placeholder'=>crayon__('A short description'))); ?>
 				<span id="crayon-te-sub-section">
 					<?php CrayonTEContent::checkbox('inline'); ?>
 					<span class="crayon-te-section"><?php crayon_e('Inline'); ?></span>
@@ -76,7 +76,7 @@ class CrayonTEContent {
 			<td>
 				<?php CrayonTEContent::select_resource('lang', $langs, $curr_lang); ?>
 				<span class="crayon-te-section"><?php crayon_e('Marked Lines'); ?></span>
-				<?php CrayonTEContent::textbox('mark', array('placeholder'=>'(e.g. 1,2,3-5)')); ?>
+				<?php CrayonTEContent::textbox('mark', array('placeholder'=>crayon__('(e.g. 1,2,3-5)'))); ?>
 				<span id="crayon-te-sub-section">
 					<?php CrayonTEContent::checkbox('highlight'); ?>
 					<span class="crayon-te-section"><?php crayon_e('Disable Highlighting'); ?></span>
@@ -85,7 +85,20 @@ class CrayonTEContent {
 		</tr>
 		<tr class="crayon-tr-center">
 			<th><?php crayon_e('Code'); ?> <input type="button" id="crayon-te-clear" class="secondary-primary" value="<?php crayon_e('Clear'); ?>" name="clear" /></th>
-			<td><textarea id="crayon-te-code" name="code" placeholder="<?php crayon_e('Paste your code here, or type it in manually.'); ?>"></textarea></td>
+			<td><textarea id="crayon-code" name="code" placeholder="<?php crayon_e('Paste your code here, or type it in manually.'); ?>"></textarea></td>
+		</tr>
+		<tr class="crayon-tr-center">
+			<th id="crayon-url-th"><?php crayon_e('URL'); ?></th>
+			<td>
+				<?php CrayonTEContent::textbox('url', array('placeholder'=>crayon__('Relative local path or absolute URL'))); ?>
+				<div id="crayon-te-url-info" class="crayon-te-info">
+				<?php
+					crayon_e("If the URL fails to load, the code above will be shown instead. If no code exists, an error is shown.");
+					echo ' ';
+					printf(crayon__('If a relative local path is given, it will be appended to %s, defined in %sCrayon &gt; Settings &gt; Files%s.'), '<span class="crayon-te-quote">'. get_home_url() . '/' . CrayonGlobalSettings::val(CrayonSettings::LOCAL_PATH) . '</span>', '<a href="options-general.php?page=crayon_settings" target="_blank">', '</a>');
+				?>
+			</div>
+			</td>
 		</tr>
 		<tr>
 			<td id="crayon-te-submit-wrapper" colspan="2" style="text-align: center;">
@@ -105,7 +118,7 @@ class CrayonTEContent {
 				echo ' <span class="', CrayonSettings::SETTING_CHANGED, '">';
 				crayon_e('Only changes (shown yellow) are applied.');
 				echo '</span><br/>';
-				echo sprintf(crayon__('Future changes to the global settings under %sCrayon &gt; Settings%s won\'t affect overridden settings.'), '<code>', '</code>');
+				echo sprintf(crayon__('Future changes to the global settings under %sCrayon &gt; Settings%s won\'t affect overridden settings.'), '<a href="options-general.php?page=crayon_settings" target="_blank">', '</a>');
 			?>
 			</div></td>
 		</tr>

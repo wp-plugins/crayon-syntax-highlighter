@@ -422,7 +422,7 @@ class CrayonSettingsWP {
 		extract($args); 
 		
 		echo '<input id="', CrayonSettings::PREFIX, $id, '" name="', self::OPTIONS, '[', $id, ']" class="'.CrayonSettings::SETTING.'" size="', $size, '" type="text" value="',
-			self::$options[$id], '" style="margin-left: ', ($margin ? '20px' : ''), ';" crayon-preview="', ($preview ? 1 : 0), '" />', ($break ? CRAYON_BR : '');
+			self::$options[$id], '" style="margin-left: ', ($margin ? '20px' : '0px'), ';" crayon-preview="', ($preview ? 1 : 0), '" />', ($break ? CRAYON_BR : '');
 	}
 
 	private static function checkbox($args, $line_break = TRUE, $preview = TRUE) {
@@ -705,7 +705,7 @@ class CrayonSettingsWP {
 	public static function tag_editor() {
 		$sep = sprintf(crayon__('Use %s to separate setting names from values in the &lt;pre&gt; class attribute'),
 						self::dropdown(CrayonSettings::ATTR_SEP, FALSE, FALSE, FALSE));
-		echo '<span>', $sep, ' <a href="#" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span>';
+		echo '<span>', $sep, ' <a href="http://bit.ly/H3xW3D" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span>';
 	}
 
 	public static function misc() {

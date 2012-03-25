@@ -569,17 +569,26 @@ class CrayonWP {
 		$atts = $matches[5];
 		$content = $matches[6];
 		
+		// If we find a crayon=false in the attributes, or a crayon[:_]false in the class, then we should not capture
+		$ignore_regex = '#crayon\s*=\s*(["\'])\s*(false|no|0)\s*\1#msi';
+		if (preg_match($ignore_regex, $atts) !== 0 ||
+				preg_match($ignore_regex, $class) !== 0 ) {
+			return $matches[0];
+		}
+		
 		if (!empty($class)) {
 			// crayon-inline is turned into inline="1"
 			$class = preg_replace('#'.self::REGEX_INLINE_CLASS.'#mi', 'inline="1"', $class);
 			// "setting[:_]value" style settings in the class attribute
 			$class = preg_replace('#\b([A-Za-z-]+)[_:](\S+)#msi', '$1='.$quotes.'$2'.$quotes, $class);
 		}
-		// If we find a crayon=false in the attributes, or a crayon[:_]false in the class, then we should not capture
-		$ignore_regex = '#crayon\s*=\s*(["\'])\s*(false|no|0)\s*\1#msi';
-		if (preg_match($ignore_regex, $atts) !== 0 ||
-				preg_match($ignore_regex, $class) !== 0 ) {
-			return $matches[0];
+		
+		// data-url is turned into url=""
+		if (!empty($post_class)) {
+			$post_class = preg_replace('#\bdata-url\s*=#mi', 'url=', $post_class);
+		}
+		if (!empty($pre_class)) {
+			$pre_class = preg_replace('#\bdata-url\s*=#mi', 'url=', $post_class);
 		}
 		
 		if (!empty($class)) {
@@ -698,7 +707,6 @@ class CrayonWP {
 				$crayon_posts[] = $post->ID;
 			}
 		}
-// 		var_dump($query->posts);
 		return $crayon_posts;
 	}
 	

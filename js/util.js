@@ -18,7 +18,7 @@ RegExp.prototype.execAll = function(string) {
 	return matches;
 };
 
-var CRAYON_DEBUG = true;
+var CRAYON_DEBUG = false;
 
 function console_log(string) {
     if (typeof console != 'undefined' && CRAYON_DEBUG) {

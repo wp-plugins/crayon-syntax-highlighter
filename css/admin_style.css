@@ -229,6 +229,11 @@
 	vertical-align: middle;
 }
 
+#crayon-url-th {
+	vertical-align: top;
+	padding-top: 5px;
+}
+
 .crayon-te-heading {
 	font-size: 14px;
 	font-weight: bold;
@@ -247,12 +252,16 @@
 	padding: 0;
 }
 
-#crayon-te-code {
+#crayon-code {
 	width: 100% !important;
 	height: 200px;
 	white-space: pre;
 	/*white-space: nowrap;
 	overflow: auto;*/
+}
+
+#crayon-url {
+	width: 100% !important;
 }
 
 .crayon-disabled {
@@ -332,6 +341,20 @@
 #TB_window.crayon-te-ajax #TB_title .crayon-te-submit {
 	margin-top: 3px !important;
 	float: right !important;
+}
+
+#TB_window.crayon-te-ajax a {
+	color: #2587e2;
+	text-decoration: none;
+}
+
+#TB_window.crayon-te-ajax a:hover {
+	color: #499ce9;
+}
+
+.crayon-te-quote {
+	background: #DDD;
+	padding: 0 2px;
 }
 
 #crayon-te-submit-wrapper {

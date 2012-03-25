@@ -95,7 +95,7 @@ class CrayonTEContent {
 				<?php
 					crayon_e("If the URL fails to load, the code above will be shown instead. If no code exists, an error is shown.");
 					echo ' ';
-					printf(crayon__('If a relative local path is given, it will be appended to %s, defined in %sCrayon &gt; Settings &gt; Files%s.'), '<span class="crayon-te-quote">'. get_home_url() . '/' . CrayonGlobalSettings::val(CrayonSettings::LOCAL_PATH) . '</span>', '<a href="options-general.php?page=crayon_settings" target="_blank">', '</a>');
+					printf(crayon__('If a relative local path is given it will be appended to %s - which is defined in %sCrayon &gt; Settings &gt; Files%s.'), '<span class="crayon-te-quote">'. get_home_url() . '/' . CrayonGlobalSettings::val(CrayonSettings::LOCAL_PATH) . '</span>', '<a href="options-general.php?page=crayon_settings" target="_blank">', '</a>');
 				?>
 			</div>
 			</td>

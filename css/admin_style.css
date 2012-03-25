@@ -230,7 +230,7 @@
 }
 
 #crayon-url-th {
-	vertical-align: top;
+	vertical-align: top !important;
 	padding-top: 5px;
 }
 

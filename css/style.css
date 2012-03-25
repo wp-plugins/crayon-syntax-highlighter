@@ -63,7 +63,8 @@ coloring etc.
 }
 
 .crayon-syntax-inline {
-	margin: 0 5px;
+	margin: 0 2px;
+	padding: 0 2px;
 }
 
 .crayon-syntax .crayon-table {

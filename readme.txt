@@ -15,6 +15,7 @@ It can highlight from a URL, a local file or Wordpress post text. Crayon makes i
 custom language elements with regular expressions.
 It also supports some neat features like:
 
+* <a href="http://bit.ly/H3xW3D" target="_blank">Tag Editor</a> in both Visual & HTML editors
 * Toggled plain code
 * Toggled line numbers
 * Copy/paste code
@@ -96,6 +97,7 @@ Please Thank Me With <a href="http://bit.ly/crayondonate" target="_blank">Coffee
 
 These are helpful for discovering new features.
 
+* <a href="http://ak.net84.net/projects/crayon-tag-editor/" target="_blank">Crayon Tag Editor</a>
 * <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting in Crayon</a>
 * <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags And Plain Tags In Crayon</a>
 * <a href="http://ak.net84.net/crayon/inline-crayons/" target="_blank">Inline Tags</a>
@@ -117,11 +119,16 @@ A handful of articles from others written about Crayon, thanks guys!
 == Installation ==
 
 Download the .zip of the plugin and extract the contents. Upload it to the Wordpress plugin directory and activate the plugin.
+Even easier, just go to <strong>Plugins > Add New</strong> and search for "Crayon". 
 You can change settings and view help under <strong>Settings > Crayon</strong> in the Wordpress Admin.
 
 == Frequently Asked Questions ==
 
-= How do I use this thing? =
+= How to add using Tag Editor =
+
+The <a href="http://bit.ly/H3xW3D" target="_blank">Tag Editor</a> provides a dialog box to add Crayons easily.
+
+= How to add manually =
 
 <code>[crayon lang="php"] your code [/crayon]</code>
 <code>[crayon url="http://example.com/code.txt" /]</code>
@@ -139,7 +146,7 @@ You can also use Mini Tags:
 
 Please see the <a href="http://bit.ly/crayonsyntax" target="_blank">documentation</a> for more details.
 
-= I need help, now! =
+= Support =
 
 Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
@@ -148,6 +155,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 1. Classic theme.
 2. Twilight theme.
 3. Mixed Language Highlighting.
+4. Tag Editor.
 
 == Changelog ==
 

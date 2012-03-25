@@ -541,7 +541,7 @@ class CrayonSettingsWP {
 		}
 		echo '<span class="crayon-span" style="min-width: 135px;">'.crayon__('Horizontal Alignment').' </span>';
 		self::dropdown(CrayonSettings::H_ALIGN);
-		echo '<div id="crayon-float">';
+		echo '<div id="crayon-subsection-float">';
 		self::checkbox(array(CrayonSettings::FLOAT_ENABLE, crayon__('Allow floating elements to surround Crayon')), FALSE, FALSE);
 		echo '</div>';
 		echo '<span class="crayon-span-100">' . crayon__('Inline Margin') . '</span>';
@@ -554,7 +554,7 @@ class CrayonSettingsWP {
 		echo '<div id="crayon-section-toolbar" class="crayon-hide-inline">';
 		self::span(crayon__('Display the Toolbar').' ');
 		self::dropdown(CrayonSettings::TOOLBAR);
-		echo '<div id="' . CrayonSettings::TOOLBAR_OVERLAY . '">';
+		echo '<div id="crayon-subsection-toolbar">';
 		self::checkbox(array(CrayonSettings::TOOLBAR_OVERLAY, crayon__('Overlay the toolbar on code rather than push it down when possible')));
 		self::checkbox(array(CrayonSettings::TOOLBAR_HIDE, crayon__('Toggle the toolbar on single click when it is overlayed')));
 		self::checkbox(array(CrayonSettings::TOOLBAR_DELAY, crayon__('Delay hiding the toolbar on MouseOut')));
@@ -597,7 +597,7 @@ class CrayonSettingsWP {
 					echo '<br/><span class="crayon-error">', sprintf(crayon__('The selected language with id %s could not be loaded'), '<strong>'.$db_fallback.'</strong>'), '. </span>';
 				}
 				// Language parsing info
-				echo CRAYON_BR, '<div id="lang-info"><div><a id="show-lang" class="button-primary" onclick="CrayonSyntaxAdmin.show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
+				echo CRAYON_BR, '<div id="crayon-subsection-lang-info"><div><a id="show-lang" class="button-primary" onclick="CrayonSyntaxAdmin.show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
 					'\');">', crayon__('Show Languages'), '</a></div></div>';
 			} else {
 				echo 'No languages could be parsed.';
@@ -661,7 +661,7 @@ class CrayonSettingsWP {
 		echo '<div id="crayon-section-code-interaction" class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::PLAIN, crayon__('Enable plain code view and display').' '), FALSE);
 		self::dropdown(CrayonSettings::SHOW_PLAIN);
-		echo '<span id="crayon-copy-check">';
+		echo '<span id="crayon-subsection-copy-check">';
 		self::checkbox(array(CrayonSettings::PLAIN_TOGGLE, crayon__('Enable plain code toggling')));
 		self::checkbox(array(CrayonSettings::SHOW_PLAIN_DEFAULT, crayon__('Show the plain code by default')));
 		self::checkbox(array(CrayonSettings::COPY, crayon__('Enable code copy/paste')));

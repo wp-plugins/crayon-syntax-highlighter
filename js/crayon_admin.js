@@ -80,7 +80,7 @@ var CrayonSyntaxAdmin = new function() {
 		
 		// Alignment
 		align_drop = me.cssElem('#h-align');
-		float = jQuery('#crayon-float');
+		float = jQuery('#crayon-subsection-float');
 		align_drop.change(function() { float_toggle(); });
 		align_drop.ready(function() { float_toggle(); });
 		
@@ -91,14 +91,15 @@ var CrayonSyntaxAdmin = new function() {
 	    msg_cbox.change(function() { toggle_error(); });
 	
 	    // Toolbar
-	    overlay = me.cssElem('#toolbar-overlay');
+	    overlay = jQuery('#crayon-subsection-toolbar');
+	    console.log(overlay);
 	    toolbar = me.cssElem('#toolbar');
 	    toggle_toolbar();
 	    toolbar.change(function() { toggle_toolbar(); });
 	    
 	    // Copy
 	    plain = me.cssElem('#plain');
-	    copy = jQuery('#crayon-copy-check');
+	    copy = jQuery('#crayon-subsection-copy-check');
 	    plain.change(function() {
 	    	if (plain.is(':checked')) {
 	    		copy.show();
@@ -275,7 +276,7 @@ var CrayonSyntaxAdmin = new function() {
 //		jQuery('#show-lang').hide();
 		jQuery.get(url, function(data) {
 //			jQuery('#lang-info').show();
-			jQuery('#lang-info').html(data);
+			jQuery('#crayon-subsection-lang-info').html(data);
 		});
 		return false;
 	};

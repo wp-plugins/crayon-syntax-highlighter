@@ -467,7 +467,7 @@ class CrayonWP {
 		
 		global $post;
 		
-		// Go through queued posts and find crayons		
+		// Go through queued posts and find crayons
 		$post_id = strval($post->ID);
 		
 		if (self::$is_excerpt) {

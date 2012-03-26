@@ -343,7 +343,7 @@ class CrayonWP {
 			
 			$id_str = strval($post->ID);
 			
-			if ( isset(self::$post_queue[$id_str]) ) {
+			if ( isset(self::$post_captures[$id_str]) ) {
 				// Don't capture twice
 				// XXX post->post_content is reset each loop, replace content
 				// Doing this might cause content changed by other plugins between the last loop
@@ -353,15 +353,16 @@ class CrayonWP {
 			}
 			// Capture post Crayons
 			$captures = self::capture_crayons($post->ID, $post->post_content);
+			// XXX Careful not to undo changes by other plugins
+			// XXX Must replace to remove $ for ignored Crayons
+			$post->post_content = $captures['content'];
+			self::$post_captures[$id_str] = $captures['content'];
 			if ($captures['has_captured'] === TRUE) {
 				$enqueue = TRUE;
 				self::$post_queue[$id_str] = array();
 				foreach ($captures['capture'] as $capture_id=>$capture_content) {
 					self::$post_queue[$id_str][$capture_id] = $capture_content;
 				}
-				// XXX Careful not to undo changes by other plugins
-				$post->post_content = $captures['content'];
-				self::$post_captures[$id_str] = $captures['content']; 
 			}
 			
 			// Search for shortcode in comments
@@ -375,9 +376,9 @@ class CrayonWP {
 					}
 					// Capture comment Crayons
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
+			        self::$comment_captures[$id_str] = $captures['content'];
 			        if ($captures['has_captured'] === TRUE) {
 			        	$enqueue = TRUE;
-			        	self::$comment_captures[$id_str] = $captures['content'];
 			        	self::$comment_queue[$id_str] = array();
 				        foreach ($captures['capture'] as $capture_id=>$capture_content) {
 				        	self::$comment_queue[$id_str][$capture_id] = $capture_content;
@@ -471,7 +472,7 @@ class CrayonWP {
 		
 		if (self::$is_excerpt) {
 			// Remove Crayon from content if we are displaying an excerpt
-			$excerpt = preg_replace(self::regex_no_capture(), '', $the_content);
+			$excerpt = preg_replace(self::REGEX_WITH_ID, '', $the_content);
 			return $excerpt;
 		}
 
@@ -508,13 +509,15 @@ class CrayonWP {
 		global $comment;
 		$comment_id = strval($comment->comment_ID);
 		// Find if this post has Crayons
+		if ( array_key_exists($comment_id, self::$comment_captures) ) {
+			// Replace with IDs now that we need to
+			$text = self::$comment_captures[$comment_id];
+		}
 		if ( array_key_exists($comment_id, self::$comment_queue) ) {
 			// XXX We want the plain post content, no formatting
 			$the_content_original = $text;
 			// Loop through Crayons
 			$post_in_queue = self::$comment_queue[$comment_id];
-			// Replace with IDs now that we need to
-			$text = self::$comment_captures[$comment_id];
 			
 			foreach ($post_in_queue as $id=>$v) {
 				$atts = $v['atts'];
@@ -556,7 +559,8 @@ class CrayonWP {
 			$the_excerpt = wpautop(wp_trim_excerpt(''));
 		}
 		self::$is_excerpt = FALSE;
-		return $the_excerpt;
+		// XXX Returning "" may cause it to default to full contents...
+		return $the_excerpt . ' ';
 	}
 	
 	// Refactored, used to capture pre and span tags which have settings in class attribute
@@ -619,7 +623,12 @@ class CrayonWP {
 	
 	// Check if the $[crayon]...[/crayon] notation has been used to ignore [crayon] tags within posts
 	public static function crayon_remove_ignore($the_content) {
-		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
+		
+// 		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
+		
+		$the_content = preg_replace('#\$(\s*\[\s*crayon)#msi', '$1', $the_content);
+		$the_content = preg_replace('#(crayon\s*\])\s*\$#msi', '$1', $the_content);
+		
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
 			$the_content = str_ireplace(array('$<pre', 'pre>$'), array('<pre', 'pre>'), $the_content);
 		}
@@ -629,8 +638,8 @@ class CrayonWP {
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG) ||
 			CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
 			self::init_tags_regex();			
-			$the_content = preg_replace('#\$([\[\{])('. self::$alias_regex .')#', '$1$2', $the_content);
-			$the_content = preg_replace('#('. self::$alias_regex .')([\[\{])\$#', '$1$2', $the_content);
+			$the_content = preg_replace('#\$\s*([\[\{])\s*('. self::$alias_regex .')#', '$1$2', $the_content);
+			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\[\{])\s*\$#', '$1$2', $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
 			$the_content = str_ireplace('\\`', '`', $the_content);

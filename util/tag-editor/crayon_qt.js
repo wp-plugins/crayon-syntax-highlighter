@@ -7,7 +7,7 @@ var CrayonQuickTags = function() {
 			function(shortcode) {
 				QTags.insertContent(shortcode);
 			},
-			function(shortcode) {/* Can't edit */}, 'html', null);
+			function(shortcode) {/* Can't edit */}, 'html', null, null, null, 'encode');
 		jQuery('#qt_content_crayon_quicktag').removeClass('qt_crayon_highlight');
 	});
 	

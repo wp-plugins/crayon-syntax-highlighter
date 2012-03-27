@@ -16,6 +16,9 @@ var CrayonTagEditor = new function() {
 	var editing = false;
 	var insertCallback = null;
 	var editCallback = null;
+	// Used for encoding, decoding
+	var inputHTML = null;
+	var outputHTML = null;
 	var editor_name = null;
 	var ajax_class_timer = null;
 	var ajax_class_timer_count = 0;
@@ -145,9 +148,15 @@ var CrayonTagEditor = new function() {
     };
     
     // XXX Displays the dialog.
-	this.showDialog = function(insert, edit, editor_str, ed, node) {
+	this.showDialog = function(insert, edit, editor_str, ed, node, input, output) {
 		// Need to reset all settings back to original, clear yellow highlighting
 		me.resetSettings();
+		// Save these for when we add a Crayon
+		insertCallback = insert;
+    	editCallback = edit;
+    	inputHTML = input;
+    	outputHTML = output;
+    	editor_name = editor_str;
 		// If we have selected a Crayon, load in the contents
 		// TODO put this in a separate function
 		var currNode = null;
@@ -239,8 +248,14 @@ var CrayonTagEditor = new function() {
 				editing = true;
 				me.setSubmitText(s.submit_edit);
 				
-				// Code 
-				code.val(currCrayon.html());
+				// Code
+				var content = currCrayon.html();
+				if (inputHTML == 'encode') {
+					content = crayon_encode_html(content); 
+				} else if (inputHTML == 'decode') {
+					content = crayon_decode_html(content);
+				}
+				code.val(content);
 				
 			} else {
 				console_log('cannot load currNode of type pre');
@@ -305,9 +320,6 @@ var CrayonTagEditor = new function() {
     	code.focus();
     	code_refresh();
     	url_refresh();
-    	insertCallback = insert;
-    	editCallback = edit;
-    	editor_name = editor_str;
     	if (ajax_class_timer) {
     		clearInterval(ajax_class_timer);
     		ajax_class_timer_count = 0;
@@ -449,6 +461,11 @@ var CrayonTagEditor = new function() {
 		}
 		
 		var content = jQuery(s.code_css).val();
+		if (outputHTML == 'encode') {
+			content = crayon_encode_html(content); 
+		} else if (outputHTML == 'decode') {
+			content = crayon_decode_html(content);
+		}
 		content = typeof content != 'undefined' ? content : '';
 		shortcode += '>' + content + '</' + tag + '>' + br_after;
 		

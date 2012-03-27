@@ -81,7 +81,7 @@ var CrayonTinyMCE = new function() {
 		            		jQuery(currPre).replaceWith(newPre);
 		            		// XXX DOM element not jQuery
 		            		currPre = newPre[0];
-		            	}, 'tinymce', ed, currPre);
+		            	}, 'tinymce', ed, currPre, 'decode', null);
 	            	
 	            	if (!currPre) {
 	            		// If no pre is selected, then button highlight depends on if it's used 

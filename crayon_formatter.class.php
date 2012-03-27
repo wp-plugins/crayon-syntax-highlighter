@@ -238,6 +238,7 @@ class CrayonFormatter {
 			$touch = TRUE;
 			$code_settings .= ' touchscreen';
 		}
+		
 		// Draw the plain code and toolbar
 		$toolbar_settings = $print_plain_button = $print_copy_button = '';
 		if (empty($error) && $hl->setting_index(CrayonSettings::TOOLBAR) != 2) {
@@ -256,7 +257,7 @@ class CrayonFormatter {
 				}
 			} else if ($hl->setting_index(CrayonSettings::TOOLBAR) == 1) {
 				// Always display the toolbar
-				$toolbar_settings .= 'show';
+				$toolbar_settings .= ' show';
 			} else {
 				$toolbar_settings .= '';
 			}

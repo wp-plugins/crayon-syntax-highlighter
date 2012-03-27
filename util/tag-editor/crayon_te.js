@@ -115,6 +115,7 @@ var CrayonTagEditor = new function() {
         		}
         		// Depends on type
         		var value = me.settingValue(setting);
+        		console_log(setting.attr('id') + ' value: ' + value);
         		var highlight = null;
         		if (setting.is('input[type=checkbox]')) {
     				highlight = setting.next('span'); 
@@ -134,7 +135,7 @@ var CrayonTagEditor = new function() {
     				}
     			}
     			// Save standardized value for later
-    			setting.attr(s.data_value, value);
+    			me.settingValue(setting, value);
     		};
         	jQuery('.'+gs.setting+'[id]:not(.'+gs.special+')').each(function() {
         		jQuery(this).change(setting_change);
@@ -394,7 +395,7 @@ var CrayonTagEditor = new function() {
 		}
 		
 		// Grab settings as attributes
-		jQuery('.'+gs.changed+'[id],.'+gs.changed+'[data-value]').each(function() {
+		jQuery('.'+gs.changed+'[id],.'+gs.changed+'['+s.data_value+']').each(function() {
     		var id = jQuery(this).attr('id');
     		var value = jQuery(this).attr(s.data_value);
     		// Remove prefix
@@ -522,6 +523,7 @@ var CrayonTagEditor = new function() {
 			} else {
 				setting.val(value);
 			}
+			setting.attr(s.data_value, value);
 		}
 	};
 	

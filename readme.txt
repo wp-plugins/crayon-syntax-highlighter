@@ -187,6 +187,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed a bug preventing mouse events for showing plain code when toolbar is always hidden
 * Fixed a bug preventing smart enqueuing from detecting if a Crayon was present before enqueuing resources.
 * Fixed a bug causing inline tags to be surround in &lt;p&gt; tags
+* Fixed a bug causing toolbar=1 to be regarded as toolbar=false from legacy settings
 * Fixed removing $ in font of ignored crayons like $&lt;pre...
 * Fixed js .style bugs in < IE 9
 * Cleaned up code for specifying attributes, NULL attributes are not passed as empty strings anymore. 

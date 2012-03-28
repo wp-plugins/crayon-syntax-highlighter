@@ -229,6 +229,10 @@
 	vertical-align: middle;
 }
 
+#crayon-te-table .crayon-nowrap {
+	white-space: nowrap;
+}
+
 #crayon-url-th {
 	vertical-align: top !important;
 	padding-top: 5px;

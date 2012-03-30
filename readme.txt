@@ -138,6 +138,10 @@ You can use &lt;pre&gt;:
 
 <code>&lt;pre lang="php"&gt; your code &lt;/pre&gt;</code>
 
+You can use an HTML5 compliant &lt;pre&gt;:
+
+<code>&lt;pre class="lang:php mark:1-4,3"&gt; your code &lt;/pre&gt;</code>
+
 You can also use Mini Tags:
 
 <code>[php theme="twilight"]your code[/php]</code>
@@ -148,7 +152,7 @@ Please see the <a href="http://bit.ly/crayonsyntax" target="_blank">documentatio
 
 = Why are the controls not working? =
 
-Make sure that jQuery is included in your theme. By default, Wordpress will enqueue it rather than letting you just print out a script tag in header.php. If you are printing it out manually in your header, make sure it comes before <?php wp_head(); ?> so that Crayon and other plugins can use it.
+Make sure that jQuery is included in your theme. By default, Wordpress will enqueue it rather than letting you just print out a script tag in header.php. If you are printing it out manually in your header, make sure it comes before <code>&lt;?php wp_head(); ?&gt;</code> so that Crayon and other plugins can use it.
 
 = Support =
 
@@ -163,7 +167,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.9.0
+= 1.9.0 =
 * This update is the biggest update yet - highly recommended for all users.
 * Added a brand new Tag Editor in the Visual Editor toolbar! <strong>Greatly</strong> simplifies adding code to posts in the Visual Editor. You can also switch between Visual and HTML modes to verify your code before posting!
 * Added ability to decode HTML entities, so now you can use &lt;, &gt; etc. in the Visual Editor. But if you need indentation etc, you'll want to use the HTML editor for posts with Crayons. You can also use decode="yes/no/true/false" to set this for an individual Crayon.

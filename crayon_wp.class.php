@@ -124,7 +124,7 @@ class CrayonWP {
 			$extra_attr = array_diff_key($atts, $allowed_atts);
 			$extra_attr = CrayonSettings::smart_settings($extra_attr);
 		}
-		$lang = $title = $mark = $inline = '';
+		$url = $lang = $title = $mark = $inline = '';
 		extract($filtered_atts);
 		
 		$crayon = self::instance($extra_attr, $id);

@@ -124,11 +124,11 @@ You can change settings and view help under <strong>Settings > Crayon</strong> i
 
 == Frequently Asked Questions ==
 
-= How to add using Tag Editor =
+= How do I use the Tag Editor? =
 
 The <a href="http://bit.ly/H3xW3D" target="_blank">Tag Editor</a> provides a dialog box to add Crayons easily.
 
-= How to add manually =
+= How do I use it manually? =
 
 <code>[crayon lang="php"] your code [/crayon]</code>
 <code>[crayon url="http://example.com/code.txt" /]</code>
@@ -145,6 +145,10 @@ You can also use Mini Tags:
 <code>[php url="https://raw.github.com/somefile.php" /]</code>
 
 Please see the <a href="http://bit.ly/crayonsyntax" target="_blank">documentation</a> for more details.
+
+= Why are the controls not working? =
+
+Make sure that jQuery is included in your theme. By default, Wordpress will enqueue it rather than letting you just print out a script tag in header.php. If you are printing it out manually in your header, make sure it comes before <?php wp_head(); ?> so that Crayon and other plugins can use it.
 
 = Support =
 
@@ -188,6 +192,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed a bug preventing smart enqueuing from detecting if a Crayon was present before enqueuing resources.
 * Fixed a bug causing inline tags to be surround in &lt;p&gt; tags
 * Fixed a bug causing toolbar=1 to be regarded as toolbar=false from legacy settings
+* Fixed a bug causing content to be specified but not formatted for URLs with no code given
 * Fixed removing $ in font of ignored crayons like $&lt;pre...
 * Fixed js .style bugs in < IE 9
 * Cleaned up code for specifying attributes, NULL attributes are not passed as empty strings anymore. 

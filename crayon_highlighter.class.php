@@ -128,7 +128,7 @@ class CrayonHighlighter {
 				curl_close($ch);
 			}
 			if ($http_code >= 200 && $http_code < 400) {
-				$this->code = $content;
+				$this->code($content);
 			} else {
 				if (empty($this->code)) {
 					// If code is also given, just use that

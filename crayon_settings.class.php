@@ -473,10 +473,7 @@ class CrayonSettings {
 				}
 				else if (CrayonUtil::str_to_bool($value) === FALSE) {
 					$settings[CrayonSettings::TOOLBAR] = 2;
-				}/* else if (CrayonUtil::str_to_bool($value, FALSE)) {
-					var_dump($value); exit;
-					$settings[CrayonSettings::TOOLBAR] = 0;
-				}*/
+				}
 			}
 		}
 		

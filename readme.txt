@@ -26,7 +26,6 @@ It also supports some neat features like:
 * <a href="http://bit.ly/yFafFL" target="_blank">Inline Tags</a> floating in sentences
 * Crayons in comments
 * &#96;Backquotes&#96; become &lt;code&gt;
-* Plain Tag ([plain]...[/plain]) for quick &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;
 * &lt;pre&gt; tag support, option to use <code>setting-value</code> in the class attribute
 * Valid HTML 5 markup
 * <a href="#" target="_blank">Visual & HTML editor compatible</a> 

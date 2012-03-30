@@ -44,6 +44,12 @@ It also supports some neat features like:
 * Dimensions, margins, alignment and CSS floating
 * Extensive error logging
 
+**Links**
+
+* Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
+* Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
+* Please Thank Me With <a href="http://bit.ly/crayondonate" target="_blank">Coffee</a>!
+
 **Supported Languages**
 
 Languages are defined in language files using Regular Expressions to capture elements.
@@ -74,12 +80,6 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * Visual Basic
 * YAML
 * Others will be added when requested
-
-Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
-
-Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
-
-Please Thank Me With <a href="http://bit.ly/crayondonate" target="_blank">Coffee</a>!
 
 **International Languages**
 

@@ -48,7 +48,7 @@ It also supports some neat features like:
 
 * Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
 * Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
-* Please Thank Me With <a href="http://bit.ly/crayondonate" target="_blank">Coffee</a>!
+* Please Thank Me With <a href="http://bit.ly/crayondonate" target="_blank">Coffee</a>! 
 
 **Supported Languages**
 

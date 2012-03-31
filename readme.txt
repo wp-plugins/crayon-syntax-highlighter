@@ -82,7 +82,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 
 **International Languages**
 
-* Chinese (Simplified, thanks to <a href="http://smerpup.com/" target="_blank">Dezhi Liu</a>)
+* Chinese (Simplified, thanks to <a href="http://smerpup.com/" target="_blank">Dezhi Liu</a> & <a href="http://neverno.me/" target="_blank">Jash Yin</a>)
 * French
 * German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&szlig;</a>)
 * Italian

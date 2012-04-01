@@ -28,7 +28,7 @@ It also supports some neat features like:
 * &#96;Backquotes&#96; become &lt;code&gt;
 * &lt;pre&gt; tag support, option to use <code>setting-value</code> in the class attribute
 * Valid HTML 5 markup
-* <a href="#" target="_blank">Visual & HTML editor compatible</a> 
+* <a href="http://bit.ly/H3xW3D" target="_blank">Visual & HTML editor compatible</a> 
 * Mobile/touchscreen device detection
 * Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Tab sizes

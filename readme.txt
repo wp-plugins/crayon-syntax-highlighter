@@ -117,9 +117,11 @@ A handful of articles from others written about Crayon, thanks guys!
 
 == Installation ==
 
-Download the .zip of the plugin and extract the contents. Upload it to the Wordpress plugin directory and activate the plugin.
-Even easier, just go to <strong>Plugins > Add New</strong> and search for "Crayon". 
-You can change settings and view help under <strong>Settings > Crayon</strong> in the Wordpress Admin.
+* Download the .zip of the plugin and extract the contents.
+* Upload it to the Wordpress plugin directory and activate the plugin.
+* Even easier, just go to <strong>Plugins > Add New</strong> and search for "Crayon". 
+* You can change settings and view help under <strong>Settings > Crayon</strong> in the Wordpress Admin.
+* Make sure your theme either manually specifies jQuery, or uses the version shipped with Wordpress (recommended). You should NOT print out jQuery manually in the header as a script tag. <a href="http://wordpress.stackexchange.com/questions/1535/how-to-dequeue-a-script" target="_blank">Enqueueing it in Wordpresss</a> will prevent duplicate jQuery includes (also bad) and will allow other scripts to be placed AFTER jQuery in the head tag so they can use it. If you're uncertain, just let Wordpress handle it and remove any jQuery script tags you find in your theme's header.php. 
 
 == Frequently Asked Questions ==
 
@@ -151,7 +153,7 @@ Please see the <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/"
 
 = Why are the controls not working? =
 
-Make sure that jQuery is included in your theme. By default, Wordpress will enqueue it rather than letting you just print out a script tag in header.php. If you are printing it out manually in your header, make sure it comes before <code>&lt;?php wp_head(); ?&gt;</code> so that Crayon and other plugins can use it.
+Make sure that jQuery is included in your theme (see Installation).
 
 = Support =
 

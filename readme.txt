@@ -137,9 +137,9 @@ You can use &lt;pre&gt;:
 
 <code>&lt;pre lang="php"&gt; your code &lt;/pre&gt;</code>
 
-You can use an HTML5 compliant &lt;pre&gt;:
+You can use an HTML5 compliant &lt;pre&gt; (recommended):
 
-<code>&lt;pre class="lang:php mark:1-4,3"&gt; your code &lt;/pre&gt;</code>
+<code>&lt;pre class="lang:php mark:1-4,3" title="some title"&gt; your code &lt;/pre&gt;</code>
 
 You can also use Mini Tags:
 
@@ -147,7 +147,7 @@ You can also use Mini Tags:
 
 <code>[php url="https://raw.github.com/somefile.php" /]</code>
 
-Please see the <a href="http://bit.ly/crayonsyntax" target="_blank">documentation</a> for more details.
+Please see the <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">documentation</a> for more details.
 
 = Why are the controls not working? =
 

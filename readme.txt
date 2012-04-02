@@ -3,7 +3,7 @@ Contributors: akarmenia
 Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
-Tested up to: 3.3.1
+Tested up to: 3.3.1Lithuanian translation thanks to <a href="http://www.host1free.com" _blank="Vincent G">Vincent G</a>
 Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
@@ -86,6 +86,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * French
 * German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&szlig;</a>)
 * Italian
+* Lithuanian (thanks to <a href="http://www.host1free.com" target="_blank">Vincent G</a>)
 * Spanish
 * Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
 * Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a> & <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>)
@@ -207,6 +208,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added ability to use closed Mini Tags like [php ... \] when you're just giving a URL
 * Added lenient spaces for closed tags
 * Fixed element content text in XHTML to avoid capturing "" as strings
+* Added Lithuanian translation thanks to <a href="http://www.host1free.com" target="_blank">Vincent G</a>
 
 = 1.8.3 =
 * Added inline support for Crayons using the inline="true" attribute or even cooler with {php}...{/php} style tags.

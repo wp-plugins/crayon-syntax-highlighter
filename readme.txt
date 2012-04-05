@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1Lithuanian translation thanks to <a href="http://www.host1free.com" _blank="Vincent G">Vincent G</a>
-Stable tag: trunk
+Stable tag: 1.9.0
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -58,6 +58,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * ABAP
 * ActionScript
 * Apache
+* Assembly (x86)
 * AutoIt
 * C
 * C#
@@ -168,6 +169,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.9.1 =
+* Added Assembly (x86)
 
 = 1.9.0 =
 * This update is the biggest update yet - highly recommended for all users.

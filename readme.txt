@@ -172,6 +172,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.9.1 =
 * Added Assembly (x86)
+* Changed Theme CSS background to avoid conflicts with themes that affect TD tags
 
 = 1.9.0 =
 * This update is the biggest update yet - highly recommended for all users.

@@ -10,7 +10,10 @@ Author URI: http://ak.net84.net/
 .crayon-theme-classic {
     border: 1px #999 solid !important;
     text-shadow: none !important;
-    background: #fdfdfd !important;
+}
+
+.crayon-theme-classic .crayon-code {
+	background: #fdfdfd !important;
 }
 
 /* Inline Style */

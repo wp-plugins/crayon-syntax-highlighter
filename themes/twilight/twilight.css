@@ -10,8 +10,11 @@ Author URI: http://ak.net84.net/
 .crayon-theme-twilight {
     border: 1px #333 solid !important;
     text-shadow: none !important;
-    background: #2d2d2d !important;
     color: #fff;
+}
+
+.crayon-theme-twilight .crayon-code {
+	background: #2d2d2d !important;
 }
 
 /* Inline Style */

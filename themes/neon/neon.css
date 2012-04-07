@@ -10,8 +10,11 @@ Author URI: http://ak.net84.net/
 .crayon-theme-neon {
     border: 1px #333 solid !important;
     text-shadow: none !important;
-    background: #2d2d2d !important;
     color: #fff;
+}
+
+.crayon-theme-neon .crayon-code {
+	background: #2d2d2d !important;
 }
 
 /* Inline Style */

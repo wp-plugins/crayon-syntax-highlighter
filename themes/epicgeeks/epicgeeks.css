@@ -9,7 +9,10 @@ Author URI: http://epicgeeks.net/
 .crayon-theme-epicgeeks {
     border: 1px #e1e1e1 solid !important;
     text-shadow: none !important;
-    background: #ffffe1 !important;
+}
+
+.crayon-theme-epicgeeks .crayon-code {
+	background: #ffffe1 !important;
 }
 
 /* Inline Style */

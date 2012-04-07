@@ -2,10 +2,10 @@
 
 <?php 
 
-$root = dirname(dirname(dirname(__FILE__)));
-require_once ($root . '/crayon_wp.class.php');
+$crayon_root_te = dirname(dirname(dirname(__FILE__)));
+require_once ($crayon_root_te . '/crayon_wp.class.php');
+require_once ($crayon_root_te.'/crayon_settings_wp.class.php');
 require_once (CrayonWP::wp_load_path());
-require_once ($root.'/crayon_settings_wp.class.php');
 require_once ('crayon_tag_editor_wp.class.php');
 require_once (CRAYON_PARSER_PHP);
 

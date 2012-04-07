@@ -176,6 +176,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Standardised the toolbar buttons, now they use CSS spriting and have the same colour 
 * Changed Theme CSS background to avoid conflicts with themes that affect TD tags
 * Fixed bug caused by discrepancies in how checkbox values were handled in Tag Editor
+* Fixed a bug causing $root variable to change on some setups, preventing tag editor from loading
 
 = 1.9.0 =
 * This update is the biggest update yet - highly recommended for all users.

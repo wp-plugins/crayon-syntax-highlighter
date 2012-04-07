@@ -210,6 +210,10 @@ var CrayonSyntax = new function() {
 	        main.css('position', 'relative');
 	        main.css('z-index', 1);
 	        
+	        // Update clickable buttons
+	        update_nums_button(uid);
+	        update_plain_button(uid);
+	        
 	        // Disable certain features for touchscreen devices
 	        touchscreen = (jQuery(this).filter('[data-settings~="touchscreen"]').length != 0);
 	        

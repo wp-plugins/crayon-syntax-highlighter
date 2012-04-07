@@ -554,6 +554,7 @@ Make sure to upgrade to the latest release when possible to ensure you avoid bug
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* eSnipe, Inc. (http://esnipe.com/), USA (again!)
 * Aliseya Wright, (http://blog.xoxothemes.com/), USA
 * Jeremy Worboys (http://complexcompulsions.com/), Australia
 * Steve McGough, Spider Creations, LLC. (http://spidercreations.net/), USA

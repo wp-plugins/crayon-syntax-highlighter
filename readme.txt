@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 1.9.0
+Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -175,6 +175,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added Assembly (x86)
 * Standardised the toolbar buttons, now they use CSS spriting and have the same colour 
 * Changed Theme CSS background to avoid conflicts with themes that affect TD tags
+* Fixed bug caused by discrepancies in how checkbox values were handled in Tag Editor
 
 = 1.9.0 =
 * This update is the biggest update yet - highly recommended for all users.

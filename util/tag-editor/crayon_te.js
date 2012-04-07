@@ -121,21 +121,22 @@ var CrayonTagEditor = new function() {
         		console_log(setting.attr('id') + ' value: ' + value);
         		var highlight = null;
         		if (setting.is('input[type=checkbox]')) {
-    				highlight = setting.next('span'); 
+    				highlight = setting.next('span');
     			}
     			
-    			if (orig_value == value) {
-    				// No change
+        		console_log('   >>> ' + setting.attr('id') + ' is ' + orig_value + ' = ' + value);
+        		if (orig_value == value) {
+        			// No change
     				setting.removeClass(gs.changed);
     				if (highlight) {
     					highlight.removeClass(gs.changed);
     				}
-    			} else {
+     			} else {
     				// Changed
-    				setting.addClass(gs.changed);
-    				if (highlight) {
-    					highlight.addClass(gs.changed);
-    				}
+     				setting.addClass(gs.changed);
+     				if (highlight) {
+     					highlight.addClass(gs.changed);
+     				}
     			}
     			// Save standardized value for later
     			me.settingValue(setting, value);
@@ -236,12 +237,16 @@ var CrayonTagEditor = new function() {
 					var setting = jQuery('#' + gs.prefix + att + '.' + gs.setting);
 					var value = atts[att];
 					me.settingValue(setting, value);
-					// Update highlights
-//					setting.change();
+					// Update highlights 
+					setting.change();
+					// If global setting changes and we access settings, it should declare loaded settings as changed even if they equal the global value, just so they aren't lost on save
 					if (!setting.hasClass(gs.special)) {
 						setting.addClass(gs.changed);
+						if (setting.is('input[type=checkbox]')) {
+		    				highlight = setting.next('span');
+		    				highlight.addClass(gs.changed);
+		    			}
 					}
-//					console_log('#' + gs.prefix + att + '.' + gs.setting);
 					console_log('loaded: ' + att + ':' + atts[att]);
 				}
 				
@@ -271,7 +276,6 @@ var CrayonTagEditor = new function() {
 		// Inline
 		var inline = jQuery('#' + s.inline_css);
 		inline.change(function() {
-			console_log('test');
 			is_inline = jQuery(this).is(':checked');
 			var inline_hide = jQuery('.' + s.inline_hide_css);
 			var inline_single = jQuery('.' + s.inline_hide_only_css);
@@ -525,7 +529,7 @@ var CrayonTagEditor = new function() {
 			value = '';
 			if (setting.is('input[type=checkbox]')) {
 				// Boolean is stored as string
-				value = setting.is(':checked') ? '1' : '0'; 
+				value = setting.is(':checked') ? 'true' : 'false'; 
 			} else {
 				value = setting.val();
 			}
@@ -534,7 +538,11 @@ var CrayonTagEditor = new function() {
 			// setter
 			if (setting.is('input[type=checkbox]')) {
 				if (typeof value == 'string') {
-					value = value == '1' ? true : false;
+					if (value == 'true' || value == '1') {
+						value = true;
+					} else if (value == 'false' || value == '0') {
+						value = false;
+					}
 				}
 				setting.prop('checked', value);
 			} else {

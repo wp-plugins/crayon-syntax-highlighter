@@ -44,7 +44,6 @@ RegExp.escape = function(text) {
 
 var hasCSSStyleDeclaration = typeof(CSSStyleDeclaration) != 'undefined';
 jQuery.fn.style = function(styleName, value, priority) {
-	console_log('style called');
 	// DOM node
 	var node = this.get(0);
 	// Ensure we have a DOM node 
@@ -182,7 +181,7 @@ var CrayonSyntax = new function() {
 	        		crayon[uid].scroll_block_fix = true;
 	        	}
 	        	
-	        	reconsile_dimensions(uid);
+//	        	reconsile_dimensions(uid);
 	    	    
 	            // If nums hidden by default
 	            if (nums.filter('[data-settings~="hide"]').length != 0) {
@@ -201,10 +200,11 @@ var CrayonSyntax = new function() {
 	            }
 	            i++;
 	        };
-	        main.ready(function() {
+//	        main.ready(function() {
+//	        	alert();
 	        	load_timer = setInterval(load_func, 300);
 	        	fix_scroll_blank(uid);
-	        });
+//	        });
 	        
 	        // Used for toggling
 	        main.css('position', 'relative');
@@ -283,6 +283,7 @@ var CrayonSyntax = new function() {
 	                nums_button.hide();
 	            }
 	            if (plain.filter('[data-settings~="show-plain-default"]').length != 0) {
+	            	// XXX
 	            	CrayonSyntax.toggle_plain(uid, true);
 	            }
 	        }
@@ -291,6 +292,9 @@ var CrayonSyntax = new function() {
 	            // Disable on touchscreen devices and when set to mouseover
 	            main.css('overflow', 'hidden');
 	            plain.css('overflow', 'hidden');
+	            
+	            console_log(plain.css('overflow'));
+	            
 				jQuery(this).mouseenter(function() { toggle_scroll(uid, true); })
 	                        .mouseleave(function() { toggle_scroll(uid, false); });
 	        }
@@ -491,12 +495,15 @@ var CrayonSyntax = new function() {
 		 * no need to revert it after toggling plain. */
 		crayon[uid].scroll_changed = false;
 		
-		var vis_over = visible.css('overflow');
-		var hid_over = hidden.css('overflow');
+//		var vis_over = visible.css('overflow');
+//		var hid_over = hidden.css('overflow');
+		
+//		
+		console_log(':: ' + plain.css('overflow'));
 		
 		// Hide scrollbars during toggle to avoid Chrome weird draw error
-		visible.css('overflow', 'hidden');
-		hidden.css('overflow', 'hidden');
+//		visible.css('overflow', 'hidden');
+//		hidden.css('overflow', 'hidden');
 		
 		fix_scroll_blank(uid);
 		
@@ -506,7 +513,7 @@ var CrayonSyntax = new function() {
 			function() {
 				visible.css('z-index', 0);
 				if (!crayon[uid].scroll_changed) {
-					visible.css('overflow', vis_over);
+//					visible.css('overflow', vis_over);
 				}
 			});
 	    hidden.stop(true);
@@ -514,7 +521,7 @@ var CrayonSyntax = new function() {
 			function() {
 				hidden.css('z-index', 1);
 				if (!crayon[uid].scroll_changed) {
-					hidden.css('overflow', hid_over);
+//					hidden.css('overflow', hid_over);
 				}
 				
 				// Give focus to plain code
@@ -532,7 +539,6 @@ var CrayonSyntax = new function() {
 				hidden.scrollTop(crayon[uid].top);
 				hidden.scrollLeft(crayon[uid].left + 1);
 				hidden.scrollLeft(crayon[uid].left);
-				
 			});
 	    
 		// Restore scroll positions to hidden
@@ -591,6 +597,7 @@ var CrayonSyntax = new function() {
 	    v_scroll_visible = (crayon[uid].table.height() > crayon[uid].main.height());
 	    if (!h_scroll_visible && !v_scroll_visible) {
 	    	crayon[uid].main.css('overflow', 'hidden');
+	    	// TODO plain?
 	    }
 	    crayon[uid].table.animate({
 	        marginLeft: num_margin
@@ -667,6 +674,7 @@ var CrayonSyntax = new function() {
 	    }
 	    
 	    crayon_slide(uid, toolbar, show, anim_time, hide_delay);
+//	    reconsile_dimensions(uid);
 	};
 	
 	var toggle_scroll = function(uid, show) {
@@ -721,6 +729,7 @@ var CrayonSyntax = new function() {
 		// Register that overflow has changed
 		crayon[uid].scroll_changed = true;
 		fix_scroll_blank(uid);
+		reconsile_dimensions(uid);
 	};
 	
 	/* Fix weird draw error, causes blank area to appear where scrollbar once was. */
@@ -737,6 +746,8 @@ var CrayonSyntax = new function() {
 		// Reconsile dimensions
 		crayon[uid].plain.height(crayon[uid].main.height());
 		//crayon[uid].plain.width(crayon[uid].main.width());
+		
+		console_log('main: ' + crayon[uid].main.height() + ' plain: ' + crayon[uid].plain.height());
 	};
 	
 	var animt = function(x, uid) {

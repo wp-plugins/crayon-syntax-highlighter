@@ -223,13 +223,15 @@ coloring etc.
 /* End Toolbar ===================== */
 
 /* Scrollbar ======================= */
-.crayon-main::-webkit-scrollbar {
+.crayon-main::-webkit-scrollbar,
+.crayon-plain::-webkit-scrollbar {
 	height: 6px;
 	overflow: visible;
 	width: 6px;
 	background: #EEE;
 }
-.crayon-main::-webkit-scrollbar-thumb {
+.crayon-main::-webkit-scrollbar-thumb,
+.crayon-plain::-webkit-scrollbar-thumb {
 	background-color: #CCC;
 	background-clip: padding-box;
 	border: 1px solid #AAA;
@@ -238,24 +240,28 @@ coloring etc.
 	padding:0;
 	border-width: 1px;
 }
-.crayon-main::-webkit-scrollbar-button {
+.crayon-main::-webkit-scrollbar-button,
+.crayon-plain::-webkit-scrollbar-button {
 	height: 0;
 	width: 0;
 	padding: 0px;
 }
-.crayon-main::-webkit-scrollbar-track {
+.crayon-main::-webkit-scrollbar-track,
+.crayon-plain::-webkit-scrollbar-track {
 	background-clip: padding-box;
 	border: solid transparent;
 	border-width: 0 0 0 4px;
 	border: 1px solid #BBB;
 	border-right: none;
 	border-bottom: none;
-	box-shadow: inset 0 0 4px #BBB;
+	abox-shadow: inset 0 0 4px #BBB;
 }
-.crayon-main::-webkit-scrollbar-corner {
+.crayon-main::-webkit-scrollbar-corner,
+.crayon-plain::-webkit-scrollbar-corner {
 	background: #EEE;
 }
-.crayon-main::-webkit-scrollbar-thumb:hover {
+.crayon-main::-webkit-scrollbar-thumb:hover,
+.crayon-plain::-webkit-scrollbar-thumb:hover {
 	background: #AAA;
 	border: 1px solid #777;
 	box-shadow: inset 0 0 2px #777;

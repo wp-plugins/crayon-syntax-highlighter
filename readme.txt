@@ -108,6 +108,7 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
+* <a href="http://www.doitwithwp.com/displaying-code-in-wordpress-with-crayon-syntax-highlighter/" target="_blank">Displaying Code in WordPress with Crayon </a>
 * <a href="http://blog.boxedpages.net/2012/03/15/abap-syntaxhighlighting-in-wordpress/" target="_blank">ABAP Syntax Highlighting in WordPress (German)</a>
 * <a href="http://infodrug.ru/wordpress/kak-krasivo-vstavit-programmnyj-kod-v-wordpress-podsvetka-sintaksisa.html" target="_blank">Crayon Syntax Highlighter (Russian)</a>
 * <a href="http://n-wp.ru/11513" target="_blank">Crayon Syntax Highlighter (also Russian)</a>
@@ -172,6 +173,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.9.1 =
 * Added Assembly (x86)
+* Standardised the toolbar buttons, now they use CSS spriting and have the same colour 
 * Changed Theme CSS background to avoid conflicts with themes that affect TD tags
 
 = 1.9.0 =

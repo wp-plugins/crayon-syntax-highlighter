@@ -157,7 +157,6 @@ coloring etc.
 	min-width: 20px;
 
 	background-repeat: no-repeat;
-	background-position: center;
     /*height: 16px;*/
     line-height: 15px;
     padding: 0px 2px !important;
@@ -168,52 +167,35 @@ coloring etc.
     text-decoration: none;
 }
 
-/* Plain Button */
-.crayon-toolbar a.crayon-button.crayon-plain-button,
-.crayon-toolbar a.crayon-button.crayon-plain-button:hover,
-.crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed:hover {
-	background-image: url('images/toolbar/plain_dark.png');
+.crayon-toolbar a.crayon-button,
+.crayon-toolbar a.crayon-button:hover,
+.crayon-toolbar a.crayon-button.crayon-pressed:hover {
+	background-position: 0px center;
 }
-.crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed,
-.crayon-toolbar a.crayon-button.crayon-plain-button:active,
-.crayon-toolbar a.crayon-button.crayon-plain-button.crayon-pressed:active {
-	background-image: url('images/toolbar/plain_light.png');
+.crayon-toolbar a.crayon-button.crayon-pressed,
+.crayon-toolbar a.crayon-button:active,
+.crayon-toolbar a.crayon-button.crayon-pressed:active {
+	background-position: -24px center;
+}
+
+/* Plain Button */
+.crayon-toolbar a.crayon-button.crayon-plain-button {
+	background-image: url('images/toolbar/plain.png');
 }
 
 /* Copy Button */
-.crayon-toolbar a.crayon-button.crayon-copy-button,
-.crayon-toolbar a.crayon-button.crayon-copy-button:hover,
-.crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed:hover {
-	background-image: url('images/toolbar/copy_dark.png');
-}
-.crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed,
-.crayon-toolbar a.crayon-button.crayon-copy-button:active,
-.crayon-toolbar a.crayon-button.crayon-copy-button.crayon-pressed:active {
-	background-image: url('images/toolbar/copy_light.png');
+.crayon-toolbar a.crayon-button.crayon-copy-button {
+	background-image: url('images/toolbar/copy.png');
 }
 
 /* Popup Button */
-.crayon-toolbar a.crayon-button.crayon-popup-button,
-.crayon-toolbar a.crayon-button.crayon-popup-button:hover,
-.crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed:hover {
-	background-image: url('images/toolbar/popup_dark.png');
-}
-.crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed,
-.crayon-toolbar a.crayon-button.crayon-popup-button:active,
-.crayon-toolbar a.crayon-button.crayon-popup-button.crayon-pressed:active {
-	background-image: url('images/toolbar/popup_light.png');
+.crayon-toolbar a.crayon-button.crayon-popup-button {
+	background-image: url('images/toolbar/popup.png');
 }
 
 /* Nums Button */
-.crayon-toolbar a.crayon-button.crayon-nums-button,
-.crayon-toolbar a.crayon-button.crayon-nums-button:hover,
-.crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed:hover {
-	background-image: url('images/toolbar/nums_dark.png');
-}
-.crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed,
-.crayon-toolbar a.crayon-button.crayon-nums-button:active,
-.crayon-toolbar a.crayon-button.crayon-nums-button.crayon-pressed:active {
-	background-image: url('images/toolbar/nums_light.png');
+.crayon-toolbar a.crayon-button.crayon-nums-button {
+	background-image: url('images/toolbar/nums.png');
 }
 
 /* Plus Sign */

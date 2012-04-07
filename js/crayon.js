@@ -495,12 +495,6 @@ var CrayonSyntax = new function() {
 		 * no need to revert it after toggling plain. */
 		crayon[uid].scroll_changed = false;
 		
-//		var vis_over = visible.css('overflow');
-//		var hid_over = hidden.css('overflow');
-		
-//		
-		console_log(':: ' + plain.css('overflow'));
-		
 		// Hide scrollbars during toggle to avoid Chrome weird draw error
 //		visible.css('overflow', 'hidden');
 //		hidden.css('overflow', 'hidden');
@@ -512,17 +506,17 @@ var CrayonSyntax = new function() {
 	    visible.fadeTo(animt(500, uid), 0,
 			function() {
 				visible.css('z-index', 0);
-				if (!crayon[uid].scroll_changed) {
+//				if (!crayon[uid].scroll_changed) {
 //					visible.css('overflow', vis_over);
-				}
+//				}
 			});
 	    hidden.stop(true);
 	    hidden.fadeTo(animt(500, uid), 1,
 			function() {
 				hidden.css('z-index', 1);
-				if (!crayon[uid].scroll_changed) {
+//				if (!crayon[uid].scroll_changed) {
 //					hidden.css('overflow', hid_over);
-				}
+//				}
 				
 				// Give focus to plain code
 				if (hidden == plain) {
@@ -597,7 +591,6 @@ var CrayonSyntax = new function() {
 	    v_scroll_visible = (crayon[uid].table.height() > crayon[uid].main.height());
 	    if (!h_scroll_visible && !v_scroll_visible) {
 	    	crayon[uid].main.css('overflow', 'hidden');
-	    	// TODO plain?
 	    }
 	    crayon[uid].table.animate({
 	        marginLeft: num_margin

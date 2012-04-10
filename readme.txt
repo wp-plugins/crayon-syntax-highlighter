@@ -171,6 +171,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.9.2 =
+* Fixed an error preventing code containing HTML tags from being added using the Tag Editor in Visual mode   
+
 = 1.9.1 =
 * Added Assembly (x86)
 * Standardised the toolbar buttons, now they use CSS spriting and have the same colour 

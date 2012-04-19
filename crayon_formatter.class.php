@@ -55,17 +55,18 @@ class CrayonFormatter {
 		/* First index in $matches is full match, subsequent indices are groups.
 		 * Minimum number of elements in array is 2, so minimum captured group is 0. */
 		$captured_group_number = count($matches) - 2;
+		$code = $matches[0];
 		if (array_key_exists($captured_group_number, self::$elements)) {
 			$captured_element = self::$elements[$captured_group_number];
 			// Avoid capturing and formatting internal Crayon elements
 			if ($captured_element->name() == CrayonParser::CRAYON_ELEMENT) {
-				return $matches[0]; // Return as is
+				return $code; // Return as is
 			} else {
 				// Separate lines and add css class, keep extended class last to allow overriding
 				$fallback_css = CrayonLangs::known_elements($captured_element->fallback());
 				$element_css = $captured_element->css();
 				$css = !empty($fallback_css) ? $fallback_css . ' ' . $element_css : $element_css ;
-				return self::split_lines($matches[0], $css);
+				return self::split_lines($code, $css);
 			}
 		} else {
 			// All else fails, return the match
@@ -495,9 +496,9 @@ class CrayonFormatter {
 		/* Convert <, > and & characters to entities, as these can appear as HTML tags and entities. */
 		$code = CrayonUtil::htmlspecialchars($code);
 		// Replace 2 spaces with html escaped characters
-		$code = preg_replace('|	 |', '&nbsp;&nbsp;', $code);
+		$code = preg_replace('#[ ]{2}#msi', '&nbsp;&nbsp;', $code);
 		// Replace tabs with 4 spaces
-		$code = preg_replace('|\t|', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
+		$code = preg_replace('#\t#', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
 		return $code;
 	}
 	
@@ -515,7 +516,11 @@ class CrayonFormatter {
 	}
 
 	public static function split_lines($code, $class) {
+// 		var_dump($code);
 		$code = self::clean_code($code);
+// 		var_dump($code);
+// 		var_dump($class);
+		echo "\n"; 
 		$code = preg_replace('|^|m', '<span class="'.$class.'">', $code);
 		$code = preg_replace('|$|m', '</span>', $code);
 		return $code;

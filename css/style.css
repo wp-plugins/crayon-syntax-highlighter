@@ -201,7 +201,8 @@ coloring etc.
 /* Plus Sign */
 .crayon-syntax .crayon-toolbar .crayon-mixed-highlight {
 	background-image: url('images/toolbar/plus.png');
-	background-position: center;
+/*	background-position: center;*/
+	background-position: 0px center;
 	background-repeat: no-repeat;
 	float: left;
 	min-width: 15px;

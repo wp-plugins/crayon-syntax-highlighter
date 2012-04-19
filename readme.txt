@@ -172,7 +172,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.9.2 =
-* Fixed an error preventing code containing HTML tags from being added using the Tag Editor in Visual mode   
+* Fixed an error preventing code containing HTML tags from being added using the Tag Editor in Visual mode
+* Fixed CSS for Mixed Highlighting (+)
+* Added a new theme thanks to http://blog.phiphou.com
 
 = 1.9.1 =
 * Added Assembly (x86)

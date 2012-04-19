@@ -11,6 +11,7 @@ Author URI: http://epicgeeks.net/
     text-shadow: none !important;
 }
 
+.crayon-theme-epicgeeks,
 .crayon-theme-epicgeeks .crayon-code {
 	background: #ffffe1 !important;
 }

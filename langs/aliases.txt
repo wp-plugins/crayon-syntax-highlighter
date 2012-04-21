@@ -15,3 +15,4 @@ pgsql sql mysql
 as flash swf fla
 ps powershell
 asm x86
+perl pl

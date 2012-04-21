@@ -13,3 +13,4 @@ python py pyw pyc pyo pyd
 vb vbs
 ruby rb rbx rhtml 
 as swf fla
+perl pl

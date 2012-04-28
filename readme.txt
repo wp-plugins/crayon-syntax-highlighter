@@ -114,6 +114,9 @@ A handful of articles from others written about Crayon, thanks guys!
 * <a href="http://infodrug.ru/wordpress/kak-krasivo-vstavit-programmnyj-kod-v-wordpress-podsvetka-sintaksisa.html" target="_blank">Crayon Syntax Highlighter (Russian)</a>
 * <a href="http://n-wp.ru/11513" target="_blank">Crayon Syntax Highlighter (also Russian)</a>
 * <a href="http://kampungtoys.com/tag/crayon-syntax-highlighter/" target="_blank">How To Post Source Code</a>
+* http://wp-best-practices.asdf573189.com/home/good-plugins/crayon-syntax-highlighter/
+* http://www.wplover.com/2155/crayon-syntax-highlighter-plugin/
+* http://www.htmlandphp.com/scripts/crayon-syntax-highlighter.html
 
 **Planned Features**
 

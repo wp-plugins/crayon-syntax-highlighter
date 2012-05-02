@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.2
+Version: 1.9.3
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -329,7 +329,8 @@ class CrayonWP {
 		
 		// Search for shortcode in posts
 		foreach ($posts as $post) {
-			if (!in_array($post->ID, $crayon_posts)) {
+			$wp_id = $post->ID;
+			if (!in_array($wp_id, $crayon_posts)) {
 				// If we get query for a page, then that page might have a template and load more posts containing Crayons
 				// By this state, we would be unable to enqueue anything (header already written).
 				if (CrayonGlobalSettings::val(CrayonSettings::SAFE_ENQUEUE) && is_page($wp_id)) {
@@ -341,7 +342,7 @@ class CrayonWP {
 				}
 			}
 			
-			$id_str = strval($post->ID);
+			$id_str = strval($wp_id);
 			
 			if ( isset(self::$post_captures[$id_str]) ) {
 				// Don't capture twice
@@ -377,6 +378,8 @@ class CrayonWP {
 					// Capture comment Crayons
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
 			        self::$comment_captures[$id_str] = $captures['content'];
+// 			        $comment->comment_content = $captures['content']; // XXX testing!
+// 			        var_dump($comment->comment_content); exit;
 			        if ($captures['has_captured'] === TRUE) {
 			        	$enqueue = TRUE;
 			        	self::$comment_queue[$id_str] = array();
@@ -505,14 +508,20 @@ class CrayonWP {
 		return $the_content;
 	}
 
-	public static function comment_text($text) {
+	public static function pre_comment_text($text) {
 		global $comment;
 		$comment_id = strval($comment->comment_ID);
-		// Find if this post has Crayons
 		if ( array_key_exists($comment_id, self::$comment_captures) ) {
 			// Replace with IDs now that we need to
 			$text = self::$comment_captures[$comment_id];
 		}
+		return $text;
+	}
+	
+	public static function comment_text($text) {
+		global $comment;
+		$comment_id = strval($comment->comment_ID);
+		// Find if this post has Crayons
 		if ( array_key_exists($comment_id, self::$comment_queue) ) {
 			// XXX We want the plain post content, no formatting
 			$the_content_original = $text;
@@ -787,6 +796,9 @@ if (defined('ABSPATH')) {
 		add_filter('the_content', 'CrayonWP::the_content', 100);
 		
 		if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
+			/* XXX This is called first to match Crayons, then higher priority replaces after other filters
+			   Prevents Crayon from being formatted by the filters, and also keeps original comment formatting */
+			add_filter('comment_text', 'CrayonWP::pre_comment_text', 1);
 			add_filter('comment_text', 'CrayonWP::comment_text', 100);
 		}
 		

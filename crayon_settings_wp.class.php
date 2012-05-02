@@ -232,12 +232,11 @@ class CrayonSettingsWP {
 	
 	public static function remove_post($id) {
 		self::load_posts();
-		for ($i = 0; $i < count(self::$crayon_posts); $i++) {
-			if (self::$crayon_posts[$i] == $id) {
-				unset(self::$crayon_posts[$i]);
-				break;
-			}
+		$key = array_search($id, self::$crayon_posts);
+		if ($key === false) {
+			return;
 		}
+		unset(self::$crayon_posts[$key]);
 		self::save_posts();
 	}
 	
@@ -252,9 +251,11 @@ class CrayonSettingsWP {
 	
 	public static function remove_cache($name) {
 		self::load_cache();
-		if (in_array($name, self::$cache)) {
-			unset(self::$cache[$name]);
+		$key = array_search($name, self::$cache);
+		if ($key === false) {
+			return;
 		}
+		unset(self::$cache[$key]);
 		self::save_cache();
 	}
 	

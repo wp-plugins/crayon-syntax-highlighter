@@ -3,7 +3,7 @@ Contributors: akarmenia
 Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
-Tested up to: 3.3.1
+Tested up to: 3.3.2
 Stable tag: 1.9.2
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
@@ -177,6 +177,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.9.3 =
 * Added Perl
+* Minor bugs fixed thanks to http://hahler.de
+* Fixed bug in js detecting PCs as Macs
+* Fixed IE bug preventing code from opening in a window
+* Fixed bug causing comment &lt;p&gt; tags being removed
 
 = 1.9.2 =
 * Fixed an error preventing code containing HTML tags from being added using the Tag Editor in Visual mode

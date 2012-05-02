@@ -442,9 +442,9 @@ class CrayonUtil {
 	// Detect if on a Mac or PC
 	public static function is_mac($default = FALSE) {
 		$user = $_SERVER['HTTP_USER_AGENT'];
-		if (stripos($user, 'macintosh')) {
+		if (stripos($user, 'macintosh') !== FALSE) {
 			return TRUE;
-		} else if (stripos($user, 'windows') || stripos($user, 'linux')) {
+		} else if (stripos($user, 'windows') !== FALSE || stripos($user, 'linux') !== FALSE) {
 			return FALSE;
 		} else {
 			return $default===TRUE;

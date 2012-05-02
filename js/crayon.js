@@ -304,7 +304,7 @@ var CrayonSyntax = new function() {
 	        }
 	        
 	        // Determine if Mac
-	        crayon[uid].mac = (jQuery(this).hasClass('crayon-os-mac').length != 0); 
+	        crayon[uid].mac = jQuery(this).hasClass('crayon-os-mac');
 	    });
 	};
 	

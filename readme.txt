@@ -70,6 +70,7 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * Java
 * JavaScript
 * Objective-C
+* Perl
 * PHP
 * PostgreSQL (thanks to <a href="http://bitorchestra.com/" target="_blank">http://bitorchestra.com/</a>)
 * PowerShell
@@ -174,6 +175,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.9.4 =
+* Added /util/external_use.php for an example of how to use Crayon in other PHP environments. 
 
 = 1.9.3 =
 * Added Perl

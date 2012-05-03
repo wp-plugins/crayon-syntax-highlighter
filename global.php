@@ -179,7 +179,9 @@ function crayon_vargs(&$var, $default) {
 // LANGUAGE TRANSLATION FUNCTIONS
 
 function crayon_load_plugin_textdomain() {
-	load_plugin_textdomain(CRAYON_DOMAIN, false, CRAYON_DIR.CRAYON_TRANS_DIR);
+	if (function_exists('load_plugin_textdomain')) {
+		load_plugin_textdomain(CRAYON_DOMAIN, false, CRAYON_DIR.CRAYON_TRANS_DIR);
+	}
 }
 
 function crayon__($text) {

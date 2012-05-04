@@ -177,7 +177,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.9.4 =
-* Added /util/external_use.php for an example of how to use Crayon in other PHP environments. 
+* Added /util/external_use.php for an example of how to use Crayon in other PHP environments.
+* Fixed issues with the excerpt, added option for Crayons appear in it and not be stripped. 
 
 = 1.9.3 =
 * Added Perl

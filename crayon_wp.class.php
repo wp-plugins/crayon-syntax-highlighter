@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.4
+Version: _1.9.4
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -76,7 +76,7 @@ class CrayonWP {
 	
 	const REGEX_ID = '#(?<!\$)\[\s*crayon#mi';
 	//const REGEX_WITH_ID = '#(\[\s*crayon-\w+)\b([^\]]*["\'])(\s*/?\s*\])#mi';
-	const REGEX_WITH_ID = '#\[\s*(crayon-\w+)\b[^\]]*\s*/\s*\]#mi';
+	const REGEX_WITH_ID = '#\[\s*(crayon-\w+)\b[^\]]*\s*/?\s*\]#mi';
 	
 	const MODE_NORMAL = 0, MODE_JUST_CODE = 1, MODE_PLAIN_CODE = 2;
 
@@ -89,7 +89,7 @@ class CrayonWP {
 	}
 	
 	public static function regex_with_id($id) {
-		return '#\[\s*(crayon-'.$id.')\b[^\]]*\]#msi';
+		return '#\[\s*(crayon-'.$id.')\b[^\]]*\s*/?\s*\]#msi';
 		//return '#(?<!\$)(?:(?:\[\s*crayon-'.$id.'\b[^\]]*/\s*\])|(?:\[\s*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[\s*/\s*crayon\s*\]))(?!\$)#msi';
 	}
 	
@@ -475,8 +475,9 @@ class CrayonWP {
 		
 		if (self::$is_excerpt) {
 			// Remove Crayon from content if we are displaying an excerpt
-			$excerpt = preg_replace(self::REGEX_WITH_ID, '', $the_content);
-			return $excerpt;
+// 			$excerpt = preg_replace(self::REGEX_WITH_ID, '', $the_content);
+// 			return $excerpt;
+			return $the_content;
 		}
 
 		// Find if this post has Crayons
@@ -557,8 +558,11 @@ class CrayonWP {
 	
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
+// 		var_dump("<i>".htmlentities($the_excerpt)."</i>");
 		CrayonLog::debug('excerpt');
-		self::$is_excerpt = TRUE;
+// 		return $the_excerpt;
+// 		return '_';
+// 		self::$is_excerpt = TRUE;
 		global $post;
 		if (!empty($post->post_excerpt)) {
 			// Use custom excerpt if defined
@@ -567,7 +571,8 @@ class CrayonWP {
 			// Pass wp_trim_excerpt('') to gen from content (and remove [crayons])
 			$the_excerpt = wpautop(wp_trim_excerpt(''));
 		}
-		self::$is_excerpt = FALSE;
+// 		$the_excerpt = wpautop(wp_trim_excerpt(''));
+// 		self::$is_excerpt = FALSE;
 		// XXX Returning "" may cause it to default to full contents...
 		return $the_excerpt . ' ';
 	}
@@ -630,25 +635,30 @@ class CrayonWP {
 		return self::class_tag($matches);
 	}
 	
-	// Check if the $[crayon]...[/crayon] notation has been used to ignore [crayon] tags within posts
-	public static function crayon_remove_ignore($the_content) {
+	// Check if the $ notation has been used to ignore [crayon] tags within posts and remove all matches
+	// Can also remove if used without $ as a regular crayon
+	public static function crayon_remove_ignore($the_content, $ignore_flag = '$') {
+		if ($ignore_flag == FALSE) {
+			$ignore_flag = '';
+		}
+		$ignore_flag_regex = preg_quote($ignore_flag);
 		
 // 		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
 		
-		$the_content = preg_replace('#\$(\s*\[\s*crayon)#msi', '$1', $the_content);
+		$the_content = preg_replace('#'.$ignore_flag_regex.'(\s*\[\s*crayon)#msi', '$1', $the_content);
 		$the_content = preg_replace('#(crayon\s*\])\s*\$#msi', '$1', $the_content);
 		
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
-			$the_content = str_ireplace(array('$<pre', 'pre>$'), array('<pre', 'pre>'), $the_content);
+			$the_content = str_ireplace(array($ignore_flag.'<pre', 'pre>'.$ignore_flag), array('<pre', 'pre>'), $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
-			$the_content = str_ireplace(array('$[plain', 'plain]$'), array('[plain', 'plain]'), $the_content);
+			$the_content = str_ireplace(array($ignore_flag.'[plain', 'plain]'.$ignore_flag), array('[plain', 'plain]'), $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG) ||
 			CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
 			self::init_tags_regex();			
-			$the_content = preg_replace('#\$\s*([\[\{])\s*('. self::$alias_regex .')#', '$1$2', $the_content);
-			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\[\{])\s*\$#', '$1$2', $the_content);
+			$the_content = preg_replace('#'.$ignore_flag_regex.'\s*([\[\{])\s*('. self::$alias_regex .')#', '$1$2', $the_content);
+			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\[\{])\s*'.$ignore_flag_regex.'#', '$1$2', $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
 			$the_content = str_ireplace('\\`', '`', $the_content);
@@ -773,6 +783,17 @@ class CrayonWP {
 		return $wp_root_path . 'wp-load.php';
 	}
 	
+	public static function pre_excerpt($e) {
+		self::$is_excerpt = TRUE;
+		return $e;
+	}
+	
+	public static function post_excerpt($e) {
+		self::$is_excerpt = FALSE;
+		$e = self::the_content($e);
+		return $e;
+	}
+	
 }
 
 // Only if WP is loaded and not in admin
@@ -803,9 +824,14 @@ if (defined('ABSPATH')) {
 		}
 		
 		// We want to allow others to define excerpt length etc later, so low priority
-		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 1);
-		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 1);
+// 		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 1);
+		
+		add_filter('get_the_excerpt', 'CrayonWP::pre_excerpt', 0);
+		add_filter('the_excerpt', 'CrayonWP::post_excerpt', 100);
+		
+// 		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 10);
 		add_action('template_redirect', 'CrayonWP::wp_head');
+		
 	} else {
 		// For marking a post as containing a Crayon
 		add_action('save_post', 'CrayonWP::save_post', 10, 2);

@@ -474,9 +474,11 @@ class CrayonWP {
 		$post_id = strval($post->ID);
 		
 		if (self::$is_excerpt) {
-			// Remove Crayon from content if we are displaying an excerpt
-// 			$excerpt = preg_replace(self::REGEX_WITH_ID, '', $the_content);
-// 			return $excerpt;
+			if (CrayonGlobalSettings::val(CrayonSettings::EXCERPT_STRIP)) {
+				// Remove Crayon from content if we are displaying an excerpt
+				$the_content = preg_replace(self::REGEX_WITH_ID, '', $the_content);
+			}
+			// Otherwise Crayon remains with ID and replaced later
 			return $the_content;
 		}
 
@@ -794,6 +796,12 @@ class CrayonWP {
 		return $e;
 	}
 	
+// 	public static function remove_excerpt($e) {
+// 		// Remove Crayon from content if we are displaying an excerpt
+// 		$e = preg_replace(self::REGEX_WITH_ID, '', $e);
+// 		return $e;
+// 	}
+	
 }
 
 // Only if WP is loaded and not in admin
@@ -817,8 +825,8 @@ if (defined('ABSPATH')) {
 		add_filter('the_content', 'CrayonWP::the_content', 100);
 		
 		if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
-			/* XXX This is called first to match Crayons, then higher priority replaces after other filters
-			   Prevents Crayon from being formatted by the filters, and also keeps original comment formatting */
+			/* XXX This is called first to match Crayons, then higher priority replaces after other filters.
+			   Prevents Crayon from being formatted by the filters, and also keeps original comment formatting. */
 			add_filter('comment_text', 'CrayonWP::pre_comment_text', 1);
 			add_filter('comment_text', 'CrayonWP::comment_text', 100);
 		}
@@ -826,7 +834,8 @@ if (defined('ABSPATH')) {
 		// We want to allow others to define excerpt length etc later, so low priority
 // 		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 1);
 		
-		add_filter('get_the_excerpt', 'CrayonWP::pre_excerpt', 0);
+		// This ensures Crayons are not formatted by WP filters. Other plugins should specify priorities between 1 and 100.
+		add_filter('get_the_excerpt', 'CrayonWP::pre_excerpt', 1);
 		add_filter('the_excerpt', 'CrayonWP::post_excerpt', 100);
 		
 // 		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 10);

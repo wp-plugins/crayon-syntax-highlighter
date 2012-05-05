@@ -67,7 +67,6 @@ class CrayonSettings {
 	const PLAIN_TOGGLE = 'plain-toggle';
 	const SHOW_PLAIN = 'show-plain';
 	const DISABLE_RUNTIME = 'runtime';
-	const EXP_SCROLL = 'exp-scroll';
 	const TOUCHSCREEN = 'touchscreen';
 	const DISABLE_ANIM = 'disable-anim';
 	const ERROR_LOG = 'error-log';
@@ -96,6 +95,7 @@ class CrayonSettings {
 	const DECODE_ATTRIBUTES = 'decode-attributes';
 	const TINYMCE_USED = 'tinymce-used';
 	const ATTR_SEP = 'attr-sep';
+	const EXCERPT_STRIP = 'excerpt-strip';
 //	const TINYMCE_LINE_BREAK = 'tinymce-line-break';
 //	const TINYMCE_ADD_OVERRIDDEN = 'tinymce-add-overridden';
 	
@@ -189,8 +189,7 @@ class CrayonSettings {
 					array(crayon__('On Double Click'), crayon__('On Single Click'), crayon__('On MouseOver'), crayon__('Disable Mouse Events'))), 
 			new CrayonSetting(self::DISABLE_ANIM, FALSE),
 			new CrayonSetting(self::TOUCHSCREEN, TRUE), 
-			new CrayonSetting(self::DISABLE_RUNTIME, FALSE),
-			new CrayonSetting(self::EXP_SCROLL, FALSE), 
+			new CrayonSetting(self::DISABLE_RUNTIME, FALSE), 
 			new CrayonSetting(self::ERROR_LOG, TRUE),
 			new CrayonSetting(self::ERROR_LOG_SYS, TRUE), 
 			new CrayonSetting(self::ERROR_MSG_SHOW, TRUE), 
@@ -216,6 +215,7 @@ class CrayonSettings {
 			new CrayonSetting(self::DECODE_ATTRIBUTES, TRUE),
 			new CrayonSetting(self::TINYMCE_USED, FALSE),
 			new CrayonSetting(self::ATTR_SEP, array(':', '_')),
+			new CrayonSetting(self::EXCERPT_STRIP, FALSE),
 //			new CrayonSetting(self::TINYMCE_LINE_BREAK, array(crayon__('Before & After'), crayon__('After'), crayon__('Before'), crayon__('None'))),
 //			new CrayonSetting(self::TINYMCE_ADD_OVERRIDDEN, TRUE),
 		);

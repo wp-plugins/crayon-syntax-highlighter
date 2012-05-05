@@ -178,7 +178,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.9.4 =
 * Added /util/external_use.php for an example of how to use Crayon in other PHP environments.
-* Fixed issues with the excerpt, added option for Crayons appear in it and not be stripped. 
+* Fixed issues with the excerpt, now Crayons are not stripped out by default, can be changed in Settings &gt; Misc. 
+* Fixed font-size issues that may conflict on some themes.
 
 = 1.9.3 =
 * Added Perl
@@ -580,6 +581,7 @@ Make sure to upgrade to the latest release when possible to ensure you avoid bug
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Christy Wiggins, (http://www.jinxyisms.com/), USA
 * eSnipe, Inc. (http://esnipe.com/), USA (again!)
 * Aliseya Wright, (http://blog.xoxothemes.com/), USA
 * Jeremy Worboys (http://complexcompulsions.com/), Australia

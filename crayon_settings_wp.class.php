@@ -716,11 +716,11 @@ class CrayonSettingsWP {
 		self::checkbox(array(CrayonSettings::EFFICIENT_ENQUEUE, crayon__('Attempt to load Crayon\'s CSS and JavaScript only when needed').'. <a href="http://ak.net84.net/?p=660" target="_blank" class="crayon-question">'.crayon__('?').'</a>'));
 		self::checkbox(array(CrayonSettings::SAFE_ENQUEUE, crayon__('Disable enqueuing for page templates that may contain The Loop.') . ' <a href="http://bit.ly/AcWRNY" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
 		self::checkbox(array(CrayonSettings::COMMENTS, crayon__('Allow Crayons inside comments')));
+		self::checkbox(array(CrayonSettings::EXCERPT_STRIP, crayon__('Remove Crayons from excerpts')));
 		self::checkbox(array(CrayonSettings::MAIN_QUERY, crayon__('Load Crayons only from the main Wordpress query')));
 		self::checkbox(array(CrayonSettings::TOUCHSCREEN, crayon__('Disable mouse gestures for touchscreen devices (eg. MouseOver)')));
 		self::checkbox(array(CrayonSettings::DISABLE_ANIM, crayon__('Disable animations')));
 		self::checkbox(array(CrayonSettings::DISABLE_RUNTIME, crayon__('Disable runtime stats')));
-		//self::checkbox(array(CrayonSettings::EXP_SCROLL, 'Use experimental CSS3 scrollbars (visible only in Chrome and Safari for now)'));
 	}
 
 	// Debug Fields ===========================================================

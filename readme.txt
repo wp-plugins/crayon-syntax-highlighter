@@ -45,14 +45,22 @@ It also supports some neat features like:
 
 **Links**
 
-* Live Demo: <a href="http://bit.ly/poKNqs" target="_blank">http://bit.ly/poKNqs</a>
-* Short How-To: <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">http://ak.net84.net/projects/crayon-syntax-highlighter/</a>
-* Please Thank Me With <a href="http://bit.ly/crayondonate" target="_blank">Coffee</a>! 
+* <a href="http://bit.ly/poKNqs" target="_blank">Live Demo</a>
+* <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">Short How-To</a>
+
+**Contributions**
+
+There are many ways you can help!
+
+* Make a Theme and share
+* Add support for your favourite <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">Language</a>
+* Write a post about your pastel experiences and share
+* <a href="http://bit.ly/crayondonate" target="_blank">Donate</a> to the project
 
 **Supported Languages**
 
 Languages are defined in language files using Regular Expressions to capture elements.
-See http://ak.net84.net/projects/crayon-language-file-specification/ to learn how to make your own.
+See the <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">Crayon Language File Specification</a> to learn how to make your own.
 
 * Default Langauge (one size fits all, highlights generic code)
 * ABAP
@@ -66,17 +74,17 @@ See http://ak.net84.net/projects/crayon-language-file-specification/ to learn ho
 * CSS
 * HTML (XML/XHTML)
 * Lua
-* Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">https://github.com/devolonter</a>)
+* Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">Devolonter</a>)
 * Java
 * JavaScript
 * Objective-C
 * Perl
 * PHP
-* PostgreSQL (thanks to <a href="http://bitorchestra.com/" target="_blank">http://bitorchestra.com/</a>)
+* PostgreSQL (thanks to <a href="http://bitorchestra.com/" target="_blank">Bitorchestra</a>)
 * PowerShell
 * Python
 * Ruby
-* Scheme (thanks to <a href="https://github.com/harry75369" target="_blank">https://github.com/harry75369</a>)
+* Scheme (thanks to <a href="https://github.com/harry75369" target="_blank">Harry75369</a>)
 * Shell (Unix)
 * Visual Basic
 * YAML

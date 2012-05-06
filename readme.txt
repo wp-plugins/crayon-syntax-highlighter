@@ -180,6 +180,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added /util/external_use.php for an example of how to use Crayon in other PHP environments.
 * Fixed issues with the excerpt, now Crayons are not stripped out by default, can be changed in Settings &gt; Misc. 
 * Fixed font-size issues that may conflict on some themes.
+* Crayons in comments now have their HTML entities decoded by default, specify "decode:false" in the class attr or decode="false" as an attr if you don't want it to decode. 
 
 = 1.9.3 =
 * Added Perl

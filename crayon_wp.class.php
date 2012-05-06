@@ -173,7 +173,7 @@ class CrayonWP {
 		self::the_posts($posts);
 	}
 	
-	public static function capture_crayons($wp_id, $wp_content) {
+	public static function capture_crayons($wp_id, $wp_content, $extra_settings = array()) {
 		// Will contain captured crayons and altered $wp_content
 		$capture = array('capture' => array(), 'content' => $wp_content, 'has_captured' => FALSE);
 		
@@ -250,7 +250,8 @@ class CrayonWP {
 				
 				// Capture attributes
 				preg_match_all('#([^="\'\s]+)[\t ]*=[\t ]*("|\')(.*?)\2#', $atts, $att_matches);
-				$atts_array = array();
+				// Add extra attributes
+				$atts_array = $extra_settings;
 				if ( count($att_matches[0]) != 0 ) {
 					for ($j = 0; $j < count($att_matches[1]); $j++) {
 						$atts_array[trim(strtolower($att_matches[1][$j]))] = trim($att_matches[3][$j]);
@@ -375,8 +376,8 @@ class CrayonWP {
 						// Don't capture twice
 						continue;
 					}
-					// Capture comment Crayons
-			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content);
+					// Capture comment Crayons, decode their contents if decode not specified
+			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content, array(CrayonSettings::DECODE => TRUE));
 			        self::$comment_captures[$id_str] = $captures['content'];
 // 			        $comment->comment_content = $captures['content']; // XXX testing!
 // 			        var_dump($comment->comment_content); exit;

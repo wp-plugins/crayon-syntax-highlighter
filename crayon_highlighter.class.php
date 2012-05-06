@@ -172,7 +172,6 @@ class CrayonHighlighter {
 				if ($this->setting_val(CrayonSettings::DECODE)) {
 					$code = CrayonUtil::html_entity_decode($code);
 				}
-				var_dump($this->setting_val(CrayonSettings::DECODE));
 				// Save code so output is plain output is the same
 				$this->code = $code;
 				// Allow mixed if langauge supports it and setting is set

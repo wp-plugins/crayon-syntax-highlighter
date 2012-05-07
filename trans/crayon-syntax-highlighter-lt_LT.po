@@ -1,1028 +1,806 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: CodeStyling Localization v1.99.6\n"
+"Project-Id-Version: crayon-syntax-highlighter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 03:13+0100\n"
-"PO-Revision-Date: 2012-04-02 11:22-0800\n"
+"POT-Creation-Date: 2012-05-07 20:58+1000\n"
+"PO-Revision-Date: 2012-05-07 20:58+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
+"X-Poedit-Language: Lithuanian\n"
+"X-Poedit-Country: LITHUANIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;crayon_e;crayon__;crayon_n\n"
+"X-Poedit-Basepath: .\n"
 "X-Textdomain-Support: yes\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-0: ..\n"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2104
-#: codestyling-localization.php:2158
-#: codestyling-localization.php:2657
-msgid "&laquo; Previous"
-msgstr "&laquo; ankstesnis"
+# @ crayon-syntax-highlighter
+#: ../crayon_formatter.class.php:266
+msgid "Toggle Plain Code"
+msgstr "Sukeisti Grynąjį Kodą"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2028
-#: codestyling-localization.php:2033
-#: codestyling-localization.php:2281
-msgid "-n.a.-"
-msgstr "-nepasiekiamas-"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1451
-#: codestyling-localization.php:1487
-#: codestyling-localization.php:2009
+# @ crayon-syntax-highlighter
+#: ../crayon_formatter.class.php:268
 #, php-format
-msgid "<strong>%d</strong> Language"
-msgid_plural "<strong>%d</strong> Languages"
-msgstr[0] "<strong>%d</strong> Kalba"
-msgstr[1] "<strong>%d</strong> Kalbos"
+msgid "Press %s to Copy, %s to Paste"
+msgstr "Paspauskite %s norėdami nukopijuoti, %s norėdami Įdėti"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2581
-msgid "Access Error"
-msgstr "Prieigos klaida"
+# @ crayon-syntax-highlighter
+#: ../crayon_formatter.class.php:268
+msgid "Copy Plain Code"
+msgstr "Kopijuoti Grynąjį Kodą"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2014
-#: codestyling-localization.php:2148
-msgid "Actions"
-msgstr "Veiksmai"
+# @ crayon-syntax-highlighter
+#: ../crayon_formatter.class.php:270
+msgid "Open Code In New Window"
+msgstr "Atverti Kodą Naujame Lange"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2007
-#: codestyling-localization.php:2234
-msgid "Add New Language"
-msgstr "Pridėti Naują Kalbą"
+# @ crayon-syntax-highlighter
+#: ../crayon_formatter.class.php:273
+msgid "Toggle Line Numbers"
+msgstr "Sukeisti Eilučių Numerius"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1221
-msgid "Affected Total Files"
-msgstr "Iš viso Paveikta Rinkmenų"
+# @ crayon-syntax-highlighter
+#: ../crayon_formatter.class.php:279
+msgid "Contains Mixed Languages"
+msgstr "Palaiko Mišrias Kalbas"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1841
-msgid "All Translations"
-msgstr "Visi Vertimai"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:138
+msgid "Hourly"
+msgstr "Valandomis"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1982
-msgid "Available Directories:"
-msgstr "Prieinami Katalogai:"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:138
+msgid "Daily"
+msgstr "Dienomis"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2328
-msgid "Confirm Delete Language"
-msgstr "Patvirtinti Kalbos Ištrynimą"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:139
+msgid "Weekly"
+msgstr "Savaitėmis"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2717
-msgid "Copy"
-msgstr "Kopijuoti"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:139
+msgid "Monthly"
+msgstr "Mėnesiais"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1082
-msgid "Creation-Date"
-msgstr "Sukūrimo Data"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:140
+msgid "Immediately"
+msgstr "Tučtuojau"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2047
-#: codestyling-localization.php:2293
-msgid "Delete"
-msgstr "Ištrinti"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:150
+#: ../crayon_settings.class.php:154
+msgid "Max"
+msgstr "Daugiausia"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1886
-#: codestyling-localization.php:1918
-#: codestyling-localization.php:1963
-msgid "Description"
-msgstr "Aprašymas"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:150
+#: ../crayon_settings.class.php:154
+msgid "Min"
+msgstr "Mažiausia"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2038
-#: codestyling-localization.php:2285
-#: codestyling-localization.php:2716
-msgid "Edit"
-msgstr "Redaguoti"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:150
+#: ../crayon_settings.class.php:154
+msgid "Static"
+msgstr "Nustatyta"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2173
-#: codestyling-localization.php:3036
-msgid "Edit Catalog Entry"
-msgstr "Redaguoti Katalogo Įrašą"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:152
+#: ../crayon_settings.class.php:156
+#: ../crayon_settings_wp.class.php:541
+#: ../crayon_settings_wp.class.php:550
+#: ../crayon_settings_wp.class.php:649
+msgid "Pixels"
+msgstr "Taškai"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2852
-msgid "Examples: <small>Please refer to official Perl regular expression descriptions</small>"
-msgstr "Pavyzdžiai: <small>Prašome remtis oficliais įprastinių Perl išraiškų aprašais</small>"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:152
+#: ../crayon_settings.class.php:156
+msgid "Percent"
+msgstr "Procentais"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2088
-msgid "Expression Result"
-msgstr "Išraiškos Rezultatas"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:165
+msgid "None"
+msgstr "Nieko"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2850
-msgid "Expression:"
-msgstr "Išraiška:"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:165
+msgid "Left"
+msgstr "Kairė"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2848
-msgid "Extended Expression Search"
-msgstr "Išplėsta Išraiškos Paieška"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:165
+msgid "Center"
+msgstr "Centras"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2063
-#: codestyling-localization.php:2460
-#: codestyling-localization.php:3130
-msgid "File:"
-msgstr "Rinkmena:"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:165
+msgid "Right"
+msgstr "Dešinė"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2683
-msgid "Files:"
-msgstr "Rinkmenos:"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:167
+#: ../crayon_settings.class.php:189
+msgid "On MouseOver"
+msgstr "Užvedus pelės žymeklį"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2117
-msgid "Infos"
-msgstr "Informacija"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:167
+#: ../crayon_settings.class.php:173
+msgid "Always"
+msgstr "Visada"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2012
-msgid "Language"
-msgstr "Kalba"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:167
+#: ../crayon_settings.class.php:173
+msgid "Never"
+msgstr "Niekada"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1216
-msgid "Language Target"
-msgstr "Kalbos Tikslas"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:173
+msgid "When Found"
+msgstr "Kai Aptinkama"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1887
-msgid "Languages"
-msgstr "Kalbos"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:189
+msgid "On Double Click"
+msgstr "Dvikarčiu Spustelėjimu"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1086
-msgid "Last-Translator"
-msgstr "Galutinis-Vertėjas"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:189
+msgid "On Single Click"
+msgstr "Vienkarčiu Spustelėjimu"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2022
-#: codestyling-localization.php:2273
-msgid "Locale"
-msgstr "Lokalė"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:189
+msgid "Disable Mouse Events"
+msgstr "Išjungti Pelės Veiksmus"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1817
-msgid "Localization"
-msgstr "Lokalizacija"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings.class.php:196
+msgid "An error has occurred. Please try again later."
+msgstr "Įvyko klaida. Prašome mėginti vėliau."
 
-#@ codestyling-localization
-#: codestyling-localization.php:1829
-msgid "Manage Language Files"
-msgstr "Tvarkyti Kalbos Rinkmenas"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:44
+#: ../crayon_settings_wp.class.php:118
+#: ../crayon_settings_wp.class.php:802
+msgid "Settings"
+msgstr "Nuostatos"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2109
-#: codestyling-localization.php:2163
-#: codestyling-localization.php:2664
-msgid "Next &raquo;"
-msgstr "Kitas &raquo;"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:99
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Jūs neturite reikiamų leidimų priėjimui prie šio puslapio."
 
-#@ codestyling-localization
-#: codestyling-localization.php:2121
-#: codestyling-localization.php:3081
-msgid "Original:"
-msgstr "Originalas:"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:130
+msgid "Save Changes"
+msgstr "Įrašyti Pakeitimus"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2092
-msgid "Page Size"
-msgstr "Puslapio Dydis"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:136
+msgid "Reset Settings"
+msgstr "Atkurti Nuostatas"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2013
-msgid "Permissions"
-msgstr "Leidimai"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:301
+msgid "General"
+msgstr "Bendrai"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1234
-msgid "Please standby, files presently being scanned ..."
-msgstr "Prašome ramiai palaukti, rinkmenos šiuo metu yra skenuojamos  ..."
-
-#@ codestyling-localization
-#: codestyling-localization.php:2152
-msgid "Please wait, file content presently being loaded ..."
-msgstr "Prašome palaukti, šiuo metu keliamas rinkmenų turinys ..."
-
-#@ codestyling-localization
-#: codestyling-localization.php:389
-msgid "Plugin"
-msgstr "Papildinys"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1852
-msgid "Plugins"
-msgstr "Papildiniai"
-
-#@ codestyling-localization
-#: codestyling-localization.php:3070
-msgid "Plural Index Calculation:"
-msgstr "Dauginis Indekso Skaičiavimas:"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2701
-#: codestyling-localization.php:2704
-#: codestyling-localization.php:3043
-#: codestyling-localization.php:3046
-#: codestyling-localization.php:3049
-#: codestyling-localization.php:3054
-msgid "Plural Index Result ="
-msgstr "Dauginis Indekso Rezultatas ="
-
-#@ codestyling-localization
-#: codestyling-localization.php:2697
-#: codestyling-localization.php:3068
-msgid "Plural:"
-msgstr "Daugiareikšmis:"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1078
-#: codestyling-localization.php:1212
-msgid "Project-Id-Version"
-msgstr "Projekto-Identifikacijos-Versija"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2041
-#: codestyling-localization.php:2044
-#: codestyling-localization.php:2287
-#: codestyling-localization.php:2290
-msgid "Rescan"
-msgstr "Peržvelgti iš naujo"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2397
-msgid "Rescanning PHP Source Files"
-msgstr "Pirminės PHP Rinkmenosi Peržvelgiamos iš naujo"
-
-#@ codestyling-localization
-#: codestyling-localization.php:3074
-#: codestyling-localization.php:3091
-msgid "Save"
-msgstr "Įrašyti"
-
-#@ codestyling-localization
-#: codestyling-localization.php:3075
-#: codestyling-localization.php:3092
-msgid "Save & Next »"
-msgstr "Įrašyti ir Tęsti »"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1226
-msgid "Scanning Progress"
-msgstr "Peržiūrėjimo Eiga"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2857
-msgid "Search"
-msgstr "Ieškoti"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2087
-msgid "Search Result"
-msgstr "Rezultato Paieška"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1569
-msgid "Server Restrictions: Changing file rights is not permitted."
-msgstr "Serverio Apribojimai: Rinkmenos teisių keitimas neleidžiamas."
-
-#@ codestyling-localization
-#: codestyling-localization.php:2697
-#: codestyling-localization.php:3066
-msgid "Singular:"
-msgstr "Vienareikšmis:"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1627
-msgid "Sorry, Google Translation is not available."
-msgstr "Atsiprašome, Google Vertimas neįmanomas."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1914
-#: codestyling-localization.php:1959
-msgid "State"
-msgstr "Būsena"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1903
-msgid "Textdomain"
-msgstr "Teksto nuoroda"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1972
-msgid "The original US version doesn't contain the language directory."
-msgstr "Nenurodytas originalios US versijos kalbos katalogas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:664
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:302
 msgid "Theme"
 msgstr "Apipavidalinimas"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1855
-msgid "Themes"
-msgstr "Apipavidalinimai"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:303
+msgid "Font"
+msgstr "Šriftas"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2061
-msgid "Translate Language File"
-msgstr "Išversti Kalbos Rinkmeną"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:304
+msgid "Metrics"
+msgstr "Maketas"
 
-#@ codestyling-localization
-#: codestyling-localization.php:2136
-#: codestyling-localization.php:3084
-#: codestyling-localization.php:3086
-msgid "Translation:"
-msgstr "Vertimas:"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:305
+msgid "Toolbar"
+msgstr "Įrankių juosta"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1885
-msgid "Type"
-msgstr "Tipas"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:306
+msgid "Lines"
+msgstr "Linijos"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1910
-#: codestyling-localization.php:1955
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:307
+msgid "Code"
+msgstr "Kodas"
+
+#: ../crayon_settings_wp.class.php:308
+msgid "Tags"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:309
+msgid "Languages"
+msgstr "Kalbos"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:310
+msgid "Files"
+msgstr "Rinkmenos"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:311
+#, fuzzy
+msgid "Tag Editor"
+msgstr "Apipavidalinimų Redaktorius"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:312
+msgid "Misc"
+msgstr "Kita"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:315
+msgid "Debug"
+msgstr "Derinimas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:316
+msgid "Errors"
+msgstr "Klaidos"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:317
+msgid "Log"
+msgstr "Žurnalas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:320
+msgid "About"
+msgstr "Apie"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:503
+msgid "Crayon Help"
+msgstr "Crayon Pagalba"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:518
+msgid "Height"
+msgstr "Aukštis"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:524
+msgid "Width"
+msgstr "Paraštė"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:530
+msgid "Top Margin"
+msgstr "Viršutinė Paraštė"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:531
+msgid "Bottom Margin"
+msgstr "Apatinė Paraštė"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:532
+#: ../crayon_settings_wp.class.php:537
+msgid "Left Margin"
+msgstr "Kairė Paraštė"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:533
+#: ../crayon_settings_wp.class.php:537
+msgid "Right Margin"
+msgstr "Dešinė paraštė"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:543
+msgid "Horizontal Alignment"
+msgstr "Horizontalus Lygiavimas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:546
+msgid "Allow floating elements to surround Crayon"
+msgstr "Leisti slankiųjų elementų Crayon apsupimą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:548
+#, fuzzy
+msgid "Inline Margin"
+msgstr "Kairė Paraštė"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:556
+msgid "Display the Toolbar"
+msgstr "Rodyti Įrankių juostą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:559
+msgid "Overlay the toolbar on code rather than push it down when possible"
+msgstr "Perdengti kodą įrankių juosta vietoje kodo nustūmimo žemyn, kai įmanoma"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:560
+msgid "Toggle the toolbar on single click when it is overlayed"
+msgstr "Perjungti įrankių juostą vieno pelės mygtuko paspaudimo metu, kai ji perdengta"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:561
+msgid "Delay hiding the toolbar on MouseOut"
+msgstr "Delsti paslėpti įrankių juostą MouseOut metu"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:563
+msgid "Display the title when provided"
+msgstr "Rodyti antraštę, kai ši pateikta"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:564
+msgid "Display the language"
+msgstr "Rodyti kalbą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:571
+msgid "Display striped code lines"
+msgstr "Rodyti atskirtas kodo eilutes"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:572
+msgid "Enable line marking for important lines"
+msgstr "Leisti eilučių žymėjimą svarbioms eilutėms"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:573
+msgid "Display line numbers by default"
+msgstr "Rodyti eilučių numerius (numatyta)"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:574
+msgid "Enable line number toggling"
+msgstr "Leisti eilučių numerių sukeitimą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:575
+msgid "Start line numbers from"
+msgstr "Pradėti eilučių numeravimą nuo"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:585
+msgid "When no language is provided, use the fallback"
+msgstr "Kai jokia kalba nepateikta, naudokite numatytąją"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:591
+#, fuzzy, php-format
+msgid "%d language has been detected."
+msgstr "aptikta %d kalba"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:592
+msgid "Parsing was successful"
+msgstr "Analizė atlikta sėkmingai"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:592
+msgid "Parsing was unsuccessful"
+msgstr "Analizė atlikta nesėkmingai"
+
+#  skliausteliai?
+#: ../crayon_settings_wp.class.php:598
+#, php-format
+msgid "The selected language with id %s could not be loaded"
+msgstr "Pasirinkta kalba su (identifikatorius %s) negali būti įkelta"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:602
+msgid "Show Languages"
+msgstr "Rodyti Kalbas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:621
+msgid "Loading..."
+msgstr "Įkeliama..."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:621
+#: ../crayon_settings_wp.class.php:804
+msgid "Theme Editor"
+msgstr "Apipavidalinimų Redaktorius"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:626
+#, php-format
+msgid "Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked."
+msgstr "Pakeiskite %1$sNumatytąją kalbą%2$s, norėdami pakeisti imties kodą. 5-7 eilutės yra pažymėtos."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:630
+msgid "Enable Live Preview"
+msgstr "Leisti Tiesioginę Greitąją peržiūrą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:632
+msgid "Enqueue themes in the header (more efficient)."
+msgstr "Išrikiuoti apipavidalinimus puslapinėje antraštėje (efektyviau)."
+
+#: ../crayon_settings_wp.class.php:632
+#: ../crayon_settings_wp.class.php:658
+#: ../crayon_settings_wp.class.php:683
+#: ../crayon_settings_wp.class.php:690
+#: ../crayon_settings_wp.class.php:691
+#: ../crayon_settings_wp.class.php:692
+#: ../crayon_settings_wp.class.php:693
+#: ../crayon_settings_wp.class.php:694
+#: ../crayon_settings_wp.class.php:695
+#: ../crayon_settings_wp.class.php:709
+#: ../crayon_settings_wp.class.php:716
+#: ../crayon_settings_wp.class.php:717
+msgid "?"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:635
+#, php-format
+msgid "The selected theme with id %s could not be loaded"
+msgstr "Pasirinktas apipavidalinimas (Identifikatorius %s) negali  būti įkeltas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:647
+msgid "Custom Font Size"
+msgstr "Individualizuotas Šrifto Dydis"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:652
+#, php-format
+msgid "The selected font with id %s could not be loaded"
+msgstr "Pasirinktas šriftas (Identifikatorius %s) negali būti įkeltas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:658
+msgid "Enqueue fonts in the header (more efficient)."
+msgstr "Išrikiuoti šriftus puslapinėje antraštėje (efektyviau)"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:663
+msgid "Enable plain code view and display"
+msgstr "Leisti paprastojo kodo peržiūrą ir vaizdavimą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:666
+msgid "Enable plain code toggling"
+msgstr "Leisti grynojo kodo sukeistį"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:667
+msgid "Show the plain code by default"
+msgstr "Rodyti grynąjį kodą (kaip numatyta)"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:668
+msgid "Enable code copy/paste"
+msgstr "Leisti kodo kopijavimą/įdėjimą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:670
+msgid "Enable opening code in a window"
+msgstr "Leisti kodo atvėrimą lange"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:671
+msgid "Always display scrollbars"
+msgstr "Visada rodyti slankjuostes"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:672
+msgid "Tab size in spaces"
+msgstr "Kortelės dydis tarpuose"
+
+#: ../crayon_settings_wp.class.php:677
+msgid "Decode HTML entities in code"
+msgstr ""
+
+#: ../crayon_settings_wp.class.php:679
+msgid "Decode HTML entities in attributes"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:681
+msgid "Remove whitespace surrounding the shortcode content"
+msgstr "Pašalinti matomus tarpus aplink trumpojo kodo turinį"
+
+#: ../crayon_settings_wp.class.php:683
+msgid "Allow Mixed Language Highlighting with delimiters and tags."
+msgstr "Leisti Mišrios Kalbos Pažymėjimą skirtukais ir gairėmis."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:685
+msgid "Show Mixed Language Icon (+)"
+msgstr "Rodyti Mišrios Kalbos Piktogramą (+)"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:690
+msgid "Capture Mini Tags like [php][/php] as Crayons."
+msgstr "Užskaityti Mini Gaires, kaip [php][/php] kaip Crayons."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:691
+#, fuzzy
+msgid "Capture Inline Tags like {php}{/php} inside sentences."
+msgstr "Užskaityti Mini Gaires, kaip [php][/php] kaip Crayons."
+
+#: ../crayon_settings_wp.class.php:692
+msgid "Wrap Inline Tags"
+msgstr ""
+
+#: ../crayon_settings_wp.class.php:693
+msgid "Capture `backquotes` as &lt;code&gt;"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:694
+msgid "Capture &lt;pre&gt; tags as Crayons"
+msgstr "Užskaityti &lt;pre&gt; gaires kaip Crayons"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:695
+msgid "Enable [plain][/plain] tag."
+msgstr "Leisti [plain][/plain] gairių kūrimą."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:700
+msgid "When loading local files and a relative path is given for the URL, use the absolute path"
+msgstr "Įkeliant vietines rinkmenas, kuomet Universaliąjai nuorodai yra priskirtas santykinis kelias, naudokite absoliutųjį kelią"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:703
+msgid "Followed by your relative URL."
+msgstr "Laikomasi Jūsų santykinės Universaliosios nuorodos"
+
+#: ../crayon_settings_wp.class.php:707
+#, php-format
+msgid "Use %s to separate setting names from values in the &lt;pre&gt; class attribute"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:713
+msgid "Clear the cache used to store remote code requests"
+msgstr "Išvalyti spartinančiąją atmintinę, naudotą kaupti nuotolines kodo užklausas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:715
+msgid "Clear Now"
+msgstr "Išvalyti Dabar"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:716
+msgid "Attempt to load Crayon's CSS and JavaScript only when needed"
+msgstr "Bandykite įkelti Crayon's CSS ir JavaScript tik tada, kai to tikrai reikia"
+
+#: ../crayon_settings_wp.class.php:717
+msgid "Disable enqueuing for page templates that may contain The Loop."
+msgstr "Panaikinti puslapio apipavidalinimų rikiavimą, kuris gali sukelti ciklinius pasikartojimus."
+
+#: ../crayon_settings_wp.class.php:718
+msgid "Allow Crayons inside comments"
+msgstr ""
+
+#: ../crayon_settings_wp.class.php:719
+msgid "Remove Crayons from excerpts"
+msgstr ""
+
+#: ../crayon_settings_wp.class.php:720
+msgid "Load Crayons only from the main Wordpress query"
+msgstr "Įkelti Crayons tik iš pagrindinės WordPress užklausos"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:721
+msgid "Disable mouse gestures for touchscreen devices (eg. MouseOver)"
+msgstr "Išjungti pelės gestus įrenginiams su liečiamuoju ekranu (pavyzdžiui MouseOver)"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:722
+msgid "Disable animations"
+msgstr "Išjungti animaciją"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:723
+msgid "Disable runtime stats"
+msgstr "Išjungti vykdymo laiko statistiką"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:729
+msgid "Log errors for individual Crayons"
+msgstr "Fiksuoti klaidas individualiems Crayons"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:730
+msgid "Log system-wide errors"
+msgstr "Fiksuoti sistemines klaidas"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:731
+msgid "Display custom message for errors"
+msgstr "Rodyti individualizuotą pranešimą klaidų atveju"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:743
+msgid "Show Log"
+msgstr "Rodyti Žurnalą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:743
+msgid "Hide Log"
+msgstr "Paslėpti Žurnalą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:745
+msgid "Clear Log"
+msgstr "Išvalyti Žurnalą"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:746
+msgid "Email Admin"
+msgstr "Susisiekti su svetainės Administratoriumi elektroniniu paštu"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:748
+msgid "Email Developer"
+msgstr "Susisiekti su svetainės Plėtotoju elektroniniu paštu"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:750
+msgid "The log is currently empty."
+msgstr "Žurnalas šiuo metu tuščias"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:752
+msgid "The log file exists and is writable."
+msgstr "Žurnalo rinkmena egzistuoja, įrašas į ją įmanomas."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:752
+msgid "The log file exists and is not writable."
+msgstr "Žurnalo rinkmena egzistuoja, įrašas į ją neįmanomas."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:754
+msgid "The log file does not exist and is not writable."
+msgstr "Žurnalo rinkmena neegzistuoja, įrašas į ją neįmanomas."
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:764
 msgid "Version"
 msgstr "Versija"
 
-#@ codestyling-localization
-#: codestyling-localization.php:342
-#: codestyling-localization.php:1844
-msgid "WordPress"
-msgstr "WordPress"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:766
+msgid "Developer"
+msgstr "Plėtotojas"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1817
-msgid "WordPress Localization"
-msgstr "WordPress Lokalizacija"
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:767
+msgid "Translators"
+msgstr "Vertėjai"
 
-#@ codestyling-localization
-#: codestyling-localization.php:1136
+#: ../crayon_settings_wp.class.php:790
+msgid "The result of innumerable hours of hard work over many months. It's an ongoing project, keep me motivated!"
+msgstr "Nesuskaičiuojamo darbo valandų kiekio ir labai sunkaus darbo vaisius. Tai tebevykstantis projektas, išlaikykite mano motyvaciją!"
+
+# @ crayon-syntax-highlighter
+#: ../crayon_settings_wp.class.php:806
+msgid "Donate"
+msgstr "Paaukokite"
+
+# @ crayon-syntax-highlighter
+#: ../util/tag-editor/crayon_tag_editor_wp.class.php:57
+#, fuzzy
+msgid "Add Crayon Code"
+msgstr "Crayon Pagalba"
+
+#: ../util/tag-editor/crayon_tag_editor_wp.class.php:58
+msgid "Edit Crayon Code"
+msgstr ""
+
+#: ../util/tag-editor/crayon_tag_editor_wp.class.php:59
+msgid "Add"
+msgstr ""
+
+#: ../util/tag-editor/crayon_tag_editor_wp.class.php:60
+msgid "Save"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../util/tag-editor/crayon_te_content.php:65
+#, fuzzy
+msgid "Title"
+msgstr "Rinkmenos"
+
+#: ../util/tag-editor/crayon_te_content.php:67
+msgid "A short description"
+msgstr ""
+
+#: ../util/tag-editor/crayon_te_content.php:70
+msgid "Inline"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../util/tag-editor/crayon_te_content.php:75
+#, fuzzy
+msgid "Language"
+msgstr "Kalbos"
+
+#: ../util/tag-editor/crayon_te_content.php:78
+msgid "Marked Lines"
+msgstr ""
+
+#: ../util/tag-editor/crayon_te_content.php:79
+msgid "(e.g. 1,2,3-5)"
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../util/tag-editor/crayon_te_content.php:82
+#, fuzzy
+msgid "Disable Highlighting"
+msgstr "Išjungti animaciją"
+
+# @ crayon-syntax-highlighter
+#: ../util/tag-editor/crayon_te_content.php:87
+#, fuzzy
+msgid "Clear"
+msgstr "Išvalyti Dabar"
+
+#: ../util/tag-editor/crayon_te_content.php:88
+msgid "Paste your code here, or type it in manually."
+msgstr ""
+
+#: ../util/tag-editor/crayon_te_content.php:91
+msgid "URL"
+msgstr ""
+
+#: ../util/tag-editor/crayon_te_content.php:93
+msgid "Relative local path or absolute URL"
+msgstr ""
+
+#: ../util/tag-editor/crayon_te_content.php:96
+msgid "If the URL fails to load, the code above will be shown instead. If no code exists, an error is shown."
+msgstr ""
+
+#: ../util/tag-editor/crayon_te_content.php:98
 #, php-format
-msgid "You are about to delete <strong>%s</strong> from \"<strong>%s</strong>\" permanently.<br/>Are you sure you wish to delete these files?"
-msgstr "Jūs ketinate negrįžtamai ištrinti <strong>%s</strong> iš \"<strong>%s</strong>\".<br/> Ar Jūs esate įsitikinęs, jog tikrai norite ištrinti šias rinkmenas?"
+msgid "If a relative local path is given it will be appended to %s - which is defined in %sCrayon &gt; Settings &gt; Files%s."
+msgstr ""
 
-#@ codestyling-localization
-#: codestyling-localization.php:320
-msgid "You do not have permission to manage translation files."
-msgstr "Jūs neturite leidimo tvarkyti vertimo rinkmenų."
+#: ../util/tag-editor/crayon_te_content.php:117
+msgid "Change the following settings to override their global values."
+msgstr ""
 
-#@ codestyling-localization
-#: codestyling-localization.php:1752
-msgid "You do not have the permission to choose the translation file directory<br/>Please upload at least one language file (*.mo|*.po) or an empty template file (*.pot) at the appropriated folder using FTP."
-msgstr "Jūs neturite leidimo pasirinkti vertimo rinkmenos katalogo.<br/> Įkelkite bent vieną kalbos rinkmeną (*. mo | *. po) arba tuščią šablono rinkmeną(*. pot) į reikiamą katalogą naudojančią FTP duomenų saugyklą."
+#: ../util/tag-editor/crayon_te_content.php:119
+msgid "Only changes (shown yellow) are applied."
+msgstr ""
 
-#@ codestyling-localization
-#: codestyling-localization.php:1443
+#: ../util/tag-editor/crayon_te_content.php:121
 #, php-format
-msgid "You do not have the permission to create the file '%s'."
-msgstr "Jūs neturite leidimo rinkmenai '%s' kurti."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1474
-#: codestyling-localization.php:1475
-#, php-format
-msgid "You do not have the permission to delete the file '%s'."
-msgstr "Jūs neturite leidimo rinkmenai '%s' ištrinti."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1572
-#, php-format
-msgid "You do not have the permission to modify the file rights for a not existing file '%s'."
-msgstr "Jūs neturite leidimo keisti neegzistuojančios rinkmenos  '%s' teisių."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1552
-#: codestyling-localization.php:1657
-#: codestyling-localization.php:1672
-#, php-format
-msgid "You do not have the permission to read the file '%s'."
-msgstr "Jūs neturite leidimo rinkmenos '%s' skaitymui."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1546
-#: codestyling-localization.php:1644
-#: codestyling-localization.php:1712
-#, php-format
-msgid "You do not have the permission to write to the file '%s'."
-msgstr "Jūs neturite leidimo rinkmenos '%s' rašymui."
-
-#@ codestyling-localization
-#: codestyling-localization.php:348
-#: codestyling-localization.php:398
-#: codestyling-localization.php:580
-#: codestyling-localization.php:669
-#: codestyling-localization.php:828
-#: codestyling-localization.php:869
-#: codestyling-localization.php:1896
-#: codestyling-localization.php:1897
-msgid "activated"
-msgstr "suaktyvintas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:135
-msgid "actual"
-msgstr "dabartinis"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1952
-msgid "by"
-msgstr "pagal"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2174
-msgid "close"
-msgstr "užverti"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1125
-msgid "create po-file"
-msgstr "sukurti .po rinkmeną"
-
-#@ codestyling-localization
-#: codestyling-localization.php:398
-#: codestyling-localization.php:669
-#: codestyling-localization.php:828
-#: codestyling-localization.php:869
-msgid "deactivated"
-msgstr "deaktyvuotas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1904
-msgid "defined by constant"
-msgstr "apibrėžtas konstanta"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1137
-msgid "delete files"
-msgstr "ištrinti rinkmenas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2423
-#: codestyling-localization.php:2448
-#: codestyling-localization.php:2465
-msgid "finished"
-msgstr "baigta"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2075
-msgid "generate mo-file"
-msgstr "generuoti .mo rinkmeną"
-
-#@ codestyling-localization
-#: codestyling-localization.php:370
-#: codestyling-localization.php:495
-#: codestyling-localization.php:510
-#: codestyling-localization.php:521
-#: codestyling-localization.php:536
-#: codestyling-localization.php:636
-#: codestyling-localization.php:734
-#: codestyling-localization.php:849
-#: codestyling-localization.php:893
-#: codestyling-localization.php:1460
-#: codestyling-localization.php:1541
-#: codestyling-localization.php:1580
-#: codestyling-localization.php:1719
-#: includes/class-translationfile.php:789
-msgid "m/d/Y H:i:s"
-msgstr "m/d/Y H:i:s"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2125
-#: codestyling-localization.php:2140
-msgid "non case-sensitive"
-msgstr "nesvarbu didžiosios ar mažosios raidės"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1977
-#: codestyling-localization.php:1998
-msgid "or create the missing directory using FTP Access as:"
-msgstr "arba sukurti trūkstamą katalogą naudojant FTP failų saugyklos Prieigą:"
-
-#@ codestyling-localization
-#: codestyling-localization.php:135
-msgid "required"
-msgstr "privalomas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1234
-msgid "scan now"
-msgstr "peržvelgti dabar"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2156
-msgid "scroll to top"
-msgstr "slinkti į viršų"
-
-#@ codestyling-localization
-#: codestyling-localization.php:3043
-#: codestyling-localization.php:3046
-#: codestyling-localization.php:3086
-msgid "translate with Google API"
-msgstr "išversti su Google API"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1974
-msgid "try to create the WordPress language directory"
-msgstr "pamėginkite sukurti WordPress kalbos katalogą"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2063
-#: codestyling-localization.php:2076
-#: includes/class-translationfile.php:789
-msgid "unknown"
-msgstr "nežinomas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:3073
-#: codestyling-localization.php:3090
-msgid "« Save & Previous"
-msgstr "« Išsaugoti ir Ankstesnis"
-
-#@ codestyling-localization
-#: codestyling-localization.php:571
-msgid "μ Plugin"
-msgstr "μ Papildinys"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1848
-msgid "μ Plugins"
-msgstr "μ Papildiniai"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2076
-msgid "last written:"
-msgstr "paskutinį kartą parašyta:"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2080
-msgid "Total"
-msgstr "Iš viso"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2081
-msgid "Plural"
-msgstr "Daugiareikšmis"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2082
-#: codestyling-localization.php:2693
-msgid "Context"
-msgstr "Kontekstas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2083
-msgid "Not translated"
-msgstr "Neišversta"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2084
-msgid "Comments"
-msgstr "Komentarai"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2085
-#: codestyling-localization.php:2675
-msgid "Code Hint"
-msgstr "Programos Kodo Patarimas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2674
-msgid "Comment"
-msgstr "Komentaras"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2068
-msgid "<b>Hint:</b> The extended feature for textdomain separation shows at dropdown box <i>Textdomain</i> the pre-selected primary textdomain."
-msgstr "<b>Patarimas:</b> Išplėstinė ypatybė teksto adreso atskyrimui rodoma išskleidžiamajame langelyje <i>Textdomain</i> parinktas pirminis teksto adresas."
-
-#@ codestyling-localization
-#: codestyling-localization.php:2069
-msgid "All other additional contained textdomains occur at the source but will not be used, if not explicitely supported by this component!"
-msgstr "Visi kiti papildomi pateikti teksto adresai veikia pirminėje reikšmėje, bet nebus naudojami, jeigu nebus aiškiai palaikomi šio komponento!"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2070
-msgid "Please contact the author, if some of the non primary textdomain based phrases will not show up translated at the required position!"
-msgstr "Jeigu kuri nors iš nepirminių teksto adresų frazių neatsiras reikiamoje vietoje, prašome susisiekti su autoriumi!"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2071
-msgid "The Textdomain <i><b>default</b></i> always stands for the WordPress main language file, this could be either intentionally or accidentally!"
-msgstr "Teksto adresas <b><i>default</i></b> visuomet rodomas pagal pirminę WordPress kalbos rinkmeną. Tai gali nutikti ir nustatant tikslingai ir netyčia!"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2074
-msgid "Textdomain:"
-msgstr "Teksto adresas:"
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:4
-msgctxt "pcre"
-msgid "Component"
-msgstr "Komponentas"
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:5
-msgctxt "pcre"
-msgid "Example"
-msgstr "Pavyzdys"
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:6
-msgctxt "pcre"
-msgid "Description"
-msgstr "Aprašas"
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:12
-#: includes/js-help-perlreg.php:17
-#: includes/js-help-perlreg.php:22
-#: includes/js-help-perlreg.php:27
-#: includes/js-help-perlreg.php:32
-#: includes/js-help-perlreg.php:37
-#: includes/js-help-perlreg.php:42
-#: includes/js-help-perlreg.php:47
-#: includes/js-help-perlreg.php:52
-#: includes/js-help-perlreg.php:112
-#: includes/js-help-perlreg.php:117
-#: includes/js-help-perlreg.php:122
-#: includes/js-help-perlreg.php:127
-msgctxt "pcre"
-msgid "out"
-msgstr "išvestis"
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:13
-msgctxt "pcre"
-msgid "matches \"out\", but also \"timeout\", \"outbreak\", \"Route\" and \"gouty\"."
-msgstr "atitinka \"out\", taip pat \"timeout\", \"outbreak\", \"Route\" ir \"gouty\"."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:18
-msgctxt "pcre"
-msgid "matches \"out\" at start of string like \"out\", \"outbreak\", as long as this are the first words at string."
-msgstr "atitinka \"out\" pradžioje eilutės, pavyzdžiui \"out\", \"outbreak\", tol, kol tai yra pirmieji žodžiai eilutėje."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:23
-msgctxt "pcre"
-msgid "matches \"out\" at end of string like \"out\", \"timeout\" and \"burnout\" as long as this are the last words at string."
-msgstr "atitinka \"out\" eilutės pabaigoje, kaip \"out\", \"timeout\" ir \"burnout\" tol, kol tai yra paskutinieji eilutės žodžiai."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:28
-msgctxt "pcre"
-msgid "matches \"ou\", \"out\", \"outt\" and \"outttttt\", the char prior to asterisk can be repeated 0 to unlimited times."
-msgstr "atitinka \"ou\", \"out\", \"outt\" ir \"outttttt\", asterisk ženklų pirmenybė gali būti kartojama nuo 0 iki begalybės kartų."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:33
-msgctxt "pcre"
-msgid "matches \"outt\" and \"outttt\", the char prior to plus char have to be repeated at least one time or more often."
-msgstr "atitinka  \"outt\" ir \"outttt\", ženklų pirmenybė prieš pridėtinius ženklus gali būti kartojama bent vieną kartą arba dažniau."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:38
-msgctxt "pcre"
-msgid "matches \"rout\" and \"gout\", any char can be placed at this position."
-msgstr "atitinka \"rout\" ir \"gout\", šioje vietoje gali būti įrašytas bet koks ženklas."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:43
-msgctxt "pcre"
-msgid "matches \"timeout\" and \"Fallout\", any char sequence at this position. Is a combination of any char and 1 but upto many times."
-msgstr "atitinka \"timeout\" ir \"Fallout\", bet kokia ženklų seka šioje vietoje. Bet kokių ženklų derinys gali būti naudojamas daug kartų."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:48
-msgctxt "pcre"
-msgid "matches \"out\" as single word. \\b means word break."
-msgstr "atitinka \"out\", kaip vienintėlis žodis. \\b suprantamas kaip žodžio skirtukas."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:53
-msgctxt "pcre"
-msgid "matches \"out\" only inside words, like \"Route\" or \"gouty\". \\B means not word break."
-msgstr "atitinka \"out\" tik vidinėse žodžių dalyse, kaip \"Route\" arba \"gouty\". \\B nereiškia žodžio skirtuko."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:58
-msgctxt "pcre"
-msgid "matches any number. \\d means a numerical digit (0 to 9)"
-msgstr "atitinka bet kokį skaičių.  \\d nurodo skaitinę reikšmę (nuo 0 iki 9) "
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:63
-msgctxt "pcre"
-msgid "matches \"-out\" at \"3-out\", any non number."
-msgstr "atitinka \"-out\" prie \"3-out\", bet koks ne skaičius."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:68
-msgctxt "pcre"
-msgid "matches form feed char."
-msgstr "atitinka perdavimo formos simbolį."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:73
-msgctxt "pcre"
-msgid "matches line feed char."
-msgstr "atitinka eilutės perdavimo simoblį."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:78
-msgctxt "pcre"
-msgid "matches carriage return char."
-msgstr "atitinka grįžimo į eilutės pradžią simbolį."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:83
-msgctxt "pcre"
-msgid "matches tabulator char."
-msgstr "atitinka tabuliatoriaus simbolį."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:88
-msgctxt "pcre"
-msgid "matches vertical tabulator char."
-msgstr "atitinka vertikalaus tabuliatoriaus simbolį."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:93
-msgctxt "pcre"
-msgid "matches any kind of whitespace and space char."
-msgstr "atitinka visus tarpų ir tuščios vietos simbolius."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:98
-msgctxt "pcre"
-msgid "matches any char, that is not a whitespace char."
-msgstr "atitinka bet kurį simbolį, kuris nėra tarpo simbolis."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:103
-msgctxt "pcre"
-msgid "matches any alphanumerical char and underscore (typical for programming syntax)."
-msgstr "atitinka bet kurį skaitinį arba raidinį ženklą ir pabraukimo brūkšnį (tipiška progravimo sintaksei)."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:108
-msgctxt "pcre"
-msgid "matches any char, that is not alphanumerical char and underscore (typical for illegal char detection at programming)."
-msgstr "atitinka bet kurį simbolį, kuris neturi skaitinės arba raidinės reikšmės ir nėra pabraukimo brūkšnys."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:113
-msgctxt "pcre"
-msgid "matches \"out\" and remembers matches internally. Upto 9 brackets are allowed per expression."
-msgstr "atitinka \"out\" ir įsimena atitikimus vidinėje atmintyje. Reiškinyje leidžiami ne daugiau nei 9 suskliaudimai."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:118
-msgctxt "pcre"
-msgid "matches \"aus\" as often it is contained at string. The match positions will be stored internally as array."
-msgstr "atitinka \"aus\" visuomet, kai tik jis egzistuoja eilutėje. Atitinkimo pozicijos bus laikomos viduje kaip masyvas."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:123
-msgctxt "pcre"
-msgid "matches \"out\", \"Out\" and \"OUT\", not case-sensitive match."
-msgstr "atitinka \"out\", \"Out\" ir \"OUT\", nesvarbu didžiosios ar mažosios raidės."
-
-#@ codestyling-localization
-#: includes/js-help-perlreg.php:128
-msgctxt "pcre"
-msgid "matches \"out\", as ofter occurs (g) and also non case-sensitive."
-msgstr "atitinka \"out\", dėl dažnai pasitaikančio ryšio, taip pat nesvarbu kokios raidės naudojamos - didžiosios ar mažosios."
-
-#@ codestyling-localization
-#: codestyling-localization.php:664
-msgid "Childtheme"
-msgstr "Pošablonis"
-
-#@ codestyling-localization
-#: codestyling-localization.php:671
-msgid "child theme of"
-msgstr "Pošalbonis nuo"
-
-#@ codestyling-localization
-#: codestyling-localization.php:819
-msgid "BuddyPress"
-msgstr "\"BuddyPress\""
-
-#@ codestyling-localization
-#: codestyling-localization.php:864
-msgid "bbPress"
-msgstr "\"bbPress\""
-
-#@ codestyling-localization
-#: codestyling-localization.php:1993
-msgid "The original bbPress component doesn't contain a language directory."
-msgstr "Originalus bbPress komponentas savyje neturi kalbos katalogo."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1995
-msgid "try to create the bbPress language directory"
-msgstr "pamėginkite sukurti bbPress kalbos katalogą"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1732
-msgid "You do not have the permission to create a new Language File Path.<br/>Please create the appropriated path using your FTP access."
-msgstr "Jūs neturite leidimo naujos Kalbos Rinkmenos Adreso kūrimui. <br/>Sukurkite naują priskirtą kelią, naudodamiesi FTP duomenų saugyklos prieiga."
-
-#@ codestyling-localization
-#: codestyling-localization.php:693
-msgid "<strong>Loading Issue: </strong>Author is using <em>load_textdomain</em> instead of <em>load_theme_textdomain</em> or <em>load_child_theme_textdomain</em> function. This may break behavior of WordPress, because some filters and actions won't be executed anymore. Please contact the Author about that."
-msgstr "<strong>Įkėlimo problema: </strong>Autorius naudoja <em>load_textdomain</em> vietoje <em>load_theme_textdomain</em> arba <em>load_child_theme_textdomain</em> funkcijos. Tai gali sutrikdyti WordPress darbą, kadangi kai kurie filtrai ir veiksmai nebegalės būti panaudoti/atlikti dar kartą. Dėl šio neskalndumo, susisiekite su autoriumi."
-
-#@ codestyling-localization
-#: codestyling-localization.php:744
-#, php-format
-msgid "<strong>Naming Issue: </strong>Author uses unsupported language file naming convention! Instead of example <em>de_DE.po</em> the non theme standard version <em>%s</em> has been used. If you translate this Theme, only renamed language files will be working!"
-msgstr "<strong>Įvardijimo problema: </strong>Autorius naudoja nesuprantamą kalbos rinkmenos sutartinį žymėjimą! Vietoje pavyzdžio <em>de_DE.po</em> buvo panaudota standartinė išskirtinai neapipavidalinta versija <em>%s</em>. Jeigu mėginate išversti šio apipavidalinimo tekstą, tik pervadintos kalbos rinkmenos bus veiksnios."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1858
-#: codestyling-localization.php:1924
-msgid "Compatibility"
-msgstr "Suderinamumas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:431
-msgid "<strong>Loading Issue: </strong>Author is using <em>load_textdomain</em> instead of <em>load_plugin_textdomain</em> function. This may break behavior of WordPress, because some filters and actions won't be executed anymore. Please contact the Author about that."
-msgstr "<strong>Įkėlimo problema: </strong>Autorius naudoja <em>load_textdomain</em> vietoje  <em>load_plugin_textdomain</em> funkcijos. Tai gali sutrikdyti WordPress darbą, kadangi kai kurie filtrai ir veiksmai nebegalės būti panaudoti/atlikti dar kartą. Dėl šio neskalndumo, susisiekite su autoriumi."
-
-#@ codestyling-localization
-#: codestyling-localization.php:805
-msgid "<strong>WooThemes Issue: </strong>The Author is known for not supporting a translatable backend. Please expect only translations for frontend or contact the Author for support!"
-msgstr "<strong>Woo Apipavidalinimo problema:</strong> Autorius nesuteikia vidinės pusės vertinių galimybės. Palaikomi tik išorinės pusės (sąsajos) vertimai. Jeigu reikalinga pagalba, susisiekite su autoriumi."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1865
-msgid "You like it?"
-msgstr "Patinka šis papildinys?"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1938
-msgid "Memory Warning"
-msgstr "Įspėjimas dėl Atminties būsenos"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1939
-msgid "Since WordPress 3.x version it may require at least <strong>58MB</strong> PHP memory_limit! The reason is still unclear but it doesn't freeze anymore. Instead a error message will be shown and the scanning process aborts while reaching your limits."
-msgstr "Nuo WordPress 3.x versijos reikalinga minimum <strong>58 megabaitai</strong> PHP atminties. To priežastis nėra galutinai aiški, tačiau veikimo sutrikimų nebepastebėta. Vietoje klaidos žinutės, peržiūros procesas bus nutrauktas, kuomet atminties limitas pasiektas."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1945
-msgid "Language Folder"
-msgstr "Kalbos Aplankas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1946
-msgid "The translation file folder is ambiguous, please select by clicking the appropriated language file folder or ask the Author about!"
-msgstr "Vertimo rinkmenos aplankas neturi vienos aiškios prasmės. Spragteldami pasirinkite tinkamą kalbos rinkmenos aplanką, arba pagalbos kreipkitės į Autorių!"
-
-#@ codestyling-localization
-#: codestyling-localization.php:3065
-#: codestyling-localization.php:3080
-msgid "Access Keys:"
-msgstr "Prieigos Raktai:"
-
-#@ codestyling-localization
-#. translators: plugin header field 'Name'
-#: codestyling-localization.php:0
-msgid "CodeStyling Localization"
-msgstr "CodeStyling Localization"
-
-#@ codestyling-localization
-#. translators: plugin header field 'PluginURI'
-#: codestyling-localization.php:0
-msgid "http://www.code-styling.de/english/development/wordpress-plugin-codestyling-localization-en"
-msgstr "http://www.code-styling.de/english/development/wordpress-plugin-codestyling-localization-en"
-
-#@ codestyling-localization
-#. translators: plugin header field 'Description'
-#: codestyling-localization.php:0
-msgid "Now you can freely manage, edit and modify your WordPress language translation files (*.po / *.mo) as usual. You won't need any additional editor have been installed. Also supports WPMU plugins, if WPMU versions has been detected."
-msgstr "Nuo šiol Jūs galite nevaržomai tvarkyti, redaguoti ir keisti savo WordPress kalbos vertimų rinkmenas  (*.po / *.mo), kaip esate įpratęs. Nereikalingas jokio kito redaktoriaus įdiegimas. Taip pat palaikomi WPMU papildiniai, jeigu įmanoma aptikti reikiamą WPMU versiją."
-
-#@ codestyling-localization
-#. translators: plugin header field 'Author'
-#: codestyling-localization.php:0
-msgid "Heiko Rabe"
-msgstr "Heiko Rabe"
-
-#@ codestyling-localization
-#. translators: plugin header field 'AuthorURI'
-#: codestyling-localization.php:0
-msgid "http://www.code-styling.de/english/"
-msgstr "http://www.code-styling.de/english/"
-
-#@ codestyling-localization
-#: codestyling-localization.php:473
-msgid "<strong>Full Encryped PHP Code: </strong>This plugin consists out of encryped code will be <strong>eval</strong>'d at runtime! It can't be checked against exploitable code pieces. That's why it will become potential target of hidden intrusion."
-msgstr "<strong>Pilnai užšifruotas PHP kodas:</strong> Šis papildinys susideda iš užšifruoto kodo <strong>apskaičiuoto</strong> paleidimo metu! Jis negali būti dar kartą sutikrintas su šiuo metu veikiančiais šifro fragmentais. Štai kodėl tai gali tapti potencialiu slapto įsibrovimo taikiniu."
-
-#@ codestyling-localization
-#: codestyling-localization.php:478
-msgid "<strong>Textdomain definition: </strong>This plugin provides a textdomain definition at plugin header fields but seems not to load any translation file. If it doesn't show your translation, please contact the plugin Author."
-msgstr "<strong>Teksto adreso apibrėžimas:</strong> Šis papildinys suteikia galimybę aprašyti teksto adresą papildinio puslapinės antraštės laukeliuose, bet neįkelia jokios vertimo rinkmenos. Jeigu Jums reikalingas vertimas nerodomas, susisiekite su papildinio Autoriumi."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1861
-#: codestyling-localization.php:1931
-msgid "Security Risk"
-msgstr "Saugumo Pavojus"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2086
-msgid "Trailing Space"
-msgstr "Galinis Tarpas"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1605
-msgid "Your translation file doesn't support the <em>multiple textdomains in one translation file</em> extension.<br/>Please re-scan the related source files at the overview page to enable this feature."
-msgstr "Jūsų vertimo rinkmena nepalaiko <em>daugybės teksto adresų vienoje vertimų rinkmenoje</em> plėtinio. <br/> Kad suaktyvinti šią ypatybę, iš naujo peržvelkite susijusias pirmines rinkmenas apžvalgos puslapyje."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1831
-msgid "enable low memory mode"
-msgstr "suaktyvinti silpnos atminties būseną"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1832
-msgid "If your Installation is running under low remaining memory conditions, you will face the memory limit error during scan process or opening catalog content. If you hitting your limit, you can enable this special mode. This will try to perform the actions in a slightly different way but that will lead to a considerably slower response times but nevertheless gives no warranty, that it will solve your memory related problems at all cases."
-msgstr "Jeigu Jūsų Įdiegimo darbai vyksta silpnos atminties būsenoje, peržvelgimo arba katalogo atvėrimo procesų metu, pasitaikys atminties limito klaida. Pasiekęs šią ribą, galite suaktyvinti specialų rėžimą. Bus bandoma atlikti reikiamus veiksmus kitokiais būdais, tačiau tai nulems gerokai prastesnius reakcijos laikus. Bet kuriu atveju, garantijos, jog tai išspręs su serverio atmintimi susijusias problemas nėra."
-
-#@ codestyling-localization
-#: codestyling-localization.php:2061
-msgid "back to overview page &raquo;"
-msgstr "grįžti į apžvalgos puslapį &raquo;"
-
-#@ codestyling-localization
-#: codestyling-localization.php:2453
-#, php-format
-msgid "You are trying to rescan files which expands above your PHP Memory Limit at %s MB during the analysis.<br/>Please enable the <em>low memory mode</em> for scanning this component."
-msgstr "Jūs bandote iš naujo peržiūrėti rinkmenas, kurios viršija jūsų PHP Atminties Limitą %s megabaitais, analizės metu<br/> Suaktyvinkite <em>silpnos atminties rėžimą</em>, kad galėtume peržiūrėti šį komponentą."
-
-#@ codestyling-localization
-#: codestyling-localization.php:2614
-#, php-format
-msgid "You are trying to open a translation catalog which expands above your PHP Memory Limit at %s MB during read.<br/>Please enable the <em>low memory mode</em> for opening this components catalog."
-msgstr "Jūs bandote atverti vertimo katalogą, kuris viršija Jūsų PHP Atminties Limitą  %s megabaitais nuskaitymo metu. <br/>Suaktyvinkite  <em>silpnos atminties rėžimą</em>, kad galėtume peržiūrėti šio katalogo komponentus."
-
-#@ codestyling-localization
-#: codestyling-localization.php:506
-#: codestyling-localization.php:532
-msgid "<strong>Textdomain definition: </strong>There are problems to find the used textdomain. It has been taken from existing translation files. If it doesn't work with your install, please contact the Author of this plugin."
-msgstr "<strong>Tekstinio adreso aprašymas:</strong> Atsirado problemų, ieškant panaudoto teksto adreso. Panaudota informacija iš jau sukurtų vertimų rinkmenų. Jeigu kyla problemų diegiant, susisiekite su šio papildinio Autoriumi."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1705
-msgid "You are trying to create an empty mo-file without any translations. This is not possible, please translate at least one entry."
-msgstr "Jūs bandote sukurti tuščią .mo rinkmeną be jokių vertimų. Tai neįmanoma! Išverskite bent vieną elementą."
-
-#@ codestyling-localization
-#: codestyling-localization.php:1836
-msgid "Attention:"
-msgstr "Dėmesio:"
-
-#@ codestyling-localization
-#: codestyling-localization.php:1836
-msgid "You have a running version of WP e-Commerce and it has been programmed to deactivate the javascript library prototype.js at each WordPress backend page! I did a work arround that, in case of issues read my article: <a href=\"http://www.code-styling.de/english/wp-e-commerce-breaks-intentionally-other-plugins-or-themes\">WP e-Commerce breaks intentionally other Plugins or Themes</a>"
-msgstr "Dabar aktyviai veikianti WordPress e-Komercijos versija sukurta taip, jog kiekvieno WordPress puslapio vidinėje pusėje JavaScript prototipų biblioteka yra deaktyvuojama! Autorius tai padarė, kad būtų išvengtos įvairiausios problemos. Plačiau skaitykite: <a href=\"http://www.code-styling.de/english/wp-e-commerce-breaks-intentionally-other-plugins-or-themes\">WordPress e-Komercijos sprendimas specialiai nutraukia kitų papildinių ir apipavidalinimų veiklą</a>"
-
-#@ codestyling-localization
-#. translators: plugin header field 'Version'
-#: codestyling-localization.php:0
-msgid "1.99.14"
-msgstr "1.99.14"
-
-#@ codestyling-localization
-#: codestyling-localization.php:699
-msgid "<strong>Textdomain Naming Issue: </strong>Author uses a variable to load the textdomain. It will be assumed to be equal to theme name now."
-msgstr "<strong>Teksto Adreso Įvardijimo problema:</strong> Autorius naudoja kintamają teksto adreso įkrovimui. Tai nuo šiol bus prilygintas apipavidilinimo pavadinimui."
-
-#@ codestyling-localization
-#: codestyling-localization.php:798
-msgid "<strong>Textdomain Naming Issue: </strong>Author uses a variable to define the textdomain constant. It will be assumed to be equal to theme name now."
-msgstr "<strong>Teksto Adreso Įvardijimo problema:</strong> Autorius naudoja kintamają teksto adreso konstantos apibrėžimui. Tai nuo šiol bus prilyginta apipavidilinimo pavadinimui."
+msgid "Future changes to the global settings under %sCrayon &gt; Settings%s won't affect overridden settings."
+msgstr ""
+
+# @ crayon-syntax-highlighter
+#: ../util/theme-editor/editor.php:16
+msgid "Back To Settings"
+msgstr "Grįžti Į Nuostatas"
 

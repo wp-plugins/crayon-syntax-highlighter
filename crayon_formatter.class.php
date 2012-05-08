@@ -520,7 +520,7 @@ class CrayonFormatter {
 		$code = self::clean_code($code);
 // 		var_dump($code);
 // 		var_dump($class);
-		echo "\n"; 
+// 		echo "\n";
 		$code = preg_replace('|^|m', '<span class="'.$class.'">', $code);
 		$code = preg_replace('|$|m', '</span>', $code);
 		return $code;

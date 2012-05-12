@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: trunk
+Stable tag: 1.9.4
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -117,6 +117,8 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
+* <a href="http://bit51.com/add-code-to-your-wordpress-posts-with-crayon-syntax-highlighter/" target="_blank">Add Code To Your WordPress Posts With Crayon Syntax Highlighter</a>
+* <a href="http://www.wpsquare.com/syntax-highlighter-wordpress-plugins/" target="_blank">15 Best Syntax Highlighter WordPress Plugins</a>
 * <a href="http://www.doitwithwp.com/displaying-code-in-wordpress-with-crayon-syntax-highlighter/" target="_blank">Displaying Code in WordPress with Crayon </a>
 * <a href="http://blog.boxedpages.net/2012/03/15/abap-syntaxhighlighting-in-wordpress/" target="_blank">ABAP Syntax Highlighting in WordPress (German)</a>
 * <a href="http://jstips.org/2012/04/23/crayon-syntax-highlighter-plugin/" target="_blank">Crayon Syntax Highlighter plugin</a>
@@ -183,6 +185,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.9.5 =
+* Fixed a bug that prevent Crayons from being captured internally, only affected certain environments
 
 = 1.9.4 =
 * Added /util/external_use.php for an example of how to use Crayon in other PHP environments.

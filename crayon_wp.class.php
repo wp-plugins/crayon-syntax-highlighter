@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.4
+Version: 1.9.5
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -76,7 +76,7 @@ class CrayonWP {
 	
 	const REGEX_ID = '#(?<!\$)\[\s*crayon#mi';
 	//const REGEX_WITH_ID = '#(\[\s*crayon-\w+)\b([^\]]*["\'])(\s*/?\s*\])#mi';
-	const REGEX_WITH_ID = '#\[\s*(crayon-\w+)\b[^\]]*\s*/?\s*\]#mi';
+	const REGEX_WITH_ID = '#\[\s*(crayon-\w+)\b[^\]]*\]#mi';
 	
 	const MODE_NORMAL = 0, MODE_JUST_CODE = 1, MODE_PLAIN_CODE = 2;
 
@@ -89,8 +89,7 @@ class CrayonWP {
 	}
 	
 	public static function regex_with_id($id) {
-		return '#\[\s*(crayon-'.$id.')\b[^\]]*\s*/?\s*\]#msi';
-		//return '#(?<!\$)(?:(?:\[\s*crayon-'.$id.'\b[^\]]*/\s*\])|(?:\[\s*crayon-'.$id.'\b[^\]]*\][\r\n]*?.*?[\r\n]*?\[\s*/\s*crayon\s*\]))(?!\$)#msi';
+		return '#\[\s*(crayon-'.$id.')\b[^\]]*\]#mi';
 	}
 	
 	public static function regex_no_capture() {
@@ -797,12 +796,6 @@ class CrayonWP {
 		return $e;
 	}
 	
-// 	public static function remove_excerpt($e) {
-// 		// Remove Crayon from content if we are displaying an excerpt
-// 		$e = preg_replace(self::REGEX_WITH_ID, '', $e);
-// 		return $e;
-// 	}
-	
 }
 
 // Only if WP is loaded and not in admin
@@ -832,16 +825,11 @@ if (defined('ABSPATH')) {
 			add_filter('comment_text', 'CrayonWP::comment_text', 100);
 		}
 		
-		// We want to allow others to define excerpt length etc later, so low priority
-// 		add_filter('the_excerpt', 'CrayonWP::the_excerpt', 1);
-		
 		// This ensures Crayons are not formatted by WP filters. Other plugins should specify priorities between 1 and 100.
 		add_filter('get_the_excerpt', 'CrayonWP::pre_excerpt', 1);
 		add_filter('the_excerpt', 'CrayonWP::post_excerpt', 100);
 		
-// 		add_filter('get_the_excerpt', 'CrayonWP::the_excerpt', 10);
-		add_action('template_redirect', 'CrayonWP::wp_head');
-		
+		add_action('template_redirect', 'CrayonWP::wp_head');		
 	} else {
 		// For marking a post as containing a Crayon
 		add_action('save_post', 'CrayonWP::save_post', 10, 2);

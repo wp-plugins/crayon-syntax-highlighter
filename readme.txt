@@ -188,6 +188,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.9.5 =
 * Fixed a bug that prevent Crayons from being captured internally, only affected on certain themes
+* Fixed a bug causing backquotes being changed to code within Crayon code
 
 = 1.9.4 =
 * Added /util/external_use.php for an example of how to use Crayon in other PHP environments.

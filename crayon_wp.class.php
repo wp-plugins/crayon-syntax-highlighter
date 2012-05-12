@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.5
+Version: _1.9.5_beta
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -202,11 +202,6 @@ class CrayonWP {
 			$wp_content = preg_replace_callback('#(?<!\$)\[\s*plain\s*\](.*?)\[\s*/\s*plain\s*\]#msi', 'CrayonFormatter::plain_code', $wp_content);
 		}
 		
-		// Convert `` backquote tags into <code></code>, if needed
-		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
-			$wp_content = preg_replace('#(?<!\\\\)`([^`]*)`#msi', '<code>$1</code>', $wp_content);
-		}
-		
 		// Add IDs to the Crayons
 		CrayonLog::debug('capture adding id ' . $wp_id . ' , now has len ' . strlen($wp_content));
 		$wp_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $wp_content);
@@ -311,8 +306,13 @@ class CrayonWP {
 			
 		}
 		
-		$capture['content'] = $wp_content;
+		// Convert `` backquote tags into <code></code>, if needed
+		// XXX Some code may contain `` so must do it after all Crayons are captured
+		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
+			$wp_content = preg_replace('#(?<!\\\\)`([^`]*)`#msi', '<code>$1</code>', $wp_content);
+		}
 		
+		$capture['content'] = $wp_content;
 		return $capture;
 	}
 	

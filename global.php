@@ -5,8 +5,8 @@
 define('CRAYON_DEBUG', FALSE);
 
 // TODO remove once done
-define('CRAYON_TAG_EDITOR', true);
-define('CRAYON_THEME_EDITOR', false);
+define('CRAYON_TAG_EDITOR', TRUE);
+define('CRAYON_THEME_EDITOR', FALSE);
 
 // Constants
 

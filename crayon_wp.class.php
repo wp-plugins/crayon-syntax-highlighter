@@ -474,7 +474,9 @@ class CrayonWP {
 		$post_id = strval($post->ID);
 		
 		if (self::$is_excerpt) {
+			CrayonLog::debug('excerpt');
 			if (CrayonGlobalSettings::val(CrayonSettings::EXCERPT_STRIP)) {
+				CrayonLog::debug('excerpt strip');
 				// Remove Crayon from content if we are displaying an excerpt
 				$the_content = preg_replace(self::REGEX_WITH_ID, '', $the_content);
 			}
@@ -786,13 +788,21 @@ class CrayonWP {
 	}
 	
 	public static function pre_excerpt($e) {
+		CrayonLog::debug('pre_excerpt');
 		self::$is_excerpt = TRUE;
 		return $e;
 	}
 	
 	public static function post_excerpt($e) {
+		CrayonLog::debug('post_excerpt');
 		self::$is_excerpt = FALSE;
 		$e = self::the_content($e);
+		return $e;
+	}
+	
+	public static function post_get_excerpt($e) {
+		CrayonLog::debug('post_get_excerpt');
+		self::$is_excerpt = FALSE;
 		return $e;
 	}
 	
@@ -827,6 +837,7 @@ if (defined('ABSPATH')) {
 		
 		// This ensures Crayons are not formatted by WP filters. Other plugins should specify priorities between 1 and 100.
 		add_filter('get_the_excerpt', 'CrayonWP::pre_excerpt', 1);
+		add_filter('get_the_excerpt', 'CrayonWP::post_get_excerpt', 100);
 		add_filter('the_excerpt', 'CrayonWP::post_excerpt', 100);
 		
 		add_action('template_redirect', 'CrayonWP::wp_head');		

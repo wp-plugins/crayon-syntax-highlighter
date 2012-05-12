@@ -4,7 +4,7 @@ Donate link: http://bit.ly/crayondonate
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 1.9.4
+Stable tag: 1.9.5
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -187,7 +187,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 == Changelog ==
 
 = 1.9.5 =
-* Fixed a bug that prevent Crayons from being captured internally, only affected certain environments
+* Fixed a bug that prevent Crayons from being captured internally, only affected on certain themes
 
 = 1.9.4 =
 * Added /util/external_use.php for an example of how to use Crayon in other PHP environments.

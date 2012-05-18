@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.5
+Version: 1.9.6
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -460,7 +460,7 @@ class CrayonWP {
 	
 	// Add Crayon into the_content
 	public static function the_content($the_content) {
-		CrayonLog::debug('the_content'); 
+		CrayonLog::debug('the_content');
 		
 		// Some themes make redundant queries and don't need extra work...
 		if (strlen($the_content) == 0) {
@@ -783,8 +783,8 @@ class CrayonWP {
 	}
 	
 	public static function wp_load_path() {
-		$wp_root_path = str_replace('wp-content/plugins/' . CRAYON_DIR, '', CRAYON_ROOT_PATH);
-		return $wp_root_path . 'wp-load.php';
+		$wp_root_path = dirname(dirname(dirname(CRAYON_ROOT_PATH)));
+		return $wp_root_path . '/wp-load.php';
 	}
 	
 	public static function pre_excerpt($e) {

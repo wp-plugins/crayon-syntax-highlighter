@@ -292,13 +292,13 @@ class CrayonHighlighter {
 		$lines = array();
 		foreach ($array as $line) {
 			// Check for ranges
-			if (strpos($line, '-')) {
-				$ranges = CrayonUtil::range_str($str);
+			if (strpos($line, '-') !== FALSE) {
+				$ranges = CrayonUtil::range_str($line);
 				$lines = array_merge($lines, $ranges);
 			} else {
 				// Otherwise check the string for a number
-				$line = CrayonUtil::clean_int($line);
-				if ($line !== FALSE) {
+				$line = intval($line);
+				if ($line !== 0) {
 					$lines[] = $line;
 				}
 			}

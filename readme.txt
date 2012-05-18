@@ -129,8 +129,9 @@ A handful of articles from others written about Crayon, thanks guys!
 * http://www.wplover.com/2155/crayon-syntax-highlighter-plugin/
 * http://www.htmlandphp.com/scripts/crayon-syntax-highlighter.html
 
-**Planned Features**
+**Future Development**
 
+* Performance, minimised resources
 * Theme Editor
 
 == Installation ==
@@ -171,7 +172,15 @@ Please see the <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/"
 
 = Why are the controls not working? =
 
-Make sure that jQuery is included in your theme (see Installation).
+Make sure jQuery is included in your theme ONCE and before all its dependents (see Installation).
+
+= Why am I only seeing [crayon-3ffr7fa34a321/]? =
+
+Your theme is being naughty. Find where it prints the content/excerpt on that page in the PHP and make sure to add this line before printing:
+
+$output = apply_filters('the_content', $output);
+
+This ensures that the content can be filtered by plugins, such as Crayon. Otherwise, Crayon detects and creates the code but can't replace those funny looking tags in the content.
 
 = Support =
 
@@ -185,6 +194,10 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.9.6 =
+* Fixed a bug causing wordpress wp_content path customisations to break the tag editor and live preview
+* Fixed a bug with marked lines using ranges
 
 = 1.9.5 =
 * Fixed a bug that prevent Crayons from being captured internally, only affected on certain themes
@@ -597,6 +610,8 @@ Make sure to upgrade to the latest release when possible to ensure you avoid bug
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Chris Wiegman, (http://bit51.com/), USA
+* Sven Meier, (http://www.codesix.net/), Germany
 * Christy Wiggins, (http://www.jinxyisms.com/), USA
 * eSnipe, Inc. (http://esnipe.com/), USA (again!)
 * Aliseya Wright, (http://blog.xoxothemes.com/), USA

@@ -100,7 +100,7 @@ class CrayonWP {
 	 * Adds the actual Crayon instance, should only be called by add_shortcode()
 	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
-	private static function shortcode($atts, $content = NULL, $id = NULL) {
+	public static function shortcode($atts, $content = NULL, $id = NULL) {
 		CrayonLog::debug('shortcode');
 		
 		// Load attributes from shortcode
@@ -161,6 +161,28 @@ class CrayonWP {
 		}
 		
 		return $crayon;
+	}
+	
+	/* For manually highlighting code, useful for other PHP contexts */
+	public static function highlight($code) {
+		$crayon_str = '';
+	
+		$captures = CrayonWP::capture_crayons(0, $code);
+		$captures = $captures['capture'];
+		foreach ($captures as $capture) {
+			$id = $capture['id'];
+			$atts = $capture['atts'];
+			$no_enqueue = array(
+					CrayonSettings::ENQUEUE_THEMES => FALSE,
+					CrayonSettings::ENQUEUE_FONTS => FALSE);
+			$atts = array_merge($atts, $no_enqueue);
+			$content = $capture['code'];
+			$crayon = CrayonWP::shortcode($atts, $content, $id);
+			$crayon_formatted = $crayon->output(TRUE, FALSE);
+			$crayon_str .= $crayon_formatted;
+		}
+	
+		return $crayon_str;
 	}
 	
 	/* Uses the main query */

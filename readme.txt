@@ -195,6 +195,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.9.7 =
+* Fixed a crucial but hard to spot bug causing Crayon code to break by incorrectly handling ignored Crayons
+
 = 1.9.6 =
 * Fixed a bug causing wordpress wp_content path customisations to break the tag editor and live preview
 * Fixed a bug with marked lines using ranges
@@ -610,6 +613,8 @@ Make sure to upgrade to the latest release when possible to ensure you avoid bug
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Oldrich Strachota, (http://www.strachota.net/), Czech Republic
+* Dividend Ninja, (http://dividendninja.com/), Canada
 * Chris Wiegman, (http://bit51.com/), USA
 * Sven Meier, (http://www.codesix.net/), Germany
 * Christy Wiggins, (http://www.jinxyisms.com/), USA

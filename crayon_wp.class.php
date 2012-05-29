@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.6
+Version: 1.9.7
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -205,6 +205,7 @@ class CrayonWP {
 		// Add IDs to the Crayons
 		CrayonLog::debug('capture adding id ' . $wp_id . ' , now has len ' . strlen($wp_content));
 		$wp_content = preg_replace_callback(self::REGEX_ID, 'CrayonWP::add_crayon_id', $wp_content);
+		
 		CrayonLog::debug('capture added id ' . $wp_id . ' : ' . strlen($wp_content));
 		
 		// Only include if a post exists with Crayon tag
@@ -297,9 +298,7 @@ class CrayonWP {
 				$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
 				$code = self::crayon_remove_ignore($contents[$i]);
 				$capture['capture'][$id] = array('post_id'=>$wp_id, 'atts'=>$atts_array, 'code'=>$code);
-				
 				CrayonLog::debug('capture finished for post id ' . $wp_id . ' crayon-id ' . $id . ' atts: ' . count($atts_array) . ' code: ' . strlen($code));
-				
 				$is_inline = isset($atts_array['inline']) && CrayonUtil::str_to_bool($atts_array['inline'], FALSE) ? '-i' : '';
 				$wp_content = str_replace($full_matches[$i], '[crayon-'.$id.$is_inline.'/]', $wp_content);
 			}
@@ -354,6 +353,7 @@ class CrayonWP {
 			}
 			// Capture post Crayons
 			$captures = self::capture_crayons($post->ID, $post->post_content);
+			
 			// XXX Careful not to undo changes by other plugins
 			// XXX Must replace to remove $ for ignored Crayons
 			$post->post_content = $captures['content'];
@@ -378,8 +378,6 @@ class CrayonWP {
 					// Capture comment Crayons, decode their contents if decode not specified
 			        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content, array(CrayonSettings::DECODE => TRUE));
 			        self::$comment_captures[$id_str] = $captures['content'];
-// 			        $comment->comment_content = $captures['content']; // XXX testing!
-// 			        var_dump($comment->comment_content); exit;
 			        if ($captures['has_captured'] === TRUE) {
 			        	$enqueue = TRUE;
 			        	self::$comment_queue[$id_str] = array();
@@ -488,6 +486,7 @@ class CrayonWP {
 		if ( array_key_exists($post_id, self::$post_queue) ) {
 			// XXX We want the plain post content, no formatting
 			$the_content_original = $the_content;
+			
 			// Replacing may cause <p> tags to become disjoint with a <div> inside them, close and reopen them if needed
 			$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
 			// Loop through Crayons
@@ -562,11 +561,7 @@ class CrayonWP {
 	
 	// Remove Crayons from the_excerpt
 	public static function the_excerpt($the_excerpt) {
-// 		var_dump("<i>".htmlentities($the_excerpt)."</i>");
 		CrayonLog::debug('excerpt');
-// 		return $the_excerpt;
-// 		return '_';
-// 		self::$is_excerpt = TRUE;
 		global $post;
 		if (!empty($post->post_excerpt)) {
 			// Use custom excerpt if defined
@@ -575,8 +570,6 @@ class CrayonWP {
 			// Pass wp_trim_excerpt('') to gen from content (and remove [crayons])
 			$the_excerpt = wpautop(wp_trim_excerpt(''));
 		}
-// 		$the_excerpt = wpautop(wp_trim_excerpt(''));
-// 		self::$is_excerpt = FALSE;
 		// XXX Returning "" may cause it to default to full contents...
 		return $the_excerpt . ' ';
 	}
@@ -647,8 +640,6 @@ class CrayonWP {
 		}
 		$ignore_flag_regex = preg_quote($ignore_flag);
 		
-// 		$the_content = str_ireplace(array('$[crayon', 'crayon]$'), array('[crayon', 'crayon]'), $the_content);
-		
 		$the_content = preg_replace('#'.$ignore_flag_regex.'(\s*\[\s*crayon)#msi', '$1', $the_content);
 		$the_content = preg_replace('#(crayon\s*\])\s*\$#msi', '$1', $the_content);
 		
@@ -662,7 +653,7 @@ class CrayonWP {
 			CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
 			self::init_tags_regex();			
 			$the_content = preg_replace('#'.$ignore_flag_regex.'\s*([\[\{])\s*('. self::$alias_regex .')#', '$1$2', $the_content);
-			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\[\{])\s*'.$ignore_flag_regex.'#', '$1$2', $the_content);
+			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\]\}])\s*'.$ignore_flag_regex.'#', '$1$2', $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
 			$the_content = str_ireplace('\\`', '`', $the_content);

@@ -200,6 +200,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 = 1.9.7 =
 * Fixed a crucial but hard to spot bug causing Crayon code to break by incorrectly handling ignored Crayons
 * Added functions to generate Crayons when given Crayon tags in strings like the post content
+* Added width:100%; so CSS float works
 
 = 1.9.6 =
 * Fixed a bug causing wordpress wp_content path customisations to break the tag editor and live preview

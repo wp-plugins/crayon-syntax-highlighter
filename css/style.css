@@ -26,6 +26,7 @@ coloring etc.
     text-align: left;
 }
 
+.crayon-syntax,
 .crayon-syntax .crayon-main,
 .crayon-syntax .crayon-toolbar,
 .crayon-syntax .crayon-info,

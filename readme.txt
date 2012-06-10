@@ -1,6 +1,6 @@
 === Crayon Syntax Highlighter ===
 Contributors: akarmenia
-Donate link: http://bit.ly/crayondonate
+Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.2
@@ -15,7 +15,7 @@ It can highlight from a URL, a local file or Wordpress post text. Crayon makes i
 custom language elements with regular expressions.
 It also supports some neat features like:
 
-* <a href="http://bit.ly/H3xW3D" target="_blank">Tag Editor</a> in both Visual & HTML editors
+* <a href="http://ak.net84.net/projects/crayon-tag-editor/" target="_blank">Tag Editor</a> in both Visual & HTML editors
 * Toggled plain code
 * Toggled line numbers
 * Copy/paste code
@@ -23,12 +23,12 @@ It also supports some neat features like:
 * Remote request caching
 * <a href="http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/" target="_blank">Mixed Language Highlighting</a> in a single Crayon
 * <a href="http://ak.net84.net/projects/mini-tags-in-crayon/" target="_blank">Mini Tags</a> like [php][/php]
-* <a href="http://bit.ly/yFafFL" target="_blank">Inline Tags</a> floating in sentences
+* <a href="http://ak.net84.net/crayon/inline-crayons/" target="_blank">Inline Tags</a> floating in sentences
 * Crayons in comments
 * &#96;Backquotes&#96; become &lt;code&gt;
 * &lt;pre&gt; tag support, option to use <code>setting-value</code> in the class attribute
 * Valid HTML 5 markup
-* <a href="http://bit.ly/H3xW3D" target="_blank">Visual & HTML editor compatible</a> 
+* <a href="http://ak.net84.net/projects/crayon-tag-editor/" target="_blank">Visual & HTML editor compatible</a> 
 * Mobile/touchscreen device detection
 * Mouse event interaction (showing plain code on double click, toolbar on mouseover)
 * Tab sizes
@@ -45,7 +45,7 @@ It also supports some neat features like:
 
 **Links**
 
-* <a href="http://bit.ly/poKNqs" target="_blank">Live Demo</a>
+* <a href="http://aksandbox.webege.com/?p=1" target="_blank">Live Demo</a>
 * <a href="http://ak.net84.net/projects/crayon-syntax-highlighter/" target="_blank">Short How-To</a>
 
 **Contributions**
@@ -55,7 +55,7 @@ There are many ways you can help!
 * Make a Theme and share
 * Add support for your favourite <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">Language</a>
 * Write a post about your pastel experiences and share
-* <a href="http://bit.ly/crayondonate" target="_blank">Donate</a> to the project
+* <a href="https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03" target="_blank">Donate</a> to the project
 
 **Supported Languages**
 
@@ -148,7 +148,7 @@ A handful of articles from others written about Crayon, thanks guys!
 
 = How do I use the Tag Editor? =
 
-The <a href="http://bit.ly/H3xW3D" target="_blank">Tag Editor</a> provides a dialog box to add Crayons easily.
+The <a href="http://ak.net84.net/projects/crayon-tag-editor/" target="_blank">Tag Editor</a> provides a dialog box to add Crayons easily.
 
 = How do I use it manually? =
 
@@ -201,6 +201,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Fixed a crucial but hard to spot bug causing Crayon code to break by incorrectly handling ignored Crayons
 * Added functions to generate Crayons when given Crayon tags in strings like the post content
 * Added width:100%; so CSS float works
+* Removed bit.ly links from this readme
 
 = 1.9.6 =
 * Fixed a bug causing wordpress wp_content path customisations to break the tag editor and live preview
@@ -360,7 +361,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * "Always display scrollbars" now a checkbox
 
 = 1.7.19 =
-* Fixed issue with Crayons failing to load on pages with templates containing The Loop. http://bit.ly/AcWRNY
+* Fixed issue with Crayons failing to load on pages with templates containing The Loop. http://ak.net84.net/crayon/failing-to-load-crayons-on-pages/
 * Objective-C operators improved
 
 = 1.7.18 =
@@ -428,7 +429,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Added namespacing to crayon.js to prevent conflicts
 
 = 1.7.3 =
-* Added Mini Tags and Plain Tags into Crayon. http://bit.ly/rRZuzk
+* Added Mini Tags and Plain Tags into Crayon. http://ak.net84.net/projects/mini-tags-in-crayon/
 * Fixed a bug causing RSS feeds to contain malformed HTML of Crayons, now it shows plain code with correct indentations. Thanks to Артём.
 * Updated help in Settings and http://ak.net84.net/projects/crayon-syntax-highlighter/
 
@@ -439,7 +440,7 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * Renamed Japanese GNU language code from ja_JP to ja.
 
 = 1.7.0 =
-* Added the ability to highlight multiple languages in a single Crayon! http://bit.ly/ukwts2
+* Added the ability to highlight multiple languages in a single Crayon! http://ak.net84.net/projects/mixed-language-highlighting-in-crayon/
 * A bunch of language improvements, a few CSS improvements, etc.
 
 = 1.6.6 =

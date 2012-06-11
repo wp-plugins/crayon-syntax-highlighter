@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: trunk
+Stable tag: 1.9.7
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -196,6 +196,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.9.8 =
+* New API to access Crayon internals
 
 = 1.9.7 =
 * Fixed a crucial but hard to spot bug causing Crayon code to break by incorrectly handling ignored Crayons

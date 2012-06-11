@@ -80,6 +80,12 @@ class CrayonWP {
 	
 	const MODE_NORMAL = 0, MODE_JUST_CODE = 1, MODE_PLAIN_CODE = 2;
 
+	// Public Methods =========================================================
+	
+// 	public static function post_captures() {
+// 		return self::$post_queue;
+// 	}
+	
 	// Methods ================================================================
 
 	private function __construct() {}

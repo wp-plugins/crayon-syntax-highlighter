@@ -72,6 +72,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * C#
 * C++
 * CSS
+* Haskell
 * HTML (XML/XHTML)
 * Lua
 * Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">Devolonter</a>)

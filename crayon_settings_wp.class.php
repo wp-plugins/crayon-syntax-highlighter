@@ -291,12 +291,14 @@ class CrayonSettingsWP {
 		return self::wp_root_path() . 'wp-load.php';
 	}
 
-	public static function admin_init() {		
+	public static function admin_init() {
 		// Load default settings if they don't exist
-
 		self::load_settings();
+		
+		// Update db
+		CrayonWP::update();
+		
 		// General
-
 		// Some of these will the $editor arguments, if TRUE it will alter for use in the Tag Editor 
 		self::add_section(self::GENERAL, crayon__('General'));
 		self::add_field(self::GENERAL, crayon__('Theme'), 'theme');
@@ -310,8 +312,8 @@ class CrayonSettingsWP {
 		self::add_field(self::GENERAL, crayon__('Files'), 'files');
 		self::add_field(self::GENERAL, crayon__('Tag Editor'), 'tag_editor');
 		self::add_field(self::GENERAL, crayon__('Misc'), 'misc');
-		// Debug
 
+		// Debug
 		self::add_section(self::DEBUG, crayon__('Debug'));
 		self::add_field(self::DEBUG, crayon__('Errors'), 'errors');
 		self::add_field(self::DEBUG, crayon__('Log'), 'log');

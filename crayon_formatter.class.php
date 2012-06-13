@@ -24,9 +24,14 @@ class CrayonFormatter {
 	private function __construct() {}
 
 	/* Formats the code using the parsed language elements. */
-	public static function format_code($code, $language, $hl = NULL, $highlight = TRUE) {
+	public static function format_code($code, $language, $hl = NULL) {
 		// Ensure the language is defined
-		if ($language != NULL && $highlight) {
+		
+// 		var_dump("late"); exit;
+		
+// 		var_dump($highlight);
+		
+		if ($language != NULL && $hl->is_highlighted) {
 			/* Perform the replace on the code using the regex, pass the captured matches for
 			 formatting before they are replaced */
 			try {
@@ -442,7 +447,7 @@ class CrayonFormatter {
 
 	// Delimiters =============================================================
 	
-	public static function format_mixed_code($code, $language, $hl, $highlight = TRUE) {
+	public static function format_mixed_code($code, $language, $hl) {
 		self::$curr = $hl;
 		self::$delim_pieces = array();
 		// Remove crayon internal element from INPUT code
@@ -461,7 +466,8 @@ class CrayonFormatter {
 		$internal_code = preg_replace_callback(self::$delim_regex, 'CrayonFormatter::delim_to_internal', $code);
 		
 		// Format with given language
-		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl, $highlight);
+// 		var_dump($hl); exit;
+		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl);
 		
 		// Replace internal elements with delimited pieces
 		$formatted_code = preg_replace_callback('#\{\{crayon-internal:(\d+)\}\}#', 'CrayonFormatter::internal_to_code', $formatted_code);
@@ -479,7 +485,8 @@ class CrayonFormatter {
 			return $matches[0];
 		}
 		$internal = sprintf('{{crayon-internal:%d}}', count(self::$delim_pieces));
-		self::$delim_pieces[] = CrayonFormatter::format_code($matches[0], $lang, TRUE, self::$curr);
+		// TODO fix
+		self::$delim_pieces[] = CrayonFormatter::format_code($matches[0], $lang, self::$curr);
 		return $internal;
 	}
 	

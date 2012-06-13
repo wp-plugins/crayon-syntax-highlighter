@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 1.9.7
+Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -86,6 +86,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * Ruby
 * Scheme (thanks to <a href="https://github.com/harry75369" target="_blank">Harry75369</a>)
 * Shell (Unix)
+* TeX
 * Visual Basic
 * YAML
 * Others will be added when requested
@@ -199,6 +200,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 = 1.9.8 =
 * New API to access Crayon internals
+* Added TeX thanks to http://blog.keyboardplaying.org/2012/06/08/syntax-highlighting-latex/
+* Moved update method into settings page to improve efficiency a bit
 
 = 1.9.7 =
 * Fixed a crucial but hard to spot bug causing Crayon code to break by incorrectly handling ignored Crayons

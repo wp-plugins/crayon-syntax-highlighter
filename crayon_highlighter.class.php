@@ -27,7 +27,7 @@ class CrayonHighlighter {
 	private $is_mixed = FALSE;
 	// Inline code on a single floating line
 	private $is_inline = FALSE;
-	private $is_highlighted = TRUE;
+	public $is_highlighted = TRUE;
 	
 	// Objects
 	// Stores the CrayonLang being used
@@ -175,12 +175,16 @@ class CrayonHighlighter {
 				// Save code so output is plain output is the same
 				$this->code = $code;
 				// Allow mixed if langauge supports it and setting is set
+				
+				// TODO remove
+				$this->is_highlighted = true;
+
 				if (!$this->setting_val(CrayonSettings::MIXED) || !$this->language->mode(CrayonParser::ALLOW_MIXED)) {
 					// Format the code with the generated regex and elements
-					$this->formatted_code = CrayonFormatter::format_code($code, $this->language, $this, $this->is_highlighted);
+					$this->formatted_code = CrayonFormatter::format_code($code, $this->language, $this);
 				} else {
 					// Format the code with Mixed Highlighting
-					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this, $this->is_highlighted);					
+					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this);					
 				}
 			} catch (Exception $e) {
 				$this->error($e->message());
@@ -194,7 +198,7 @@ class CrayonHighlighter {
 	/* Used to format the glue in between code when finding mixed languages */
 	private function format_glue($glue, $highlight = TRUE) {
 		// TODO $highlight
-		return CrayonFormatter::format_code($glue, $this->language, $highlight, $this);
+		return CrayonFormatter::format_code($glue, $this->language, $this, $highlight);
 	}
 
 	/* Sends the code to the formatter for printing. Apart from the getters and setters, this is

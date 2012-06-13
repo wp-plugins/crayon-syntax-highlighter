@@ -202,6 +202,8 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 * New API to access Crayon internals
 * Added TeX thanks to http://blog.keyboardplaying.org/2012/06/08/syntax-highlighting-latex/
 * Moved update method into settings page to improve efficiency a bit
+* Fixed an issue causing HTML spaces to appear in plain code
+* Made sure \r\n was present for all line breaks in plain code
 
 = 1.9.7 =
 * Fixed a crucial but hard to spot bug causing Crayon code to break by incorrectly handling ignored Crayons

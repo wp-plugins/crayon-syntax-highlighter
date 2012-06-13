@@ -26,11 +26,6 @@ class CrayonFormatter {
 	/* Formats the code using the parsed language elements. */
 	public static function format_code($code, $language, $hl = NULL) {
 		// Ensure the language is defined
-		
-// 		var_dump("late"); exit;
-		
-// 		var_dump($highlight);
-		
 		if ($language != NULL && $hl->is_highlighted) {
 			/* Perform the replace on the code using the regex, pass the captured matches for
 			 formatting before they are replaced */
@@ -316,7 +311,7 @@ class CrayonFormatter {
 			$readonly = $touch ? '' : 'readonly';
 			$print_plain = $print_plain_button = '';
 			// TODO remove wrap
-			$print_plain = '<textarea wrap="off" class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
+			$print_plain = '<textarea wrap="off" class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code(), FALSE) . '</textarea>';
 		} else {
 			$print_plain = $plain_settings = $plain_settings = '';
 		}
@@ -466,7 +461,6 @@ class CrayonFormatter {
 		$internal_code = preg_replace_callback(self::$delim_regex, 'CrayonFormatter::delim_to_internal', $code);
 		
 		// Format with given language
-// 		var_dump($hl); exit;
 		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl);
 		
 		// Replace internal elements with delimited pieces
@@ -496,14 +490,17 @@ class CrayonFormatter {
 	
 	// Auxiliary Methods ======================================================
 	/* Prepares code for formatting. */
-	public static function clean_code($code) {
+	public static function clean_code($code, $spaces = TRUE) {
 		if (empty($code)) {
 			return $code;
 		}
 		/* Convert <, > and & characters to entities, as these can appear as HTML tags and entities. */
 		$code = CrayonUtil::htmlspecialchars($code);
-		// Replace 2 spaces with html escaped characters
-		$code = preg_replace('#[ ]{2}#msi', '&nbsp;&nbsp;', $code);
+		if ($spaces) {
+			// Replace 2 spaces with html escaped characters
+			$code = preg_replace('#[ ]{2}#msi', '&nbsp;&nbsp;', $code);
+		}
+		$code = preg_replace('#(\r(?!\n))|((?<!\r)\n)#msi', '\r\n', $code);
 		// Replace tabs with 4 spaces
 		$code = preg_replace('#\t#', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
 		return $code;

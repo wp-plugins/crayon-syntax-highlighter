@@ -3,7 +3,7 @@ Contributors: akarmenia
 Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
-Tested up to: 3.3.2
+Tested up to: 3.4
 Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.

@@ -4,8 +4,12 @@
 
     NAME                TeX
     VERSION             1.9.8
-    COMMENT             (?<!--\\)%.*?$
-    # Make math formulaes appear as Strings
-    MATH:STRING         ((?<!\\)\$\$.*?(?<!\\)\$\$)|((?<!\\)\$.*?(?<!\\)\$)|((?<!\\)\\\[.*?(?<!\\)\\\])
-    STATEMENT           (\\[\w]+)|(\\['`^"~=.$vuH][\w]?)
-    SYMBOL              (?<!\\)(?default)-->
+
+    COMMENT (?<!\\)%.*?$
+
+	# Make math formulaes appear as Strings
+	MATH:STRING ((?<!\\)\$\$.*?(?<!\\)\$\$)|((?<!\\)\$.*?(?<!\\)\$)|((?<!\\)\\\[.*?(?<!\\)\\\])
+	
+	STATEMENT (\\[\w]+)|(\\['`^"~=.$vuH][\w]?)
+	
+	SYMBOL (?<!\\)(?default)

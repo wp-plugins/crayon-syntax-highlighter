@@ -1,6 +1,9 @@
+var CRAYON_DEBUG = false;
+
 if (typeof CrayonTagEditorSettings == 'undefined') {
 	// WP may have already added it
 	CrayonTagEditorSettings = {};
+	CrayonSettings = {};
 }
 
 RegExp.prototype.execAll = function(string) {
@@ -17,8 +20,6 @@ RegExp.prototype.execAll = function(string) {
 	}
 	return matches;
 };
-
-var CRAYON_DEBUG = false;
 
 function console_log(string) {
     if (typeof console != 'undefined' && CRAYON_DEBUG) {

@@ -3,8 +3,8 @@ Contributors: akarmenia
 Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
-Tested up to: 3.4
-Stable tag: 1.9.11
+Tested up to: 3.4.1
+Stable tag: 1.9.12
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -119,7 +119,7 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
-
+* <a href="http://www.trynull.com/2012/06/15/finally-wordpress-code-syntax-highlighting-that-works/" target="_blank">Finally!… WordPress code syntax highlighting that works</a>
 * <a href="http://selfpwnt.com/crayon-syntax-highlighter-and-its-studly-author/" target="_blank">Crayon Syntax Highlighter (and its studly author)</a>
 * <a href="http://bit51.com/add-code-to-your-wordpress-posts-with-crayon-syntax-highlighter/" target="_blank">Add Code To Your WordPress Posts With Crayon Syntax Highlighter</a>
 * <a href="http://www.wpsquare.com/syntax-highlighter-wordpress-plugins/" target="_blank">15 Best Syntax Highlighter WordPress Plugins</a>
@@ -137,6 +137,7 @@ A handful of articles from others written about Crayon, thanks guys!
 
 * Performance, minimised resources
 * Theme Editor
+* Line wrapping
 
 == Installation ==
 
@@ -198,6 +199,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.9.12 =
+* Fixed a bug caused by unescaped HTML elements in the plain code breaking the page markup, reverted to escaped and uses the new sanitisation method. 
 
 = 1.9.11 =
 * Fixed an issue with IE 8 throwing JS errors for setStyleProperty

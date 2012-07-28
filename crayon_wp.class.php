@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.9.12
+Version: 1.10
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -240,8 +240,6 @@ class CrayonWP {
 		// Only include if a post exists with Crayon tag
 		preg_match_all(self::regex(), $wp_content, $matches);
 		
-		// We need to escape ignored Crayons, since they won't be captured
-		$wp_content = self::crayon_remove_ignore($wp_content);
 		CrayonLog::debug('capture ignore for id ' . $wp_id . ' : ' . strlen($capture['content']) . ' vs ' . strlen($wp_content));
 		
 		if ( count($matches[0]) != 0 ) {
@@ -324,6 +322,7 @@ class CrayonWP {
 				}
 				
 				// Add array of atts and content to post queue with key as post ID
+				// XXX If at this point no ID is added we have failed!
 				$id = !empty($open_ids[$i]) ? $open_ids[$i] : $closed_ids[$i];
 				$code = self::crayon_remove_ignore($contents[$i]);
 				$capture['capture'][$id] = array('post_id'=>$wp_id, 'atts'=>$atts_array, 'code'=>$code);
@@ -333,6 +332,10 @@ class CrayonWP {
 			}
 			
 		}
+		
+		// We need to escape ignored Crayons, since they won't be captured
+		// XXX Do this after replacing the Crayon with the shorter ID tag, otherwise $full_matches will be different from $wp_content
+		$wp_content = self::crayon_remove_ignore($wp_content);
 		
 		// Convert `` backquote tags into <code></code>, if needed
 		// XXX Some code may contain `` so must do it after all Crayons are captured
@@ -614,9 +617,10 @@ class CrayonWP {
 		$content = $matches[6];
 		
 		// If we find a crayon=false in the attributes, or a crayon[:_]false in the class, then we should not capture
-		$ignore_regex = '#crayon\s*=\s*(["\'])\s*(false|no|0)\s*\1#msi';
-		if (preg_match($ignore_regex, $atts) !== 0 ||
-				preg_match($ignore_regex, $class) !== 0 ) {
+		$ignore_regex_atts = '#crayon\s*=\s*(["\'])\s*(false|no|0)\s*\1#msi';
+		$ignore_regex_class = '#crayon\s*[:_]\s*(false|no|0)#msi';
+		if (preg_match($ignore_regex_atts, $atts) !== 0 ||
+				preg_match($ignore_regex_class, $class) !== 0 ) {
 			return $matches[0];
 		}
 		
@@ -681,8 +685,9 @@ class CrayonWP {
 		if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG) ||
 			CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
 			self::init_tags_regex();			
-			$the_content = preg_replace('#'.$ignore_flag_regex.'\s*([\[\{])\s*('. self::$alias_regex .')#', '$1$2', $the_content);
-			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\]\}])\s*'.$ignore_flag_regex.'#', '$1$2', $the_content);
+// 			$the_content = preg_replace('#'.$ignore_flag_regex.'\s*([\[\{])\s*('. self::$alias_regex .')#', '$1$2', $the_content);
+// 			$the_content = preg_replace('#('. self::$alias_regex .')\s*([\]\}])\s*'.$ignore_flag_regex.'#', '$1$2', $the_content);
+			$the_content = preg_replace('#'.$ignore_flag_regex.'(\s*[\[\{]\s*('. self::$alias_regex .')[^\]]*[\]\}])#', '$1', $the_content);
 		}
 		if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
 			$the_content = str_ireplace('\\`', '`', $the_content);

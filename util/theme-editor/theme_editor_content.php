@@ -1,8 +1,8 @@
 <?php
 
-$crayon_root_theme_editor = dirname(dirname(dirname(__FILE__)));
-require_once ($crayon_root_theme_editor . '/crayon_wp.class.php');
-require_once (CrayonWP::wp_load_path());
+require_once('../../crayon_wp.class.php');
+crayon_die_if_not_php($_GET['wp_load'], 'wp-load');
+require_once ($_GET['wp_load']);
 
 $theme = CrayonResources::themes()->get_default();
 $editing = false;

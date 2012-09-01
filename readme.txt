@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.10
+Stable tag: 1.10.1
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -74,6 +74,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * C++
 * CSS
 * Delphi/Pascal (thanks to <a href="http://squashbrain.com/" target="_blank">Chris McClenny</a>)
+* Diff (thanks to <a href="http://omniavin.co/post/262" target="_blank">omniavin</a>)
 * Haskell
 * HTML (XML/XHTML)
 * Lua
@@ -122,7 +123,8 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
-* <a href="http://www.trynull.com/2012/06/15/finally-wordpress-code-syntax-highlighting-that-works/" target="_blank">Finally!‚Ä¶ WordPress code syntax highlighting that works</a>
+* <a href="http://www.techbrunch.fr/informations/plugin-wordpress-afficher-code-source/" target="_blank">The ultimate plugin for displaying code in WordPress (French)</a>
+* <a href="http://www.trynull.com/2012/06/15/finally-wordpress-code-syntax-highlighting-that-works/" target="_blank">Finally!‚A WordPress code syntax highlighting that works</a>
 * <a href="http://selfpwnt.com/crayon-syntax-highlighter-and-its-studly-author/" target="_blank">Crayon Syntax Highlighter (and its studly author)</a>
 * <a href="http://bit51.com/add-code-to-your-wordpress-posts-with-crayon-syntax-highlighter/" target="_blank">Add Code To Your WordPress Posts With Crayon Syntax Highlighter</a>
 * <a href="http://www.wpsquare.com/syntax-highlighter-wordpress-plugins/" target="_blank">15 Best Syntax Highlighter WordPress Plugins</a>
@@ -204,6 +206,14 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.10.1 =
+* Added diff language thanks to <a href="http://omniavin.co/post/262" target="_blank">omniavin</a>
+* Fixed CSS rule for plain-wrap
+* Added CSS class and white background to popup window
+* Removed noConflict() that was causing jQuery to fail on scripts that used $
+* Fixed an issue in the German translation causing "%gt;" (should be "&") to be recognised as an argument in printf.
+* The new method for using the wp_load.php path provided through a GET request from Crayon's js to its PHP should allow redefinitions WP directories in wp_config 
 
 = 1.10 =
 * Added Dutch translation thanks to <a href="https://twitter.com/#!/chilionsnoek">@chilionsnoek</a>.

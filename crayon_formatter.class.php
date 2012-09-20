@@ -81,6 +81,15 @@ class CrayonFormatter {
 	public static function print_code($hl, $code, $line_numbers = TRUE, $print = TRUE) {
 		global $CRAYON_VERSION;
 		
+		$before = $hl->setting_val(CrayonSettings::WHITESPACE_BEFORE);
+		if ($before > 0) {
+			$code = str_repeat("\n", $before) . $code;
+		}
+		$after = $hl->setting_val(CrayonSettings::WHITESPACE_AFTER);
+		if ($after > 0) {
+			$code = $code . str_repeat("\n", $after);
+		}
+		
 		// We can print either block or inline, inline is treated differently, factor out common stuff here
 		$output = '';
 		// Used for style tag
@@ -167,7 +176,16 @@ class CrayonFormatter {
 		$start_line = $hl->setting_val(CrayonSettings::START_LINE);
 		$marking = $hl->setting_val(CrayonSettings::MARKING);
 		$striped = $hl->setting_val(CrayonSettings::STRIPED);
+		$range = $hl->setting_val(CrayonSettings::RANGES) ? $hl->range() : FALSE;
 		for ($i = 1; $i <= $hl->line_count(); $i++) {
+			// Check if the current line is in the range of code to display
+			if ($range){
+				if ($i < $range[0]) {
+					continue;
+				} else if ($i > $range[1]) {
+					break;
+				}
+			}
 			$code_line = $code_lines[0][$i - 1];
 			// Check if the current line has been selected
 			$marked_lines = $hl->marked();

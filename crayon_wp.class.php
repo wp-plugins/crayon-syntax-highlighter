@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.10.1
+Version: 1.11
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -104,14 +104,14 @@ class CrayonWP {
 	}
 	
 	/**
-	 * Adds the actual Crayon instance, should only be called by add_shortcode()
+	 * Adds the actual Crayon instance.
 	 * $mode can be: 0 = return crayon content, 1 = return only code, 2 = return only plain code 
 	 */
 	public static function shortcode($atts, $content = NULL, $id = NULL) {
 		CrayonLog::debug('shortcode');
 		
 		// Load attributes from shortcode
-		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL, 'inline' => NULL);
+		$allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL, 'range' => NULL, 'inline' => NULL);
 		$filtered_atts = shortcode_atts($allowed_atts, $atts);
 		
 		// Clean attributes
@@ -130,7 +130,7 @@ class CrayonWP {
 			$extra_attr = array_diff_key($atts, $allowed_atts);
 			$extra_attr = CrayonSettings::smart_settings($extra_attr);
 		}
-		$url = $lang = $title = $mark = $inline = '';
+		$url = $lang = $title = $mark = $range = $inline = '';
 		extract($filtered_atts);
 		
 		$crayon = self::instance($extra_attr, $id);
@@ -142,6 +142,7 @@ class CrayonWP {
 		$crayon->language($lang);
 		$crayon->title($title);
 		$crayon->marked($mark);
+		$crayon->range($range);
 		
 		$crayon->is_inline($inline);
 		
@@ -175,21 +176,26 @@ class CrayonWP {
 		$crayon_str = '';
 	
 		$captures = CrayonWP::capture_crayons(0, $code);
-		$captures = $captures['capture'];
-		foreach ($captures as $capture) {
+		//var_dump($captures);
+		$the_captures = $captures['capture'];
+		$the_content = $captures['content'];
+		foreach ($the_captures as $capture) {
 			$id = $capture['id'];
 			$atts = $capture['atts'];
 			$no_enqueue = array(
 					CrayonSettings::ENQUEUE_THEMES => FALSE,
 					CrayonSettings::ENQUEUE_FONTS => FALSE);
 			$atts = array_merge($atts, $no_enqueue);
-			$content = $capture['code'];
-			$crayon = CrayonWP::shortcode($atts, $content, $id);
+			$code = $capture['code'];			
+			$crayon = CrayonWP::shortcode($atts, $code, $id);
 			$crayon_formatted = $crayon->output(TRUE, FALSE);
-			$crayon_str .= $crayon_formatted;
+			$the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
+			//$crayon_str .= $crayon_formatted;
 		}
+		
+		//var_dump($the_content); exit;
 	
-		return $crayon_str;
+		return $the_content;
 	}
 	
 	/* Uses the main query */
@@ -443,11 +449,11 @@ class CrayonWP {
 		CrayonLog::debug('enqueue');
 		
 		global $CRAYON_VERSION;
-		wp_enqueue_style('crayon-style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
-		//wp_enqueue_script('crayon-jquery', plugins_url(CRAYON_JQUERY, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_style('crayon_style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_style('crayon_global_style', plugins_url(CRAYON_STYLE_GLOBAL, __FILE__), array(), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, __FILE__), array('jquery'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon-js', plugins_url(CRAYON_JS, __FILE__), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon-jquery-popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
 		self::$enqueued = TRUE;
 	}
 	
@@ -835,6 +841,10 @@ class CrayonWP {
 		return $e;
 	}
 	
+	public static function test($content) {
+		return CrayonWP::highlight($content);
+	}
+	
 }
 
 // Only if WP is loaded and not in admin
@@ -855,6 +865,10 @@ if (defined('ABSPATH')) {
 		
 		// XXX Some themes like to play with the content, make sure we replace after they're done
 		add_filter('the_content', 'CrayonWP::the_content', 100);
+		
+// 		add_filter('the_content', 'CrayonWP::test');
+		
+		add_filter( 'bbp_get_reply_content', 'CrayonWP::test', 100);
 		
 		if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
 			/* XXX This is called first to match Crayons, then higher priority replaces after other filters.

@@ -3,8 +3,8 @@ Contributors: akarmenia
 Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter
 Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 1.10.1
+Tested up to: 3.4.2
+Stable tag: 1.11
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -78,6 +78,8 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * Haskell
 * HTML (XML/XHTML)
 * Lua
+* Microsoft Registry (thanks to <a href="http://techexplored.com/2012/03/21/crayon-syntax-highlighter-reg-support/" target="_blank">techexplored.com</a>)
+* MIVA Script
 * Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">Devolonter</a>)
 * Java
 * JavaScript
@@ -90,6 +92,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * Ruby
 * Scheme (thanks to <a href="https://github.com/harry75369" target="_blank">Harry75369</a>)
 * Shell (Unix)
+* Transact-SQL
 * TeX
 * Visual Basic
 * YAML
@@ -103,7 +106,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&szlig;</a>)
 * Italian (thanks to <a href="http://www.federicobellucci.net/" target="_blank">Federico Bellucci</a>)
 * Lithuanian (thanks to <a href="http://www.host1free.com" target="_blank">Vincent G</a>)
-* Spanish
+* Spanish (thanks to <a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>)
 * Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
 * Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a> & <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>)
 * Turkish (thanks to <a href="http://kazancexpert.com" target="_blank">Hakan</a>)
@@ -206,6 +209,19 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.11 =
+* Added bbPress support.
+* Integrated Tag Editor with Fancybox, switched from the discontinued ThickBox, a fair amount of changes took place.
+* Crayon should now appear pretty much anywhere TinyMCE does, and this can be tweaked to add more options later.
+* Added setting to disable Tag Editor on front end, and/or disable its settings.
+* Added the ability to specify <a href="http://ak.net84.net/crayon/line-ranges-in-crayon/" target="_blank">line ranges</a>
+* Added Microsoft Registry language thanks to <a href="http://techexplored.com/2012/03/21/crayon-syntax-highlighter-reg-support/" target="_blank">techexplored.com</a>
+* Added MIVA Script language
+* Added Transact-SQL language
+* Added option to add blank lines before and after the code
+* Wrote a neat GeSHi language file scraper, makes it easier to scrape GeSHi files for grouped keywords and add them as Crayon languages
+* Added improved Spanish translation (thanks to <a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>) 
 
 = 1.10.1 =
 * Added diff language thanks to <a href="http://omniavin.co/post/262" target="_blank">omniavin</a>
@@ -669,7 +685,8 @@ Make sure to upgrade to the latest release when possible to ensure you avoid bug
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
-* Jeff Benshetler, USA
+* Tarek Sakr, (http://centrivision.com/), USA
+* Jeff Benshetler, (http://branchpoint.net/), USA
 * Oldrich Strachota, (http://www.strachota.net/), Czech Republic
 * Dividend Ninja, (http://dividendninja.com/), Canada
 * Chris Wiegman, (http://bit51.com/), USA

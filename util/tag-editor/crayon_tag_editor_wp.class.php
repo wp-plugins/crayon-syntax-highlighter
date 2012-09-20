@@ -11,13 +11,22 @@ class CrayonTagEditorWP {
 		// Hooks
 		if (CRAYON_TAG_EDITOR) {
 			self::addbuttons();
-			// TODO this fails!
-			add_action('admin_print_scripts-post-new.php', 'CrayonTagEditorWP::admin_scripts');
-			add_action('admin_print_scripts-post.php', 'CrayonTagEditorWP::admin_scripts');
-			add_filter('tiny_mce_before_init', 'CrayonTagEditorWP::init_tinymce');
-			// Must come after
-			add_action("admin_print_scripts-post-new.php", 'CrayonSettingsWP::init_js_settings');
-			add_action("admin_print_scripts-post.php", 'CrayonSettingsWP::init_js_settings');
+			CrayonSettingsWP::load_settings(TRUE);
+			if (is_admin()) {
+				// XXX Only runs in wp-admin
+				add_action('admin_print_scripts-post-new.php', 'CrayonTagEditorWP::enqueue_resources');
+				add_action('admin_print_scripts-post.php', 'CrayonTagEditorWP::enqueue_resources');
+				add_filter('tiny_mce_before_init', 'CrayonTagEditorWP::init_tinymce');
+				// Must come after
+				add_action("admin_print_scripts-post-new.php", 'CrayonSettingsWP::init_js_settings');
+				add_action("admin_print_scripts-post.php", 'CrayonSettingsWP::init_js_settings');
+			} else if ( CrayonGlobalSettings::val(CrayonSettings::TAG_EDITOR_FRONT) ) {
+				// XXX This will always need to enqueue, but only runs on front end
+				add_action('wp', 'CrayonTagEditorWP::enqueue_resources');
+				add_filter('tiny_mce_before_init', 'CrayonTagEditorWP::init_tinymce');
+				// Must come after
+				add_action("wp", 'CrayonSettingsWP::init_js_settings');
+			}
 		}
 	}
 	
@@ -25,7 +34,6 @@ class CrayonTagEditorWP {
 		
 		if (!self::$settings) {
 			// Add settings
-			CrayonSettingsWP::load_settings(TRUE);
 			self::$settings = array(
 					'url' => plugins_url(CRAYON_TE_CONTENT_PHP, __FILE__),
 					'home_url' => home_url(),
@@ -42,14 +50,18 @@ class CrayonTagEditorWP {
 					'lang_css' => '#crayon-lang',
 					'title_css' => '#crayon-title',
 					'mark_css' => '#crayon-mark',
+					'range_css' => '#crayon-range',
 					'inline_css' => 'crayon-inline',
 					'inline_hide_css' => 'crayon-hide-inline',
 					'inline_hide_only_css' => 'crayon-hide-inline-only',
 					'hl_css' => '#crayon-highlight',
 					'switch_html' => '#content-html',
 					'switch_tmce' => '#content-tmce',
-					'tinymce_button' => '#content_crayon_tinymce',
-					'submit_css' => 'crayon-te-submit',
+					'tinymce_button' => 'a.mce_crayon_tinymce',
+					'submit_css' => '#crayon-te-ok',
+					'cancel_css' => '#crayon-te-cancel',
+					'content_css' => '#crayon-te-content',
+					'dialog_title_css' => '#crayon-te-title',
 					'submit_wrapper_css' => '#crayon-te-submit-wrapper',
 					'data_value' => 'data-value',
 					'attr_sep' => CrayonGlobalSettings::val_str(CrayonSettings::ATTR_SEP),
@@ -59,6 +71,8 @@ class CrayonTagEditorWP {
 					'dialog_title_edit' => crayon__('Edit Crayon Code'),
 					'submit_add' => crayon__('Add'),
 					'submit_edit' => crayon__('Save'),
+					'bar' => '#crayon-te-bar',
+					'bar_content' => '#crayon-te-bar-content',
 					'extensions' => CrayonResources::langs()->extensions_inverted()
 			);
 		}
@@ -71,23 +85,32 @@ class CrayonTagEditorWP {
 	
 	public static function addbuttons() {
 		// Don't bother doing this stuff if the current user lacks permissions
-		if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
-	   		return;
-		}
+// 		if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+// 	   		return;
+// 		}
 		
 		// Add only in Rich Editor mode
-		if ( get_user_option('rich_editing') == 'true') {
+		//if ( get_user_option('rich_editing') == 'true') {
 			add_filter('mce_external_plugins', 'CrayonTagEditorWP::add_plugin');
 			add_filter('mce_buttons', 'CrayonTagEditorWP::register_buttons');
-		}
+		//}
 	}
 	
-	public static function admin_scripts() {
+	public static function enqueue_resources() {
 		global $CRAYON_VERSION;
 		self::init_settings();
-		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, dirname(dirname(__FILE__))), NULL, $CRAYON_VERSION);
+		//wp_enqueue_style('thickbox');
+// 		wp_enqueue_style('admin-bar');
+// 		wp_enqueue_style('wp-admin');
+// 		wp_enqueue_style('colors-fresh');
+// 		wp_enqueue_style('editor');
+
+		wp_enqueue_style('crayon_fancybox', plugins_url(CRAYON_CSS_FANCYBOX, dirname(dirname(__FILE__))), array(), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_fancybox', plugins_url(CRAYON_JS_FANCYBOX, dirname(dirname(__FILE__))), array('jquery'), $CRAYON_VERSION);
+		
+		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, dirname(dirname(__FILE__))), array('jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, dirname(dirname(__FILE__))), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_te_js', plugins_url(CRAYON_TE_JS, __FILE__), array('crayon_admin_js'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_te_js', plugins_url(CRAYON_TE_JS, __FILE__), array('crayon_admin_js', 'thickbox', 'crayon_fancybox'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_qt_js', plugins_url(CRAYON_QUICKTAGS_JS, __FILE__), array('quicktags','crayon_te_js'), $CRAYON_VERSION, TRUE);
 		wp_localize_script('crayon_te_js', 'CrayonTagEditorSettings', self::$settings);
 	}
@@ -105,7 +128,7 @@ class CrayonTagEditorWP {
 	
 }
 
-if (defined('ABSPATH') && is_admin()) {
+if (defined('ABSPATH') /*&& is_admin()*/) {
 	add_action('init', 'CrayonTagEditorWP::init');
 }
 

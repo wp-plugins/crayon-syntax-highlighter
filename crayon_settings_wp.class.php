@@ -48,6 +48,8 @@ class CrayonSettingsWP {
 		register_setting(self::FIELDS, self::OPTIONS, 'CrayonSettingsWP::settings_validate');
 		add_action("admin_head-$admin_page", 'CrayonSettingsWP::admin_init');
 		// Register settings for post page
+		add_action("admin_print_styles-post-new.php", 'CrayonSettingsWP::admin_scripts');
+		add_action("admin_print_styles-post.php", 'CrayonSettingsWP::admin_scripts');
 		add_action("admin_print_styles-post-new.php", 'CrayonSettingsWP::admin_styles');
 		add_action("admin_print_styles-post.php", 'CrayonSettingsWP::admin_styles');
 				
@@ -62,6 +64,7 @@ class CrayonSettingsWP {
 	
 	public static function admin_styles() {
 		global $CRAYON_VERSION;
+		wp_enqueue_style('crayon_global_style', plugins_url(CRAYON_STYLE_GLOBAL, __FILE__), array(), $CRAYON_VERSION);
 		wp_enqueue_style('crayon_admin_style', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), $CRAYON_VERSION);
 		wp_enqueue_style('crayon_theme_editor_style', plugins_url(CRAYON_THEME_EDITOR_STYLE, __FILE__), array(), $CRAYON_VERSION);
 	}
@@ -86,6 +89,7 @@ class CrayonSettingsWP {
 		if (!self::$js_settings) {
 			self::$js_settings = array(
 					'wp_load' => CrayonWP::wp_load_path(),
+					'is_admin' => is_admin(),
 					'crayon_wp' => CRAYON_ROOT_PATH . 'crayon_wp.class.php', 
 					'prefix' => CrayonSettings::PREFIX,
 					'setting' => CrayonSettings::SETTING,
@@ -95,8 +99,9 @@ class CrayonSettingsWP {
 					'orig_value' => CrayonSettings::SETTING_ORIG_VALUE 
 					);
 		}
-		wp_localize_script('crayon_admin_js', 'CrayonSyntaxSettings', self::$js_settings);
-		CrayonThemeEditorWP::admin_scripts();
+		//wp_localize_script('crayon_admin_js', 'CrayonSyntaxSettings', self::$js_settings);
+		wp_localize_script('crayon_util_js', 'CrayonSyntaxSettings', self::$js_settings);
+		//CrayonThemeEditorWP::admin_scripts();
 	}
 
 	public static function settings() {
@@ -544,7 +549,7 @@ class CrayonSettingsWP {
 		echo '<div id="crayon-subsection-float">';
 		self::checkbox(array(CrayonSettings::FLOAT_ENABLE, crayon__('Allow floating elements to surround Crayon')), FALSE, FALSE);
 		echo '</div>';
-		echo '<span class="crayon-span-100">' . crayon__('Inline Margin') . '</span>';
+		echo '<span class="crayon-span-100">' . crayon__('Inline Margin') . ' </span>';
 		self::textbox(array('id' => CrayonSettings::INLINE_MARGIN, 'size' => 2));
 		echo '<span class="crayon-span-margin">', crayon__('Pixels'), '</span>';
 		echo '</div>';
@@ -569,6 +574,7 @@ class CrayonSettingsWP {
 		echo '<div id="crayon-section-lines" class="crayon-hide-inline">';
 		self::checkbox(array(CrayonSettings::STRIPED, crayon__('Display striped code lines')));
 		self::checkbox(array(CrayonSettings::MARKING, crayon__('Enable line marking for important lines')));
+		self::checkbox(array(CrayonSettings::RANGES, crayon__('Enable line ranges for showing only parts of code')));
 		self::checkbox(array(CrayonSettings::NUMS, crayon__('Display line numbers by default')));
 		self::checkbox(array(CrayonSettings::NUMS_TOGGLE, crayon__('Enable line number toggling')));
 		self::span(crayon__('Start line numbers from').' ');
@@ -671,10 +677,7 @@ class CrayonSettingsWP {
 		echo '</span>';
 		self::checkbox(array(CrayonSettings::POPUP, crayon__('Enable opening code in a window')));
 		self::checkbox(array(CrayonSettings::SCROLL, crayon__('Always display scrollbars')));
-		self::span(crayon__('Tab size in spaces').': ');
-		self::textbox(array('id' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
 		echo '</div>';
-		
 		if (!$editor) {
 			self::checkbox(array(CrayonSettings::DECODE, crayon__('Decode HTML entities in code')));
 		}
@@ -686,6 +689,12 @@ class CrayonSettingsWP {
 		echo '<div class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::SHOW_MIXED, crayon__('Show Mixed Language Icon (+)')));
 		echo '</div>';
+		self::span(crayon__('Tab size in spaces').': ');
+		self::textbox(array('id' => CrayonSettings::TAB_SIZE, 'size' => 2, 'break' => TRUE));
+		self::span(crayon__('Blank lines before code:') . ' ');
+		self::textbox(array('id' => CrayonSettings::WHITESPACE_BEFORE, 'size' => 2, 'break' => TRUE));
+		self::span(crayon__('Blank lines after code:') . ' ');
+		self::textbox(array('id' => CrayonSettings::WHITESPACE_AFTER, 'size' => 2, 'break' => TRUE));
 	}
 	
 	public static function tags() {
@@ -708,7 +717,9 @@ class CrayonSettingsWP {
 	public static function tag_editor() {
 		$sep = sprintf(crayon__('Use %s to separate setting names from values in the &lt;pre&gt; class attribute'),
 						self::dropdown(CrayonSettings::ATTR_SEP, FALSE, FALSE, FALSE));
-		echo '<span>', $sep, ' <a href="http://bit.ly/H3xW3D" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span>';
+		echo '<span>', $sep, ' <a href="http://bit.ly/H3xW3D" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span><br/>';
+		self::checkbox(array(CrayonSettings::TAG_EDITOR_FRONT, crayon__("Display the Tag Editor in any TinyMCE instances on the frontend")));
+		self::checkbox(array(CrayonSettings::TAG_EDITOR_SETTINGS, crayon__("Display Tag Editor settings on the frontend")));
 	}
 
 	public static function misc() {
@@ -774,6 +785,7 @@ class CrayonSettingsWP {
 			Lithuanian (<a href="http://www.host1free.com" target="_blank">Vincent G</a>),
 			Japanese (<a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>), 
 			Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>, <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>),
+			Spanish (<a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>),
 			Turkish (<a href="http://kazancexpert.com" target="_blank">Hakan</a>)';
 		
 		$links = '<a id="twitter-icon" href="' . $CRAYON_TWITTER . '" target="_blank"></a>

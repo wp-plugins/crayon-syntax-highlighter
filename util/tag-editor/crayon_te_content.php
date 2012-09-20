@@ -1,4 +1,15 @@
-<div id="crayon-te-content">
+<div id="crayon-te-content" class="crayon-te">
+
+<div id="crayon-te-bar">
+	<div id="crayon-te-bar-content">
+		<div id="crayon-te-title">Title</div>
+		<div id="crayon-te-controls">
+			<a id="crayon-te-ok" href="#">Ok</a>
+			<span class="crayon-te-seperator">|</span>
+			<a id="crayon-te-cancel" href="#">Cancel</a>
+		</div>
+	</div>
+</div>
 
 <?php 
 
@@ -69,22 +80,24 @@ class CrayonTEContent {
 					<?php CrayonTEContent::checkbox('inline'); ?>
 					<span class="crayon-te-section"><?php crayon_e('Inline'); ?></span>
 				</span>
+				<span id="crayon-te-sub-section">
+					<?php CrayonTEContent::checkbox('highlight'); ?>
+					<span class="crayon-te-section"><?php crayon_e("Don't Highlight"); ?></span>
+				</span>
 			</td>
 		</tr>
 		<tr class="crayon-tr-center">
 			<th><?php crayon_e('Language'); ?></th>
 			<td class="crayon-nowrap">
 				<?php CrayonTEContent::select_resource('lang', $langs, $curr_lang); ?>
+				<span class="crayon-te-section"><?php crayon_e('Line Range'); ?></span>
+				<?php CrayonTEContent::textbox('range', array('placeholder'=>crayon__('(e.g. 3-5 or 3)'))); ?>
 				<span class="crayon-te-section"><?php crayon_e('Marked Lines'); ?></span>
 				<?php CrayonTEContent::textbox('mark', array('placeholder'=>crayon__('(e.g. 1,2,3-5)'))); ?>
-				<span id="crayon-te-sub-section">
-					<?php CrayonTEContent::checkbox('highlight'); ?>
-					<span class="crayon-te-section"><?php crayon_e('Disable Highlighting'); ?></span>
-				</span>
 			</td>
 		</tr>
-		<tr class="crayon-tr-center">
-			<th><?php crayon_e('Code'); ?> <input type="button" id="crayon-te-clear" class="secondary-primary" value="<?php crayon_e('Clear'); ?>" name="clear" /></th>
+		<tr class="crayon-tr-center" style="text-align: center;">
+			<th><div><?php crayon_e('Code'); ?></div><input type="button" id="crayon-te-clear" class="secondary-primary" value="<?php crayon_e('Clear'); ?>" name="clear" /></th>
 			<td><textarea id="crayon-code" name="code" placeholder="<?php crayon_e('Paste your code here, or type it in manually.'); ?>"></textarea></td>
 		</tr>
 		<tr class="crayon-tr-center">
@@ -110,6 +123,11 @@ class CrayonTEContent {
 <!--		</tr>-->
 		<tr>
 			<td colspan="2">
+			<?php
+				if (!is_admin() && !$_GET['is_admin'] && !CrayonGlobalSettings::val(CrayonSettings::TAG_EDITOR_SETTINGS)) {
+					exit;
+				}
+			 ?>
 			<hr />
 			<div><h2 class="crayon-te-heading"><?php crayon_e('Settings'); ?></h2></div>
 			<div id="crayon-te-settings-info" class="crayon-te-info">

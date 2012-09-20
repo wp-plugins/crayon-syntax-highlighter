@@ -71,6 +71,8 @@ define('CRAYON_JS', CRAYON_JS_DIR . 'crayon.js');
 define('CRAYON_JS_ADMIN', CRAYON_JS_DIR . 'crayon_admin.js');
 define('CRAYON_JS_UTIL', CRAYON_JS_DIR . 'util.js');
 define('CRAYON_CSSJSON_JS', CRAYON_JS_DIR . 'cssjson.js');
+define('CRAYON_JS_FANCYBOX', CRAYON_JS_DIR . 'fancybox/jquery.fancybox.pack.js');
+define('CRAYON_CSS_FANCYBOX', CRAYON_JS_DIR . 'fancybox/jquery.fancybox.css');
 // TODO rename TE
 define('CRAYON_TE_JS', 'crayon_te.js');
 define('CRAYON_TE_PHP', CRAYON_TAG_EDITOR_PATH . 'crayon_tag_editor_wp.class.php');
@@ -78,8 +80,9 @@ define('CRAYON_TE_PHP', CRAYON_TAG_EDITOR_PATH . 'crayon_tag_editor_wp.class.php
 define('CRAYON_TE_CONTENT_PHP', 'crayon_te_content.php');
 define('CRAYON_TINYMCE_JS', 'crayon_tinymce.js');
 define('CRAYON_QUICKTAGS_JS', 'crayon_qt.js');
-define('CRAYON_STYLE', CRAYON_CSS_DIR . 'style.css');
+define('CRAYON_STYLE', CRAYON_CSS_DIR . 'crayon_style.css');
 define('CRAYON_STYLE_ADMIN', CRAYON_CSS_DIR . 'admin_style.css');
+define('CRAYON_STYLE_GLOBAL', CRAYON_CSS_DIR . 'global_style.css');
 define('CRAYON_LOGO', CRAYON_CSS_DIR . 'images/crayon_logo.png');
 define('CRAYON_DONATE_BUTTON', CRAYON_CSS_DIR . 'images/donate.png');
 define('CRAYON_THEME_EDITOR_PHP', CRAYON_THEME_EDITOR_PATH . 'theme_editor.php');

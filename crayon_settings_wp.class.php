@@ -98,10 +98,15 @@ class CrayonSettingsWP {
 					'special' => CrayonSettings::SETTING_SPECIAL,
 					'orig_value' => CrayonSettings::SETTING_ORIG_VALUE 
 					);
+			
+			if (is_admin()) {
+				self::$js_settings['plugins_url'] = plugins_url();
+				self::$js_settings['crayon_dir'] = CRAYON_DIR;
+				self::$js_settings['list_langs'] = CRAYON_LIST_LANGS_PHP;
+				self::$js_settings['list_posts'] = CRAYON_LIST_POSTS_PHP; 
+			}
 		}
-		//wp_localize_script('crayon_admin_js', 'CrayonSyntaxSettings', self::$js_settings);
 		wp_localize_script('crayon_util_js', 'CrayonSyntaxSettings', self::$js_settings);
-		//CrayonThemeEditorWP::admin_scripts();
 	}
 
 	public static function settings() {
@@ -127,7 +132,7 @@ class CrayonSettingsWP {
 </div>
 <h2>Crayon Syntax Highlighter <?php crayon_e('Settings'); ?></h2>
 <?php self::help(); ?>
-<form action="options.php" method="post"><?php
+<form id="crayon-settings-form" action="options.php" method="post"><?php
 		settings_fields(self::FIELDS);
 		?>
 
@@ -208,6 +213,10 @@ class CrayonSettingsWP {
 	}
 	
 	// Crayons posts
+	
+	/**
+	 * This loads the posts marked as containing Crayons
+	 */
 	public static function load_posts() {
 		if (self::$crayon_posts === NULL) {
 			// Load from db
@@ -220,10 +229,16 @@ class CrayonSettingsWP {
 		return self::$crayon_posts;
 	}
 	
+	/**
+	 * This looks through all posts and marks those which contain Crayons
+	 */
 	public static function scan_and_save_posts() {
-		self::save_posts(CrayonWP::scan_posts());
+		self::save_posts(CrayonWP::scan_posts(TRUE, TRUE));
 	}
 	
+	/**
+	 * Saves the marked posts to the db 
+	 */
 	public static function save_posts($posts = NULL) {
 		if ($posts === NULL) {
 			$posts = self::$crayon_posts;
@@ -232,6 +247,9 @@ class CrayonSettingsWP {
 		self::load_posts();
 	}
 	
+	/**
+	 * Adds a post as containing a Crayon
+	 */
 	public static function add_post($id) {
 		self::load_posts();
 		if (!in_array($id, self::$crayon_posts)) {
@@ -240,6 +258,9 @@ class CrayonSettingsWP {
 		self::save_posts();
 	}
 	
+	/**
+	 * Removes a post as not containing a Crayon
+	 */
 	public static function remove_post($id) {
 		self::load_posts();
 		$key = array_search($id, self::$crayon_posts);
@@ -251,6 +272,7 @@ class CrayonSettingsWP {
 	}
 	
 	// Cache
+	
 	public static function add_cache($name) {
 		self::load_cache();
 		if (!in_array($name, self::$cache)) {
@@ -312,6 +334,7 @@ class CrayonSettingsWP {
 		self::add_field(self::GENERAL, crayon__('Tags'), 'tags');
 		self::add_field(self::GENERAL, crayon__('Languages'), 'langs');
 		self::add_field(self::GENERAL, crayon__('Files'), 'files');
+		self::add_field(self::GENERAL, crayon__('Posts'), 'posts');
 		self::add_field(self::GENERAL, crayon__('Tag Editor'), 'tag_editor');
 		self::add_field(self::GENERAL, crayon__('Misc'), 'misc');
 
@@ -351,6 +374,10 @@ class CrayonSettingsWP {
 		if (array_key_exists('reset', $inputs)) {
 			self::clear_cache();
 			return array();
+		}
+		// Convert old tags
+		if (array_key_exists('convert', $inputs)) {
+			CrayonWP::convert_tags();
 		}
 		// Clear the log if needed
 		if (array_key_exists(self::LOG_CLEAR, $_POST)) {
@@ -459,6 +486,15 @@ class CrayonSettingsWP {
 		} else {
 			return $return;
 		}
+	}
+	
+	private static function button($args = array()) {
+		extract($args);
+		CrayonUtil::set_var($id, '');
+		CrayonUtil::set_var($class, '');
+		CrayonUtil::set_var($onclick, '');
+		CrayonUtil::set_var($title, '');
+		return '<a id="'.$id.'" class="button-primary '.$class.'" onclick="'.$onclick.'">'.$title.'</a>';
 	}
 	
 	private static function info_span($name, $text) {
@@ -603,12 +639,16 @@ class CrayonSettingsWP {
 					echo '<br/><span class="crayon-error">', sprintf(crayon__('The selected language with id %s could not be loaded'), '<strong>'.$db_fallback.'</strong>'), '. </span>';
 				}
 				// Language parsing info
-				echo CRAYON_BR, '<div id="crayon-subsection-lang-info"><div><a id="show-lang" class="button-primary" onclick="CrayonSyntaxAdmin.show_langs(\'', plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__),
-					'\');">', crayon__('Show Languages'), '</a></div></div>';
+				echo CRAYON_BR, '<div id="crayon-subsection-lang-info"><div>'.self::button(array('id'=>'show-lang', 'title'=>crayon__('Show Languages'), 'onclick'=>'CrayonSyntaxAdmin.show_langs(\''.plugins_url(CRAYON_LIST_LANGS_PHP, __FILE__).'\');')).'</div></div>';
 			} else {
 				echo 'No languages could be parsed.';
 			}
 		}
+	}
+	
+	public static function posts() {
+		echo '<a name="posts"></a>';
+		echo '<div id="crayon-subsection-posts-info">'.self::button(array('id'=>'show-posts', 'title'=>crayon__('Show Crayon Posts'))).'<span class="crayon-span-10"></span><a href="http://bit.ly/NQfZN5" target="_blank" class="crayon-question">' . crayon__('?') . '</a></div>' ;
 	}
 
 	public static function theme($editor = FALSE) {
@@ -715,6 +755,17 @@ class CrayonSettingsWP {
 	}
 	
 	public static function tag_editor() {
+		$can_convert = CrayonWP::can_convert_tags();
+		if ($can_convert) {
+			$disabled = '';
+			$convert_text = crayon__('Convert Legacy Tags');
+		} else {
+			$disabled = 'disabled="disabled"';
+			$convert_text = crayon__('No Legacy Tags Found');
+		}
+		
+		echo '<input type="submit" name="', self::OPTIONS, '[convert]" id="convert" class="button-primary" value="', $convert_text, '"', $disabled, ' />';
+		echo '<span class="crayon-span-10"></span><span>' . crayon__('Convert existing Crayon tags to Tag Editor format (&lt;pre&gt;)'), '</span>', ' <a href="http://bit.ly/ReRr0i" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', CRAYON_BR, CRAYON_BR;
 		$sep = sprintf(crayon__('Use %s to separate setting names from values in the &lt;pre&gt; class attribute'),
 						self::dropdown(CrayonSettings::ATTR_SEP, FALSE, FALSE, FALSE));
 		echo '<span>', $sep, ' <a href="http://bit.ly/H3xW3D" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span><br/>';
@@ -786,7 +837,7 @@ class CrayonSettingsWP {
 			Japanese (<a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>), 
 			Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>, <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>),
 			Spanish (<a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>),
-			Turkish (<a href="http://kazancexpert.com" target="_blank">Hakan</a>)';
+			Turkish (<a href="http://hakanertr.wordpress.com" target="_blank">Hakan</a>)';
 		
 		$links = '<a id="twitter-icon" href="' . $CRAYON_TWITTER . '" target="_blank"></a>
 					<a id="gmail-icon" href="mailto:' . $CRAYON_EMAIL . '" target="_blank"></a><div id="crayon-donate"><a href="' . $CRAYON_DONATE . '" target="_blank"><img src="'.plugins_url(CRAYON_DONATE_BUTTON, __FILE__).'"></a></div>';

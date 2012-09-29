@@ -297,7 +297,7 @@ class CrayonFormatter {
 			}
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
-			$print_plus = $hl->setting_val(CrayonSettings::MIXED) && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
+			$print_plus = $hl->is_mixed() && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
 			$buttons = $print_plus.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
 			$toolbar = '
 			<div class="crayon-toolbar" data-settings="'.$toolbar_settings.'" style="'.$toolbar_style.'">'.$print_title.'
@@ -534,12 +534,14 @@ class CrayonFormatter {
 	}
 	
 	/* Converts the code to entities and wraps in a <pre><code></code></pre> */
-	public static function plain_code($code) {
+	public static function plain_code($code, $encoded = TRUE) {
 		if (is_array($code)) {
 			// When used as a preg_replace_callback
 			$code = $code[1];
 		}
-		$code = CrayonUtil::htmlentities($code);
+		if (!$encoded) {
+			$code = CrayonUtil::htmlentities($code);
+		}
 		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
 			$code = trim($code);
 		}
@@ -547,13 +549,7 @@ class CrayonFormatter {
 	}
 
 	public static function split_lines($code, $class) {
-		
-// 		var_dump($code);
-// 		exit;
-		
 		$code = self::clean_code($code, TRUE, TRUE, TRUE, FALSE);
-// 		$code = preg_replace('#^[^\r\n]+#m', '<span class="'.$class.'">', $code);
-// 		$code = preg_replace('#(?<=[^\r\n])(?=\r\n|\r|\n)#m', '</span>', $code);
 		$code = preg_replace('#^([^\r\n]+)(?=\r\n|\r|\n|$)#m', '<span class="'.$class.'">$1</span>', $code);
 		return $code;
 	}

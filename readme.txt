@@ -5,7 +5,7 @@ License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.12
+Stable tag: 1.12.1
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -164,6 +164,7 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Tricia Aanderud, USA
 * Tarek Sakr, (http://centrivision.com/), USA
 * Jeff Benshetler, (http://branchpoint.net/), USA
 * Oldrich Strachota, (http://www.strachota.net/), Czech Republic
@@ -243,6 +244,9 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.12.1 =
+* Fixed a bug with bbPress preventing posts from appearing.
 
 = 1.12 =
 * Added ability to convert all legacy Crayon tags in blog posts and comments to &lt;pre&gt; tags, retaining all attributes. These are the accepted standard for the Tag Editor and they're backwards compatible (if Crayon is off or you're using another highlighter).

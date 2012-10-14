@@ -5,7 +5,7 @@ License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.12.1
+Stable tag: 1.13
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -21,6 +21,7 @@ It also supports some neat features like:
 * Toggled line numbers
 * Copy/paste code
 * Open code in a new window (popup)
+* Line wrapping
 * bbPress 2 support
 * <a href="http://bit.ly/ReRr0i" target="_blank">Converting legacy code in blog posts/comments to &lt;pre&gt;</a>
 * Remote request caching
@@ -156,14 +157,13 @@ A handful of articles from others written about Crayon, thanks guys!
 
 * Performance, minimised resources
 * Theme Editor
-* Line wrapping
-* Go language support
 * Integrated commenting
 
 **Donations**
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Will, Simple Phishing Toolkit (http://www.sptoolkit.com/), USA
 * Tricia Aanderud, USA
 * Tarek Sakr, (http://centrivision.com/), USA
 * Jeff Benshetler, (http://branchpoint.net/), USA
@@ -244,6 +244,15 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.13 =
+* Added line wrapping.
+* Fixed a bug in converting tags.
+* Fixed a bug preventing Tag Editor from opening in HTML editor.
+* From now on, only the wp-admin will reveal your wordpress install directory.
+* The plain code now wraps based on the toggle setting.
+* Fixed a potential vulnerability when loading components through AJAX and a remote PHP file path is provided.
+* Spanish updated
 
 = 1.12.1 =
 * Fixed a bug with bbPress preventing posts from appearing.

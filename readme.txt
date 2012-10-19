@@ -5,7 +5,7 @@ License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.13
+Stable tag: 1.13.1
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -245,13 +245,18 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 1.13.1 =
+* Fixed an bug with file paths on Windows causing false positives for the security checks needed to load AJAX requests; thanks to Andreas Giemza.
+* Fixed a bug in list_posts.php, also thanks to Andreas.
+* Added a more spaced classic theme, mostly for testing at the moment.
+
 = 1.13 =
 * Added line wrapping.
 * Fixed a bug in converting tags.
 * Fixed a bug preventing Tag Editor from opening in HTML editor.
 * From now on, only the wp-admin will reveal your wordpress install directory.
 * The plain code now wraps based on the toggle setting.
-* Fixed a potential vulnerability when loading components through AJAX and a remote PHP file path is provided.
+* Fixed a potential vulnerability when loading components through AJAX and a remote PHP file path is provided. Thanks to Charlie Eriksen via Secunia SVCRP.
 * Spanish updated
 
 = 1.12.1 =

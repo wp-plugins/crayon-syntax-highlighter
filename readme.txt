@@ -1,11 +1,11 @@
 === Crayon Syntax Highlighter ===
 Contributors: akarmenia
-Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03
+Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=4FKp23py2y97iYDcCYZ9zOSEMedaceiEpb8Pvf_qQyezHR3TQROKd_IeRfC&dispatch=5885d80a13c0db1f8e263663d3faee8d0b7e678a25d883d0fa72c947f193f8fd
 License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.13.1
+Stable tag: 1.14
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -61,14 +61,14 @@ There are many ways you can help!
 * Make a Theme and share
 * Add support for your favourite <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">Language</a>
 * Write a post about your pastel experiences and share
-* <a href="https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=PPqWIQJ0gEZp4pVGNnYzhcwFGvx3MGwD95tvUcZgeYlHIEjBS7x6QHG34B4&dispatch=5885d80a13c0db1f8e263663d3faee8d0288a7fd2903afb85a5540fd44243d03" target="_blank">Donate</a> to the project
+* <a href="https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=4FKp23py2y97iYDcCYZ9zOSEMedaceiEpb8Pvf_qQyezHR3TQROKd_IeRfC&dispatch=5885d80a13c0db1f8e263663d3faee8d0b7e678a25d883d0fa72c947f193f8fd" target="_blank">Donate</a> to the project
 
 **Supported Languages**
 
 Languages are defined in language files using Regular Expressions to capture elements.
 See the <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">Crayon Language File Specification</a> to learn how to make your own.
 
-* Default Langauge (one size fits all, highlights generic code)
+* Default Language (one size fits all, highlights generic code)
 * ABAP
 * ActionScript
 * Apache
@@ -81,6 +81,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * CSS
 * Delphi/Pascal (thanks to <a href="http://squashbrain.com/" target="_blank">Chris McClenny</a>)
 * Diff (thanks to <a href="http://omniavin.co/post/262" target="_blank">omniavin</a>)
+* Erlang (thanks to <a href="http://netroid.de/" target="_blank">Daniel</a>)
 * Go
 * Haskell
 * HTML (XML/XHTML)
@@ -163,6 +164,8 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Jack Fruh, (http://basementjack.com/), USA
+* Ross Barbieri, USA
 * Will, Simple Phishing Toolkit (http://www.sptoolkit.com/), USA
 * Tricia Aanderud, USA
 * Tarek Sakr, (http://centrivision.com/), USA
@@ -244,6 +247,20 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.14 =
+* All AJAX functions are now using the wp_ajax action and admin-ajax.php method defined here: http://codex.wordpress.org/AJAX_in_Plugins. This means Crayon no longer passes around the wp_load path and doesn't use it as a $_GET variable to load AJAX requests. The security vulnerability in 1.13 is no longer present and that code has been removed.
+* font-size and line-height has been removed from the crayon style CSS and is specified using the settings screen - the custom font size is enabled at 12px. This allows you to disable the custom font size and allow your own CSS to take control of the sizing for you. With the custom size disabled the inherited size is applied, so the code will appear at the size of its parent element based on your wordpress theme.
+* Update functionality has been improved so the CrayonWP::update() function is only called when an update is detected from a change in the version string, not every time you load the page! If using lower than 1.14 the custom font size setting is enabled for you, since this setting was disabled by default in previous versions.
+* Fixed a bug preventing Tag Editor from showing on the front end (related to the AJAX fix)
+* Moved global js variables to the init functions which are called on ready()
+* Fancybox now uses "fancybox" as the script name and checks if another version is already queued
+* Fixed a bug where post previews were not displaying any Crayon code
+* Fixed an issue with code wrap not reverting when disabled
+* Fixed a bug causing code wrap from distorting the style of the popup
+* Added Erlang thanks to Daniel (http://netroid.de/)
+* Fixed a bug where languages were parsed too late to pick up language modes
+* Updated German translation.
 
 = 1.13.1 =
 * Fixed an bug with file paths on Windows causing false positives for the security checks needed to load AJAX requests; thanks to Andreas Giemza.

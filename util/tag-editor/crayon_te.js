@@ -1,16 +1,4 @@
 (function($) {
-	
-	// Sets the TINYMCE_USED setting
-	window.CrayonTagEditorSettings.setUsed = function(is_used) {
-		if (typeof this.ajax_url != 'undefined') {
-			if (this.ajax_url && !this.used) {
-				is_used = is_used ? '1' : '0';
-				this.used = is_used; // Save the setting
-				var used_url = this.ajax_url + '?' + this.used_setting + '=' + is_used + '&wp_load=' + CrayonSyntaxSettings.wp_load;
-				$.get(used_url);
-			}
-		}
-	};
 
 	window.CrayonTagEditor = new function() {
 		var base = this;
@@ -38,9 +26,7 @@
 		var is_inline = false;
 		
 		// Generated in WP and contains the settings
-		var s = CrayonTagEditorSettings;
-		var gs = CrayonSyntaxSettings;
-		var admin = CrayonSyntaxAdmin;
+		var s, gs, admin = null;
 		// For use in async functions
 		var me = this;
 		
@@ -48,6 +34,10 @@
 		var dialog = code = clear = submit = null;
 		
 		base.init = function(button) {
+			s = CrayonTagEditorSettings;
+			gs = CrayonSyntaxSettings;
+			admin = CrayonSyntaxAdmin;
+
 			base.loadDialog();
 			$(button).fancybox({
         		href : s.content_css,
@@ -90,9 +80,7 @@
 	    	}
 	    	
 	        // Load the editor content 
-	    	var url = s.url + '?wp_load=' + CrayonSyntaxSettings.wp_load + '&' + 'is_admin=' + CrayonSyntaxSettings.is_admin;
-	//		url += 'crayon_wp=' + CrayonSyntaxSettings.crayon_wp + '&';
-	        $.get(url, function(data) {
+            $.get(gs.ajaxurl, {action : 'crayon-tag-editor'}, function(data) {
 	        	dialog = $('<div id="'+s.css+'"></div>');
 	            dialog.appendTo('body').hide();
 	        	dialog.html(data);
@@ -401,8 +389,6 @@
 	        	}
 	        	ajax_class_timer_count++;
 	    	}, 40);
-	    	
-	    	s.setUsed(true);
 	    };
 	    
 	    // XXX Add Crayon to editor

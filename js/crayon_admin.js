@@ -25,7 +25,7 @@
 		// var theme_editor_loaded = false;
 		// var theme_editor_loading = false;
 
-		var settings = CrayonSyntaxSettings;
+		var settings = null;
 
 		base.cssElem = function(id) {
 			return $(base.addPrefixToID(id));
@@ -43,6 +43,7 @@
 
 		base.init = function() {
 			console_log('admin init');
+			settings = CrayonSyntaxSettings;
 
 			// Wraps
 			main_wrap = $('#crayon-main-wrap');
@@ -71,7 +72,7 @@
 			help = $('.crayon-help-close');
 			help.click(function() {
 				$('.crayon-help').hide();
-				$.get(help.attr('url'));
+				$.get(CrayonSyntaxSettings.ajaxurl, {action : 'crayon-ajax', 'hide-help' : 1});
 			});
 
 			// Preview
@@ -91,9 +92,15 @@
 			}
 			
 			$('#show-posts').click(function() {
-				var url = settings.plugins_url + '/' + settings.crayon_dir + settings.list_posts + '?wp_load=' + settings.wp_load; 
-				$.get(url, function(data) {
+				$.get(CrayonSyntaxSettings.ajaxurl, {action : 'crayon-show-posts'}, function(data) {
 					$('#crayon-subsection-posts-info').html(data);
+				});
+			});
+			
+			$('#show-langs').click(function() {
+				$.get(CrayonSyntaxSettings.ajaxurl, {action : 'crayon-show-langs'}, function(data) {
+					$('#lang-info').hide();
+					$('#crayon-subsection-langs-info').html(data);
 				});
 			});
 
@@ -170,12 +177,9 @@
 
 		/* Whenever a control changes preview */
 		var preview_update = function() {
-			// console_log('preview_update');
-			preview_get = '?wp_load=' + CrayonSyntaxSettings.wp_load + '&';
-			// preview_get += 'crayon_wp=' + CrayonSyntaxSettings.crayon_wp +
-			// '&';
 			var val = 0;
 			var obj;
+			var getVars = {action : 'crayon-show-preview'};
 			for ( var i = 0; i < preview_obj_names.length; i++) {
 				obj = preview_objs[i];
 				if (obj.attr('type') == 'checkbox') {
@@ -183,26 +187,12 @@
 				} else {
 					val = obj.val();
 				}
-				preview_get += preview_obj_names[i] + '=' + crayon_escape(val)
-						+ "&";
+				getVars[preview_obj_names[i]] = crayon_escape(val);
 			}
 
-			// XXX Scroll to top of themes
-			// Disabled for now, too annoying
-			// var top = $('a[name="crayon-theme"]');
-			// $(window).scrollTop(top.position().top);
-
-			// Delay resize
-			// preview.css('height', preview.height());
-			// preview.css('overflow', 'hidden');
-			// preview_timer = setInterval(function() {
-			// preview.css('height', '');
-			// preview.css('overflow', 'visible');
-			// clearInterval(preview_timer);
-			// }, 1000);
-
 			// Load Preview
-			$.get(preview_url + preview_get, function(data) {
+			$.get(CrayonSyntaxSettings.ajaxurl, getVars, function(data) {
+				//console.log(1);
 				preview.html(data);
 				// Important! Calls the crayon.js init
 				CrayonSyntax.init();
@@ -312,14 +302,6 @@
 			} else {
 				overlay.hide();
 			}
-		};
-
-		base.show_langs = function(url) {
-			$.get(url, function(data) {
-				$('#lang-info').hide();
-				$('#crayon-subsection-lang-info').html(data);
-			});
-			return false;
 		};
 
 		base.get_vars = function() {

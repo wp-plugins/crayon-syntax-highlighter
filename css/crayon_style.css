@@ -308,6 +308,10 @@ coloring etc.
     font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;
     font-weight: 500;
 }
+/*
+
+This has been disabled to allow more flexibility in changing font sizes.
+
 .crayon-syntax,
 .crayon-syntax .crayon-nums,
 .crayon-syntax .crayon-plain,
@@ -315,9 +319,10 @@ coloring etc.
 	font-size: 12px !important;
 	line-height: 15px !important;
 }
+*/
 .crayon-syntax .crayon-num,
 .crayon-syntax .crayon-line {
-	height: 15px;
+	/*height: 15px;*/
 }
 .crayon-syntax.crayon-wrapped .crayon-line {
 /*	min-height: 15px;*/

@@ -3,25 +3,25 @@
  Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.13.1
+Version: 1.14
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
 Domain Path: /trans/
 License: GPL2
-	Copyright 2012	Aram Kocharyan	(email : akarmenia@gmail.com)
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as
-	published by the Free Software Foundation.
-	
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-	
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+Copyright 2012	Aram Kocharyan	(email : akarmenia@gmail.com)
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License, version 2, as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 require_once ('global.php');
 require_once (CRAYON_HIGHLIGHTER_PHP);
@@ -394,7 +394,7 @@ class CrayonWP {
 
 		self::init_tags_regex();
 		$crayon_posts = CrayonSettingsWP::load_posts(); // Loads posts containing crayons
-
+		
 		// Search for shortcode in posts
 		foreach ($posts as $post) {
 			$wp_id = $post->ID;
@@ -410,6 +410,11 @@ class CrayonWP {
 			}
 
 			$id_str = strval($wp_id);
+			
+			if (wp_is_post_revision($wp_id)) {
+				// Ignore post revisions, use the parent, which has the updated post content
+				continue;
+			}
 
 			if ( isset(self::$post_captures[$id_str]) ) {
 				// Don't capture twice
@@ -420,7 +425,7 @@ class CrayonWP {
 				continue;
 			}
 			// Capture post Crayons
-			$captures = self::capture_crayons($post->ID, $post->post_content);
+			$captures = self::capture_crayons(intval($post->ID), $post->post_content);
 
 			// XXX Careful not to undo changes by other plugins
 			// XXX Must replace to remove $ for ignored Crayons
@@ -432,7 +437,7 @@ class CrayonWP {
 				foreach ($captures['capture'] as $capture_id=>$capture_content) {
 					self::$post_queue[$id_str][$capture_id] = $capture_content;
 				}
-			}
+			}	
 
 			// Search for shortcode in comments
 			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
@@ -456,6 +461,7 @@ class CrayonWP {
 				}
 			}
 		}
+// 		exit;
 
 		if (!is_admin() && $enqueue && !self::$enqueued) {
 			// Crayons have been found and we enqueue efficiently
@@ -493,7 +499,7 @@ class CrayonWP {
 		if ($force || self::$tags_regex == "") {
 			// Check which tags are in $flags. If it's NULL, then all flags are true.
 			$in_flag = self::in_flag($flags);
-				
+
 			if ( ($in_flag[CrayonSettings::CAPTURE_MINI_TAG] && CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) ||
 					($in_flag[CrayonSettings::INLINE_TAG] && CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) ) {
 				$aliases = CrayonResources::langs()->ids_and_aliases();
@@ -506,10 +512,10 @@ class CrayonWP {
 					self::$alias_regex .= $alias_regex;
 				}
 			}
-				
+
 			// Add other tags
 			self::$tags_regex = '#(?<!\$)(?:(\s*\[\s*crayon\b)';
-				
+
 			$tag_regexes = array(
 					CrayonSettings::CAPTURE_MINI_TAG => '([\[]\s*('.self::$alias_regex.')\b)',
 					CrayonSettings::CAPTURE_PRE => '(<\s*pre\b)',
@@ -517,15 +523,15 @@ class CrayonWP {
 					CrayonSettings::PLAIN_TAG => '(\s*\[\s*plain\b)',
 					CrayonSettings::BACKQUOTE => '(`[^`]*`)'
 			);
-				
+
 			foreach ($tag_regexes as $tag=>$regex) {
 				if ($in_flag[$tag] && CrayonGlobalSettings::val($tag)) {
 					self::$tags_regex .= '|' . $regex;
 				}
 			}
 			self::$tags_regex .= ')#msi';
-				
-				
+
+
 			// 			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
 			// 				self::$tags_regex .= '|([\[]\s*('.self::$alias_regex.'))';
 			// 			}
@@ -607,6 +613,7 @@ class CrayonWP {
 			$the_content = preg_replace_callback('#' . self::REGEX_BETWEEN_PARAGRAPH_SIMPLE . '#msi', 'CrayonWP::add_paragraphs', $the_content);
 			// Loop through Crayons
 			$post_in_queue = self::$post_queue[$post_id];
+			
 			foreach ($post_in_queue as $id=>$v) {
 				$atts = $v['atts'];
 				$content = $v['code']; // The code we replace post content with
@@ -873,6 +880,24 @@ class CrayonWP {
 		CrayonLog::debug('init');
 		crayon_load_plugin_textdomain();
 	}
+	
+	public static function init_ajax() {
+		add_action('wp_ajax_crayon-ajax', 'CrayonWP::ajax');
+		add_action('wp_ajax_crayon-tag-editor', 'CrayonTagEditorWP::content');
+		add_action('wp_ajax_crayon-show-posts', 'CrayonSettingsWP::show_posts');
+		add_action('wp_ajax_crayon-show-langs', 'CrayonSettingsWP::show_langs');
+		add_action('wp_ajax_crayon-show-preview', 'CrayonSettingsWP::show_preview');
+	}
+	
+	public static function ajax() {
+		$allowed = array(CrayonSettings::HIDE_HELP);
+		foreach ($allowed as $allow) {
+			if (array_key_exists($allow, $_GET) ) {
+				CrayonGlobalSettings::set($allow, $_GET[$allow]);
+				CrayonSettingsWP::save_settings();
+			}
+		}
+	}
 
 	/**
 	 * Return an array of post IDs where crayons occur.
@@ -914,31 +939,45 @@ class CrayonWP {
 
 	}
 
-	public  static function update() {
-		// Upgrade database and settings
+	public static function update() {
 		global $CRAYON_VERSION;
+		CrayonSettingsWP::load_settings(TRUE);
 		$settings = CrayonSettingsWP::get_settings();
 		if ($settings === NULL || !isset($settings[CrayonSettings::VERSION])) {
 			return;
 		}
 
 		$version = $settings[CrayonSettings::VERSION];
-		$defaults = CrayonSettings::get_defaults_array();
-		$touched = FALSE;
-
-		if ($version < '1.7.21') {
-			$settings[CrayonSettings::SCROLL] = $defaults[CrayonSettings::SCROLL];
-			$touched = TRUE;
-		}
-
-		if ($version < '1.7.23' && $settings[CrayonSettings::FONT] == 'theme-font') {
-			$settings[CrayonSettings::FONT] = $defaults[CrayonSettings::FONT];
-			$touched = TRUE;
-		}
-
-		if ($touched) {
+		
+		// Only upgrade if the version differs
+		if ($version != $CRAYON_VERSION) {
+			$defaults = CrayonSettings::get_defaults_array();
+			$touched = FALSE;
+			
+			// Upgrade database and settings
+			
+			if ($version < '1.7.21') {
+				$settings[CrayonSettings::SCROLL] = $defaults[CrayonSettings::SCROLL];
+				$touched = TRUE;
+			}
+			
+			if ($version < '1.7.23' && $settings[CrayonSettings::FONT] == 'theme-font') {
+				$settings[CrayonSettings::FONT] = $defaults[CrayonSettings::FONT];
+				$touched = TRUE;
+			}
+			
+			if ($version < '1.14') {
+				$settings[CrayonSettings::FONT_SIZE_ENABLE] = true;
+			}
+			
+			// Save new version
 			$settings[CrayonSettings::VERSION] = $CRAYON_VERSION;
 			CrayonSettingsWP::save_settings($settings);
+			CrayonLog::syslog("Updated from $version to $CRAYON_VERSION");
+			
+			// Refresh to show new settings
+			header('Location: ' . CrayonUtil::current_url());
+			exit();
 		}
 	}
 
@@ -999,19 +1038,19 @@ class CrayonWP {
 			$post = get_post($postID);
 			$post_content = $post->post_content;
 			$post_captures = self::capture_crayons($postID, $post_content, array(), $args);
-				
+
 			$post_obj = array();
 			$post_obj['ID'] = $postID;
 			$post_obj['post_content'] = $post_captures['content'];
 			wp_update_post($post_obj);
 			CrayonLog::syslog("Converted Crayons in post ID $postID to pre tags", 'CONVERT');
-				
+
 			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
 				$comments = get_comments(array('post_id' => $postID));
 				foreach ($comments as $comment) {
 					$commentID = $comment->comment_ID;
 					$comment_captures = self::capture_crayons($commentID, $comment->comment_content, array(CrayonSettings::DECODE => TRUE), $args);
-						
+
 					$comment_obj = array();
 					$comment_obj['comment_ID'] = $commentID;
 					$comment_obj['comment_content'] = $comment_captures['content'];
@@ -1019,7 +1058,7 @@ class CrayonWP {
 					CrayonLog::syslog("Converted Crayons in post ID $postID, comment ID $commentID to pre tags", 'CONVERT');
 				}
 			}
-				
+
 		}
 	}
 
@@ -1058,20 +1097,16 @@ class CrayonWP {
 		return str_replace($original, CrayonUtil::html_element('pre', $capture['code'], $atts), $wp_content);
 	}
 
-	public static function test($wfw, $efr) {
-		exit();
-		return "123";
-	}
-
 }
 
-// Only if WP is loaded and not in admin
+// Only if WP is loaded
 if (defined('ABSPATH')) {
 	if (!is_admin()) {
 		register_activation_hook(__FILE__, 'CrayonWP::install');
 		register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
 
 		// Filters and Actions
+
 		add_filter('init', 'CrayonWP::init');
 
 		CrayonSettingsWP::load_settings(TRUE);
@@ -1085,10 +1120,10 @@ if (defined('ABSPATH')) {
 		add_filter('the_content', 'CrayonWP::the_content', 100);
 
 		// Highlight bbPress content
-		add_filter( 'bbp_get_reply_content', 'CrayonWP::highlight', 100);
-		add_filter( 'bbp_get_topic_content', 'CrayonWP::highlight', 100);
-		add_filter( 'bbp_get_forum_content', 'CrayonWP::highlight', 100);
-		add_filter( 'bbp_get_topic_excerpt', 'CrayonWP::highlight', 100);
+		add_filter('bbp_get_reply_content', 'CrayonWP::highlight', 100);
+		add_filter('bbp_get_topic_content', 'CrayonWP::highlight', 100);
+		add_filter('bbp_get_forum_content', 'CrayonWP::highlight', 100);
+		add_filter('bbp_get_topic_excerpt', 'CrayonWP::highlight', 100);
 
 		if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
 			/* XXX This is called first to match Crayons, then higher priority replaces after other filters.
@@ -1104,12 +1139,15 @@ if (defined('ABSPATH')) {
 
 		add_action('template_redirect', 'CrayonWP::wp_head');
 	} else {
+		// Update between versions
+		CrayonWP::update();
 		// For marking a post as containing a Crayon
 		add_action('save_post', 'CrayonWP::save_post', 10, 2);
 		if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
 			//add_action('comment_post', 'CrayonWP::save_comment', 10, 2);
 			add_action('edit_comment', 'CrayonWP::save_comment', 10, 2);
 		}
+		add_filter('init', 'CrayonWP::init_ajax');
 	}
 }
 

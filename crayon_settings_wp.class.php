@@ -15,10 +15,13 @@ class CrayonSettingsWP {
 	private static $options = NULL;
 	// Posts containing crayons in db
 	private static $crayon_posts = NULL;
+	// Posts containing legacy tags in db
+	private static $crayon_legacy_posts = NULL;
 	// An array of cache names for use with Transients API
 	private static $cache = NULL;
 	// Array of settings to pass to js
 	private static $js_settings = NULL;
+	private static $admin_js_settings = NULL;
 	private static $admin_page = '';
 	private static $is_fully_loaded = FALSE;
 
@@ -26,6 +29,7 @@ class CrayonSettingsWP {
 	const FIELDS = 'crayon_settings';
 	const OPTIONS = 'crayon_options';
 	const POSTS = 'crayon_posts';
+	const LEGACY_POSTS = 'crayon_legacy_posts';
 	const CACHE = 'crayon_cache';
 	const GENERAL = 'crayon_general';
 	const DEBUG = 'crayon_debug';
@@ -65,24 +69,27 @@ class CrayonSettingsWP {
 
 	public static function admin_styles() {
 		global $CRAYON_VERSION;
-		wp_enqueue_style('crayon_style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_style('crayon_global_style', plugins_url(CRAYON_STYLE_GLOBAL, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_style('crayon_admin_style', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), $CRAYON_VERSION);
-		wp_enqueue_style('crayon_theme_editor_style', plugins_url(CRAYON_THEME_EDITOR_STYLE, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_style('crayon', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_style('crayon_global', plugins_url(CRAYON_STYLE_GLOBAL, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_style('crayon_admin', plugins_url(CRAYON_STYLE_ADMIN, __FILE__), array(), $CRAYON_VERSION);
+		wp_enqueue_style('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_STYLE, __FILE__), array(), $CRAYON_VERSION);
 	}
 
-	public static function admin_scripts() {
+	public static function admin_base_scripts() {
 		global $CRAYON_VERSION;
 		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, __FILE__), array('jquery'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
-		wp_enqueue_script('cssjson_js', plugins_url(CRAYON_CSSJSON_JS, __FILE__), $CRAYON_VERSION);
-		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('jquery', 'crayon_jquery_popup', 'crayon_util_js'), $CRAYON_VERSION);
-		if (CRAYON_THEME_EDITOR) {
-			wp_enqueue_script('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_JS, __FILE__), array('jquery', 'cssjson_js'), $CRAYON_VERSION);
-		}
-		// XXX Must come after
 		self::init_js_settings();
+		if (is_admin()) {
+			wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
+			self::init_admin_js_settings();
+		}
+	}
+	
+	public static function admin_scripts() {
+		global $CRAYON_VERSION;
+		self::admin_base_scripts();
+		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
+		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('jquery', 'crayon_jquery_popup', 'crayon_util_js'), $CRAYON_VERSION);
 	}
 
 	public static function init_js_settings() {
@@ -99,17 +106,31 @@ class CrayonSettingsWP {
 					'special' => CrayonSettings::SETTING_SPECIAL,
 					'orig_value' => CrayonSettings::SETTING_ORIG_VALUE
 			);
+			wp_localize_script('crayon_util_js', 'CrayonSyntaxSettings', self::$js_settings);
 		}
-		wp_localize_script('crayon_util_js', 'CrayonSyntaxSettings', self::$js_settings);
+	}
+	
+	public static function init_admin_js_settings() {
+		if (!self::$admin_js_settings) {
+			$themes_ = CrayonResources::themes()->get();
+			$themes = array();
+			foreach ($themes_ as $theme) {
+				$themes[$theme->id()] = $theme->name();
+			}
+			self::$admin_js_settings = array(
+					'themes' => $themes,
+					'themes_url' => plugins_url(CRAYON_THEME_DIR, __FILE__)
+			);
+			wp_localize_script('crayon_admin_js', 'CrayonAdminSettings', self::$admin_js_settings);
+		}
 	}
 
 	public static function settings() {
 		if (!current_user_can('manage_options')) {
 			wp_die(crayon__('You do not have sufficient permissions to access this page.'));
 		}
-
 		// Go through and find all Crayons in posts on each reload
-		self::scan_and_save_posts();
+		//self::scan_and_save_posts();
 
 		?>
 
@@ -216,7 +237,7 @@ class CrayonSettingsWP {
 		update_option(self::OPTIONS, $settings);
 	}
 
-	// Crayons posts
+	// Crayon posts
 
 	/**
 	 * This loads the posts marked as containing Crayons
@@ -236,9 +257,9 @@ class CrayonSettingsWP {
 	/**
 	 * This looks through all posts and marks those which contain Crayons
 	 */
-	public static function scan_and_save_posts() {
-		self::save_posts(CrayonWP::scan_posts(TRUE, TRUE));
-	}
+// 	public static function scan_and_save_posts() {
+// 		self::save_posts(CrayonWP::scan_posts(TRUE, TRUE));
+// 	}
 
 	/**
 	 * Saves the marked posts to the db
@@ -273,6 +294,75 @@ class CrayonSettingsWP {
 		}
 		unset(self::$crayon_posts[$key]);
 		self::save_posts();
+	}
+	
+	public static function remove_posts() {
+		self::$crayon_posts = array();
+		self::save_posts();
+	}
+	
+	// Crayon legacy posts
+	
+	/**
+	 * This loads the posts marked as containing Crayons
+	 */
+	public static function load_legacy_posts() {
+		if (self::$crayon_legacy_posts === NULL) {
+			// Load from db
+			if (!(self::$crayon_legacy_posts = get_option(self::LEGACY_POSTS))) {
+				// Posts don't exist! Scan for them. This will fill self::$crayon_legacy_posts
+				self::$crayon_legacy_posts = CrayonWP::scan_legacy_posts();
+				update_option(self::LEGACY_POSTS, self::$crayon_legacy_posts);
+			}
+		}
+		return self::$crayon_legacy_posts;
+	}
+	
+	/**
+	 * This looks through all posts and marks those which contain Crayons
+	 */
+// 	public static function scan_and_save_posts() {
+// 		self::save_posts(CrayonWP::scan_posts(TRUE, TRUE));
+// 	}
+	
+	/**
+	 * Saves the marked posts to the db
+	 */
+	public static function save_legacy_posts($posts = NULL) {
+		if ($posts === NULL) {
+			$posts = self::$crayon_legacy_posts;
+		}
+		update_option(self::LEGACY_POSTS, $posts);
+		self::load_legacy_posts();
+	}
+	
+	/**
+	 * Adds a post as containing a Crayon
+	 */
+	public static function add_legacy_post($id) {
+		self::load_legacy_posts();
+		if (!in_array($id, self::$crayon_legacy_posts)) {
+			self::$crayon_legacy_posts[] = $id;
+		}
+		self::save_legacy_posts();
+	}
+	
+	/**
+	 * Removes a post as not containing a Crayon
+	 */
+	public static function remove_legacy_post($id) {
+		self::load_legacy_posts();
+		$key = array_search($id, self::$crayon_legacy_posts);
+		if ($key === false) {
+			return;
+		}
+		unset(self::$crayon_legacy_posts[$key]);
+		self::save_legacy_posts();
+	}
+	
+	public static function remove_legacy_posts() {
+		self::$crayon_legacy_posts = array();
+		self::save_legacy_posts();
 	}
 
 	// Cache
@@ -379,6 +469,10 @@ class CrayonSettingsWP {
 		// Convert old tags
 		if (array_key_exists('convert', $inputs)) {
 			CrayonWP::convert_tags();
+		}
+		// Refresh internal tag management
+		if (array_key_exists('refresh_tags', $inputs)) {
+			CrayonWP::refresh_posts();
 		}
 		// Clear the log if needed
 		if (array_key_exists(self::LOG_CLEAR, $_POST)) {
@@ -620,12 +714,13 @@ class CrayonSettingsWP {
 		self::textbox(array('id' => CrayonSettings::START_LINE, 'size' => 2, 'break' => TRUE));
 		echo '</div>';
 	}
-
+	
 	public static function langs() {
 		echo '<a name="langs"></a>';
 		// Specialised dropdown for languages
 		if (array_key_exists(CrayonSettings::FALLBACK_LANG, self::$options)) {
 			if (($langs = CrayonParser::parse_all()) != FALSE) {
+				$langs = CrayonLangs::sort_by_name($langs);
 				self::span(crayon__('When no language is provided, use the fallback').': ');
 				self::dropdown(CrayonSettings::FALLBACK_LANG,FALSE,TRUE,TRUE,$langs);
 				// Information about parsing
@@ -652,6 +747,7 @@ class CrayonSettingsWP {
 	public static function show_langs() {
 		require_once (CRAYON_PARSER_PHP);
 		if (($langs = CrayonParser::parse_all()) != FALSE) {
+			$langs = CrayonLangs::sort_by_name($langs);
 			echo '<table class="crayon-table" cellspacing="0" cellpadding="0"><tr class="crayon-table-header">',
 			'<td>ID</td><td>Name</td><td>Version</td><td>File Extensions</td><td>Aliases</td><td>State</td></tr>';
 			$keys = array_values($langs);
@@ -677,25 +773,37 @@ class CrayonSettingsWP {
 
 	public static function posts() {
 		echo '<a name="posts"></a>';
-		echo '<div id="crayon-subsection-posts-info">'.self::button(array('id'=>'show-posts', 'title'=>crayon__('Show Crayon Posts'))).'<span class="crayon-span-10"></span><a href="http://bit.ly/NQfZN5" target="_blank" class="crayon-question">' . crayon__('?') . '</a></div>' ;
+		echo self::button(array('id'=>'show-posts', 'title'=>crayon__('Show Crayon Posts')));
+		echo ' <input type="submit" name="', self::OPTIONS, '[refresh_tags]" id="refresh_tags" class="button-primary" value="', crayon__('Refresh') ,'" />';
+		echo self::help_button('http://bit.ly/NQfZN5');
+		echo '<div id="crayon-subsection-posts-info"></div>';
 	}
 
 	public static function show_posts() {
 		$posts = self::load_posts();
+		$legacy_posts = self::load_legacy_posts();
+		// Avoids O(n^2) by using a hash map, tradeoff in using strval
+		$legacy_map = array();
+		foreach ($legacy_posts as $legacyID) {
+			$legacy_map[strval($legacyID)] = TRUE;
+		}
 		arsort($posts);
 
 		echo '<table class="crayon-table" cellspacing="0" cellpadding="0"><tr class="crayon-table-header">',
-		'<td>ID</td><td>Title</td><td>Posted</td><td>Modified</td></tr>';
+		'<td>', crayon__('ID'), '</td><td>', crayon__('Title'), '</td><td>', crayon__('Posted'), '</td><td>', crayon__('Modifed'), '</td><td>', crayon__('Contains Legacy Tags?'), '</td></tr>';
 
 		for ($i = 0; $i < count($posts); $i++) {
 			$postID = $posts[$i];
 			$post = get_post($postID);
+			$title = $post->post_title;
+			$title = !empty($title) ? $title : 'N/A';
 			$tr = ($i == count($posts) - 1) ? 'crayon-table-last' : '';
 			echo '<tr class="', $tr, '">',
 			'<td>', $postID, '</td>',
-			'<td><a href="', $post->guid ,'" target="_blank">', $post->post_title, '</a></td>',
+			'<td><a href="', $post->guid ,'" target="_blank">', $title, '</a></td>',
 			'<td>', $post->post_date, '</td>',
 			'<td>', $post->post_modified, '</td>',
+			'<td>', isset($legacy_map[strval($postID)]) ? '<span style="color: red;">'.crayon__('Yes').'</a>' : crayon__('No'), '</td>',
 			'</tr>';
 		}
 
@@ -771,27 +879,39 @@ class Human {
 			$db_theme = '';
 		}
 		$themes_array = CrayonResources::themes()->get_array();
-		self::dropdown(CrayonSettings::THEME,FALSE,TRUE,TRUE,$themes_array);
+		self::dropdown(CrayonSettings::THEME,FALSE,FALSE,TRUE,$themes_array);
 		if ($editor) {
 			return;
 		}
 		// Theme editor
 		if (CRAYON_THEME_EDITOR) {
 			// 			echo '<a id="crayon-theme-editor-button" class="button-primary crayon-admin-button" loading="'. crayon__('Loading...') .'" loaded="'. crayon__('Theme Editor') .'" >'. crayon__('Theme Editor') .'</a></br>';
-			echo '<div id="crayon-theme-editor-admin-buttons">',
-			'<a id="crayon-theme-editor-edit-button" class="button-primary crayon-admin-button" loading="', crayon__('Loading...'), '" loaded="', crayon__('Edit'), '" >', crayon__('Edit'), '</a>',
-			'<a id="crayon-theme-editor-create-button" class="button-primary crayon-admin-button" loading="', crayon__('Loading...'), '" loaded="', crayon__('Create'), '" >', crayon__('Create'), '</a></br></div>';
+			echo '<div id="crayon-theme-editor-admin-buttons">';
+			$buttons = array('edit' => crayon__('Edit'), 'duplicate' => crayon__('Duplicate'), 'create' => crayon__('Create'), 'delete' => crayon__('Delete'));
+			foreach ($buttons as $k=>$v) {
+				echo '<a id="crayon-theme-editor-', $k, '-button" class="button-primary crayon-admin-button" loading="', crayon__('Loading...'), '" loaded="', $v, '" >', $v, '</a>';
+			}
+			echo '</br></div>';
 		}
 		// Preview Box
-		echo '<div id="crayon-live-preview"></div>';
-		echo '<div id="crayon-preview-info">';
-		printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>');
-		echo '</div>';
+		?>
+		<div id="crayon-theme-panel">
+			<div id="crayon-theme-info">
+				<div class="desc"></div>
+				<div class="version field">Version:</div><div class="value"></div>
+				<div class="author field">Author:</div><div class="value"></div>
+			</div>
+			
+			<div id="crayon-live-preview"></div>
+			<div id="crayon-preview-info">
+				<?php printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>'); ?>
+			</div>
+		</div>
+		<?php
 		// Preview checkbox
-		echo '<div style="height:10px;"></div>';
 		self::checkbox(array(CrayonSettings::PREVIEW, crayon__('Enable Live Preview')), FALSE, FALSE);
 		echo '</select><span class="crayon-span-10"></span>';
-		self::checkbox(array(CrayonSettings::ENQUEUE_THEMES, crayon__('Enqueue themes in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
+		self::checkbox(array(CrayonSettings::ENQUEUE_THEMES, crayon__('Enqueue themes in the header (more efficient).') . self::help_button('http://bit.ly/zTUAQV')));
 		// Check if theme from db is loaded
 		if (!CrayonResources::themes()->is_loaded($db_theme) || !CrayonResources::themes()->exists($db_theme)) {
 			echo '<span class="crayon-error">', sprintf(crayon__('The selected theme with id %s could not be loaded'), '<strong>'.$db_theme.'</strong>'), '. </span>';
@@ -817,7 +937,7 @@ class Human {
 			return;
 		}
 		echo '<div style="height:10px;"></div>';
-		self::checkbox(array(CrayonSettings::ENQUEUE_FONTS, crayon__('Enqueue fonts in the header (more efficient).') . ' <a href="http://bit.ly/zTUAQV" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
+		self::checkbox(array(CrayonSettings::ENQUEUE_FONTS, crayon__('Enqueue fonts in the header (more efficient).') . self::help_button('http://bit.ly/zTUAQV')));
 	}
 
 	public static function code($editor = FALSE) {
@@ -839,7 +959,7 @@ class Human {
 		echo '<div class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::TRIM_WHITESPACE, crayon__('Remove whitespace surrounding the shortcode content')));
 		echo '</div>';
-		self::checkbox(array(CrayonSettings::MIXED, crayon__('Allow Mixed Language Highlighting with delimiters and tags.') . ' <a href="http://bit.ly/ukwts2" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
+		self::checkbox(array(CrayonSettings::MIXED, crayon__('Allow Mixed Language Highlighting with delimiters and tags.') . self::help_button('http://bit.ly/ukwts2')));
 		echo '<div class="crayon-hide-inline-only">';
 		self::checkbox(array(CrayonSettings::SHOW_MIXED, crayon__('Show Mixed Language Icon (+)')));
 		echo '</div>';
@@ -852,12 +972,12 @@ class Human {
 	}
 
 	public static function tags() {
-		self::checkbox(array(CrayonSettings::CAPTURE_MINI_TAG, crayon__('Capture Mini Tags like [php][/php] as Crayons.') . ' <a href="http://bit.ly/rRZuzk" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
-		self::checkbox(array(CrayonSettings::INLINE_TAG, crayon__('Capture Inline Tags like {php}{/php} inside sentences.') . ' <a href="http://bit.ly/yFafFL" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
-		self::checkbox(array(CrayonSettings::INLINE_WRAP, crayon__('Wrap Inline Tags') . ' <a href="http://bit.ly/yFafFL" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
-		self::checkbox(array(CrayonSettings::BACKQUOTE, crayon__('Capture `backquotes` as &lt;code&gt;') . ' <a href="http://bit.ly/yFafFL" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
-		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons') . ' <a href="http://bit.ly/rRZuzk" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
-		self::checkbox(array(CrayonSettings::PLAIN_TAG, crayon__('Enable [plain][/plain] tag.') . ' <a href="http://bit.ly/rRZuzk" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
+		self::checkbox(array(CrayonSettings::CAPTURE_MINI_TAG, crayon__('Capture Mini Tags like [php][/php] as Crayons.') . self::help_button('http://bit.ly/rRZuzk')));
+		self::checkbox(array(CrayonSettings::INLINE_TAG, crayon__('Capture Inline Tags like {php}{/php} inside sentences.') . self::help_button('http://bit.ly/yFafFL')));
+		self::checkbox(array(CrayonSettings::INLINE_WRAP, crayon__('Wrap Inline Tags') . self::help_button('http://bit.ly/yFafFL')));
+		self::checkbox(array(CrayonSettings::BACKQUOTE, crayon__('Capture `backquotes` as &lt;code&gt;') . self::help_button('http://bit.ly/yFafFL')));
+		self::checkbox(array(CrayonSettings::CAPTURE_PRE, crayon__('Capture &lt;pre&gt; tags as Crayons') . self::help_button('http://bit.ly/rRZuzk')));
+		self::checkbox(array(CrayonSettings::PLAIN_TAG, crayon__('Enable [plain][/plain] tag.') . self::help_button('http://bit.ly/rRZuzk')));
 	}
 
 	public static function files() {
@@ -869,7 +989,7 @@ class Human {
 	}
 
 	public static function tag_editor() {
-		$can_convert = CrayonWP::can_convert_tags();
+		$can_convert = self::load_legacy_posts();
 		if ($can_convert) {
 			$disabled = '';
 			$convert_text = crayon__('Convert Legacy Tags');
@@ -878,12 +998,12 @@ class Human {
 			$convert_text = crayon__('No Legacy Tags Found');
 		}
 
-		echo '<input type="submit" name="', self::OPTIONS, '[convert]" id="convert" class="button-primary" value="', $convert_text, '"', $disabled, ' />';
-		echo '<span class="crayon-span-10"></span><span>' . crayon__('Convert existing Crayon tags to Tag Editor format (&lt;pre&gt;)'), '</span>', ' <a href="http://bit.ly/ReRr0i" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', CRAYON_BR, CRAYON_BR;
+		echo '<input type="submit" name="', self::OPTIONS, '[convert]" id="convert" class="button-primary" value="', $convert_text, '"', $disabled, ' /> ';
+		echo self::help_button('http://bit.ly/ReRr0i') , CRAYON_BR, CRAYON_BR;
 		$sep = sprintf(crayon__('Use %s to separate setting names from values in the &lt;pre&gt; class attribute'),
 				self::dropdown(CrayonSettings::ATTR_SEP, FALSE, FALSE, FALSE));
-		echo '<span>', $sep, ' <a href="http://bit.ly/H3xW3D" target="_blank" class="crayon-question">' . crayon__('?') . '</a>', '</span><br/>';
-		self::checkbox(array(CrayonSettings::TAG_EDITOR_FRONT, crayon__("Display the Tag Editor in any TinyMCE instances on the frontend")));
+		echo '<span>', $sep, self::help_button('http://bit.ly/H3xW3D'), '</span><br/>';
+		self::checkbox(array(CrayonSettings::TAG_EDITOR_FRONT, crayon__("Display the Tag Editor in any TinyMCE instances on the frontend (e.g. bbPress)") . self::help_button('http://bit.ly/TyYyll')));
 		self::checkbox(array(CrayonSettings::TAG_EDITOR_SETTINGS, crayon__("Display Tag Editor settings on the frontend")));
 	}
 
@@ -891,8 +1011,8 @@ class Human {
 		echo crayon__('Clear the cache used to store remote code requests'),': ';
 		self::dropdown(CrayonSettings::CACHE, false);
 		echo '<input type="submit" id="crayon-cache-clear" name="crayon-cache-clear" class="button-secondary" value="', crayon__('Clear Now'), '" /><br/>';
-		self::checkbox(array(CrayonSettings::EFFICIENT_ENQUEUE, crayon__('Attempt to load Crayon\'s CSS and JavaScript only when needed').'. <a href="http://ak.net84.net/?p=660" target="_blank" class="crayon-question">'.crayon__('?').'</a>'));
-		self::checkbox(array(CrayonSettings::SAFE_ENQUEUE, crayon__('Disable enqueuing for page templates that may contain The Loop.') . ' <a href="http://bit.ly/AcWRNY" target="_blank" class="crayon-question">' . crayon__('?') . '</a>'));
+		self::checkbox(array(CrayonSettings::EFFICIENT_ENQUEUE, crayon__('Attempt to load Crayon\'s CSS and JavaScript only when needed'). self::help_button('http://ak.net84.net/?p=660')));
+		self::checkbox(array(CrayonSettings::SAFE_ENQUEUE, crayon__('Disable enqueuing for page templates that may contain The Loop.') . self::help_button('http://bit.ly/AcWRNY')));
 		self::checkbox(array(CrayonSettings::COMMENTS, crayon__('Allow Crayons inside comments')));
 		self::checkbox(array(CrayonSettings::EXCERPT_STRIP, crayon__('Remove Crayons from excerpts')));
 		self::checkbox(array(CrayonSettings::MAIN_QUERY, crayon__('Load Crayons only from the main Wordpress query')));
@@ -976,14 +1096,15 @@ class Human {
 				</table>';
 
 	}
+	
+	public static function help_button($link) {
+		return ' <a href="' . $link . '" target="_blank" class="crayon-question">' . crayon__('?') . '</a>';
+	}
 
 	public static function plugin_row_meta($meta, $file) {
 		global $CRAYON_DONATE;
 		if ($file == CrayonWP::basename()) {
 			$meta[] = '<a href="options-general.php?page=crayon_settings">' . crayon__('Settings') . '</a>';
-			if (CRAYON_THEME_EDITOR) {
-				$meta[] = '<a href="options-general.php?page=crayon_settings&subpage=theme_editor">' . crayon__('Theme Editor') . '</a>';
-			}
 			$meta[] = '<a href="'.$CRAYON_DONATE.'" target="_blank">' . crayon__('Donate') . '</a>';
 		}
 		return $meta;

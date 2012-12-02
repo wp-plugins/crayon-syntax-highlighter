@@ -1,11 +1,11 @@
 === Crayon Syntax Highlighter ===
 Contributors: akarmenia
-Donate link: https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=4FKp23py2y97iYDcCYZ9zOSEMedaceiEpb8Pvf_qQyezHR3TQROKd_IeRfC&dispatch=5885d80a13c0db1f8e263663d3faee8d0b7e678a25d883d0fa72c947f193f8fd
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AW99EMEPQ4CFE&lc=AU&item_name=Crayon%20Syntax%20Highlighter%20Donation&item_number=crayon%2ddonate&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
 License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.14
+Stable tag: 1.15
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -61,7 +61,7 @@ There are many ways you can help!
 * Make a Theme and share
 * Add support for your favourite <a href="http://ak.net84.net/projects/crayon-language-file-specification/" target="_blank">Language</a>
 * Write a post about your pastel experiences and share
-* <a href="https://www.paypal.com/au/cgi-bin/webscr?cmd=_flow&SESSION=4FKp23py2y97iYDcCYZ9zOSEMedaceiEpb8Pvf_qQyezHR3TQROKd_IeRfC&dispatch=5885d80a13c0db1f8e263663d3faee8d0b7e678a25d883d0fa72c947f193f8fd" target="_blank">Donate</a> to the project
+* <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AW99EMEPQ4CFE&lc=AU&item_name=Crayon%20Syntax%20Highlighter%20Donation&item_number=crayon%2ddonate&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted" target="_blank">Donate</a> to the project
 
 **Supported Languages**
 
@@ -89,6 +89,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * Microsoft Registry (thanks to <a href="http://techexplored.com/2012/03/21/crayon-syntax-highlighter-reg-support/" target="_blank">techexplored.com</a>)
 * MIVA Script
 * Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">Devolonter</a>)
+* MS-DOS Batch (thanks to <a href="http://www.amigalog.com/?p=334" target="_blank">http://www.amigalog.com/?p=334</a>)
 * Java
 * JavaScript
 * Objective-C
@@ -138,10 +139,11 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
+* <a href="http://icrunched.co/top-5-syntax-highlighter-wordpress-plugins/" target="_blank">Top 5 Syntax Highlighter WordPress Plugins</a>
 * <a href="http://themesplugins.com/wordpress-Plugin/add-php-java-html-codes-posts-pages/" target="_blank">Crayon Syntax Highlighter – Plugin</a>
 * <a href="http://bbpress.org/forums/topic/state-of-syntax-highlighter-support-in-bbpress-2/" target="_blank">State of syntax highlighter support in bbPress 2</a>
 * <a href="http://www.techbrunch.fr/informations/plugin-wordpress-afficher-code-source/" target="_blank">The ultimate plugin for displaying code in WordPress (French)</a>
-* <a href="http://www.trynull.com/2012/06/15/finally-wordpress-code-syntax-highlighting-that-works/" target="_blank">Finally!‚A WordPress code syntax highlighting that works</a>
+* <a href="http://www.trynull.com/2012/06/15/finally-wordpress-code-syntax-highlighting-that-works/" target="_blank">Finally!, A WordPress code syntax highlighting that works</a>
 * <a href="http://selfpwnt.com/crayon-syntax-highlighter-and-its-studly-author/" target="_blank">Crayon Syntax Highlighter (and its studly author)</a>
 * <a href="http://bit51.com/add-code-to-your-wordpress-posts-with-crayon-syntax-highlighter/" target="_blank">Add Code To Your WordPress Posts With Crayon Syntax Highlighter</a>
 * <a href="http://www.wpsquare.com/syntax-highlighter-wordpress-plugins/" target="_blank">15 Best Syntax Highlighter WordPress Plugins</a>
@@ -249,8 +251,25 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
-= 1.14.1 =
-* Improved version updating
+= 1.15 =
+* ADDED:
+	* The settings page no longer searches through all posts looking for legacy tags until you hit a new "refresh" button. Refreshing will look through all posts for crayon tags, and also mark any that are legacy tags. The same process occurs on an individual basis when saving a post.
+	* The settings page shows which posts contains legacy tags, and the buttons do not hide when showing the table. 
+	* Added theme information to the settings page
+	* Improved version updating
+	* Code in a new window loses size constraints
+	* MS-DOS batch language (thanks to <a href="http://www.amigalog.com/?p=334" target="_blank">http://www.amigalog.com/?p=334</a>)
+	* Minor improvements
+* FIXED:
+	* Fancybox issues have been fixed: http://ak.net84.net/crayon/initialising-fancybox-with-custom-objects/
+	* max/min-height/width didn't work on Tag Editor
+	* Width discrepancy before and after mouseover from 1px border
+	* Before and after whitespace didn't display correctly
+	* Code opened in a new window didn't display if the current wp theme css was included
+	* IE 8 compatibility issues
+	* Dropdown of languages in settings and Tag Editor are now sorted by name, not id
+	* By default "Display the Tag Editor in any TinyMCE instances on the frontend" is disabled to reduce resources
+	* Chinese translation updated
 
 = 1.14 =
 * All AJAX functions are now using the wp_ajax action and admin-ajax.php method defined here: http://codex.wordpress.org/AJAX_in_Plugins. This means Crayon no longer passes around the wp_load path and doesn't use it as a $_GET variable to load AJAX requests. The security vulnerability in 1.13 is no longer present and that code has been removed.

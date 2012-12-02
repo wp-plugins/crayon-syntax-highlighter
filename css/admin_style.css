@@ -152,8 +152,8 @@
 
 #crayon-live-preview,
 #crayon-log-wrapper {
-	padding: 5px;
-	width: 95%;
+	padding: 0px;
+	width: 100%;
 	float: left;
 	clear: both;
 }
@@ -188,6 +188,20 @@
 }
 
 #crayon-theme-editor-admin-buttons .crayon-admin-button {
+	margin-left: 5px;
+}
+
+#crayon-theme-info {
+    float: left;
+}
+#crayon-theme-info * {
+    float: left;
+}
+#crayon-theme-info .field {
+	font-weight: bold;
+}
+#crayon-theme-info .field,
+#crayon-theme-info .value {
 	margin-left: 5px;
 }
 

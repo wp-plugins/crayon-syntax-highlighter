@@ -224,7 +224,7 @@ class CrayonSettings {
 			new CrayonSetting(self::ATTR_SEP, array(':', '_')),
 			new CrayonSetting(self::EXCERPT_STRIP, FALSE),
 			new CrayonSetting(self::RANGES, TRUE),
-			new CrayonSetting(self::TAG_EDITOR_FRONT, TRUE),
+			new CrayonSetting(self::TAG_EDITOR_FRONT, FALSE),
 			new CrayonSetting(self::TAG_EDITOR_SETTINGS, TRUE),
 			new CrayonSetting(self::WRAP_TOGGLE, TRUE),
 			new CrayonSetting(self::WRAP, FALSE)
@@ -445,9 +445,10 @@ class CrayonSettings {
 				$value = CrayonUtil::str_to_bool($value);
 			}
 			
-			if ($name == 'min-height' || $name == 'max-height' || $name == 'height') {
+			// XXX removed height and width, since it wasn't using the global settings for mode if only height was provided
+			if ($name == 'min-height' || $name == 'max-height'/* || $name == 'height'*/) {
 				self::smart_hw($name, CrayonSettings::HEIGHT_SET, CrayonSettings::HEIGHT_MODE, CrayonSettings::HEIGHT_UNIT, $settings);
-			} else if ($name == 'min-width' || $name == 'max-width' || $name == 'width') {
+			} else if ($name == 'min-width' || $name == 'max-width'/* || $name == 'width'*/) {
 				self::smart_hw($name, CrayonSettings::WIDTH_SET, CrayonSettings::WIDTH_MODE, CrayonSettings::WIDTH_UNIT, $settings);
 			} else if ($name == CrayonSettings::FONT_SIZE) {
 				$settings[CrayonSettings::FONT_SIZE_ENABLE] = TRUE; 

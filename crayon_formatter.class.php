@@ -27,9 +27,7 @@ class CrayonFormatter {
 	public static function format_code($code, $language, $hl = NULL) {
 		// Ensure the language is defined
 		if ($language != NULL && $hl->is_highlighted) {
-			
 			$code = self::clean_code($code, FALSE, FALSE, FALSE, TRUE);
-			
 			/* Perform the replace on the code using the regex, pass the captured matches for
 			 formatting before they are replaced */
 			try {
@@ -80,15 +78,6 @@ class CrayonFormatter {
 	/* Prints the formatted code, option to override the line numbers with a custom string */
 	public static function print_code($hl, $code, $line_numbers = TRUE, $print = TRUE) {
 		global $CRAYON_VERSION;
-		
-		$before = $hl->setting_val(CrayonSettings::WHITESPACE_BEFORE);
-		if ($before > 0) {
-			$code = str_repeat("\n", $before) . $code;
-		}
-		$after = $hl->setting_val(CrayonSettings::WHITESPACE_AFTER);
-		if ($after > 0) {
-			$code = $code . str_repeat("\n", $after);
-		}
 		
 		// We can print either block or inline, inline is treated differently, factor out common stuff here
 		$output = '';
@@ -224,7 +213,6 @@ class CrayonFormatter {
 		// Determine whether to print language
 		$print_lang = '';
 		// XXX Use for printing the regex
-//		var_dump($hl->language()->regex()); exit;
 		if ($hl->language()) {
 			$lang = $hl->language()->name();
 			switch ($hl->setting_index(CrayonSettings::SHOW_LANG)) {
@@ -317,7 +305,7 @@ class CrayonFormatter {
 			$readonly = $touch ? '' : 'readonly';
 			$print_plain = $print_plain_button = '';
 			$textwrap = !$hl->setting_val(CrayonSettings::WRAP) ? 'wrap="off"' : '';
-			$print_plain = '<textarea '.$textwrap.' class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
+			$print_plain = '<textarea '.$textwrap.' class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . "\n" . self::clean_code($hl->code()) . '</textarea>';
 		} else {
 			$print_plain = $plain_settings = $plain_settings = '';
 		}

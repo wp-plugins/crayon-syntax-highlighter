@@ -3,7 +3,7 @@
  Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.14
+Version: 1.15
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -25,8 +25,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 require_once ('global.php');
 require_once (CRAYON_HIGHLIGHTER_PHP);
-require_once (CRAYON_TE_PHP);
-require_once (CRAYON_THEME_EDITOR_PHP);
+if (CRAYON_TAG_EDITOR) {
+	require_once (CRAYON_TE_PHP);
+}
+if (CRAYON_THEME_EDITOR) {
+	require_once (CRAYON_THEME_EDITOR_PHP);
+}
 require_once ('crayon_settings_wp.class.php');
 
 if (defined('ABSPATH')) {
@@ -53,9 +57,10 @@ class CrayonWP {
 	private static $wp_head = FALSE;
 	// Used to keep Crayon IDs
 	private static $next_id = 0;
-	// String to store the regex for capturing mini tags
+	// String to store the regex for capturing tags
 	private static $alias_regex = '';
 	private static $tags_regex = '';
+	private static $tags_regex_legacy = '';
 	private static $tag_regexes = array();
 	// Defined constants used in bitwise flags
 	private static $tag_types = array(
@@ -65,6 +70,8 @@ class CrayonWP {
 			CrayonSettings::PLAIN_TAG,
 			CrayonSettings::BACKQUOTE);
 	private static $tag_bits = array();
+	// Used to find legacy tags
+	private static $legacy_flags = NULL;
 
 	// Used to detect the shortcode
 	const REGEX_CLOSED = '(?:\[\s*crayon(?:-(\w+))?\b([^\]]*)/\s*\])'; // [crayon atts="" /]
@@ -461,7 +468,6 @@ class CrayonWP {
 				}
 			}
 		}
-// 		exit;
 
 		if (!is_admin() && $enqueue && !self::$enqueued) {
 			// Crayons have been found and we enqueue efficiently
@@ -490,13 +496,20 @@ class CrayonWP {
 		wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, __FILE__), array('jquery'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_js', plugins_url(CRAYON_JS, __FILE__), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
 		wp_enqueue_script('crayon_jquery_popup', plugins_url(CRAYON_JQUERY_POPUP, __FILE__), array('jquery'), $CRAYON_VERSION);
+		CrayonSettingsWP::init_js_settings();
 		self::$enqueued = TRUE;
 	}
 
-	private static function init_tags_regex($force = FALSE, $flags = NULL) {
+	private static function init_tags_regex($force = FALSE, $flags = NULL, &$tags_regex = NULL) {
 		self::init_tag_bits();
+		
+		// Default output
+		if ($tags_regex === NULL) {
+			$tags_regex = &self::$tags_regex;
+		}
+		
 
-		if ($force || self::$tags_regex == "") {
+		if ($force || $tags_regex === "") {
 			// Check which tags are in $flags. If it's NULL, then all flags are true.
 			$in_flag = self::in_flag($flags);
 
@@ -514,7 +527,7 @@ class CrayonWP {
 			}
 
 			// Add other tags
-			self::$tags_regex = '#(?<!\$)(?:(\s*\[\s*crayon\b)';
+			$tags_regex = '#(?<!\$)(?:(\s*\[\s*crayon\b)';
 
 			$tag_regexes = array(
 					CrayonSettings::CAPTURE_MINI_TAG => '([\[]\s*('.self::$alias_regex.')\b)',
@@ -526,28 +539,10 @@ class CrayonWP {
 
 			foreach ($tag_regexes as $tag=>$regex) {
 				if ($in_flag[$tag] && CrayonGlobalSettings::val($tag)) {
-					self::$tags_regex .= '|' . $regex;
+					$tags_regex .= '|' . $regex;
 				}
 			}
-			self::$tags_regex .= ')#msi';
-
-
-			// 			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_MINI_TAG)) {
-			// 				self::$tags_regex .= '|([\[]\s*('.self::$alias_regex.'))';
-			// 			}
-			// 			if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
-			// 				self::$tags_regex .= '|(<\s*pre\b)';
-			// 			}
-			// 			if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG)) {
-			// 				self::$tags_regex .= '|('.self::REGEX_INLINE_CLASS.')'.'|([\{]\s*('.self::$alias_regex.'))';
-			// 			}
-			// 			if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
-			// 				self::$tags_regex .= '|(\s*\[\s*plain\b)';
-			// 			}
-			// 			if (CrayonGlobalSettings::val(CrayonSettings::BACKQUOTE)) {
-			// 				self::$tags_regex .= '|(`[^`]*`)';
-			// 			}
-			// 			self::$tags_regex .= '#msi';
+			$tags_regex .= ')#msi';
 		}
 	}
 
@@ -576,6 +571,17 @@ class CrayonWP {
 			$in_flag[$tag] = $flags === NULL || ($flags & self::tag_bit($tag)) > 0;
 		}
 		return $in_flag;
+	}
+	
+	private static function init_legacy_tag_bits() {
+		if (self::$legacy_flags === NULL) {
+			self::$legacy_flags = self::tag_bit(CrayonSettings::CAPTURE_MINI_TAG) |
+			self::tag_bit(CrayonSettings::INLINE_TAG) |
+			self::tag_bit(CrayonSettings::PLAIN_TAG);
+		}
+		if (self::$tags_regex_legacy === "") {
+			self::init_tags_regex(TRUE, self::$legacy_flags, self::$tags_regex_legacy);
+		}
 	}
 
 	// Add Crayon into the_content
@@ -796,7 +802,8 @@ class CrayonWP {
 			CrayonLog::debug('head: missed enqueue');
 			// We have missed our chance to check before enqueuing. Use setting to either load always or only in the_post
 			CrayonSettingsWP::load_settings(TRUE); // Ensure settings are loaded
-			if (!CrayonGlobalSettings::val(CrayonSettings::EFFICIENT_ENQUEUE)) {
+			// If we need the tag editor loaded at all times, we must enqueue at all times
+			if (!CrayonGlobalSettings::val(CrayonSettings::EFFICIENT_ENQUEUE) || CrayonGlobalSettings::val(CrayonSettings::TAG_EDITOR_FRONT)) {
 				CrayonLog::debug('head: force enqueue');
 				// Efficient enqueuing disabled, always load despite enqueuing or not in the_post
 				self::enqueue_resources();
@@ -817,47 +824,46 @@ class CrayonWP {
 		// 			// Ignore revisions
 		// 			return;
 		// 		}
-
-		$id = $post->ID;
-
-		self::init_tags_regex();
-
-		if (preg_match(self::$tags_regex, $post->post_content)) {
-			CrayonSettingsWP::add_post($id);
-		} else {
-			$found = FALSE;
-			CrayonSettingsWP::load_settings(TRUE);
-			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
-				$comments = get_comments(array('post_id' => $id));
-				foreach ($comments as $comment) {
-					$found = self::save_comment($comment->comment_ID, NULL, $comment);
-					if ($found) {
-						break;
-					}
+		self::refresh_post($post);
+	}
+	
+	public static function refresh_post($post, $refresh_legacy = TRUE) {
+		$postID = $post->ID;
+		if (CrayonWP::scan_post($post)) {
+			CrayonSettingsWP::add_post($postID);
+			if ($refresh_legacy) {
+				if (self::scan_legacy_post($post)) {
+					CrayonSettingsWP::add_legacy_post($postID);
+				} else {
+					CrayonSettingsWP::remove_legacy_post($postID);
 				}
 			}
-			if (!$found) {
-				CrayonSettingsWP::remove_post($id);
-			}
+		} else {
+			CrayonSettingsWP::remove_post($postID);
+			CrayonSettingsWP::remove_legacy_post($postID);
+		}
+	}
+	
+	public static function refresh_posts() {
+		CrayonSettingsWP::remove_posts();
+		CrayonSettingsWP::remove_legacy_posts();
+		foreach (CrayonWP::get_posts() as $post) {
+			self::refresh_post($post);
 		}
 	}
 
 	public static function save_comment($id, $is_spam = NULL, $comment = NULL) {
 		self::init_tags_regex();
-
-		if ($comment == NULL) {
+		if ($comment === NULL) {
 			$comment = get_comment($id);
 		}
-
 		$content = $comment->comment_content;
 		$post_id = $comment->comment_post_ID;
-
-		if (preg_match(self::$tags_regex, $content)) {
+		$found = preg_match(self::$tags_regex, $content);
+		if ($found) {
 			CrayonSettingsWP::add_post($post_id);
-			return TRUE;
-		} else {
-			return FALSE;
 		}
+		return $found;
 	}
 
 	public static function crayon_theme_css() {
@@ -899,36 +905,83 @@ class CrayonWP {
 		}
 	}
 
+	public static function get_posts() {
+		$query = new WP_Query(array('post_type' => 'any', 'suppress_filters' => TRUE, 'posts_per_page' => '-1'));
+		return $query->posts;
+	}
+	
 	/**
 	 * Return an array of post IDs where crayons occur.
 	 * Comments are ignored by default.
 	 */
-	public static function scan_posts($init_regex = TRUE, $check_comments = FALSE) {
+	public static function scan_posts($check_comments = FALSE) {
+		$crayon_posts = array();
+		foreach (self::get_posts() as $post) {
+			if (self::scan_post($post)) {
+				$crayon_posts[] = $post->ID;
+			}
+		}
+		return $crayon_posts;
+	}
+	
+	public static function scan_legacy_posts($init_regex = TRUE, $check_comments = FALSE) {
 		if ($init_regex) {
 			// We can skip this if needed
 			self::init_tags_regex();
 		}
-
 		$crayon_posts = array();
-		$query = new WP_Query(array('post_type' => 'any', 'suppress_filters' => TRUE, 'posts_per_page' => '-1'));
-		foreach ($query->posts as $post) {
-			$post_id = $post->ID;
-			if (preg_match(self::$tags_regex, $post->post_content)) {
-				$crayon_posts[] = $post_id;
-			} else if ($check_comments) {
-				CrayonSettingsWP::load_settings(TRUE);
-				if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
-					$comments = get_comments(array('post_id' => $post_id));
-					foreach ($comments as $comment) {
-						if (preg_match(self::$tags_regex, $comment->comment_content)) {
-							$crayon_posts[] = $post_id;
-							break;
-						}
+		foreach (self::get_posts() as $post) {
+			if (self::scan_legacy_post($post)) { // TODO this part is different
+				$crayon_posts[] = $post->ID;
+			}
+		}
+		return $crayon_posts;
+	}
+	
+	/**
+	 * Returns TRUE if a given post contains a Crayon tag
+	 */
+	public static function scan_post($post, $scan_comments = TRUE, $tags_regex = NULL) {
+		if ($tags_regex === NULL) {
+			self::init_tags_regex();
+			$tags_regex = self::$tags_regex;
+		}
+		
+		$id = $post->ID;
+		if (preg_match($tags_regex, $post->post_content)) {
+			return TRUE;
+		} else if ($scan_comments) {
+			CrayonSettingsWP::load_settings(TRUE);
+			if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
+				$comments = get_comments(array('post_id' => $id));
+				foreach ($comments as $comment) {
+					if (self::scan_comment($comment, $tags_regex)) {
+						return TRUE;
 					}
 				}
 			}
 		}
-		return $crayon_posts;
+		return FALSE;
+	}
+	
+	public static function scan_legacy_post($post, $scan_comments = TRUE) {
+		self::init_legacy_tag_bits();
+		return self::scan_post($post, $scan_comments, self::$tags_regex_legacy);
+	}
+	
+	/**
+	 * Returns TRUE if the comment contains a Crayon tag
+	 */
+	public static function scan_comment($comment, $tags_regex = NULL) {
+		if ($tags_regex === NULL) {
+			self::init_tags_regex();
+			$tags_regex = self::$tags_regex;
+		}
+		if (preg_match($tags_regex, $comment->comment_content)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 
 	public static function install() {
@@ -956,17 +1009,18 @@ class CrayonWP {
 			
 			// Upgrade database and settings
 			
-			if ($version < '1.7.21') {
+			if (CrayonUtil::version_compare($version, '1.7.21') < 0) {
 				$settings[CrayonSettings::SCROLL] = $defaults[CrayonSettings::SCROLL];
 				$touched = TRUE;
 			}
 			
-			if ($version < '1.7.23' && $settings[CrayonSettings::FONT] == 'theme-font') {
+			if (CrayonUtil::version_compare($version, '1.7.23') < 0 && $settings[CrayonSettings::FONT] == 'theme-font') {
 				$settings[CrayonSettings::FONT] = $defaults[CrayonSettings::FONT];
 				$touched = TRUE;
 			}
 			
-			if ($version < '1.14') {
+			if (CrayonUtil::version_compare($version, '1.14') < 0) {
+				CrayonLog::syslog("Updated to v1.14: Font size enabled");
 				$settings[CrayonSettings::FONT_SIZE_ENABLE] = true;
 			}
 			
@@ -1019,26 +1073,24 @@ class CrayonWP {
 	 * XXX: Do NOT call this while updating posts or comments, it may cause an infinite loop or fail
 	 */
 	public static function convert_tags($just_check = FALSE) {
-		$result = self::can_convert_tags(TRUE);
-		if ($result === FALSE) {
+		$crayon_posts = CrayonSettingsWP::load_legacy_posts();
+		if ($crayon_posts === NULL) {
 			return;
-		} else {
-			$crayon_posts = $result[0];
-			$flags = $result[1];
 		}
 
+		self::init_legacy_tag_bits();
 		$args = array(
 				'callback' => 'CrayonWP::capture_replace_pre',
 				'ignore' => FALSE,
 				'preserve_atts' => TRUE,
-				'flags' => $flags
+				'flags' => self::$legacy_flags
 		);
-
+		
 		foreach ($crayon_posts as $postID) {
 			$post = get_post($postID);
 			$post_content = $post->post_content;
 			$post_captures = self::capture_crayons($postID, $post_content, array(), $args);
-
+			
 			$post_obj = array();
 			$post_obj['ID'] = $postID;
 			$post_obj['post_content'] = $post_captures['content'];
@@ -1058,42 +1110,15 @@ class CrayonWP {
 					CrayonLog::syslog("Converted Crayons in post ID $postID, comment ID $commentID to pre tags", 'CONVERT');
 				}
 			}
-
 		}
-	}
-
-	public static function can_convert_tags($return = FALSE) {
-		CrayonSettingsWP::load_settings(TRUE);
-		self::init_tag_bits();
-		$flags = self::tag_bit(CrayonSettings::CAPTURE_MINI_TAG) |
-		self::tag_bit(CrayonSettings::INLINE_TAG) |
-		self::tag_bit(CrayonSettings::PLAIN_TAG);
-		self::init_tags_regex(TRUE, $flags);
-
-		// These posts (or comments) will contain the old tag markup
-		$crayon_posts = self::scan_posts(FALSE, TRUE);
-
-		// Reset to all flags for other queries
-		self::init_tags_regex(TRUE);
-		if (count($crayon_posts) > 0) {
-			if ($return) {
-				return array($crayon_posts, $flags);
-			} else {
-				return TRUE;
-			}
-		} else {
-			return FALSE;
-		}
+		
+		self::refresh_posts();
 	}
 
 	// Used as capture_crayons callback
 	public static function capture_replace_pre($capture, $original, $id, $is_inline, $wp_content) {
 		$atts = array();
 		$atts['class'] = CrayonUtil::html_attributes($capture['atts'], CrayonGlobalSettings::val_str(CrayonSettings::ATTR_SEP), '');
-		// 		$has_decode = isset($capture['atts'][CrayonSettings::DECODE]);
-		// 		$default = CrayonGlobalSettings::val(CrayonSettings::DECODE);
-		// 		$encoded = $has_decode ? CrayonUtil::str_to_bool($capture['atts'][CrayonSettings::DECODE], $default) : $default;
-		// 		CrayonUtil::bool_to_str($encoded);
 		return str_replace($original, CrayonUtil::html_element('pre', $capture['code'], $atts), $wp_content);
 	}
 

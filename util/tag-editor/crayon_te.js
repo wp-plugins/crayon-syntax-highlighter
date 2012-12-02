@@ -5,18 +5,12 @@
 		
 		var loaded = false;
 		var editing = false;
-		var insertCallback = null;
-		var editCallback = null;
-		var showCallback = null;
-		var hideCallback = null;
+		var insertCallback, editCallback, showCallback, hideCallback = null;
 		// Used for encoding, decoding
-		var inputHTML = null;
-		var outputHTML = null;
-		var editor_name = null;
-		var ajax_class_timer = null;
+		var inputHTML, outputHTML, editor_name, ajax_class_timer = null;
 		var ajax_class_timer_count = 0;
 		
-		var code_refresh = url_refresh = null;
+		var code_refresh, url_refresh = null;
 		
 		// Current $ obj of pre node
 		var currCrayon = null;
@@ -26,26 +20,26 @@
 		var is_inline = false;
 		
 		// Generated in WP and contains the settings
-		var s, gs, admin = null;
+		var s, gs, util = null;
 		// For use in async functions
 		var me = this;
 		
 		// CSS
-		var dialog = code = clear = submit = null;
+		var dialog, code, clear, submit = null;
 		
 		base.init = function(button) {
 			s = CrayonTagEditorSettings;
 			gs = CrayonSyntaxSettings;
-			admin = CrayonSyntaxAdmin;
+			util = CrayonUtil;
 
 			base.loadDialog();
-			$(button).fancybox({
+			$(button).crayonFancybox({
         		href : s.content_css,
         		margin : [40,10,40,10],
         		padding : 0,
         		width : 690,
-        		//height : '100%',
-        		//autoSize : false,
+        		height : '100%',
+        		autoSize : false,
         		title : '',
         		beforeShow : function () {
             		$(this.outer).prepend($(s.bar_content));
@@ -60,13 +54,13 @@
         	});
 			
 			$(s.cancel_css).live('click', function () {
-				$.fancybox.close();
+				$.crayonFancybox.close();
 				return false;
 			});
 		};
 		
 		base.hide = function() {
-    		$.fancybox.close();
+    		$.crayonFancybox.close();
 			return false;
 		};
 		
@@ -84,11 +78,6 @@
 	        	dialog = $('<div id="'+s.css+'"></div>');
 	            dialog.appendTo('body').hide();
 	        	dialog.html(data);
-	        	
-	        	dialog.ready(function() {
-	        		// Some settings have dependencies, need to load js for that
-	        		admin.init();
-	        	});
 	        	
 	        	me.setOrigValues();
 	        	
@@ -340,20 +329,10 @@
 			
 			// Show the dialog
 			var dialog_title = editing ? s.dialog_title_edit : s.dialog_title_add;
-//			if (tb_show) {
-//				tb_show(dialog_title, '#TB_inline?inlineId=' + s.css);
-//			} else {
-				$(s.dialog_title_css).html(dialog_title);
-				if (showCallback) {
-					showCallback();
-				}
-//			}
-			
-			//tb_show(dialog_title, '#TB_inline?inlineId=' + s.css);
-//			console.log($("#crayon-te-table"));
-//			$("#bbp_topic_content_crayon_tinymce").fancybox({afterLoad: function() {
-//				alert();
-//			}, content: '#crayon-te-table'});
+			$(s.dialog_title_css).html(dialog_title);
+			if (showCallback) {
+				showCallback();
+			}
 			
 	    	code.focus();
 	    	code_refresh();
@@ -362,9 +341,6 @@
 	    		clearInterval(ajax_class_timer);
 	    		ajax_class_timer_count = 0;
 	    	}
-	    	
-	    	// Position submit button
-//			$('#TB_title').append(submit);
 	    	
 	    	var ajax_window = $('#TB_window');
 	    	ajax_window.hide();
@@ -408,7 +384,7 @@
 			// Spacing only for <pre>
 			var br_before = br_after = '';
 			if (!editing) {
-				// Don't add spaces if editting
+				// Don't add spaces if editing
 				if (!is_inline) {
 					if (editor_name == 'html') {
 						br_after = br_before = ' \n'; 
@@ -447,7 +423,7 @@
 	    		var id = $(this).attr('id');
 	    		var value = $(this).attr(s.data_value);
 	    		// Remove prefix
-	    		id = admin.removePrefixFromID(id);
+	    		id = util.removePrefixFromID(id);
 	    		atts[id] = value;
 	    	});
 			
@@ -530,14 +506,6 @@
 			if (hideCallback) {
 				hideCallback();
 			}
-			// Hide dialog
-//			tb_remove();
-//			var ajax = $('#TB_ajaxContent');
-//	    	if ( typeof ajax == 'undefined' ) {
-//	    		ajax.removeClass('crayon-te-ajax');
-//	    	}
-	    	// Title is destroyed, so move the submit out
-//	    	$(s.submit_wrapper_css).append(submit);
 		};
 		
 		// XXX Auxiliary methods

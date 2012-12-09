@@ -5,10 +5,18 @@ var CRAYON_DEBUG = false;
 
 (function ($) {
 	
+	$(document).ready(function() {
+		CrayonUtil.init();
+    });
+	
 	CrayonUtil = new function() {
 		
 		var base = this;
-		var settings = CrayonSyntaxSettings;
+		var settings = null;
+		
+		base.init = function() {
+			settings = CrayonSyntaxSettings;			
+		};
 		
 		base.addPrefixToID = function (id) {
 	        return id.replace(/^([#.])?(.*)$/, '$1' + settings.prefix + '$2');
@@ -23,6 +31,40 @@ var CRAYON_DEBUG = false;
 	        return $(base.addPrefixToID(id));
 	    };
 	    
+	    base.setDefault = function (v, d) {
+	    	return (typeof v == 'undefined') ? d : v;
+	    };
+	    
+	    base.setMax = function (v, max) {
+	    	return v <= max ? v : max; 
+	    };
+	    
+	    base.setMin = function (v, min) {
+	    	return v >= min ? v : min; 
+	    };
+	    
+	    base.setRange = function (v, min, max) {
+	    	return base.setMax(base.setMin(v, min), max); 
+	    };
+	    
+	};
+	
+	// http://stackoverflow.com/questions/2360655/jquery-event-handlers-always-execute-in-order-they-were-bound-any-way-around-t
+
+	// [name] is the name of the event "click", "mouseover", ..
+	// same as you'd pass it to bind()
+	// [fn] is the handler function
+	$.fn.bindFirst = function(name, fn) {
+		// bind as you normally would
+		// don't want to miss out on any jQuery magic
+		this.bind(name, fn);
+		// Thanks to a comment by @Martin, adding support for
+		// namespaced events too.
+		var handlers = this.data('events')[name.split('.')[0]];
+		// take out the handler we just inserted from the end
+		var handler = handlers.pop();
+		// move it at the beginning
+		handlers.splice(0, 0, handler);
 	};
 
 })(jQueryCrayon);
@@ -113,22 +155,4 @@ var CrayonSyntaxUtil = new function() {
 		}
 		return ext;
 	};
-};
-
-// http://stackoverflow.com/questions/2360655/jquery-event-handlers-always-execute-in-order-they-were-bound-any-way-around-t
-
-// [name] is the name of the event "click", "mouseover", ..
-// same as you'd pass it to bind()
-// [fn] is the handler function
-jQueryCrayon.fn.bindFirst = function(name, fn) {
-	// bind as you normally would
-	// don't want to miss out on any jQuery magic
-	this.bind(name, fn);
-	// Thanks to a comment by @Martin, adding support for
-	// namespaced events too.
-	var handlers = this.data('events')[name.split('.')[0]];
-	// take out the handler we just inserted from the end
-	var handler = handlers.pop();
-	// move it at the beginning
-	handlers.splice(0, 0, handler);
 };

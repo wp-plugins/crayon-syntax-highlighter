@@ -778,23 +778,39 @@ class CrayonSettingsWP {
 		echo self::help_button('http://bit.ly/NQfZN5');
 		echo '<div id="crayon-subsection-posts-info"></div>';
 	}
+	
+	public static function post_cmp($a, $b) {
+		$a = $a->post_modified;
+		$b = $b->post_modified;
+		if ($a == $b) {
+			return 0;
+		} else {
+			return $a < $b ? 1 : -1; 
+		}
+	}
 
 	public static function show_posts() {
-		$posts = self::load_posts();
+		$postIDs = self::load_posts();
 		$legacy_posts = self::load_legacy_posts();
 		// Avoids O(n^2) by using a hash map, tradeoff in using strval
 		$legacy_map = array();
 		foreach ($legacy_posts as $legacyID) {
 			$legacy_map[strval($legacyID)] = TRUE;
 		}
-		arsort($posts);
 
 		echo '<table class="crayon-table" cellspacing="0" cellpadding="0"><tr class="crayon-table-header">',
 		'<td>', crayon__('ID'), '</td><td>', crayon__('Title'), '</td><td>', crayon__('Posted'), '</td><td>', crayon__('Modifed'), '</td><td>', crayon__('Contains Legacy Tags?'), '</td></tr>';
 
+		$posts = array();
+		for ($i = 0; $i < count($postIDs); $i++) {
+			$posts[$i] = get_post($postIDs[$i]);
+		}
+
+		usort($posts, 'CrayonSettingsWP::post_cmp');
+		
 		for ($i = 0; $i < count($posts); $i++) {
-			$postID = $posts[$i];
-			$post = get_post($postID);
+			$post = $posts[$i];
+			$postID = $post->ID;
 			$title = $post->post_title;
 			$title = !empty($title) ? $title : 'N/A';
 			$tr = ($i == count($posts) - 1) ? 'crayon-table-last' : '';
@@ -951,6 +967,8 @@ class Human {
 		echo '</span>';
 		self::checkbox(array(CrayonSettings::POPUP, crayon__('Enable opening code in a window')));
 		self::checkbox(array(CrayonSettings::SCROLL, crayon__('Always display scrollbars')));
+		self::checkbox(array(CrayonSettings::EXPAND, crayon__('Expand code beyond page borders on mouseover')));
+		self::checkbox(array(CrayonSettings::EXPAND_TOGGLE, crayon__('Enable code expanding toggling when possible')));
 		echo '</div>';
 		if (!$editor) {
 			self::checkbox(array(CrayonSettings::DECODE, crayon__('Decode HTML entities in code')));
@@ -1065,10 +1083,12 @@ class Human {
 		$translators = '<strong>'.crayon__('Translators').':</strong> ' .
 				'Chinese (<a href="http://smerpup.com/" target="_blank">Dezhi Liu</a>, <a href="http://neverno.me/" target="_blank">Jash Yin</a>),
 				Dutch (<a href="https://twitter.com/#!/chilionsnoek" target="_blank">Chilion Snoek</a>),
+				French (<a href="http://tech.dupeu.pl" target="_blank">Victor Felder</a>),
 				German (<a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&#223;</a>),
 				Italian (<a href="http://www.federicobellucci.net/" target="_blank">Federico Bellucci</a>),
-				Lithuanian (<a href="http://www.host1free.com" target="_blank">Vincent G</a>),
 				Japanese (<a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>),
+				Lithuanian (<a href="http://www.host1free.com" target="_blank">Vincent G</a>),
+				Portuguese (<a href="http://www.adonai.eti.br" target="_blank">Adonai S. Canez</a>),
 				Russian (<a href="http://simplelib.com/" target="_blank">Minimus</a>, <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>),
 				Spanish (<a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>),
 				Turkish (<a href="http://hakanertr.wordpress.com" target="_blank">Hakan</a>)';

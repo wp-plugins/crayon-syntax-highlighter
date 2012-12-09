@@ -5,7 +5,7 @@ License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.15
+Stable tag: 1.16
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -111,12 +111,13 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 
 * Chinese (Simplified, thanks to <a href="http://smerpup.com/" target="_blank">Dezhi Liu</a> & <a href="http://neverno.me/" target="_blank">Jash Yin</a>)
 * Dutch (thanks to <a href="https://twitter.com/#!/chilionsnoek" target="_blank">Chilion Snoek</a>)
-* French
+* French (thanks to <a href="http://tech.dupeu.pl" target="_blank">Victor Felder</a>)
 * German (thanks to <a href="http://www.technologyblog.de/" target="_blank">Stephan Knau&szlig;</a>)
 * Italian (thanks to <a href="http://www.federicobellucci.net/" target="_blank">Federico Bellucci</a>)
-* Lithuanian (thanks to <a href="http://www.host1free.com" target="_blank">Vincent G</a>)
-* Spanish (thanks to <a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>)
 * Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
+* Lithuanian (thanks to <a href="http://www.host1free.com" target="_blank">Vincent G</a>)
+* Portuguese (thanks to <a href="http://www.adonai.eti.br" target="_blank">Adonai S. Canez</a>)
+* Spanish (thanks to <a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>)
 * Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a> & <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>)
 * Turkish (thanks to <a href="http://hakanertr.wordpress.com" target="_blank">Hakan</a>)
 * Help from translators at improving/adding to this list greatly appreciated!
@@ -250,6 +251,22 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 4. Tag Editor.
 
 == Changelog ==
+
+= 1.16 =
+* ADDED:
+	* Expanding code beyond the page border on mouseover - enable the setting under Settings > Crayon > Code.
+	* Expanding the code is delayed in the same way using the toolbar delay setting.
+	* French translation
+	* Portuguese translation
+* FIXED:
+	* Carriage returns and new line characters were being treated differently and not being detected correctly. I'm using a new regex which detects both and also captures the line content: (?:^|(?<=\r\n|\n))[^\r\n]*
+	* JS variable bugs when minifying with W3 Total Cache
+	* CSS did not load in newly opened code window if minified
+	* Saved comments did not capture Crayons until they were updated or the post list was refreshed in settings
+	* Posts in settings are sorted now descending based on modified date
+	* bbPress posts showed Crayons on the bottom of posts irrespective of their position in the post content.
+	* Toggle plain code button appeared when plain code was disabled
+	* Updated Turkish translation
 
 = 1.15 =
 * ADDED:

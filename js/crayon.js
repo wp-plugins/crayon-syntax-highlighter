@@ -1,6 +1,6 @@
 // Crayon Syntax Highlighter JavaScript
 
-(function($) {
+(function ($) {
 
     // BEGIN AUXILIARY FUNCTIONS
 
@@ -8,7 +8,7 @@
         return this.length !== 0;
     };
 
-    $.fn.style = function(styleName, value, priority) {
+    $.fn.style = function (styleName, value, priority) {
         // DOM node
         var node = this.get(0);
         // Ensure we have a DOM node
@@ -62,26 +62,26 @@
     var CRAYON_COPY_BUTTON = '.crayon-copy-button';
     var CRAYON_PLAIN_BUTTON = '.crayon-plain-button';
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         CrayonSyntax.init();
     });
 
-    CrayonSyntax = new function() {
-    	var base = this;
+    CrayonSyntax = new function () {
+        var base = this;
         var crayon = new Object();
         var currUID = 0;
 
-        base.init = function() {
+        base.init = function () {
             if (typeof crayon == 'undefined') {
                 crayon = new Object();
             }
 
-            $(CRAYON_SYNTAX).each(function() {
+            $(CRAYON_SYNTAX).each(function () {
                 base.process(this);
             });
         };
 
-        base.process = function(c, replace) {
+        base.process = function (c, replace) {
             c = $(c);
             var uid = c.attr('id');
             if (uid == 'crayon-') {
@@ -148,7 +148,7 @@
                 'min-height': main_style && main_style.minHeight || '',
                 'width': main_style && main_style.width || '',
                 'max-width': main_style && main_style.maxWidth || '',
-                'min-width': main_style && main_style.minWidth || '',
+                'min-width': main_style && main_style.minWidth || ''
             };
 
             var load_timer;
@@ -157,34 +157,47 @@
             crayon[uid].scroll_block_fix = false;
 
             // Register click events
-            nums_button.click(function() { CrayonSyntax.toggle_nums(uid); });
-            wrap_button.click(function() { CrayonSyntax.toggle_wrap(uid); });
-            expand_button.click(function() { CrayonSyntax.toggle_expand(uid); });
-            plain_button.click(function() { CrayonSyntax.toggle_plain(uid); });
-            copy_button.click(function() { CrayonSyntax.copy_plain(uid); });
+            nums_button.click(function () {
+                CrayonSyntax.toggle_nums(uid);
+            });
+            wrap_button.click(function () {
+                CrayonSyntax.toggle_wrap(uid);
+            });
+            expand_button.click(function () {
+                CrayonSyntax.toggle_expand(uid);
+            });
+            plain_button.click(function () {
+                CrayonSyntax.toggle_plain(uid);
+            });
+            copy_button.click(function () {
+                CrayonSyntax.copy_plain(uid);
+            });
 
-            var load_func = function() {
+            // Enable retina if supported
+            retina(uid);
+
+            var load_func = function () {
                 if (main.height() < 30) {
                     crayon[uid].scroll_block_fix = true;
                 }
 
                 // If nums hidden by default
                 if (nums.filter('[data-settings~="hide"]').length != 0) {
-                    nums_content.ready(function() {
+                    nums_content.ready(function () {
                         console_log('function' + uid);
                         CrayonSyntax.toggle_nums(uid, true, true);
                     });
                 } else {
                     update_nums_button(uid);
                 }
-                
+
                 if (typeof crayon[uid].expanded == 'undefined') {
-                	// Determine if we should enable code expanding toggling 
-	                if (Math.abs(crayon[uid].main.width() - crayon[uid].table.width()) < 10) {
-	                	crayon[uid].expand_button.hide();
-	                } else {
-	                	crayon[uid].expand_button.show();
-	                }
+                    // Determine if we should enable code expanding toggling
+                    if (Math.abs(crayon[uid].main.width() - crayon[uid].table.width()) < 10) {
+                        crayon[uid].expand_button.hide();
+                    } else {
+                        crayon[uid].expand_button.show();
+                    }
                 }
 
                 // TODO If width has changed or timeout, stop timer
@@ -198,7 +211,8 @@
             load_timer = setInterval(load_func, 300);
             fix_scroll_blank(uid);
 
-            $(CRAYON_NUM, crayon[uid]).each(function() {
+            // Add ref to num for each line
+            $(CRAYON_NUM, crayon[uid]).each(function () {
                 var line_id = $(this).attr('data-line');
                 var line = $('#' + line_id);
                 var height = line.style('height');
@@ -216,25 +230,33 @@
 
             // Used to hide info
             if (!touchscreen) {
-                main.click(function() { crayon_info(uid, '', false); });
-                plain.click(function() { crayon_info(uid, '', false); });
-                info.click(function() { crayon_info(uid, '', false); });
+                main.click(function () {
+                    crayon_info(uid, '', false);
+                });
+                plain.click(function () {
+                    crayon_info(uid, '', false);
+                });
+                info.click(function () {
+                    crayon_info(uid, '', false);
+                });
             }
 
             // Used for code popup
-            crayon[uid].popup_settings = popupWindow(popup_button, {
-                height:screen.height - 200,
-                width:screen.width - 100,
-                top:75,
-                left:50,
-                scrollbars:1,
-                windowURL:'',
-                data:'' // Data overrides URL
-            }, function() {
-                code_popup(uid);
-            }, function() {
-                //console_log('after');
-            });
+            if (c.filter('[data-settings~="no-popup"]').length == 0) {
+                crayon[uid].popup_settings = popupWindow(popup_button, {
+                    height: screen.height - 200,
+                    width: screen.width - 100,
+                    top: 75,
+                    left: 50,
+                    scrollbars: 1,
+                    windowURL: '',
+                    data: '' // Data overrides URL
+                }, function () {
+                    code_popup(uid);
+                }, function () {
+                    //console_log('after');
+                });
+            }
 
             plain.css('opacity', 0);
             // If a toolbar with mouseover was found
@@ -251,8 +273,12 @@
                     toolbar.css('z-index', 2);
                     // Hide on single click when overlayed
                     if (toolbar.filter('[data-settings~="hide"]').length != 0) {
-                        main.click(function() { toolbar_toggle(uid, undefined, undefined, 0); });
-                        plain.click(function() { toolbar_toggle(uid, false, undefined, 0); });
+                        main.click(function () {
+                            toolbar_toggle(uid, undefined, undefined, 0);
+                        });
+                        plain.click(function () {
+                            toolbar_toggle(uid, false, undefined, 0);
+                        });
                     }
                 } else {
                     toolbar.css('z-index', 4);
@@ -262,21 +288,33 @@
                     crayon[uid].toolbar_delay = 500;
                 }
                 // Use .hover() for chrome, but in firefox mouseover/mouseout worked best
-                c.mouseenter(function() { toolbar_toggle(uid, true); })
-                    .mouseleave(function() { toolbar_toggle(uid, false); });
+                c.mouseenter(function () {
+                    toolbar_toggle(uid, true);
+                })
+                    .mouseleave(function () {
+                        toolbar_toggle(uid, false);
+                    });
             } else if (touchscreen) {
                 toolbar.show();
             }
-            
+
             // Plain show events
             if (plain.length != 0 && !touchscreen) {
                 if (plain.filter('[data-settings~="dblclick"]').length != 0) {
-                    main.dblclick(function() { CrayonSyntax.toggle_plain(uid); });
+                    main.dblclick(function () {
+                        CrayonSyntax.toggle_plain(uid);
+                    });
                 } else if (plain.filter('[data-settings~="click"]').length != 0) {
-                    main.click(function() { CrayonSyntax.toggle_plain(uid); });
+                    main.click(function () {
+                        CrayonSyntax.toggle_plain(uid);
+                    });
                 } else if (plain.filter('[data-settings~="mouseover"]').length != 0) {
-                    c.mouseenter(function() { CrayonSyntax.toggle_plain(uid, true); })
-                        .mouseleave(function() { CrayonSyntax.toggle_plain(uid, false); });
+                    c.mouseenter(function () {
+                        CrayonSyntax.toggle_plain(uid, true);
+                    })
+                        .mouseleave(function () {
+                            CrayonSyntax.toggle_plain(uid, false);
+                        });
                     nums_button.hide();
                 }
                 if (plain.filter('[data-settings~="show-plain-default"]').length != 0) {
@@ -284,31 +322,40 @@
                     CrayonSyntax.toggle_plain(uid, true);
                 }
             }
-            
+
             // Scrollbar show events
             var expand = c.filter('[data-settings~="expand"]').length != 0;
+//            crayon[uid].mouse_expand = expand;
             if (!touchscreen && c.filter('[data-settings~="scroll-mouseover"]').length != 0) {
                 // Disable on touchscreen devices and when set to mouseover
                 main.css('overflow', 'hidden');
                 plain.css('overflow', 'hidden');
                 if (!expand) {
-                	c.mouseenter(function() { toggle_scroll(uid, true, expand); })
-                    .mouseleave(function() { toggle_scroll(uid, false, expand); });
+                    c.mouseenter(function () {
+                        toggle_scroll(uid, true, expand);
+                    })
+                        .mouseleave(function () {
+                            toggle_scroll(uid, false, expand);
+                        });
                 }
             }
-            
+
             if (expand) {
-            	c.mouseenter(function() { toggle_expand(uid, true); })
-                	.mouseleave(function() { toggle_expand(uid, false); });
+                c.mouseenter(function () {
+                    toggle_expand(uid, true);
+                })
+                    .mouseleave(function () {
+                        toggle_expand(uid, false);
+                    });
             }
-            
+
             // Disable animations
-            if ( c.filter('[data-settings~="disable-anim"]').length != 0 ) {
+            if (c.filter('[data-settings~="disable-anim"]').length != 0) {
                 crayon[uid].time = 0;
             }
 
             // Wrap
-            if ( c.filter('[data-settings~="wrap"]').length != 0 ) {
+            if (c.filter('[data-settings~="wrap"]').length != 0) {
                 crayon[uid].wrapped = true;
             }
 
@@ -321,10 +368,10 @@
             update_wrap(uid);
         };
 
-        var make_uid = function(uid) {
+        var make_uid = function (uid) {
             console_log(crayon);
             if (typeof crayon[uid] == 'undefined') {
-                crayon[uid] = $('#'+uid);
+                crayon[uid] = $('#' + uid);
                 console_log('make ' + uid);
                 return true;
             }
@@ -333,11 +380,11 @@
             return false;
         };
 
-        var getUID = function() {
+        var getUID = function () {
             return currUID++;
         };
 
-        var code_popup = function(uid) {
+        var code_popup = function (uid) {
             if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             }
@@ -352,7 +399,7 @@
 
             // Unwrap
             if (crayon[uid].wrapped) {
-                $(CRAYON_NUM, clone).each(function() {
+                $(CRAYON_NUM, clone).each(function () {
                     var line_id = $(this).attr('data-line');
                     var line = $('#' + line_id);
                     var height = line.attr('data-height');
@@ -376,11 +423,11 @@
                 ' crayon-popup">' + remove_css_inline(get_jquery_str(code)) + '</div></body>';
         };
 
-        var get_jquery_str = function(object) {
+        var get_jquery_str = function (object) {
             return $('<div>').append(object.clone()).remove().html();
         };
 
-        var remove_css_inline = function(string) {
+        var remove_css_inline = function (string) {
             var reStyle = /style\s*=\s*"([^"]+)"/gmi;
             var match = null;
             while ((match = reStyle.exec(string)) != null) {
@@ -392,25 +439,25 @@
         };
 
         // Get all CSS on the page as a string
-        base.get_all_css = function() {
+        base.get_all_css = function () {
             var css_str = '';
             var css = $('link[rel="stylesheet"]');
             var filtered = [];
             if (css.length == 1) {
-            	// For minified CSS, only allow a single file
-            	filtered = css;
+                // For minified CSS, only allow a single file
+                filtered = css;
             } else {
-            	// Filter all others for Crayon CSS
-            	filtered = css.filter('[href*="crayon-syntax-highlighter"]');
+                // Filter all others for Crayon CSS
+                filtered = css.filter('[href*="crayon-syntax-highlighter"]');
             }
-            filtered.each(function() {
+            filtered.each(function () {
                 var string = get_jquery_str($(this));
                 css_str += string;
             });
             return css_str;
         };
 
-        base.copy_plain = function(uid, hover) {
+        base.copy_plain = function (uid, hover) {
             if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             }
@@ -428,7 +475,7 @@
             return false;
         };
 
-        var crayon_info = function(uid, text, show) {
+        var crayon_info = function (uid, text, show) {
             if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             }
@@ -447,7 +494,7 @@
                 info.css('margin-top', -info.height());
                 info.show();
                 crayon_slide(uid, info, true);
-                setTimeout(function() {
+                setTimeout(function () {
                     crayon_slide(uid, info, false);
                 }, 5000);
             }
@@ -458,7 +505,19 @@
 
         };
 
-        var crayon_is_slide_hidden = function(object) {
+        var retina = function (uid) {
+            if (window.devicePixelRatio > 1) {
+                var buttons = $('.crayon-button', crayon[uid].toolbar);
+                buttons.each(function () {
+                    var lowres = $(this).css('background-image');
+                    var highres = lowres.replace(/\.(?=[^\.]+$)/g, '@2x.');
+                    $(this).css('background-size', '48px 16px');
+                    $(this).css('background-image', highres);
+                });
+            }
+        };
+
+        var crayon_is_slide_hidden = function (object) {
             var object_neg_height = '-' + object.height() + 'px';
             if (object.css('margin-top') == object_neg_height || object.css('display') == 'none') {
                 return true;
@@ -467,7 +526,7 @@
             }
         };
 
-        var crayon_slide = function(uid, object, show, anim_time, hide_delay) {
+        var crayon_slide = function (uid, object, show, anim_time, hide_delay) {
             var object_neg_height = '-' + object.height() + 'px';
 
             if (typeof show == 'undefined') {
@@ -484,7 +543,7 @@
             if (anim_time == false) {
                 anim_time = false;
             }
-            if (typeof hide_delay== 'undefined') {
+            if (typeof hide_delay == 'undefined') {
                 hide_delay = 0;
             }
             object.stop(true);
@@ -500,13 +559,13 @@
                 }
                 object.animate({
                     marginTop: object_neg_height
-                }, animt(anim_time, uid), function() {
+                }, animt(anim_time, uid), function () {
                     object.hide();
                 });
             }
         };
 
-        base.toggle_plain = function(uid, hover, select) {
+        base.toggle_plain = function (uid, hover, select) {
             if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             }
@@ -514,7 +573,7 @@
             var main = crayon[uid].main;
             var plain = crayon[uid].plain;
 
-            if ( (main.is(':animated') || plain.is(':animated')) && typeof hover == 'undefined' ) {
+            if ((main.is(':animated') || plain.is(':animated')) && typeof hover == 'undefined') {
                 return;
             }
 
@@ -559,12 +618,12 @@
             // Show hidden, hide visible
             visible.stop(true);
             visible.fadeTo(animt(500, uid), 0,
-                function() {
+                function () {
                     visible.css('z-index', 0);
                 });
             hidden.stop(true);
             hidden.fadeTo(animt(500, uid), 1,
-                function() {
+                function () {
                     hidden.css('z-index', 1);
                     // Give focus to plain code
                     if (hidden == plain) {
@@ -594,7 +653,7 @@
             return false;
         };
 
-        base.toggle_nums = function(uid, hide, instant) {
+        base.toggle_nums = function (uid, hide, instant) {
             if (typeof crayon[uid] == 'undefined') {
                 make_uid(uid);
                 return false;
@@ -642,7 +701,7 @@
             }
             crayon[uid].table.animate({
                 marginLeft: num_margin
-            }, animt(200, uid), function() {
+            }, animt(200, uid), function () {
                 if (typeof crayon[uid] != 'undefined') {
                     update_nums_button(uid);
                     if (!h_scroll_visible && !v_scroll_visible) {
@@ -653,25 +712,28 @@
             return false;
         };
 
-        base.toggle_wrap = function(uid) {
+        base.toggle_wrap = function (uid) {
             crayon[uid].wrapped = !crayon[uid].wrapped;
             update_wrap(uid);
         };
-        
-        base.toggle_expand = function(uid) {
-        	var expand = !CrayonUtil.setDefault(crayon[uid].expanded, false);
-        	toggle_expand(uid, expand);
+
+        base.toggle_expand = function (uid) {
+            var expand = !CrayonUtil.setDefault(crayon[uid].expanded, false);
+            toggle_expand(uid, expand);
         };
 
-        var update_wrap = function(uid) {
+        var update_wrap = function (uid) {
             if (crayon[uid].wrapped) {
                 crayon[uid].addClass(CRAYON_WRAPPED);
             } else {
                 crayon[uid].removeClass(CRAYON_WRAPPED);
             }
             update_wrap_button(uid);
+            if (!crayon[uid].expanded) {
+                restore_dimensions(uid);
+            }
             crayon[uid].wrap_times = 0;
-            crayon[uid].wrap_timer = setInterval(function() {
+            crayon[uid].wrap_timer = setInterval(function () {
                 reconsile_lines(uid);
                 crayon[uid].wrap_times++;
                 if (crayon[uid].wrap_times == 5) {
@@ -680,7 +742,7 @@
             }, 200);
         };
 
-        var fix_table_width = function(uid) {
+        var fix_table_width = function (uid) {
             if (typeof crayon[uid] == 'undefined') {
                 make_uid(uid);
                 return false;
@@ -688,7 +750,7 @@
         };
 
         // Convert '-10px' to -10
-        var px_to_int = function(pixels) {
+        var px_to_int = function (pixels) {
             if (typeof pixels != 'string') {
                 return 0;
             }
@@ -700,7 +762,7 @@
             }
         };
 
-        var update_nums_button = function(uid) {
+        var update_nums_button = function (uid) {
             if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].nums_visible == 'undefined') {
                 return;
             }
@@ -714,7 +776,7 @@
             }
         };
 
-        var update_wrap_button = function(uid) {
+        var update_wrap_button = function (uid) {
             if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].wrapped == 'undefined') {
                 return;
             }
@@ -727,12 +789,12 @@
                 crayon[uid].wrap_button.addClass(UNPRESSED);
             }
         };
-        
-        var update_expand_button = function(uid) {
+
+        var update_expand_button = function (uid) {
             if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].expanded == 'undefined') {
                 return;
             }
-            
+
             if (crayon[uid].expanded) {
                 crayon[uid].expand_button.removeClass(UNPRESSED);
                 crayon[uid].expand_button.addClass(PRESSED);
@@ -743,7 +805,7 @@
             }
         };
 
-        var update_plain_button = function(uid) {
+        var update_plain_button = function (uid) {
             if (typeof crayon[uid] == 'undefined' || typeof crayon[uid].plain_visible == 'undefined') {
                 return;
             }
@@ -758,7 +820,7 @@
             }
         };
 
-        var toolbar_toggle = function(uid, show, anim_time, hide_delay) {
+        var toolbar_toggle = function (uid, show, anim_time, hide_delay) {
             if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             } else if (!crayon[uid].toolbar_mouseover) {
@@ -773,122 +835,147 @@
             crayon_slide(uid, toolbar, show, anim_time, hide_delay);
         };
 
-        var toggle_expand = function(uid, expand) {
-        	if (typeof crayon[uid] == 'undefined') {
+        var initSize = function (uid) {
+            // Shared for scrollbars and expanding
+            crayon[uid].initialSize = {width: crayon[uid].width(), height: crayon[uid].height()};
+        };
+
+        var toggle_expand = function (uid, expand) {
+            if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             }
             if (typeof expand == 'undefined') {
                 return;
             }
-        	
-        	var main = crayon[uid].main;
+
+            var main = crayon[uid].main;
             var plain = crayon[uid].plain;
-        	
+
             if (expand) {
-            	if (typeof crayon[uid].expanded == 'undefined') {
-            		crayon[uid].initialSize = {width: crayon[uid].width(), height: crayon[uid].height()};
-            		crayon[uid].finalSize = {width: crayon[uid].table.width(), height: crayon[uid].table.height()};
-            		crayon[uid].diffSize = {
-        				width: crayon[uid].finalSize.width - crayon[uid].initialSize.width,
-        				height: crayon[uid].finalSize.height - crayon[uid].initialSize.height
-            		};
-            		crayon[uid].expandTime = CrayonUtil.setRange(crayon[uid].diffSize.width / 3, 300, 800);
-            		crayon[uid].expanded = false;
-            	}
-            	
-            	var initialSize = crayon[uid].initialSize;
-            	var diffSize = crayon[uid].diffSize;
-                var finalSize = crayon[uid].finalSize;
-                
-                if (diffSize.width > 0) {
-                	var expandHeight = {
-                		'height' : 'auto',
-                		'min-height' : 'none',
-                		'max-height' : 'none'
-                	};
-                	var expandWidth = {
-            			'width' : 'auto',
-                		'min-width' : 'none',
-                		'max-width' : 'none',
-                	};
-                	crayon[uid].height(crayon[uid].height());
-                    crayon[uid].width(crayon[uid].width());
-                    crayon[uid].css({
-                    	'min-width' : 'none',
-                		'max-width' : 'none'
-                    });
-                    main.css(expandHeight);
-                    main.css(expandWidth);
-                    crayon[uid].stop(true);
-                    crayon[uid].animate({
-                        width: finalSize.width,
-                        height: finalSize.height
-                    }, animt(crayon[uid].expandTime, uid), function() {
-                    	crayon[uid].expanded = true;
-                    	update_expand_button(uid);
-                    });
+                if (typeof crayon[uid].expanded == 'undefined') {
+                    initSize(uid);
+                    crayon[uid].finalSize = {width: crayon[uid].table.width(), height: crayon[uid].table.height()};
+                    // Ensure we don't shrink
+                    crayon[uid].finalSize.width = CrayonUtil.setMin(crayon[uid].finalSize.width, crayon[uid].initialSize.width);
+                    crayon[uid].finalSize.height = CrayonUtil.setMin(crayon[uid].finalSize.height, crayon[uid].initialSize.height);
+                    crayon[uid].diffSize = {
+                        width: crayon[uid].finalSize.width - crayon[uid].initialSize.width,
+                        height: crayon[uid].finalSize.height - crayon[uid].initialSize.height
+                    };
+                    crayon[uid].expandTime = CrayonUtil.setRange(crayon[uid].diffSize.width / 3, 300, 800);
+                    crayon[uid].expanded = false;
                 }
+
+                var initialSize = crayon[uid].initialSize;
+                var diffSize = crayon[uid].diffSize;
+                var finalSize = crayon[uid].finalSize;
+
+                var expandHeight = {
+                    'height': 'auto',
+                    'min-height': 'none',
+                    'max-height': 'none'
+                };
+                var expandWidth = {
+                    'width': 'auto',
+                    'min-width': 'none',
+                    'max-width': 'none'
+                };
+                crayon[uid].height(crayon[uid].height());
+                crayon[uid].width(crayon[uid].width());
+                crayon[uid].css({
+                    'min-width': 'none',
+                    'max-width': 'none'
+                });
+                main.css(expandHeight);
+                main.css(expandWidth);
+                crayon[uid].stop(true);
+                crayon[uid].animate({
+                    width: finalSize.width,
+                    height: finalSize.height
+                }, animt(crayon[uid].expandTime, uid), function () {
+                    crayon[uid].expanded = true;
+                    update_expand_button(uid);
+                });
             } else {
-            	var initialSize = crayon[uid].initialSize;
-            	var delay = crayon[uid].toolbar_delay;
-            	if (initialSize) {
-            		crayon[uid].stop(true);
-            		if (!crayon[uid].expanded) {
-            			crayon[uid].delay(delay);            			
-            		}
-            		crayon[uid].animate({
+                var initialSize = crayon[uid].initialSize;
+                var delay = crayon[uid].toolbar_delay;
+                if (initialSize) {
+                    crayon[uid].stop(true);
+                    if (!crayon[uid].expanded) {
+                        crayon[uid].delay(delay);
+                    }
+                    crayon[uid].animate({
                         width: initialSize.width,
                         height: initialSize.height
-                    }, animt(crayon[uid].expandTime, uid), function() {
-                    	crayon[uid].expanded = false;
-                    	restore_dimensions(uid);
-                    	update_expand_button(uid);
+                    }, animt(crayon[uid].expandTime, uid), function () {
+                        expand_finish(uid);
                     });
-            	} else {
-            		setTimeout(function() {
-            			crayon[uid].expanded = false;
-            			restore_dimensions(uid);
-            			update_expand_button(uid);
-            		}, delay);
-            	}
+                } else {
+                    setTimeout(function () {
+                        expand_finish(uid);
+                    }, delay);
+                }
             }
-            
+
             reconsile_dimensions(uid);
             if (expand) {
-            	update_wrap(uid);
+                update_wrap(uid);
             }
         };
-        
-        var toggle_scroll = function(uid, show, expand) {
+
+        var expand_finish = function(uid) {
+            crayon[uid].expanded = false;
+            restore_dimensions(uid);
+            update_expand_button(uid);
+            if (crayon[uid].wrapped) {
+                update_wrap(uid);
+            }
+        };
+
+        var toggle_scroll = function (uid, show, expand) {
             if (typeof crayon[uid] == 'undefined') {
                 return make_uid(uid);
             }
             if (typeof show == 'undefined') {
                 return;
             }
-            
+
             var main = crayon[uid].main;
             var plain = crayon[uid].plain;
-            
+
+            if (typeof crayon[uid].initialSize == 'undefined') {
+                initSize(uid);
+            }
+
             if (show) {
-            	// Show scrollbars
+                main.height(main.height());
+                plain.height(plain.height());
+                // Show scrollbars
                 main.css('overflow', 'auto');
                 plain.css('overflow', 'auto');
                 if (typeof crayon[uid].top != 'undefined') {
                     visible = (main.css('z-index') == 1 ? main : plain);
                     // Browser will not render until scrollbar moves, move it manually
-                    visible.scrollTop(crayon[uid].top-1);
+                    visible.scrollTop(crayon[uid].top - 1);
                     visible.scrollTop(crayon[uid].top);
-                    visible.scrollLeft(crayon[uid].left-1);
+                    visible.scrollLeft(crayon[uid].left - 1);
                     visible.scrollLeft(crayon[uid].left);
                 }
             } else {
-            	// Hide scrollbars
+                // Hide scrollbars
                 visible = (main.css('z-index') == 1 ? main : plain);
                 crayon[uid].top = visible.scrollTop();
                 crayon[uid].left = visible.scrollLeft();
                 main.css('overflow', 'hidden');
                 plain.css('overflow', 'hidden');
+//                main.height(crayon[uid].initialSize.height);
+//                plain.height(crayon[uid].initialSize.height);
+
+                if (!crayon[uid].expanded) {
+                    restore_dimensions(uid);
+                }
+
+                //restore_dimensions(uid);
             }
             // Register that overflow has changed
             crayon[uid].scroll_changed = true;
@@ -896,34 +983,34 @@
         };
 
         /* Fix weird draw error, causes blank area to appear where scrollbar once was. */
-        var fix_scroll_blank = function(uid) {
+        var fix_scroll_blank = function (uid) {
             // Scrollbar draw error in Chrome
             crayon[uid].table.style('width', '100%', 'important');
-            var redraw = setTimeout(function() {
+            var redraw = setTimeout(function () {
                 crayon[uid].table.style('width', '');
                 clearInterval(redraw);
             }, 10);
         };
 
-        var restore_dimensions = function(uid) {
-        	// Restore dimensions
-        	var main = crayon[uid].main;
-        	var main_style = crayon[uid].main_style;
-        	main.css(main_style);
-        	// Width styles also apply to crayon
-        	crayon[uid].css('height', 'auto');
-        	crayon[uid].css('width', main_style['width']);
-        	crayon[uid].css('max-width', main_style['max-width']);
-        	crayon[uid].css('min-width', main_style['min-width']);
+        var restore_dimensions = function (uid) {
+            // Restore dimensions
+            var main = crayon[uid].main;
+            var main_style = crayon[uid].main_style;
+            main.css(main_style);
+            // Width styles also apply to crayon
+            crayon[uid].css('height', 'auto');
+            crayon[uid].css('width', main_style['width']);
+            crayon[uid].css('max-width', main_style['max-width']);
+            crayon[uid].css('min-width', main_style['min-width']);
         };
-        
-        var reconsile_dimensions = function(uid) {
+
+        var reconsile_dimensions = function (uid) {
             // Reconsile dimensions
             crayon[uid].plain.height(crayon[uid].main.height());
         };
 
-        var reconsile_lines = function(uid) {
-            $(CRAYON_NUM, crayon[uid]).each(function() {
+        var reconsile_lines = function (uid) {
+            $(CRAYON_NUM, crayon[uid]).each(function () {
                 var line_id = $(this).attr('data-line');
                 var line = $('#' + line_id);
                 if (crayon[uid].wrapped) {
@@ -937,11 +1024,13 @@
                         line.css('height', height);
                         $(this).css('height', height);
                     }
+                    //line.css('height', line.css('line-height'));
+                    //console.log(line.css('line-height'));
                 }
             });
         };
 
-        var animt = function(x, uid) {
+        var animt = function (x, uid) {
             if (x == 'fast') {
                 x = 200;
             } else if (x == 'slow') {
@@ -955,7 +1044,7 @@
             return x * crayon[uid].time;
         };
 
-        var isNumber = function(x) {
+        var isNumber = function (x) {
             return typeof x == 'number';
         };
 

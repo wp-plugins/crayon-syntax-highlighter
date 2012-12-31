@@ -1,9 +1,9 @@
 <?php
 /*
- Plugin Name: Crayon Syntax Highlighter
+Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://ak.net84.net/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 1.17
+Version: 2.0.0
 Author: Aram Kocharyan
 Author URI: http://ak.net84.net/
 Text Domain: crayon-syntax-highlighter
@@ -226,6 +226,7 @@ class CrayonWP {
     public static function capture_crayons($wp_id, $wp_content, $extra_settings = array(), $args = array()) {
         extract($args);
         CrayonUtil::set_var($callback, NULL);
+        CrayonUtil::set_var($callback_extra_args, NULL);
         CrayonUtil::set_var($ignore, TRUE);
         CrayonUtil::set_var($preserve_atts, FALSE);
         CrayonUtil::set_var($flags, NULL);
@@ -369,7 +370,7 @@ class CrayonWP {
                 if ($callback === NULL) {
                     $wp_content = str_replace($full_matches[$i], '[crayon-' . $id . $is_inline . '/]', $wp_content);
                 } else {
-                    $wp_content = call_user_func($callback, $c, $full_matches[$i], $id, $is_inline, $wp_content);
+                    $wp_content = call_user_func($callback, $c, $full_matches[$i], $id, $is_inline, $wp_content, $callback_extra_args);
                 }
             }
 
@@ -397,7 +398,7 @@ class CrayonWP {
 
         // Whether to enqueue syles/scripts
         $enqueue = FALSE;
-        CrayonSettingsWP::load_settings(TRUE); // Load just the settings from db, for now
+        CrayonSettingsWP::load_settings(TRUE); // We will eventually need more than the settings
 
         self::init_tags_regex();
         $crayon_posts = CrayonSettingsWP::load_posts(); // Loads posts containing crayons
@@ -764,8 +765,12 @@ class CrayonWP {
         return self::class_tag($matches);
     }
 
-    // Check if the $ notation has been used to ignore [crayon] tags within posts and remove all matches
-    // Can also remove if used without $ as a regular crayon
+    /**
+     * Check if the $ notation has been used to ignore [crayon] tags within posts and remove all matches
+     * Can also remove if used without $ as a regular crayon
+     *
+     * @depreciated
+     */
     public static function crayon_remove_ignore($the_content, $ignore_flag = '$') {
         if ($ignore_flag == FALSE) {
             $ignore_flag = '';
@@ -778,7 +783,8 @@ class CrayonWP {
         if (CrayonGlobalSettings::val(CrayonSettings::CAPTURE_PRE)) {
             $the_content = str_ireplace(array($ignore_flag . '<pre', 'pre>' . $ignore_flag), array('<pre', 'pre>'), $the_content);
             // Remove any <code> tags wrapping around the whole code, since we won't needed them
-            $the_content = preg_replace('#(^\s*<\s*code[^>]*>)|(<\s*/\s*code[^>]*>\s*$)#msi', '', $the_content);
+            // XXX This causes <code> tags to be stripped in the post content! Disabled now.
+            // $the_content = preg_replace('#(^\s*<\s*code[^>]*>)|(<\s*/\s*code[^>]*>\s*$)#msi', '', $the_content);
         }
         if (CrayonGlobalSettings::val(CrayonSettings::PLAIN_TAG)) {
             $the_content = str_ireplace(array($ignore_flag . '[plain', 'plain]' . $ignore_flag), array('[plain', 'plain]'), $the_content);
@@ -893,6 +899,11 @@ class CrayonWP {
     public static function init_ajax() {
         add_action('wp_ajax_crayon-ajax', 'CrayonWP::ajax');
         add_action('wp_ajax_crayon-tag-editor', 'CrayonTagEditorWP::content');
+        add_action('wp_ajax_crayon-theme-editor', 'CrayonThemeEditorWP::content');
+        add_action('wp_ajax_crayon-theme-editor-save', 'CrayonThemeEditorWP::save');
+        add_action('wp_ajax_crayon-theme-editor-delete', 'CrayonThemeEditorWP::delete');
+        add_action('wp_ajax_crayon-theme-editor-duplicate', 'CrayonThemeEditorWP::duplicate');
+        add_action('wp_ajax_crayon-theme-editor-submit', 'CrayonThemeEditorWP::submit');
         add_action('wp_ajax_crayon-show-posts', 'CrayonSettingsWP::show_posts');
         add_action('wp_ajax_crayon-show-langs', 'CrayonSettingsWP::show_langs');
         add_action('wp_ajax_crayon-show-preview', 'CrayonSettingsWP::show_preview');
@@ -1024,7 +1035,11 @@ class CrayonWP {
 
             if (CrayonUtil::version_compare($version, '1.14') < 0) {
                 CrayonLog::syslog("Updated to v1.14: Font size enabled");
-                $settings[CrayonSettings::FONT_SIZE_ENABLE] = true;
+                $settings[CrayonSettings::FONT_SIZE_ENABLE] = TRUE;
+            }
+
+            if (CrayonUtil::version_compare($version, '1.17') < 0) {
+                $settings[CrayonSettings::HIDE_HELP] = FALSE;
             }
 
             // Save new version
@@ -1073,9 +1088,10 @@ class CrayonWP {
     /**
      * Converts Crayon tags found in WP to <pre> form.
      * XXX: This will alter blog content, so backup before calling.
-     * XXX: Do NOT call this while updating posts or comments, it may cause an infinite loop or fail
+     * XXX: Do NOT call this while updating posts or comments, it may cause an infinite loop or fail.
+     * @param $encode Whether to detect missing "decode" attribute and encode html entities in the code.
      */
-    public static function convert_tags($just_check = FALSE) {
+    public static function convert_tags($encode = FALSE) {
         $crayon_posts = CrayonSettingsWP::load_legacy_posts();
         if ($crayon_posts === NULL) {
             return;
@@ -1084,6 +1100,7 @@ class CrayonWP {
         self::init_legacy_tag_bits();
         $args = array(
             'callback' => 'CrayonWP::capture_replace_pre',
+            'callback_extra_args' => array('encode' => $encode),
             'ignore' => FALSE,
             'preserve_atts' => TRUE,
             'flags' => self::$legacy_flags
@@ -1119,10 +1136,18 @@ class CrayonWP {
     }
 
     // Used as capture_crayons callback
-    public static function capture_replace_pre($capture, $original, $id, $is_inline, $wp_content) {
-        $atts = array();
-        $atts['class'] = CrayonUtil::html_attributes($capture['atts'], CrayonGlobalSettings::val_str(CrayonSettings::ATTR_SEP), '');
-        return str_replace($original, CrayonUtil::html_element('pre', $capture['code'], $atts), $wp_content);
+    public static function capture_replace_pre($capture, $original, $id, $is_inline, $wp_content, $args = array()) {
+        $code = $capture['code'];
+        $oldAtts = $capture['atts'];
+        $newAtts = array();
+        $encode = isset($args['encode']) ? $args['encode'] : FALSE;
+        if (!isset($oldAtts[CrayonSettings::DECODE]) && $encode) {
+            // Encode the content, since no decode information exists.
+            $code = CrayonUtil::htmlentities($code);
+            $oldAtts[CrayonSettings::DECODE] = TRUE;
+        }
+        $newAtts['class'] = CrayonUtil::html_attributes($oldAtts, CrayonGlobalSettings::val_str(CrayonSettings::ATTR_SEP), '');
+        return str_replace($original, CrayonUtil::html_element('pre', $code, $newAtts), $wp_content);
     }
 
 }

@@ -5,7 +5,7 @@ License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.17
+Stable tag: 2.0.0
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
 
@@ -16,6 +16,7 @@ It can highlight from a URL, a local file or Wordpress post text. Crayon makes i
 custom language elements with regular expressions.
 It also supports some neat features like:
 
+* Integrated <a href="http://ak.net84.net/crayon/crayon-theme-editor/" target="_blank">Theme Editor!</a>
 * <a href="http://ak.net84.net/projects/crayon-tag-editor/" target="_blank">Tag Editor</a> in both Visual & HTML editors
 * Toggled plain code
 * Toggled line numbers
@@ -105,6 +106,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * Shell (Unix)
 * Transact-SQL
 * TeX
+* Vim
 * Visual Basic
 * YAML
 * Others will be added when requested
@@ -118,6 +120,7 @@ See the <a href="http://ak.net84.net/projects/crayon-language-file-specification
 * Italian (thanks to <a href="http://www.federicobellucci.net/" target="_blank">Federico Bellucci</a>)
 * Japanese (thanks to <a href="https://twitter.com/#!/west_323" target="_blank">@west_323</a>)
 * Lithuanian (thanks to <a href="http://www.host1free.com" target="_blank">Vincent G</a>)
+* Polish (thanks to <a href="https://github.com/toszcze" target="_blank">Bartosz Romanowski</a>)
 * Portuguese (thanks to <a href="http://www.adonai.eti.br" target="_blank">Adonai S. Canez</a>)
 * Spanish (thanks to <a href="http://www.hbravo.com/" target="_blank">Hermann Bravo</a>)
 * Russian (thanks to <a href="http://simplelib.com" target="_blank">Minimus</a> & <a href="http://atlocal.net/" target="_blank">Di_Skyer</a>)
@@ -170,6 +173,8 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Joseph DeVenuta, USA
+* Iván Prego García, Spain
 * Johannes Luijten, (http://www.tweaking4all.com/, http://www.weethet.nl/), USA
 * Jack Fruh, (http://basementjack.com/), USA
 * Ross Barbieri, USA
@@ -252,8 +257,25 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 2. Twilight theme.
 3. Mixed Language Highlighting.
 4. Tag Editor.
+5. Theme Editor.
 
 == Changelog ==
+
+= 2.0.0 =
+* ADDED:
+    * Theme Editor allowing users to create and modify Crayon Themes!
+	* Polish translation (thanks to <a href="https://github.com/toszcze" target="_blank">Bartosz Romanowski</a>)
+	* Vim language
+	* Solarized themes (thanks to <a href="https://github.com/Greduan" target="_blank">Greduan</a>)
+	* Converting legacy tags now has an "encode" option. If selected, any legacy tag where the "decode" attribute is missing (neither true or false) has its code encoded and decode="true" specified.
+* FIXED:
+	* Removed fancybox_init.js and integrated into util.js, other minor improvements in loading Tag Editor
+	* Improved expanding with shirt
+	* Issues with expanding a single line, other minor issues.
+	* Merged JS and PHP debugging toggle
+	* Moved everything towards camelCase from underscores
+	* Minor improvements to Objective-C
+	* Numerous bug fixes and improvements!
 
 = 1.17 =
 * ADDED:

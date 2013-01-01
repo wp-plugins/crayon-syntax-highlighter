@@ -122,10 +122,6 @@ class CrayonThemeEditorWP {
 
     const RE_COMMENT = '#^\s*\/\*[\s\S]*?\*\/#msi';
 
-    public static function init() {
-        self::admin_resources();
-    }
-
     public static function initFields() {
         if (self::$infoFields === NULL) {
             self::$infoFields = array(
@@ -159,7 +155,6 @@ class CrayonThemeEditorWP {
     }
 
     public static function initSettings() {
-
         self::initFields();
         self::initStrings();
         if (self::$settings === NULL) {
@@ -179,9 +174,6 @@ class CrayonThemeEditorWP {
         if (self::$strings === NULL) {
             self::$strings = array(
                 // These appear only in the UI and can be translated
-                // TODO add the rest
-                'no' => crayon__("No"),
-                'yes' => crayon__("Yes"),
                 'userTheme' => crayon__("User-Defined Theme"),
                 'stockTheme' => crayon__("Stock Theme"),
                 'success' => crayon__("Success!"),
@@ -194,12 +186,8 @@ class CrayonThemeEditorWP {
                 'duplicateFail' => crayon__("Duplicate failed!"),
                 'checkLog' => crayon__("Please check the log for details."),
                 'discardConfirm' => crayon__("Are you sure you want to discard all changes?"),
-                'confirm' => crayon__("Confirm"),
                 'editingTheme' => crayon__("Editing Theme: %s"),
                 'creatingTheme' => crayon__("Creating Theme: %s"),
-                'prompt' => crayon__("Prompt"),
-                'value' => crayon__("Value"),
-                'alert' => crayon__("Alert"),
                 'submit' => crayon__("Submit Your Theme"),
                 'submitText' => crayon__("Submit your User Theme for inclusion as a Stock Theme in Crayon!"),
                 'message' => crayon__("Message"),
@@ -215,14 +203,13 @@ class CrayonThemeEditorWP {
         self::initSettings();
         $path = dirname(dirname(__FILE__));
         wp_enqueue_script('cssjson_js', plugins_url(CRAYON_CSSJSON_JS, $path), $CRAYON_VERSION);
-        wp_enqueue_script('jquery_ui_js', plugins_url(CRAYON_JS_JQUERY_UI, $path), array('jquery'), $CRAYON_VERSION);
+
         wp_enqueue_script('jquery_colorpicker_js', plugins_url(CRAYON_JS_JQUERY_COLORPICKER, $path), array('jquery'), $CRAYON_VERSION);
         wp_enqueue_script('jquery_tinycolor_js', plugins_url(CRAYON_JS_TINYCOLOR, $path), array(), $CRAYON_VERSION);
         wp_enqueue_script('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_JS, $path), array('jquery', 'jquery_ui_js', 'crayon_util_js', 'crayon_admin_js', 'cssjson_js', 'jquery_colorpicker_js', 'jquery_tinycolor_js'), $CRAYON_VERSION);
         wp_localize_script('crayon_theme_editor', 'CrayonThemeEditorSettings', self::$settings);
         wp_localize_script('crayon_theme_editor', 'CrayonThemeEditorStrings', self::$strings);
 
-        wp_enqueue_style('jquery_ui', plugins_url(CRAYON_CSS_JQUERY_UI, $path), array(), $CRAYON_VERSION);
         wp_enqueue_style('jquery_colorpicker', plugins_url(CRAYON_CSS_JQUERY_COLORPICKER, $path), array(), $CRAYON_VERSION);
     }
 
@@ -673,12 +660,15 @@ class CrayonThemeEditorWP {
             // Create the new path if needed
             if (!is_file($newPath)) {
                 if (!is_dir($newDir)) {
-                    mkdir($newDir, 0777, TRUE);
-                    try {
-                        // Copy image folder
-                        CrayonUtil::copyDir($oldDir . 'images', $newDir . 'images');
-                    } catch (Exception $e) {
-                        CrayonLog::syslog($e->getMessage(), "THEME SAVE");
+                    wp_mkdir_p($newDir);
+                    $imageSrc = $oldDir . 'images';
+                    if (is_dir($imageSrc)) {
+                        try {
+                            // Copy image folder
+                            CrayonUtil::copyDir($imageSrc, $newDir . 'images', 'wp_mkdir_p');
+                        } catch (Exception $e) {
+                            CrayonLog::syslog($e->getMessage(), "THEME SAVE");
+                        }
                     }
                 }
             }
@@ -774,7 +764,7 @@ class CrayonThemeEditorWP {
         $message = $_POST['message'];
         $dir = CrayonResources::themes()->dirpath($id);
         $dest = $dir . 'tmp';
-        @mkdir($dest);
+        wp_mkdir_p($dest);
 
         if (is_dir($dir) && CrayonResources::themes()->exists($id)) {
             try {
@@ -864,10 +854,6 @@ class CrayonThemeEditorWP {
         }
     }
 
-}
-
-if (defined('ABSPATH') && is_admin()) {
-    add_action('init', 'CrayonThemeEditorWP::init');
 }
 
 ?>

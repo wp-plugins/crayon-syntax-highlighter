@@ -6,7 +6,7 @@
         var base = this;
 
         // Preview
-        var preview, previewWrapper, preview_info, preview_cbox, preview_delay_timer, preview_get, preview_loaded;
+        var preview, previewWrapper, previewInner, preview_info, preview_cbox, preview_delay_timer, preview_get, preview_loaded;
         // The DOM object ids that trigger a preview update
         var preview_obj_names = [];
         // The jQuery objects for these objects
@@ -19,12 +19,13 @@
         // Error
         var msg_cbox, msg;
         // Log
-        var log_button, log_text;
+        var log_button, log_text, log_wrapper, change_button, change_code, plain, copy, clog, help;
 
         var main_wrap, theme_editor_wrap, theme_editor_loading, theme_editor_edit_button, theme_editor_create_button, theme_editor_duplicate_button, theme_editor_delete_button, theme_editor_submit_button;
         var theme_select, theme_info, theme_ver, theme_author, theme_desc;
 
         var settings = null;
+        var strings = null;
         var adminSettings = null;
         var util = null;
 
@@ -32,6 +33,7 @@
             CrayonUtil.log('admin init');
             settings = CrayonSyntaxSettings;
             adminSettings = CrayonAdminSettings;
+            strings = CrayonAdminStrings;
             util = CrayonUtil;
 
             // Wraps
@@ -89,6 +91,7 @@
             // Preview
             preview = $('#crayon-live-preview');
             previewWrapper = $('#crayon-live-preview-wrapper');
+            previewInner = $('#crayon-live-preview-inner');
             preview_info = $('#crayon-preview-info');
             preview_cbox = util.cssElem('#preview');
             if (preview.length != 0) {
@@ -123,8 +126,7 @@
             $('#crayon-settings-form input').live(
                 'focusin focusout mouseup',
                 function () {
-                    $('#crayon-settings-form')
-                        .data('lastSelected', $(this));
+                    $('#crayon-settings-form').data('lastSelected', $(this));
                 });
             $('#crayon-settings-form')
                 .submit(
@@ -182,26 +184,60 @@
             var hide_log = log_button.attr('hide_txt');
             clog = $('#crayon-log');
             log_button.val(show_log);
-            log_button
-                .click(function () {
-                    clog.width(log_wrapper.width());
-                    clog.toggle();
-                    // Scrolls content
-                    clog.scrollTop(log_text.height());
-                    var text = (log_button.val() == show_log ? hide_log
-                        : show_log);
-                    log_button.val(text);
+            log_button.click(function () {
+                clog.width(log_wrapper.width());
+                clog.toggle();
+                // Scrolls content
+                clog.scrollTop(log_text.height());
+                var text = (log_button.val() == show_log ? hide_log
+                    : show_log);
+                log_button.val(text);
+            });
+
+            change_button = $('#crayon-change-code');
+            change_button.click(function () {
+                base.createDialog({
+                    title: strings.changeCode,
+                    html: '<textarea id="crayon-change-code-text"></textarea>',
+                    desc: null,
+                    value: '',
+                    options: {
+                        buttons: {
+                            "OK": function () {
+                                change_code = $('#crayon-change-code-text').val();
+                                base.preview_update();
+                                $(this).dialog('close');
+                            },
+                            "Cancel": function () {
+                                $(this).dialog('close');
+                            }
+                        },
+                        open: function () {
+                            if (change_code) {
+                                $('#crayon-change-code-text').val(change_code);
+                            }
+                        }
+                    }
                 });
+                return false;
+            });
+            $('#crayon-fallback-lang').change(function () {
+                change_code = null;
+                base.preview_update();
+            });
         };
 
         /* Whenever a control changes preview */
-        base.preview_update = function () {
+        base.preview_update = function (vars) {
             var val = 0;
             var obj;
-            var getVars = {
+            var getVars = $.extend({
                 action: 'crayon-show-preview',
                 theme: adminSettings.currTheme
-            };
+            }, vars);
+            if (change_code) {
+                getVars[adminSettings.sampleCode] = change_code;
+            }
             for (var i = 0; i < preview_obj_names.length; i++) {
                 obj = preview_objs[i];
                 if (obj.attr('type') == 'checkbox') {
@@ -209,7 +245,7 @@
                 } else {
                     val = obj.val();
                 }
-                getVars[preview_obj_names[i]] = CrayonUtil.escape(val);
+                getVars[preview_obj_names[i]] = val;//CrayonUtil.escape(val);
             }
 
             // Load Preview
@@ -352,7 +388,6 @@
         };
 
 
-
         base.refresh_theme_info = function (callback) {
             adminSettings.currTheme = theme_select.val();
             adminSettings.currThemeName = theme_select.find('option:selected').attr('data-value');
@@ -435,42 +470,6 @@
                     callback();
                 }
             });
-
-//            CrayonSyntaxThemeEditor.
-//
-//            $.ajax({
-//                url: adminSettings.currThemeURL,
-//                success: function (data) {
-//                    adminSettings.curr_theme_str = data;
-//                    var fields = {
-//                        'Version': theme_ver,
-//                        'Author': theme_author,
-//                        'URL': null,
-//                        'Description': theme_desc
-//                    };
-//                    for (field in fields) {
-//                        var re = new RegExp('(?:^|[\\r\\n]\\s*)\\b' + field
-//                            + '\\s*:\\s*([^\\r\\n]+)', 'gmi');
-//                        var match = re.exec(data);
-//                        var val = fields[field];
-//                        if (match) {
-//                            if (val != null) {
-//                                val.html(match[1].escape().linkify('_blank'));
-//                            } else if (field == 'Author URI') {
-//                                theme_author.html('<a href="' + match[1]
-//                                    + '" target="_blank">'
-//                                    + theme_author.text() + '</a>');
-//                            }
-//                        } else if (val != null) {
-//                            val.text('N/A');
-//                        }
-//                    }
-//                    if (callback) {
-//                        callback();
-//                    }
-//                },
-//                cache: false
-//            });
         };
 
         base.show_theme_editor = function (button, editing) {
@@ -494,13 +493,13 @@
                 }
                 CrayonSyntaxThemeEditor.show(function () {
                     base.show_theme_editor_now(button);
-                }, preview);
+                }, previewInner);
             });
             return false;
         };
 
-        base.resetPreview = function() {
-            previewWrapper.append(preview);
+        base.resetPreview = function () {
+            previewWrapper.append(previewInner);
             CrayonSyntaxThemeEditor.removeStyle();
         };
 
@@ -511,13 +510,59 @@
             button.html(button.attr('loaded'));
         };
 
-//        base.delete_theme = function () {
-//            adminSettings.curr_theme
-//        };
+        // JQUERY UI DIALOGS
 
-//        base.duplicate_theme = function () {
-//
-//        };
+        base.createAlert = function (args) {
+            args = $.extend({
+                title: strings.alert,
+                options: {
+                    buttons: {
+                        "OK": function () {
+                            $(this).dialog('close');
+                        }
+                    }
+                }
+            }, args);
+            base.createDialog(args);
+        };
+
+        base.createDialog = function (args) {
+            var defaultArgs = {
+                yesLabel: strings.yes,
+                noLabel: strings.no,
+                title: strings.confirm
+            };
+            args = $.extend(defaultArgs, args);
+            var options = {
+                modal: true, title: args.title, zIndex: 10000, autoOpen: true,
+                width: 'auto', resizable: false,
+                buttons: {
+                },
+                selectedButtonIndex: 1, // starts from 1
+                close: function (event, ui) {
+                    $(this).remove();
+                }
+            };
+            options.open = function () {
+                $(this).parent().find('button:nth-child(' + options.selectedButtonIndex + ')').focus();
+            };
+            options.buttons[args.yesLabel] = function () {
+                if (args.yes) {
+                    args.yes();
+                }
+                $(this).dialog('close');
+            };
+            options.buttons[args.noLabel] = function () {
+                if (args.no) {
+                    args.no();
+                }
+                $(this).dialog('close');
+            };
+            options = $.extend(options, args.options);
+            $('<div></div>').appendTo('body').html(args.html).dialog(options);
+            // Can be modified afterwards
+            return args;
+        };
 
     };
 

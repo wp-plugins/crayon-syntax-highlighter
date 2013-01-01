@@ -22,6 +22,7 @@ class CrayonSettingsWP {
     // Array of settings to pass to js
     private static $js_settings = NULL;
     private static $admin_js_settings = NULL;
+    private static $admin_js_strings = NULL;
     private static $admin_page = '';
     private static $is_fully_loaded = FALSE;
 
@@ -39,6 +40,7 @@ class CrayonSettingsWP {
     const LOG_CLEAR = 'log_clear';
     const LOG_EMAIL_ADMIN = 'log_email_admin';
     const LOG_EMAIL_DEV = 'log_email_dev';
+    const SAMPLE_CODE = 'sample-code';
 
     private function __construct() {
     }
@@ -49,6 +51,7 @@ class CrayonSettingsWP {
         self::$admin_page = $admin_page = add_options_page('Crayon Syntax Highlighter ' . crayon__('Settings'), 'Crayon', 'manage_options', 'crayon_settings', 'CrayonSettingsWP::settings');
         add_action("admin_print_scripts-$admin_page", 'CrayonSettingsWP::admin_scripts');
         add_action("admin_print_styles-$admin_page", 'CrayonSettingsWP::admin_styles');
+        add_action("admin_print_scripts-$admin_page", 'CrayonThemeEditorWP::admin_resources');
         // Register settings, second argument is option name stored in db
         register_setting(self::FIELDS, self::OPTIONS, 'CrayonSettingsWP::settings_validate');
         add_action("admin_head-$admin_page", 'CrayonSettingsWP::admin_init');
@@ -78,9 +81,13 @@ class CrayonSettingsWP {
     public static function admin_scripts() {
         global $CRAYON_VERSION;
         wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, __FILE__), array('jquery'), $CRAYON_VERSION);
+
+        wp_enqueue_script('jquery_ui_js', plugins_url(CRAYON_JS_JQUERY_UI, __FILE__), array('jquery'), $CRAYON_VERSION);
+        wp_enqueue_style('jquery_ui', plugins_url(CRAYON_CSS_JQUERY_UI, __FILE__), array(), $CRAYON_VERSION);
+
         self::init_js_settings();
         if (is_admin()) {
-            wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('jquery', 'crayon_util_js'), $CRAYON_VERSION);
+            wp_enqueue_script('crayon_admin_js', plugins_url(CRAYON_JS_ADMIN, __FILE__), array('jquery', 'jquery_ui_js', 'crayon_util_js'), $CRAYON_VERSION);
             self::init_admin_js_settings();
         }
         self::other_scripts();
@@ -140,9 +147,22 @@ class CrayonSettingsWP {
                 'userThemes' => $userThemes,
                 'defaultTheme' => CrayonThemes::DEFAULT_THEME,
                 'themesURL' => CrayonThemes::dir_url(),
-                'userThemesURL' => CrayonThemes::dir_url(true)
+                'userThemesURL' => CrayonThemes::dir_url(true),
+                'sampleCode' => self::SAMPLE_CODE
             );
             wp_localize_script('crayon_admin_js', 'CrayonAdminSettings', self::$admin_js_settings);
+        }
+        if (!self::$admin_js_strings) {
+            self::$admin_js_strings = array(
+                'prompt' => crayon__("Prompt"),
+                'value' => crayon__("Value"),
+                'alert' => crayon__("Alert"),
+                'no' => crayon__("No"),
+                'yes' => crayon__("Yes"),
+                'confirm' => crayon__("Confirm"),
+                'changeCode' => crayon__("Change Code")
+            );
+            wp_localize_script('crayon_admin_js', 'CrayonAdminStrings', self::$admin_js_strings);
         }
     }
 
@@ -861,7 +881,7 @@ class CrayonSettingsWP {
         $crayon = CrayonWP::instance();
 
         // Settings to prevent from validating
-        $preview_settings = array();
+        $preview_settings = array(self::SAMPLE_CODE);
 
         // Load settings from GET and validate
         foreach ($_POST as $key => $value) {
@@ -892,7 +912,11 @@ class CrayonSettingsWP {
         $lang = $crayon->setting_val(CrayonSettings::FALLBACK_LANG);
         $path = crayon_pf(CRAYON_UTIL_PATH . '/sample/' . $lang . '.txt', FALSE);
 
-        if ($lang && @file_exists($path)) {
+
+
+        if (isset($_POST[self::SAMPLE_CODE])) {
+            $crayon->code($_POST[self::SAMPLE_CODE]);
+        } else if ($lang && @file_exists($path)) {
             $crayon->url($path);
         } else {
             $code = "
@@ -948,10 +972,12 @@ class Human {
     <div id="crayon-theme-panel">
         <div id="crayon-theme-info"></div>
         <div id="crayon-live-preview-wrapper">
-            <div id="crayon-live-preview"></div>
-        </div>
-        <div id="crayon-preview-info">
-            <?php printf(crayon__('Change the %1$sfallback language%2$s to change the sample code. Lines 5-7 are marked.'), '<a href="#langs">', '</a>'); ?>
+            <div id="crayon-live-preview-inner">
+                <div id="crayon-live-preview"></div>
+                <div id="crayon-preview-info">
+                    <?php printf(crayon__('Change the %1$sfallback language%2$s to change the sample code or %3$schange it manually%4$s. Lines 5-7 are marked.'), '<a href="#langs">', '</a>', '<a id="crayon-change-code" href="#">', '</a>'); ?>
+                </div>
+            </div>
         </div>
     </div>
     <?php

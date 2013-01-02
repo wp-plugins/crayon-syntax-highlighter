@@ -261,6 +261,12 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 
 == Changelog ==
 
+= 2.0.2 =
+* FIXED:
+    * Converting tags failed to work since 2.0.0 - also fixed minor bugs leading to false positives for legacy tags.
+    * Copy function was calling invalid function, preventing duplication from taking place.
+	* Slashes are removed from server side input which was appearing from the change code dialog
+
 = 2.0.1 =
 * ADDED:
     * Ability to change sample code in settings

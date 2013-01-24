@@ -54,6 +54,8 @@
     var CRAYON_TABLE = '.crayon-table';
     var CRAYON_LOADING = '.crayon-loading';
     var CRAYON_CODE = '.crayon-code';
+    var CRAYON_TITLE = '.crayon-title';
+    var CRAYON_TOOLS = '.crayon-tools';
     var CRAYON_NUMS = '.crayon-nums';
     var CRAYON_NUM = '.crayon-num';
     var CRAYON_LINE = '.crayon-line';
@@ -73,13 +75,16 @@
     CrayonSyntax = new function () {
         var base = this;
         var crayon = new Object();
+        var settings;
+        var strings;
         var currUID = 0;
 
         base.init = function () {
             if (typeof crayon == 'undefined') {
                 crayon = new Object();
             }
-
+            settings = CrayonSyntaxSettings;
+            strings = CrayonSyntaxStrings;
             $(CRAYON_SYNTAX).each(function () {
                 base.process(this);
             });
@@ -110,6 +115,8 @@
             var main = c.find(CRAYON_MAIN);
             var table = c.find(CRAYON_TABLE);
             var code = c.find(CRAYON_CODE);
+            var title = c.find(CRAYON_TITLE);
+            var tools = c.find(CRAYON_TOOLS);
             var nums = c.find(CRAYON_NUMS);
             var numsContent = c.find(CRAYON_NUMS_CONTENT);
             var numsButton = c.find(CRAYON_NUMS_BUTTON);
@@ -126,6 +133,8 @@
             crayon[uid].main = main;
             crayon[uid].table = table;
             crayon[uid].code = code;
+            crayon[uid].title = title;
+            crayon[uid].tools = tools;
             crayon[uid].nums = nums;
             crayon[uid].nums_content = numsContent;
             crayon[uid].numsButton = numsButton;
@@ -226,10 +235,10 @@
             main.css('z-index', 1);
 
             // Disable certain features for touchscreen devices
-            touchscreen = (c.filter('[data-settings~="touchscreen"]').length != 0);
+            crayon.touchscreen = (c.filter('[data-settings~="touchscreen"]').length != 0);
 
             // Used to hide info
-            if (!touchscreen) {
+            if (!crayon.touchscreen) {
                 main.click(function () {
                     crayonInfo(uid, '', false);
                 });
@@ -263,7 +272,7 @@
             crayon[uid].toolbar_visible = true;
             crayon[uid].toolbarMouseover = false;
             // If a toolbar with mouseover was found
-            if (toolbar.filter('[data-settings~="mouseover"]').length != 0 && !touchscreen) {
+            if (toolbar.filter('[data-settings~="mouseover"]').length != 0 && !crayon.touchscreen) {
                 crayon[uid].toolbarMouseover = true;
                 crayon[uid].toolbar_visible = false;
 
@@ -298,12 +307,17 @@
                     .mouseleave(function () {
                         toggleToolbar(uid, false);
                     });
-            } else if (touchscreen) {
+            } else if (crayon.touchscreen) {
                 toolbar.show();
             }
 
+            // Minimize
+            if (c.filter('[data-settings~="minimize"]').length == 0) {
+                base.minimize(uid);
+            }
+
             // Plain show events
-            if (plain.length != 0 && !touchscreen) {
+            if (plain.length != 0 && !crayon.touchscreen) {
                 if (plain.filter('[data-settings~="dblclick"]').length != 0) {
                     main.dblclick(function () {
                         CrayonSyntax.togglePlain(uid);
@@ -330,7 +344,7 @@
             // Scrollbar show events
             var expand = c.filter('[data-settings~="expand"]').length != 0;
 //            crayon[uid].mouse_expand = expand;
-            if (!touchscreen && c.filter('[data-settings~="scroll-mouseover"]').length != 0) {
+            if (!crayon.touchscreen && c.filter('[data-settings~="scroll-mouseover"]').length != 0) {
                 // Disable on touchscreen devices and when set to mouseover
                 main.css('overflow', 'hidden');
                 plain.css('overflow', 'hidden');
@@ -427,6 +441,32 @@
                 ' crayon-popup">' + base.removeCssInline(base.getHtmlString(code)) + '</div></body>';
         };
 
+        base.minimize = function (uid) {
+            var button = $('<div class="crayon-minimize crayon-button"><div>');
+            crayon[uid].tools.append(button);
+            // TODO translate
+            crayon[uid].origTitle = crayon[uid].title.html();
+            if (!crayon[uid].origTitle) {
+                crayon[uid].title.html(strings.minimize);
+            };
+            var cls = 'crayon-minimized';
+            var show = function () {
+                crayon[uid].toolbarPreventHide = false;
+                button.remove();
+                crayon[uid].removeClass(cls);
+                crayon[uid].title.html(crayon[uid].origTitle);
+                var toolbar = crayon[uid].toolbar;
+                if (toolbar.filter('[data-settings~="never-show"]').length != 0) {
+                    toolbar.remove();
+                }
+            };
+            crayon[uid].toolbar.click(show);
+            button.click(show);
+            crayon[uid].addClass(cls);
+            crayon[uid].toolbarPreventHide = true;
+            toggleToolbar(uid, undefined, undefined, 0);
+        }
+
         base.getHtmlString = function (object) {
             return $('<div>').append(object.clone()).remove().html();
         };
@@ -471,8 +511,8 @@
             base.togglePlain(uid, true, true);
             toggleToolbar(uid, true);
 
-            key = crayon[uid].mac ? '\u2318' : 'CTRL';
-            var text = crayon[uid].copy_button.attr('data-text');
+            var key = crayon[uid].mac ? '\u2318' : 'CTRL';
+            var text = strings.copy;
             text = text.replace(/%s/, key + '+C');
             text = text.replace(/%s/, key + '+V');
             crayonInfo(uid, text);
@@ -746,10 +786,13 @@
             crayon[uid].wrapTimes = 0;
             clearInterval(crayon[uid].wrapTimer);
             crayon[uid].wrapTimer = setInterval(function () {
-                reconsileLines(uid);
-                crayon[uid].wrapTimes++;
-                if (crayon[uid].wrapTimes == 5) {
-                    clearInterval(crayon[uid].wrapTimer);
+                if (crayon[uid].is(':visible')) {
+                    // XXX if hidden the height can't be determined
+                    reconsileLines(uid);
+                    crayon[uid].wrapTimes++;
+                    if (crayon[uid].wrapTimes == 5) {
+                        clearInterval(crayon[uid].wrapTimer);
+                    }
                 }
             }, 200);
         };
@@ -836,6 +879,10 @@
             if (typeof crayon[uid] == 'undefined') {
                 return makeUID(uid);
             } else if (!crayon[uid].toolbarMouseover) {
+                return;
+            } else if (show == false && crayon[uid].toolbarPreventHide) {
+                return;
+            } else if (crayon.touchscreen) {
                 return;
             }
             var toolbar = crayon[uid].toolbar;
@@ -1040,17 +1087,19 @@
             $(CRAYON_NUM, crayon[uid]).each(function () {
                 var lineID = $(this).attr('data-line');
                 var line = $('#' + lineID);
+                var height = null;
                 if (crayon[uid].wrapped) {
                     line.css('height', '');
-                    $(this).css('height', line.height());
+                    height = line.height();
+                    height = height ? height : '';
                     // TODO toolbar should overlay title if needed
                 } else {
-                    var height = line.attr('data-height');
+                    height = line.attr('data-height');
                     height = height ? height : '';
                     line.css('height', height);
-                    $(this).css('height', height);
                     //line.css('height', line.css('line-height'));
                 }
+                $(this).css('height', height);
             });
         };
 

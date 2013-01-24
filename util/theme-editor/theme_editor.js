@@ -14,12 +14,14 @@
         var admin = CrayonSyntaxAdmin;
 
         var preview, previewCrayon, previewCSS, status, title, info;
+        var colorPickerPos;
         var changed, loaded;
         var themeID, themeJSON, themeCSS, themeStr, themeInfo;
         var reImportant = /\s+!important$/gmi;
         var reSize = /^[0-9-]+px$/;
         var reCopy = /-copy(-\d+)?$/;
         var changedAttr = 'data-value';
+        var borderCSS = {'border':true, 'border-left':true, 'border-right':true, 'border-top':true, 'border-bottom':true};
 
         base.init = function (callback) {
             // Called only once
@@ -33,9 +35,6 @@
         base.show = function (callback, crayon) {
             // Called each time editor is shown
             previewCrayon = crayon.find('.crayon-syntax');
-            //crayon.attr('id', 'theme-editor-instance');
-//            CrayonSyntax.process(crayon, true);
-//            preview.html(crayon);
             preview.append(crayon)
             base.load();
             if (callback) {
@@ -52,6 +51,7 @@
                 stripComments: true,
                 split: true
             });
+            themeJSON = base.filterCSS(themeJSON);
             CrayonUtil.log(themeJSON);
             themeInfo = base.readCSSInfo(themeStr);
             base.removeExistingCSS();
@@ -76,7 +76,6 @@
             }
             // Update attributes
             base.persistAttributes();
-//            return false;
             // Save
             themeCSS = CSSJSON.toCSS(themeJSON);
             var newThemeStr = base.writeCSSInfo(info) + themeCSS;
@@ -164,7 +163,7 @@
                         id: id,
                         message: val
                     }, function (result) {
-                        var msg = result > 0 ? strings.submitSucceed : strings.submitFail + ' ' + strings.checkLog ;
+                        var msg = result > 0 ? strings.submitSucceed : strings.submitFail + ' ' + strings.checkLog;
                         admin.createAlert({
                             html: msg
                         });
@@ -206,11 +205,6 @@
             var match = null;
             var infoRegex = /([^\r\n:]*[^\r\n\s:])\s*:\s*([^\r\n]+)/gmi;
             while ((match = infoRegex.exec(infoStr)) != null) {
-//                var fieldID = settings.fieldsInverse[match[1]];
-//                var fieldID = base.convertToID(match[1]);
-//                if (fieldID) {
-//                    themeInfo[fieldID] = match[2];
-//                }
                 themeInfo[base.nameToID(match[1])] = CrayonUtil.encode_html(match[2]);
             }
             // Force title case on the name
@@ -238,7 +232,7 @@
             return names;
         };
 
-        base.removeExistingCSS = function() {
+        base.removeExistingCSS = function () {
             // Remove the old <style> tag to prevent clashes
             preview.find('link[rel="stylesheet"][href*="' + adminSettings.currThemeURL + '"]').remove()
         };
@@ -398,21 +392,66 @@
             return attr.replace(reImportant, '');
         };
 
+        base.isImportant = function (attr) {
+            return reImportant.exec(attr) != null;
+        };
+
         base.appendStyle = function (css) {
             previewCSS.html('<style>' + css + '</style>');
         };
 
-        base.removeStyle = function() {
+        base.removeStyle = function () {
             previewCSS.html('');
         };
 
         base.writeCSSInfo = function (info) {
             var infoStr = '/*\n';
-            for (field in info) {
+            for (var field in info) {
                 infoStr += field + ': ' + info[field] + '\n';
             }
             return infoStr + '*/\n';
         };
+
+        base.filterCSS = function(css) {
+            // Split all border CSS attributes into individual attributes
+            for (var child in css.children) {
+                var atts = css.children[child].attributes;
+                for (var att in atts) {
+                    if (att in borderCSS) {
+                        var rules = base.getBorderCSS(atts[att]);
+                        for (var rule in rules) {
+                            atts[att + '-' + rule] = rules[rule];
+                        }
+                        delete atts[att];
+                    }
+                }
+            }
+            return css;
+        },
+
+        base.getBorderCSS = function (css) {
+            var result = {};
+            var important = base.isImportant(css);
+            $.each(strings.borderStyles, function (i, style) {
+                if (css.indexOf(style) >= 0) {
+                    result.style = style;
+                }
+            });
+            var width = /\d+\s*(px|%|em|rem)/gi.exec(css);
+            if (width) {
+                result.width = width[0];
+            }
+            var color = /#\w+/gi.exec(css);
+            if (color) {
+                result.color = color[0];
+            }
+            if (important) {
+                for (var rule in result) {
+                    result[rule] = base.addImportant(result[rule]);
+                }
+            }
+            return result;
+        },
 
         base.createPrompt = function (args) {
             args = $.extend({
@@ -426,10 +465,10 @@
                             if (args.ok) {
                                 args.ok(base.getFieldValue('prompt-text'));
                             }
-                            $(this).dialog('close');
+                            $(this).crayonDialog('close');
                         },
                         "Cancel": function () {
-                            $(this).dialog('close');
+                            $(this).crayonDialog('close');
                         }
                     },
                     open: function () {
@@ -437,7 +476,7 @@
                     }
                 }
             }, args);
-            args.html = '<table>';
+            args.html = '<table class="field-table">';
             if (args.desc) {
                 args.html += '<tr><td colspan="2">' + args.desc + '</td></tr>';
             }
@@ -479,12 +518,19 @@
                         showNoneButton: true,
                         colorFormat: '#HEX'
                     };
+                    args.open = function (e, color) {
+                        $('.ui-colorpicker-dialog .ui-button').addClass('button-primary');
+                        if (colorPickerPos) {
+                            console.log('colorPickerPos', colorPickerPos);
+                            var picker = $('.ui-colorpicker-dialog:visible');
+                            picker.css('left', colorPickerPos.left);
+//                            picker.css('top', colorPickerPos.top);
+                        }
+                    };
                     args.select = function (e, color) {
                         attr.trigger('change');
                     };
                     args.close = function (e, color) {
-//                        attr.val(color.formatted);
-//                        args.select(e, color);
                         attr.trigger('change');
                     };
                     attr.colorpicker(args);
@@ -526,6 +572,18 @@
                     }
                 });
             });
+            $('.ui-colorpicker-dialog').addClass('wp-dialog');
+            $('.ui-colorpicker-dialog').mouseup(function () {
+                base.colorPickerMove($(this));
+            });
+        };
+
+        base.colorPickerMove = function (picker) {
+            console.log('picker', picker);
+            if (picker) {
+                colorPickerPos = {left: picker.css('left'), top: picker.css('top')};
+                console.log('colorPickerPos', colorPickerPos);
+            }
         };
 
         base.updateLiveCSS = function (clone) {

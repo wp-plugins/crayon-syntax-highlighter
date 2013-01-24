@@ -1,6 +1,6 @@
 <?php
 
-class Element {
+class CrayonHTMLElement {
     public $id;
     public $class = '';
     public $tag = 'div';
@@ -8,6 +8,20 @@ class Element {
     public $contents = '';
     public $attributes = array();
     const CSS_INPUT_PREFIX = "crayon-theme-input-";
+
+    public static $borderStyles = array(
+        'none',
+        'hidden',
+        'dotted',
+        'dashed',
+        'solid',
+        'double',
+        'groove',
+        'ridge',
+        'inset',
+        'outset',
+        'inherit'
+    );
 
     public function __construct($id) {
         $this->id = $id;
@@ -34,7 +48,7 @@ class Element {
     }
 }
 
-class Input extends Element {
+class CrayonHTMLInput extends CrayonHTMLElement {
     public $name;
     public $type;
 
@@ -54,7 +68,7 @@ class Input extends Element {
     }
 }
 
-class Select extends Input {
+class CrayonHTMLSelect extends CrayonHTMLInput {
     public $options;
     public $selected = NULL;
 
@@ -93,7 +107,7 @@ class Select extends Input {
     }
 }
 
-class Separator extends Element {
+class CrayonHTMLSeparator extends CrayonHTMLElement {
     public $name = '';
 
     public function __construct($name) {
@@ -102,7 +116,7 @@ class Separator extends Element {
     }
 }
 
-class Title extends Separator {
+class CrayonHTMLTitle extends CrayonHTMLSeparator {
 
 }
 
@@ -141,9 +155,9 @@ class CrayonThemeEditorWP {
             self::$attributes = array();
             // A map of CSS attribute to input type
             self::$attributeGroups = array(
-                'color' => array('background', 'background-color', 'border-color', 'color', 'border-top-color', 'border-bottom-color'),
+                'color' => array('background', 'background-color', 'border-color', 'color', 'border-top-color', 'border-bottom-color', 'border-left-color', 'border-right-color'),
                 'size' => array('border-width'),
-                'border-style' => array('border-style', 'border-bottom-style', 'border-top-style')
+                'border-style' => array('border-style', 'border-bottom-style', 'border-top-style', 'border-left-style', 'border-right-style')
             );
             self::$attributeGroupsInverse = CrayonUtil::array_flip(self::$attributeGroups);
             // Mapping of input type to attribute group
@@ -161,7 +175,7 @@ class CrayonThemeEditorWP {
             self::$settings = array(
                 // Only things the theme editor needs
                 'cssThemePrefix' => CrayonThemes::CSS_PREFIX,
-                'cssInputPrefix' => Element::CSS_INPUT_PREFIX,
+                'cssInputPrefix' => CrayonHTMLElement::CSS_INPUT_PREFIX,
                 'attribute' => self::ATTRIBUTE,
                 'fields' => self::$infoFields,
                 'fieldsInverse' => self::$infoFieldsInverse,
@@ -194,6 +208,7 @@ class CrayonThemeEditorWP {
                 'submitMessage' => crayon__("Please include this theme in Crayon!"),
                 'submitSucceed' => crayon__("Submit was successful."),
                 'submitFail' => crayon__("Submit failed!"),
+                'borderStyles' => CrayonHTMLElement::$borderStyles
             );
         }
     }
@@ -204,12 +219,13 @@ class CrayonThemeEditorWP {
         $path = dirname(dirname(__FILE__));
         wp_enqueue_script('cssjson_js', plugins_url(CRAYON_CSSJSON_JS, $path), $CRAYON_VERSION);
 
-        wp_enqueue_script('jquery_colorpicker_js', plugins_url(CRAYON_JS_JQUERY_COLORPICKER, $path), array('jquery'), $CRAYON_VERSION);
+        wp_enqueue_script('jquery_colorpicker_js', plugins_url(CRAYON_JS_JQUERY_COLORPICKER, $path), array('jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-tabs', 'jquery-ui-draggable', 'jquery-ui-dialog', 'jquery-ui-position', 'jquery-ui-mouse', 'jquery-ui-slider', 'jquery-ui-droppable', 'jquery-ui-selectable', 'jquery-ui-resizable'), $CRAYON_VERSION);
         wp_enqueue_script('jquery_tinycolor_js', plugins_url(CRAYON_JS_TINYCOLOR, $path), array(), $CRAYON_VERSION);
-        wp_enqueue_script('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_JS, $path), array('jquery', 'jquery_ui_js', 'crayon_util_js', 'crayon_admin_js', 'cssjson_js', 'jquery_colorpicker_js', 'jquery_tinycolor_js'), $CRAYON_VERSION);
+        wp_enqueue_script('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_JS, $path), array('jquery', 'crayon_util_js', 'crayon_admin_js', 'cssjson_js', 'jquery_colorpicker_js', 'jquery_tinycolor_js'), $CRAYON_VERSION);
         wp_localize_script('crayon_theme_editor', 'CrayonThemeEditorSettings', self::$settings);
         wp_localize_script('crayon_theme_editor', 'CrayonThemeEditorStrings', self::$strings);
 
+        wp_enqueue_style('crayon_theme_editor', plugins_url(CRAYON_THEME_EDITOR_STYLE, $path), array('wp-jquery-ui-dialog'), $CRAYON_VERSION);
         wp_enqueue_style('jquery_colorpicker', plugins_url(CRAYON_CSS_JQUERY_COLORPICKER, $path), array(), $CRAYON_VERSION);
     }
 
@@ -217,11 +233,11 @@ class CrayonThemeEditorWP {
         $str = '<form class="' . self::$settings['prefix'] . '-form"><table>';
         $sepCount = 0;
         foreach ($inputs as $input) {
-            if ($input instanceof Input) {
+            if ($input instanceof CrayonHTMLInput) {
                 $str .= self::formField($input->name, $input);
-            } else if ($input instanceof Separator) {
+            } else if ($input instanceof CrayonHTMLSeparator) {
                 $sepClass = '';
-                if ($input instanceof Title) {
+                if ($input instanceof CrayonHTMLTitle) {
                     $sepClass .= ' title';
                 }
                 if ($sepCount == 0) {
@@ -277,6 +293,7 @@ class CrayonThemeEditorWP {
         $tBorder = crayon__("Border");
         $tTopBorder = crayon__("Top Border");
         $tBottomBorder = crayon__("Bottom Border");
+        $tBorderRight = crayon__("Right Border");
 
         $tHover = crayon__("Hover");
         $tActive = crayon__("Active");
@@ -350,7 +367,7 @@ class CrayonThemeEditorWP {
                     <div id="tabs-1">
                         <?php
                         self::createAttributesForm(array(
-                            new Title($tInformation)
+                            new CrayonHTMLTitle($tInformation)
                         ));
                         ?>
                         <div id="tabs-1-contents"></div>
@@ -379,7 +396,7 @@ class CrayonThemeEditorWP {
                             'f' => crayon__("Faded"),
                             'h' => crayon__("HTML")
                         );
-                        $atts = array(new Title($tHighlighting));
+                        $atts = array(new CrayonHTMLTitle($tHighlighting));
                         foreach ($elems as $class => $name) {
                             $atts[] = array(
                                 $name,
@@ -396,8 +413,8 @@ class CrayonThemeEditorWP {
                         <?php
                         $inline = '-inline';
                         self::createAttributesForm(array(
-                            new Title($tFrame),
-                            new Separator($tNormal),
+                            new CrayonHTMLTitle($tFrame),
+                            new CrayonHTMLSeparator($tNormal),
 //                            self::createAttribute('', 'background', $tBackground),
                             array(
                                 $tBorder,
@@ -405,7 +422,7 @@ class CrayonThemeEditorWP {
                                 self::createAttribute('', 'border-color'),
                                 self::createAttribute('', 'border-style')
                             ),
-                            new Separator($tInline),
+                            new CrayonHTMLSeparator($tInline),
                             self::createAttribute($inline, 'background', $tBackground),
                             array(
                                 $tBorder,
@@ -422,12 +439,12 @@ class CrayonThemeEditorWP {
                         $markedLine = ' .crayon-marked-line';
                         $stripedMarkedLine = ' .crayon-marked-line.crayon-striped-line';
                         self::createAttributesForm(array(
-                            new Title($tLines),
-                            new Separator($tNormal),
+                            new CrayonHTMLTitle($tLines),
+                            new CrayonHTMLSeparator($tNormal),
                             self::createAttribute('', 'background', $tBackground),
-                            new Separator($tStriped),
+                            new CrayonHTMLSeparator($tStriped),
                             self::createAttribute($stripedLine, 'background', $tBackground),
-                            new Separator($tMarked),
+                            new CrayonHTMLSeparator($tMarked),
                             self::createAttribute($markedLine, 'background', $tBackground),
                             array(
                                 $tBorder,
@@ -437,7 +454,7 @@ class CrayonThemeEditorWP {
                             ),
                             self::createAttribute($markedLine . $top, 'border-top-style', $tTopBorder),
                             self::createAttribute($markedLine . $bottom, 'border-bottom-style', $tBottomBorder),
-                            new Separator($tStripedMarked),
+                            new CrayonHTMLSeparator($tStripedMarked),
                             self::createAttribute($stripedMarkedLine, 'background', $tBackground),
                         ));
                         ?>
@@ -449,14 +466,20 @@ class CrayonThemeEditorWP {
                         $markedNum = ' .crayon-marked-num';
                         $stripedMarkedNum = ' .crayon-marked-num.crayon-striped-num';
                         self::createAttributesForm(array(
-                            new Title($tNumbers),
-                            new Separator($tNormal),
+                            new CrayonHTMLTitle($tNumbers),
+                            array(
+                                $tBorderRight,
+                                self::createAttribute($nums, 'border-right-width'),
+                                self::createAttribute($nums, 'border-right-color'),
+                                self::createAttribute($nums, 'border-right-style'),
+                            ),
+                            new CrayonHTMLSeparator($tNormal),
                             self::createAttribute($nums, 'background', $tBackground),
                             self::createAttribute($nums, 'color', $tText),
-                            new Separator($tStriped),
+                            new CrayonHTMLSeparator($tStriped),
                             self::createAttribute($stripedNum, 'background', $tBackground),
                             self::createAttribute($stripedNum, 'color', $tText),
-                            new Separator($tMarked),
+                            new CrayonHTMLSeparator($tMarked),
                             self::createAttribute($markedNum, 'background', $tBackground),
                             self::createAttribute($markedNum, 'color', $tText),
                             array(
@@ -467,7 +490,7 @@ class CrayonThemeEditorWP {
                             ),
                             self::createAttribute($markedNum.$top, 'border-top-style', $tTopBorder),
                             self::createAttribute($markedNum.$bottom, 'border-bottom-style', $tBottomBorder),
-                            new Separator($tStripedMarked),
+                            new CrayonHTMLSeparator($tStripedMarked),
                             self::createAttribute($stripedMarkedNum, 'background', $tBackground),
                             self::createAttribute($stripedMarkedNum, 'color', $tText),
                         ));
@@ -477,12 +500,12 @@ class CrayonThemeEditorWP {
                         <?php
                         $toolbar = ' .crayon-toolbar';
                         $title = ' .crayon-title';
-                        $button = ' a.crayon-button';
+                        $button = ' .crayon-button';
                         $info = ' .crayon-info';
                         $language = ' .crayon-language';
                         self::createAttributesForm(array(
-                            new Title($tToolbar),
-                            new Separator($tFrame),
+                            new CrayonHTMLTitle($tToolbar),
+                            new CrayonHTMLSeparator($tFrame),
                             self::createAttribute($toolbar, 'background', $tBackground),
                             array(
                                 $tBottomBorder,
@@ -497,14 +520,14 @@ class CrayonThemeEditorWP {
                                 self::createAttribute($title, 'font-style'),
                                 self::createAttribute($title, 'text-decoration')
                             ),
-                            new Separator($tButtons),
+                            new CrayonHTMLSeparator($tButtons),
                             self::createAttribute($button, 'background-color', $tBackground),
                             self::createAttribute($button.$hover, 'background-color', $tHover),
                             self::createAttribute($button.$active, 'background-color', $tActive),
                             self::createAttribute($button.$pressed, 'background-color', $tPressed),
                             self::createAttribute($button.$pressed.$hover, 'background-color', $tHoverPressed),
                             self::createAttribute($button.$pressed.$active, 'background-color', $tActivePressed),
-                            new Separator($tInformation . ' ' . crayon__("(Used for Copy/Paste)")),
+                            new CrayonHTMLSeparator($tInformation . ' ' . crayon__("(Used for Copy/Paste)")),
                             self::createAttribute($info, 'background', $tBackground),
                             array(
                                 $tText,
@@ -519,16 +542,14 @@ class CrayonThemeEditorWP {
                                 self::createAttribute($info, 'border-bottom-color'),
                                 self::createAttribute($info, 'border-bottom-style'),
                             ),
-                            new Separator($tLanguage),
+                            new CrayonHTMLSeparator($tLanguage),
                             array(
                                 $tText,
                                 self::createAttribute($language, 'color'),
                                 self::createAttribute($language, 'font-weight'),
                                 self::createAttribute($language, 'font-style'),
                                 self::createAttribute($language, 'text-decoration')
-                            ),
-//                            self::createAttribute($toolbar.' > div', 'float', crayon__("Title Float")),
-//                            self::createAttribute($toolbar.' .crayon-tools', 'float', crayon__("Buttons Float"))
+                            )
                         ));
                         ?>
                     </div>
@@ -546,21 +567,9 @@ class CrayonThemeEditorWP {
         $group = self::getAttributeGroup($attribute);
         $type = self::getAttributeType($group);
         if ($type == 'select') {
-            $input = new Select($element . '_' . $attribute, $name);
+            $input = new CrayonHTMLSelect($element . '_' . $attribute, $name);
             if ($group == 'border-style') {
-                $input->addOptions(array(
-                    'none',
-                    'hidden',
-                    'dotted',
-                    'dashed',
-                    'solid',
-                    'double',
-                    'groove',
-                    'ridge',
-                    'inset',
-                    'outset',
-                    'inherit'
-                ));
+                $input->addOptions(CrayonHTMLElement::$borderStyles);
             } else if ($group == 'float') {
                 $input->addOptions(array(
                     'left',
@@ -604,7 +613,7 @@ class CrayonThemeEditorWP {
                 ));
             }
         } else {
-            $input = new Input($element . '_' . $attribute, $name);
+            $input = new CrayonHTMLInput($element . '_' . $attribute, $name);
         }
         $input->addClass(self::ATTRIBUTE);
         $input->addAttributes(array(
@@ -623,14 +632,14 @@ class CrayonThemeEditorWP {
      * Saves the given theme id and css, making any necessary path and id changes to ensure the new theme is valid.
      * Echos 0 on failure, 1 on success and 2 on success and if paths have changed.
      */
-    public static function save($allow_edit_stock_theme = NULL) {
+    public static function save() {
         CrayonSettingsWP::load_settings();
         $oldID = stripslashes($_POST['id']);
         $name = stripslashes($_POST['name']);
         $css = stripslashes($_POST['css']);
         $change_settings = CrayonUtil::set_default($_POST['change_settings'], TRUE);
         $allow_edit = CrayonUtil::set_default($_POST['allow_edit'], TRUE);
-        $allow_edit_stock_theme = CrayonUtil::set_default_null($allow_edit_stock_theme, CRAYON_DEBUG);
+        $allow_edit_stock_theme = CrayonUtil::set_default($_POST['allow_edit_stock_theme'], CRAYON_DEBUG);
         $delete = CrayonUtil::set_default($_POST['delete'], TRUE);
         $oldTheme = CrayonResources::themes()->get($oldID);
 
@@ -641,6 +650,7 @@ class CrayonThemeEditorWP {
             $oldPath = CrayonResources::themes()->path($oldID);
             $oldDir = CrayonResources::themes()->dirpath($oldID);
             $newID = CrayonResource::clean_id($name);
+            $name = CrayonResource::clean_name($newID);
             $newPath = CrayonResources::themes()->path($newID, $user);
             $newDir = CrayonResources::themes()->dirpath($newID, $user);
 
@@ -734,7 +744,8 @@ class CrayonThemeEditorWP {
         $_POST['css'] = file_get_contents($oldPath);
         $_POST['delete'] = FALSE;
         $_POST['allow_edit'] = FALSE;
-        self::save(FALSE);
+        $_POST['allow_edit_stock_theme'] = FALSE;
+        self::save();
     }
 
     public static function delete() {
@@ -831,6 +842,7 @@ class CrayonThemeEditorWP {
     }
 
     public static function getFieldName($id) {
+        self::initFields();
         if (isset(self::$infoFields[$id])) {
             return self::$infoFields[$id];
         } else {

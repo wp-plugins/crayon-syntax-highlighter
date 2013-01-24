@@ -89,6 +89,7 @@ class CrayonSettings {
 	const MAIN_QUERY = 'main-query';
 	const SAFE_ENQUEUE = 'safe-enqueue';
 	const INLINE_TAG = 'inline-tag';
+    const INLINE_TAG_CAPTURE = 'inline-tag-capture';
 	const INLINE_MARGIN = 'inline-margin';
 	const INLINE_WRAP = 'inline-wrap';
 	const BACKQUOTE = 'backquote';
@@ -105,6 +106,7 @@ class CrayonSettings {
 	const WRAP = 'wrap';
 	const EXPAND = 'expand';
 	const EXPAND_TOGGLE = 'expand-toggle';
+    const MINIMIZE = 'minimize';
 	
 	private static $cache_array;
 	
@@ -215,7 +217,8 @@ class CrayonSettings {
 			new CrayonSetting(self::ENQUEUE_FONTS, TRUE),
 			new CrayonSetting(self::MAIN_QUERY, FALSE),
 			new CrayonSetting(self::SAFE_ENQUEUE, TRUE),
-			new CrayonSetting(self::INLINE_TAG, FALSE),
+			new CrayonSetting(self::INLINE_TAG, TRUE),
+            new CrayonSetting(self::INLINE_TAG_CAPTURE, FALSE),
 			new CrayonSetting(self::INLINE_MARGIN, 5),
 			new CrayonSetting(self::INLINE_WRAP, TRUE),
 			new CrayonSetting(self::BACKQUOTE, TRUE),
@@ -231,7 +234,8 @@ class CrayonSettings {
 			new CrayonSetting(self::WRAP_TOGGLE, TRUE),
 			new CrayonSetting(self::WRAP, FALSE),
 			new CrayonSetting(self::EXPAND, FALSE),
-			new CrayonSetting(self::EXPAND_TOGGLE, TRUE)
+			new CrayonSetting(self::EXPAND_TOGGLE, TRUE),
+            new CrayonSetting(self::MINIMIZE, FALSE)
 		);
 		
 		$this->set($settings);
@@ -539,6 +543,7 @@ class CrayonGlobalSettings {
 	private static $plugin_path = '';
     private static $upload_path = '';
     private static $upload_url = '';
+    private static $mkdir = NULL;
 	private function __construct() {}
 
 	private static function init() {
@@ -615,6 +620,22 @@ class CrayonGlobalSettings {
         } else {
             self::$upload_url = CrayonUtil::url_slash($upload_url);
         }
+    }
+
+    public static function set_mkdir($mkdir = NULL) {
+        if ($mkdir === NULL) {
+            return self::$mkdir;
+        } else {
+            self::$mkdir = $mkdir;
+        }
+    }
+
+    public static function mkdir($dir = NULL) {
+    	if (self::$mkdir) {
+    		call_user_func(self::$mkdir, $dir);
+    	} else {
+    		@mkdir($dir, 0777, TRUE);
+    	}
     }
 }
 

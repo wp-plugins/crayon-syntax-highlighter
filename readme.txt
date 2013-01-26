@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AW99E
 License: GPLv2 or later
 Tags: syntax highlighter, syntax, highlighter, highlighting, crayon, code highlighter, bbpress
 Requires at least: 3.0
-Tested up to: 3.5
+Tested up to: 3.5.1
 Stable tag: trunk
 
 Syntax Highlighter supporting multiple languages, themes, fonts, highlighting from a URL, local file or post text.
@@ -219,43 +219,7 @@ Thanks to all those who donate to my project, your support keeps the Crayons goi
 
 == Frequently Asked Questions ==
 
-= How do I use the Tag Editor? =
-
-The <a href="http://aramk.com/projects/crayon-tag-editor/" target="_blank">Tag Editor</a> provides a dialog box to add Crayons easily.
-
-= How do I use it manually? =
-
-<code>[crayon lang="php"] your code [/crayon]</code>
-<code>[crayon url="http://example.com/code.txt" /]</code>
-<code>[crayon url="/relative-path-added-to-local-path-defined-in-settings/code.java" /]</code>
-
-You can use &lt;pre&gt;:
-
-<code>&lt;pre lang="php"&gt; your code &lt;/pre&gt;</code>
-
-You can use an HTML5 compliant &lt;pre&gt; (recommended):
-
-<code>&lt;pre class="lang:php mark:1-4,3" title="some title"&gt; your code &lt;/pre&gt;</code>
-
-You can also use Mini Tags:
-
-<code>[php theme="twilight"]your code[/php]</code>
-
-<code>[php url="https://raw.github.com/somefile.php" /]</code>
-
-Please see the <a href="http://aramk.com/projects/crayon-syntax-highlighter/" target="_blank">documentation</a> for more details.
-
-= Why are the controls not working? =
-
-Make sure jQuery is included in your theme ONCE and before all its dependents (see Installation).
-
-= Why am I only seeing [crayon-3ffr7fa34a321/]? =
-
-Your theme is being naughty. Find where it prints the content/excerpt on that page in the PHP and make sure to add this line before printing:
-
-$output = apply_filters('the_content', $output);
-
-This ensures that the content can be filtered by plugins, such as Crayon. Otherwise, Crayon detects and creates the code but can't replace those funny looking tags in the content.
+Please see the <a href="http://aramk.com/projects/crayon-syntax-highlighter/" target="_blank">documentation</a> for all the details.
 
 = Support =
 
@@ -270,6 +234,16 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.1.1 =
+* ADDED:
+    * Arduino IDE theme thanks to LukaszWiecek (http://wordpress.org/support/topic/arduino-code-support)
+    * User Fonts can be added to wp-content/crayon-syntax-highlighter/uploads/fonts/somefont.css
+* FIXED:
+    * Issues with resource management, preventing loading of user CSS themes and performing theme editor functions
+    * C#, C++ id issues preventing them loading
+    * Tag Editor duplicate loading issue prevented close dialog on HTML view
+    * Arduino language updates thanks to LukaszWiecek (http://wordpress.org/support/topic/arduino-code-support)
 
 = 2.1.0 =
 * ADDED:

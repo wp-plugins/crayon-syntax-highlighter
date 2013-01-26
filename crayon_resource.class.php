@@ -221,13 +221,13 @@ class CrayonResourceCollection {
         }
 	}
 	
-	public function get_url($id) {
+	public function url($id) {
 		return '';
 	}
 	
 	public function get_css($id, $ver = NULL) {
 		$resource = $this->get($id);
-		return '<link rel="stylesheet" type="text/css" href="' . $this->get_url($resource->id()) . ($ver ? "?ver=$ver" : '') . '" />' . CRAYON_NL;
+		return '<link rel="stylesheet" type="text/css" href="' . $this->url($resource->id()) . ($ver ? "?ver=$ver" : '') . '" />' . CRAYON_NL;
 	}
 }
 
@@ -275,12 +275,12 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 	public function resource_instance($id, $name = NULL) {
 		return new CrayonUsedResource($id, $name);
 	}
-	
+
 	public function get_used_css() {
 		$used = $this->get_used();
 		$css = array();
 		foreach ($used as $resource) {
-			$url = $this->get_url($resource->id());
+			$url = $this->url($resource->id());
 			$css[$resource->id()] = $url;
 		}
 		return $css;
@@ -290,6 +290,10 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 class CrayonUserResourceCollection extends CrayonUsedResourceCollection {
     private $user_dir = '';
     private $curr_dir = NULL;
+    // TODO better to use a base dir and relative
+    private $relative_directory = NULL;
+    // TODO move this higher up inheritance
+    private $extension = '';
 
     // XXX Override
     public function resource_instance($id, $name = NULL) {
@@ -306,6 +310,20 @@ class CrayonUserResourceCollection extends CrayonUsedResourceCollection {
         }
     }
 
+    public function relative_directory($relative_directory = NULL) {
+        if ($relative_directory == NULL) {
+            return $this->relative_directory;
+        }
+        $this->relative_directory = $relative_directory;
+    }
+
+    public function extension($extension = NULL) {
+        if ($extension == NULL) {
+            return $this->extension;
+        }
+        $this->extension = $extension;
+    }
+
     public function load_resources($dir = NULL) {
         $this->curr_dir = $this->directory();
         parent::load_resources($this->curr_dir);
@@ -318,6 +336,54 @@ class CrayonUserResourceCollection extends CrayonUsedResourceCollection {
         return $this->curr_dir;
     }
 
+    public function dir_is_user($id, $user = NULL) {
+        if ($user === NULL) {
+            if ($this->is_state_loading()) {
+                // We seem to be loading resources - use current directory
+                $user = $this->current_directory() == $this->user_directory();
+            } else {
+                $theme = $this->get($id);
+                if ($theme) {
+                    $user = $theme->user();
+                } else {
+                    $user = FALSE;
+                }
+            }
+        }
+        return $user;
+    }
+
+    public function dirpath($user = NULL) {
+        $path = $user ? $this->user_directory() : $this->directory();
+        return CrayonUtil::path_slash($path);
+    }
+
+    public function dirpath_for_id($id, $user = NULL) {
+        $user = $this->dir_is_user($id, $user);
+        return $this->dirpath($user) . $id;
+    }
+
+    public function dirurl($user = NULL) {
+        $path = $user ? CrayonGlobalSettings::upload_url() : CrayonGlobalSettings::plugin_path();
+        return CrayonUtil::path_slash($path . $this->relative_directory());
+    }
+
+    // XXX Override
+    public function path($id, $user = NULL) {
+        $user = $this->dir_is_user($id, $user);
+        return $this->dirpath($user) . $this->filename($id, $user);
+    }
+
+    // XXX Override
+    public function url($id, $user = NULL) {
+        $user = $this->dir_is_user($id, $user);
+        return $this->dirurl($user) . $this->filename($id, $user);
+    }
+
+    public function filename($id, $user = NULL) {
+        return "$id.$this->extension";
+    }
+
 }
 
 class CrayonResource {
@@ -325,7 +391,7 @@ class CrayonResource {
 	private $name = '';
 
 	function __construct($id, $name = NULL) {
-		$id = self::clean_id($id);
+		$id = $this->clean_id($id);
 		CrayonUtil::str($this->id, $id);
 		( empty($name) ) ? $this->name( $this->clean_name($this->id) ) : $this->name($name);
 	}
@@ -346,14 +412,12 @@ class CrayonResource {
 		}
 	}
 	
-	// Override
-	static function clean_id($id) {
+	function clean_id($id) {
         $id = CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
         return preg_replace('#[^\w-]#msi', '', $id);
 	}
 	
-	// Override
-	static function clean_name($id) {
+	function clean_name($id) {
 		$id = CrayonUtil::hyphen_to_space( strtolower(trim($id)) );
 		return CrayonUtil::ucwords($id);
 	}

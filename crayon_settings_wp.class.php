@@ -149,8 +149,8 @@ class CrayonSettingsWP {
                 'stockThemes' => $stockThemes,
                 'userThemes' => $userThemes,
                 'defaultTheme' => CrayonThemes::DEFAULT_THEME,
-                'themesURL' => CrayonThemes::dir_url(),
-                'userThemesURL' => CrayonThemes::dir_url(true),
+                'themesURL' => CrayonResources::themes()->dirurl(false),
+                'userThemesURL' => CrayonResources::themes()->dirurl(true),
                 'sampleCode' => self::SAMPLE_CODE,
                 'dialogFunction' => 'wpdialog'
             );
@@ -1014,6 +1014,8 @@ class Human {
         }
         $fonts_array = CrayonResources::fonts()->get_array();
         self::dropdown(CrayonSettings::FONT, FALSE, TRUE, TRUE, $fonts_array);
+        echo '<span class="crayon-span-5"></span>';
+        echo '<a href="http://bit.ly/Yr2Xv6" target="_blank">', crayon__('Add More') , '</a>';
         echo '<span class="crayon-span-10"></span>';
         self::checkbox(array(CrayonSettings::FONT_SIZE_ENABLE, crayon__('Custom Font Size') . ' '), FALSE);
         self::textbox(array('id' => CrayonSettings::FONT_SIZE, 'size' => 2));

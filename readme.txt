@@ -107,6 +107,7 @@ See the <a href="http://aramk.com/projects/crayon-language-file-specification/" 
 * PostgreSQL (thanks to <a href="http://bitorchestra.com/" target="_blank">Bitorchestra</a>)
 * PowerShell
 * Python
+* R
 * Ruby
 * Scheme (thanks to <a href="https://github.com/harry75369" target="_blank">Harry75369</a>)
 * Shell (Unix)
@@ -182,6 +183,8 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to my project, your support keeps the Crayons going!
 
+* Raam Dev, (http://raamdev.com/), USA
+* Scot Ranney, (http://scotsscripts.com/), USA
 * Nico Hartung, (http://www.loggn.de/), Germany
 * Joseph DeVenuta, USA
 * Iván Prego García, Spain
@@ -234,6 +237,20 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.1.2 =
+* ADDED:
+    * R language
+    * TinyMCE is automatically added to the comment box when the Tag Editor is enabled on the frontend
+    * SQL Management Studio 2012 Theme
+* FIXED:
+    * bbPress Tag Editor button wasn't showing
+    * Slashes are now added to post content before legacy tag conversion, since wp_update_post removes them
+    * PowerShell improvements
+    * Empty directory path on some pages
+    * Expanding uses absolute positioning, so it will stay on top of other elements
+    * When expanded the toolbar controls move left for easier toggling
+    * CSS conflicts with wordpress themes causing line-height and font-size overrides to be ignored
 
 = 2.1.1 =
 * ADDED:

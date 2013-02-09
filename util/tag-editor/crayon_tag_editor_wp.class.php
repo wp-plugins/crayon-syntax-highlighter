@@ -70,21 +70,6 @@ class CrayonTagEditorWP {
         }
     }
 
-    public static function init_tinymce($init) {
-        if (!array_key_exists('extended_valid_elements', $init)) {
-            $init['extended_valid_elements'] = '';
-        }
-        $init['extended_valid_elements'] .= ',pre[*],code[*],iframe[*]';
-        return $init;
-    }
-
-    public static function addbuttons() {
-        // Add only in Rich Editor mode
-        //if ( get_user_option('rich_editing') == 'true') {
-        add_filter('mce_external_plugins', 'CrayonTagEditorWP::add_plugin');
-        add_filter('mce_buttons', 'CrayonTagEditorWP::register_buttons');
-    }
-
     public static function enqueue_resources() {
         global $CRAYON_VERSION;
         self::init_settings();
@@ -97,12 +82,31 @@ class CrayonTagEditorWP {
         CrayonSettingsWP::other_scripts();
     }
 
+    public static function init_tinymce($init) {
+        if (!array_key_exists('extended_valid_elements', $init)) {
+            $init['extended_valid_elements'] = '';
+        }
+        $init['extended_valid_elements'] .= ',pre[*],code[*],iframe[*]';
+        return $init;
+    }
+
+    public static function addbuttons() {
+        // Add only in Rich Editor mode
+        add_filter('mce_external_plugins', 'CrayonTagEditorWP::add_plugin');
+        add_filter('mce_buttons', 'CrayonTagEditorWP::register_buttons');
+        add_filter('bbp_before_get_the_content_parse_args', 'CrayonTagEditorWP::bbp_get_the_content_args');
+    }
+
+    public static function bbp_get_the_content_args($args) {
+        // Turn off "teeny" to allow the bbPress TinyMCE to display external plugins
+        return array_merge($args, array('teeny' => false));
+    }
+
     public static function register_buttons($buttons) {
         array_push($buttons, 'separator', 'crayon_tinymce');
         return $buttons;
     }
 
-    // Load the TinyMCE plugin : editor_plugin.js (wp2.5)
     public static function add_plugin($plugin_array) {
         $plugin_array['crayon_tinymce'] = plugins_url(CRAYON_TINYMCE_JS, __FILE__);
         return $plugin_array;
@@ -233,7 +237,7 @@ class CrayonTagEditorWP {
                 <td colspan="2"><?php
                     $admin = isset($_GET['is_admin']) ? intval($_GET['is_admin']) : is_admin();
                     if (!$admin && !CrayonGlobalSettings::val(CrayonSettings::TAG_EDITOR_SETTINGS)) {
-                        exit;
+                        exit();
                     }
                     ?>
                     <hr/>

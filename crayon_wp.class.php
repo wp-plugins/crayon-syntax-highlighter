@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://aramk.com/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 2.1.1
+Version: 2.1.2
 Author: Aram Kocharyan
 Author URI: http://aramk.com/
 Text Domain: crayon-syntax-highlighter
@@ -189,13 +189,10 @@ class CrayonWP {
 
     /* For manually highlighting code, useful for other PHP contexts */
     public static function highlight($code) {
-        $crayon_str = '';
-
         $captures = CrayonWP::capture_crayons(0, $code);
         $the_captures = $captures['capture'];
         $the_content = $captures['content'];
-        foreach ($the_captures as $capture) {
-            $id = $capture['id'];
+        foreach ($the_captures as $id => $capture) {
             $atts = $capture['atts'];
             $no_enqueue = array(
                 CrayonSettings::ENQUEUE_THEMES => FALSE,
@@ -886,6 +883,7 @@ class CrayonWP {
 
     public static function crayon_theme_css() {
         global $CRAYON_VERSION;
+        CrayonSettingsWP::load_settings();
         $css = CrayonResources::themes()->get_used_css();
         foreach ($css as $theme => $url) {
             wp_enqueue_style('crayon-theme-' . $theme, $url, array(), $CRAYON_VERSION);
@@ -894,6 +892,7 @@ class CrayonWP {
 
     public static function crayon_font_css() {
         global $CRAYON_VERSION;
+        CrayonSettingsWP::load_settings();
         $css = CrayonResources::fonts()->get_used_css();
         foreach ($css as $font_id => $url) {
             wp_enqueue_style('crayon-font-' . $font_id, $url, array(), $CRAYON_VERSION);
@@ -1147,7 +1146,7 @@ class CrayonWP {
             if ($post_captures['has_captured'] === TRUE) {
                 $post_obj = array();
                 $post_obj['ID'] = $postID;
-                $post_obj['post_content'] = $post_captures['content'];
+                $post_obj['post_content'] = addslashes($post_captures['content']);
                 wp_update_post($post_obj);
                 CrayonLog::syslog("Converted Crayons in post ID $postID to pre tags", 'CONVERT');
             }
@@ -1186,6 +1185,16 @@ class CrayonWP {
         $oldAtts[CrayonSettings::DECODE] = TRUE;
         $newAtts['class'] = CrayonUtil::html_attributes($oldAtts, CrayonGlobalSettings::val_str(CrayonSettings::ATTR_SEP), '');
         return str_replace($original, CrayonUtil::html_element('pre', $code, $newAtts), $wp_content);
+    }
+
+    // Add TinyMCE to comments
+    public static function tinymce_comment_enable($args) {
+        if (function_exists('wp_editor')) {
+            ob_start();
+            wp_editor('', 'comment', array('tinymce'));
+            $args['comment_field'] = ob_get_clean();
+        }
+        return $args;
     }
 
 }
@@ -1228,7 +1237,11 @@ if (defined('ABSPATH')) {
         add_filter('get_the_excerpt', 'CrayonWP::post_get_excerpt', 100);
         add_filter('the_excerpt', 'CrayonWP::post_excerpt', 100);
 
-        add_action('template_redirect', 'CrayonWP::wp_head');
+        add_action('template_redirect', 'CrayonWP::wp_head', 0);
+
+        if (CrayonGlobalSettings::val(CrayonSettings::TAG_EDITOR_FRONT)) {
+            add_filter('comment_form_defaults', 'CrayonWP::tinymce_comment_enable');
+        }
     } else {
         // Update between versions
         CrayonWP::update();

@@ -476,13 +476,14 @@
                     }
                 }
             }, args);
-            args.html = '<table class="field-table">';
+            args.html = '<table class="field-table crayon-prompt-' + base.nameToID(args.title) + '">';
             if (args.desc) {
                 args.html += '<tr><td colspan="2">' + args.desc + '</td></tr>';
             }
             args.html += '<tr><td>' + args.text + ':</td><td>' + base.createInput('prompt-text') + '</td></tr>';
             args.html += '</table>';
-            admin.createDialog(args);
+            var options = {width: '400px'};
+            admin.createDialog(args, options);
         };
 
         base.initUI = function () {
@@ -521,7 +522,6 @@
                     args.open = function (e, color) {
                         $('.ui-colorpicker-dialog .ui-button').addClass('button-primary');
                         if (colorPickerPos) {
-                            console.log('colorPickerPos', colorPickerPos);
                             var picker = $('.ui-colorpicker-dialog:visible');
                             picker.css('left', colorPickerPos.left);
 //                            picker.css('top', colorPickerPos.top);
@@ -579,10 +579,8 @@
         };
 
         base.colorPickerMove = function (picker) {
-            console.log('picker', picker);
             if (picker) {
                 colorPickerPos = {left: picker.css('left'), top: picker.css('top')};
-                console.log('colorPickerPos', colorPickerPos);
             }
         };
 

@@ -49,7 +49,7 @@ It also supports some neat features like:
 * Local directory to search for local files
 * File extension detection
 * Live Preview in settings
-* Dimensions, margins, alignment and CSS floating
+* Dimensions, margins, alignment, font-size, line-height, float
 * Extensive error logging
 
 **Links**
@@ -153,6 +153,8 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
+* <a href="http://www.jjpro.net/2013/01/13/how-to-post-source-code-on-wordpress-2/" target="_blank">How to post source code on WordPress</a>
+* <a href="http://www.emanueleferonato.com/2013/02/01/syntax-highlighter-switched-to-crayon/" target="_blank">Syntax highlighter switched to Crayon</a>
 * <a href="http://www.wordpressthemeshq.net/5-best-syntax-highlighter-plugins-for-wordpress/" target="_blank">5 Best Syntax Highlighter Plugins for WordPress</a>
 * <a href="http://amecylia.com/how-to-post-source-code-wordpress/" target="_blank">How To Post Source Code In Wordpress</a>
 * <a href="http://icrunched.co/top-5-syntax-highlighter-wordpress-plugins/" target="_blank">Top 5 Syntax Highlighter WordPress Plugins</a>
@@ -181,8 +183,11 @@ A handful of articles from others written about Crayon, thanks guys!
 
 **Donations**
 
-Thanks to all those who donate to my project, your support keeps the Crayons going!
+Thanks to all those who donate to the project:
 
+* Anthony Steiner, (http://steinerd.com/), US
+* Alexander Harvey, (http://alexharvey.eu/), UK
+* Minhazul Haque Shawon, Cyprus
 * Raam Dev, (http://raamdev.com/), USA
 * Scot Ranney, (http://scotsscripts.com/), USA
 * Nico Hartung, (http://www.loggn.de/), Germany
@@ -237,6 +242,21 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.1.3 =
+* ADDED:
+    * Line height can now be customised along with font size
+    * AJAX method for highlighting Crayon using ajaxurl. See http://aramk.com/crayon/adding-crayon-to-posts-in-wordpress-programmatically/.
+    * Ability to capture code tags as inline Crayons
+    * Terminal theme
+* FIXED:
+    * Expanding code issues to do with position and dimensions
+    * Toolbar font-size and line height improvements
+    * Now settings which affect capturing trigger a refresh of crayon posts when modified
+    * Added message about emailing in submit window of theme editor
+    * Border is now drawn inside so right border won't clip from theme CSS
+    * Comments were not detected to contain Crayons unless edited in wp-admin
+    * Highlighting improvements for variables and entities
 
 = 2.1.2 =
 * ADDED:

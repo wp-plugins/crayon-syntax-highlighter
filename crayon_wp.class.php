@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://aramk.com/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 2.1.2
+Version: 2.1.3
 Author: Aram Kocharyan
 Author URI: http://aramk.com/
 Text Domain: crayon-syntax-highlighter
@@ -191,6 +191,12 @@ class CrayonWP {
     public static function highlight($code) {
         $captures = CrayonWP::capture_crayons(0, $code);
         $the_captures = $captures['capture'];
+        if (count($the_captures) == 0) {
+            // Nothing captured, so wrap in a pre and try again
+            $code = '<pre>' . $code . '</pre>';
+            $captures = CrayonWP::capture_crayons(0, $code);
+            $the_captures = $captures['capture'];
+        }
         $the_content = $captures['content'];
         foreach ($the_captures as $id => $capture) {
             $atts = $capture['atts'];
@@ -205,6 +211,19 @@ class CrayonWP {
         }
 
         return $the_content;
+    }
+
+    public static function ajax_highlight() {
+        $code = isset($_POST['code']) ? $_POST['code'] : null;
+        if (!$code) {
+            $code = isset($_GET['code']) ? $_GET['code'] : null;
+        }
+        if ($code) {
+            echo self::highlight($code);
+        } else {
+            echo "No code specified.";
+        }
+        exit();
     }
 
     /* Uses the main query */
@@ -248,10 +267,14 @@ class CrayonWP {
             $wp_content = preg_replace('#(?<!\$)\[\s*(' . self::$alias_regex . ')\b([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
         }
 
-        // Convert inline {php}{/php} tags to crayon tags, if needed
         if ((CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG) || $skip_setting_check) && $in_flag[CrayonSettings::INLINE_TAG]) {
             if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG_CAPTURE)) {
+                // Convert inline {php}{/php} tags to crayon tags, if needed
                 $wp_content = preg_replace('#(?<!\$)\{\s*(' . self::$alias_regex . ')\b([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
+            }
+            // Convert <code> to inline tags
+            if (CrayonGlobalSettings::val(CrayonSettings::INLINE_CODE_TAG_CAPTURE)) {
+                $wp_content = preg_replace('#<(\s*code\b)([^>]*)>(.*?)</\1[^>]*>#msi', '[crayon inline="true" \2]\3[/crayon]', $wp_content);
             }
             // Convert <span class="crayon-inline"> tags to inline crayon tags
             $wp_content = preg_replace_callback('#(?<!\$)<\s*span([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*)>(.*?)<\s*/\s*span\s*>#msi', 'CrayonWP::span_tag', $wp_content);
@@ -907,6 +930,8 @@ class CrayonWP {
     public static function init_ajax() {
         add_action('wp_ajax_crayon-tag-editor', 'CrayonTagEditorWP::content');
         add_action('wp_ajax_nopriv_crayon-tag-editor', 'CrayonTagEditorWP::content');
+        add_action('wp_ajax_crayon-highlight', 'CrayonWP::ajax_highlight');
+        add_action('wp_ajax_nopriv_crayon-highlight', 'CrayonWP::ajax_highlight');
         if (is_admin()) {
             add_action('wp_ajax_crayon-ajax', 'CrayonWP::ajax');
             add_action('wp_ajax_crayon-theme-editor', 'CrayonThemeEditorWP::content');
@@ -1248,10 +1273,10 @@ if (defined('ABSPATH')) {
         // For marking a post as containing a Crayon
         add_action('update_post', 'CrayonWP::save_post', 10, 2);
         add_action('save_post', 'CrayonWP::save_post', 10, 2);
-        if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
-            add_action('comment_post', 'CrayonWP::save_comment', 10, 2);
-            add_action('edit_comment', 'CrayonWP::save_comment', 10, 2);
-        }
+    }
+    if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
+        add_action('comment_post', 'CrayonWP::save_comment', 10, 2);
+        add_action('edit_comment', 'CrayonWP::save_comment', 10, 2);
     }
     add_filter('init', 'CrayonWP::init_ajax');
 }

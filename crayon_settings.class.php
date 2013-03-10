@@ -26,6 +26,7 @@ class CrayonSettings {
 	const FONT = 'font';
 	const FONT_SIZE_ENABLE = 'font-size-enable';
 	const FONT_SIZE = 'font-size';
+    const LINE_HEIGHT = 'line-height';
 	const PREVIEW = 'preview';
 	const HEIGHT_SET = 'height-set';
 	const HEIGHT_MODE = 'height-mode';
@@ -90,6 +91,7 @@ class CrayonSettings {
 	const SAFE_ENQUEUE = 'safe-enqueue';
 	const INLINE_TAG = 'inline-tag';
     const INLINE_TAG_CAPTURE = 'inline-tag-capture';
+    const INLINE_CODE_TAG_CAPTURE = 'inline-code-tag-capture';
 	const INLINE_MARGIN = 'inline-margin';
 	const INLINE_WRAP = 'inline-wrap';
 	const BACKQUOTE = 'backquote';
@@ -153,7 +155,8 @@ class CrayonSettings {
 			new CrayonSetting(self::THEME, CrayonThemes::DEFAULT_THEME), 
 			new CrayonSetting(self::FONT, CrayonFonts::DEFAULT_FONT), 
 			new CrayonSetting(self::FONT_SIZE_ENABLE, TRUE),
-			new CrayonSetting(self::FONT_SIZE, 12), 
+			new CrayonSetting(self::FONT_SIZE, 12),
+            new CrayonSetting(self::LINE_HEIGHT, 15),
 			new CrayonSetting(self::PREVIEW, TRUE),
 			new CrayonSetting(self::HEIGHT_SET, FALSE), 
 			new CrayonSetting(self::HEIGHT_MODE, array(crayon__('Max'), crayon__('Min'), crayon__('Static'))), 
@@ -219,6 +222,7 @@ class CrayonSettings {
 			new CrayonSetting(self::SAFE_ENQUEUE, TRUE),
 			new CrayonSetting(self::INLINE_TAG, TRUE),
             new CrayonSetting(self::INLINE_TAG_CAPTURE, FALSE),
+            new CrayonSetting(self::INLINE_CODE_TAG_CAPTURE, FALSE),
 			new CrayonSetting(self::INLINE_MARGIN, 5),
 			new CrayonSetting(self::INLINE_WRAP, TRUE),
 			new CrayonSetting(self::BACKQUOTE, TRUE),
@@ -430,6 +434,10 @@ class CrayonSettings {
 					$value = 1;
 				}
 				break;
+            case CrayonSettings::LINE_HEIGHT:
+                $font_size = CrayonGlobalSettings::val(CrayonSettings::FONT_SIZE);
+                $value = $value >= $font_size ? $value : $font_size;
+                break;
 			case CrayonSettings::THEME:
 				$value = strtolower($value);
 			// XXX validate settings here
@@ -576,6 +584,10 @@ class CrayonGlobalSettings {
 		self::init();
 		return self::$global->val_str($name);
 	}
+
+    public static function has_changed($input, $setting, $value) {
+        return $input == $setting && $value != CrayonGlobalSettings::val($setting);
+    }
 
 	public static function set($name, $value = NULL, $replace = FALSE) {
 		self::init();

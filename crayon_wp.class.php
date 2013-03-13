@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://aramk.com/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 2.1.3
+Version: 2.1.4
 Author: Aram Kocharyan
 Author URI: http://aramk.com/
 Text Domain: crayon-syntax-highlighter
@@ -188,10 +188,10 @@ class CrayonWP {
     }
 
     /* For manually highlighting code, useful for other PHP contexts */
-    public static function highlight($code) {
+    public static function highlight($code, $add_tags = FALSE) {
         $captures = CrayonWP::capture_crayons(0, $code);
         $the_captures = $captures['capture'];
-        if (count($the_captures) == 0) {
+        if (count($the_captures) == 0 && $add_tags) {
             // Nothing captured, so wrap in a pre and try again
             $code = '<pre>' . $code . '</pre>';
             $captures = CrayonWP::capture_crayons(0, $code);
@@ -874,9 +874,6 @@ class CrayonWP {
             CrayonSettingsWP::remove_post($postID, $save);
             CrayonSettingsWP::remove_legacy_post($postID, $save);
         }
-//        CrayonLog::syslog($postID, "TEST");
-//        CrayonSettingsWP::remove_post($postID, $save);
-//        CrayonSettingsWP::remove_legacy_post($postID, $save);
     }
 
     public static function refresh_posts() {
@@ -1037,7 +1034,6 @@ class CrayonWP {
     public static function scan_comment($comment, $flags = NULL) {
         if ($flags === NULL) {
             self::init_tags_regex();
-//            $tags_regex = self::$tags_regex;
         }
         $args = array(
             'ignore' => FALSE,
@@ -1047,14 +1043,10 @@ class CrayonWP {
         );
         $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content, array(), $args);
         return $captures['has_captured'];
-//        if (preg_match($tags_regex, $comment->comment_content)) {
-//            return TRUE;
-//        } else {
-//            return FALSE;
-//        }
     }
 
     public static function install() {
+        self::refresh_posts();
         self::update();
     }
 
@@ -1227,9 +1219,6 @@ class CrayonWP {
 // Only if WP is loaded
 if (defined('ABSPATH')) {
     if (!is_admin()) {
-        register_activation_hook(__FILE__, 'CrayonWP::install');
-        register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
-
         // Filters and Actions
 
         add_filter('init', 'CrayonWP::init');
@@ -1274,6 +1263,8 @@ if (defined('ABSPATH')) {
         add_action('update_post', 'CrayonWP::save_post', 10, 2);
         add_action('save_post', 'CrayonWP::save_post', 10, 2);
     }
+    register_activation_hook(__FILE__, 'CrayonWP::install');
+    register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
     if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
         add_action('comment_post', 'CrayonWP::save_comment', 10, 2);
         add_action('edit_comment', 'CrayonWP::save_comment', 10, 2);

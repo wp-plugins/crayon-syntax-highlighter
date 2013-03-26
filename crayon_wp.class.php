@@ -3,7 +3,7 @@
 Plugin Name: Crayon Syntax Highlighter
 Plugin URI: http://aramk.com/projects/crayon-syntax-highlighter
 Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 2.1.4
+Version: 2.2.0
 Author: Aram Kocharyan
 Author URI: http://aramk.com/
 Text Domain: crayon-syntax-highlighter
@@ -74,6 +74,7 @@ class CrayonWP {
     private static $legacy_flags = NULL;
 
     // Used to detect the shortcode
+    private static $allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL, 'range' => NULL, 'inline' => NULL);
     const REGEX_CLOSED = '(?:\[\s*crayon(?:-(\w+))?\b([^\]]*)/\s*\])'; // [crayon atts="" /]
     const REGEX_TAG = '(?:\[\s*crayon(?:-(\w+))?\b([^\]]*)\](.*?)\[\s*/\s*crayon\s*\])'; // [crayon atts=""] ... [/crayon]
     const REGEX_INLINE_CLASS = '\bcrayon-inline\b';
@@ -127,8 +128,7 @@ class CrayonWP {
         CrayonLog::debug('shortcode');
 
         // Load attributes from shortcode
-        $allowed_atts = array('url' => NULL, 'lang' => NULL, 'title' => NULL, 'mark' => NULL, 'range' => NULL, 'inline' => NULL);
-        $filtered_atts = shortcode_atts($allowed_atts, $atts);
+        $filtered_atts = shortcode_atts(self::$allowed_atts, $atts);
 
         // Clean attributes
         $keys = array_keys($filtered_atts);
@@ -143,7 +143,7 @@ class CrayonWP {
         // Contains all other attributes not found in allowed, used to override global settings
         $extra_attr = array();
         if (!empty($atts)) {
-            $extra_attr = array_diff_key($atts, $allowed_atts);
+            $extra_attr = array_diff_key($atts, self::$allowed_atts);
             $extra_attr = CrayonSettings::smart_settings($extra_attr);
         }
         $url = $lang = $title = $mark = $range = $inline = '';
@@ -267,14 +267,17 @@ class CrayonWP {
             $wp_content = preg_replace('#(?<!\$)\[\s*(' . self::$alias_regex . ')\b([^\]]*)/\s*\](?!\$)#msi', '[crayon lang="\1" \2 /]', $wp_content);
         }
 
+        // Convert <code> to inline tags
+        if (CrayonGlobalSettings::val(CrayonSettings::CODE_TAG_CAPTURE)) {
+            $inline = CrayonGlobalSettings::val(CrayonSettings::CODE_TAG_CAPTURE_TYPE) === 0;
+            $inline_setting = $inline ? 'inline="true"' : '';
+            $wp_content = preg_replace('#<(\s*code\b)([^>]*)>(.*?)</\1[^>]*>#msi', '[crayon ' . $inline_setting . ' \2]\3[/crayon]', $wp_content);
+        }
+
         if ((CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG) || $skip_setting_check) && $in_flag[CrayonSettings::INLINE_TAG]) {
             if (CrayonGlobalSettings::val(CrayonSettings::INLINE_TAG_CAPTURE)) {
                 // Convert inline {php}{/php} tags to crayon tags, if needed
                 $wp_content = preg_replace('#(?<!\$)\{\s*(' . self::$alias_regex . ')\b([^\}]*)\}(.*?)\{/(?:\1)\}(?!\$)#msi', '[crayon lang="\1" inline="true" \2]\3[/crayon]', $wp_content);
-            }
-            // Convert <code> to inline tags
-            if (CrayonGlobalSettings::val(CrayonSettings::INLINE_CODE_TAG_CAPTURE)) {
-                $wp_content = preg_replace('#<(\s*code\b)([^>]*)>(.*?)</\1[^>]*>#msi', '[crayon inline="true" \2]\3[/crayon]', $wp_content);
             }
             // Convert <span class="crayon-inline"> tags to inline crayon tags
             $wp_content = preg_replace_callback('#(?<!\$)<\s*span([^>]*)\bclass\s*=\s*(["\'])(.*?)\2([^>]*)>(.*?)<\s*/\s*span\s*>#msi', 'CrayonWP::span_tag', $wp_content);
@@ -482,7 +485,8 @@ class CrayonWP {
                         continue;
                     }
                     // Capture comment Crayons, decode their contents if decode not specified
-                    $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content, array(CrayonSettings::DECODE => TRUE));
+                    $content = apply_filters('get_comment_text', $comment->comment_content, $comment);
+                    $captures = self::capture_crayons($comment->comment_ID, $content, array(CrayonSettings::DECODE => TRUE));
                     self::$comment_captures[$id_str] = $captures['content'];
                     if ($captures['has_captured'] === TRUE) {
                         self::$comment_queue[$id_str] = array();
@@ -507,18 +511,28 @@ class CrayonWP {
         return self::$next_id++;
     }
 
-    private static function enqueue_resources() {
+    public static function enqueue_resources() {
         if (!self::$enqueued) {
+
             CrayonLog::debug('enqueue');
             global $CRAYON_VERSION;
-            wp_enqueue_style('crayon_style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
-            wp_enqueue_style('crayon_global_style', plugins_url(CRAYON_STYLE_GLOBAL, __FILE__), array(), $CRAYON_VERSION);
-            wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, __FILE__), array('jquery'), $CRAYON_VERSION);
-            CrayonSettingsWP::other_scripts();
+            if (CRAYON_MINIFY) {
+                wp_enqueue_style('crayon', plugins_url(CRAYON_STYLE_MIN, __FILE__), array(), $CRAYON_VERSION);
+                wp_enqueue_script('crayon_js_min', plugins_url(CRAYON_JS_MIN, __FILE__), array('jquery'), $CRAYON_VERSION);
+            } else {
+                wp_enqueue_style('crayon_style', plugins_url(CRAYON_STYLE, __FILE__), array(), $CRAYON_VERSION);
+                wp_enqueue_style('crayon_global_style', plugins_url(CRAYON_STYLE_GLOBAL, __FILE__), array(), $CRAYON_VERSION);
+                wp_enqueue_script('crayon_util_js', plugins_url(CRAYON_JS_UTIL, __FILE__), array('jquery'), $CRAYON_VERSION);
+                CrayonSettingsWP::other_scripts();
+            }
             CrayonSettingsWP::init_js_settings();
             self::$enqueued = TRUE;
         }
     }
+
+//    public static function prevent_resources() {
+//        self::$enqueued = TRUE;
+//    }
 
     private static function init_tags_regex($force = FALSE, $flags = NULL, &$tags_regex = NULL) {
         self::init_tag_bits();
@@ -1041,7 +1055,8 @@ class CrayonWP {
             'skip_setting_check' => TRUE,
             'just_check' => TRUE
         );
-        $captures = self::capture_crayons($comment->comment_ID, $comment->comment_content, array(), $args);
+        $content = apply_filters('get_comment_text', $comment->comment_content, $comment);
+        $captures = self::capture_crayons($comment->comment_ID, $content, array(), $args);
         return $captures['has_captured'];
     }
 
@@ -1214,6 +1229,17 @@ class CrayonWP {
         return $args;
     }
 
+    public static function allowed_tags() {
+        global $allowedtags;
+        $tags = array('pre', 'span', 'code');
+        foreach ($tags as $tag) {
+            $current_atts = isset($allowedtags[$tag]) ? $allowedtags[$tag] : array();
+            // TODO data-url isn't recognised by WP
+            $new_atts = array('class' => TRUE, 'title' => TRUE, 'data-url' => TRUE);
+            $allowedtags[$tag] = array_merge($current_atts, $new_atts);
+        }
+    }
+
 }
 
 // Only if WP is loaded
@@ -1238,6 +1264,9 @@ if (defined('ABSPATH')) {
         add_filter('bbp_get_topic_content', 'CrayonWP::highlight', 100);
         add_filter('bbp_get_forum_content', 'CrayonWP::highlight', 100);
         add_filter('bbp_get_topic_excerpt', 'CrayonWP::highlight', 100);
+
+        // Allow tags
+        add_action('init', 'CrayonWP::allowed_tags', 11);
 
         if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
             /* XXX This is called first to match Crayons, then higher priority replaces after other filters.

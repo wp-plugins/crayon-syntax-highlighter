@@ -185,6 +185,7 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to the project:
 
+* Luigi Massa, (http://bwlab.it/), Italy
 * Anthony Steiner, (http://steinerd.com/), US
 * Alexander Harvey, (http://alexharvey.eu/), UK
 * Minhazul Haque Shawon, Cyprus
@@ -242,6 +243,17 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.2.0 =
+* ADDED:
+    * ASP language
+    * Added Secrets of Rock theme
+    * &lt;code&gt; tags can now be captured as either inline or block Crayons.
+* FIXED:
+    * Comments now pass through filters before being checked for Crayons.
+    * JavaScript and CSS resources are minified into single files on the front-end to reduce HTTP requests.
+    * Toolbar buttons use a sprite sheet, not individual images.
+    * bbPress now allows posting Crayons for non-users
 
 = 2.1.4 =
 * ADDED:

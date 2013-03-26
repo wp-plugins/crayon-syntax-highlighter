@@ -241,23 +241,23 @@
 }
 
 #twitter-icon {
-	background: url(images/twitter.png);
+	background: url(../images/twitter.png);
 }
 #gmail-icon {
-	background: url(images/google.png);
+	background: url(../images/google.png);
 }
 #docs-icon {
-	background: url(images/docs.png);
+	background: url(../images/docs.png);
 }
 #git-icon {
-	background: url(images/github.png);
+	background: url(../images/github.png);
 }
 #wp-icon {
-	background: url(images/wordpress-blue.png);
+	background: url(../images/wordpress-blue.png);
 }
 
 #donate-icon {
-	background: url(images/donate.png);
+	background: url(../images/donate.png);
 	width: 75px;
 }
 

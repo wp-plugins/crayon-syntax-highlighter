@@ -554,11 +554,11 @@
 
         var retina = function (uid) {
             if (window.devicePixelRatio > 1) {
-                var buttons = $('.crayon-button', crayons[uid].toolbar);
+                var buttons = $('.crayon-button-icon', crayons[uid].toolbar);
                 buttons.each(function () {
                     var lowres = $(this).css('background-image');
                     var highres = lowres.replace(/\.(?=[^\.]+$)/g, '@2x.');
-                    $(this).css('background-size', '48px 16px');
+                    $(this).css('background-size', '48px 128px');
                     $(this).css('background-image', highres);
                 });
             }

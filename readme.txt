@@ -120,6 +120,7 @@ See the <a href="http://aramk.com/projects/crayon-language-file-specification/" 
 
 **International Languages**
 
+* Arabic (thanks to <a href="http://djennadhamza.eb2a.com/" target="_blank">Djennad Hamza</a>)
 * Chinese (Simplified, thanks to <a href="http://smerpup.com/" target="_blank">Dezhi Liu</a> & <a href="http://neverno.me/" target="_blank">Jash Yin</a>)
 * Dutch (thanks to <a href="https://twitter.com/#!/chilionsnoek" target="_blank">Chilion Snoek</a>)
 * French (thanks to <a href="http://tech.dupeu.pl" target="_blank">Victor Felder</a>)
@@ -185,6 +186,8 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to the project:
 
+* Saulius Stonys, Lithuania
+* Konstantin Sabel, Germany
 * Luigi Massa, (http://bwlab.it/), Italy
 * Anthony Steiner, (http://steinerd.com/), US
 * Alexander Harvey, (http://alexharvey.eu/), UK
@@ -243,6 +246,19 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.2.1 =
+* ADDED:
+    * Mirc Dark theme
+    * Feeldesign theme
+    * IntelliJ theme
+    * Arabic translation
+* FIXED:
+    * All language css classes are prefixed with "crayon-" to prevent conflicts
+    * Terminal theme fix
+    * Improved language readme
+    * Lines containing a single zero appeared blank when highlighting was disabled
+    * AppleScript regex (thanks to darricktheprogrammer)
 
 = 2.2.0 =
 * ADDED:

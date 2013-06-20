@@ -186,6 +186,8 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to the project:
 
+* Ivan Churakov, Russia
+* Carla Macías González, Mexico
 * Saulius Stonys, Lithuania
 * Konstantin Sabel, Germany
 * Luigi Massa, (http://bwlab.it/), Italy
@@ -246,6 +248,21 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.3.0 =
+* ADDED:
+    * Ada langauge from https://github.com/antiphasis/crayon-lang-ada
+    * Monokai theme
+    * CG Cookie theme
+    * MATLAB language
+* FIXED:
+    * Escaping quotes in strings
+    * R language type literals
+    * Arabic translation
+    * Forced LTR for Crayon CSS, preventing the line numbers from appearing on the right
+    * Added unhighlighted colour to theme editor and existing dark themes
+    * New theme inputs not present in the loaded theme are added during save
+    * Fixed a bug related to IIS 7.5 and uniqid(): https://github.com/aramkocharyan/crayon-syntax-highlighter/issues/97
 
 = 2.2.1 =
 * ADDED:

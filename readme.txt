@@ -99,7 +99,7 @@ See the <a href="http://aramk.com/projects/crayon-language-file-specification/" 
 * MIVA Script
 * Monkey (thanks to <a href="https://github.com/devolonter" target="_blank">Devolonter</a>)
 * MS-DOS (thanks to <a href="http://www.amigalog.com/?p=334" target="_blank">http://www.amigalog.com/?p=334</a>)
-* MySQL (thanks to <a href="http://assemblysys.com/" target="_blank">AssemblySys.com</a>)
+* MySQL (thanks to <a href="http://assemblysys.com/" target="_blank">AssemblySys.com</a> and <a href="http://ansas-meyer.de/" target="_blank">ansas-meyer.de</a>)
 * Java
 * JavaScript
 * Objective-C
@@ -116,6 +116,7 @@ See the <a href="http://aramk.com/projects/crayon-language-file-specification/" 
 * TeX
 * Vim
 * Visual Basic
+* Visual Basic .NET (thanks to <a href="https://github.com/OomJan/crayon-lang-vbnet">Kevin Gardthausen</a>)
 * YAML
 * Others will be added when requested
 
@@ -155,6 +156,7 @@ These are helpful for discovering new features.
 
 A handful of articles from others written about Crayon, thanks guys!
 
+* <a href="http://www.webworkgarage.com/2013/07/using-crayon-syntax-highlighter-wordpress-plugin-to-post-code-snippets-on-your-blog/" target="_blank">Using Crayon Syntax Highlighter WordPress plugin to post code snippets on your blog</a>
 * <a href="http://www.jjpro.net/2013/01/13/how-to-post-source-code-on-wordpress-2/" target="_blank">How to post source code on WordPress</a>
 * <a href="http://www.emanueleferonato.com/2013/02/01/syntax-highlighter-switched-to-crayon/" target="_blank">Syntax highlighter switched to Crayon</a>
 * <a href="http://www.wordpressthemeshq.net/5-best-syntax-highlighter-plugins-for-wordpress/" target="_blank">5 Best Syntax Highlighter Plugins for WordPress</a>
@@ -187,6 +189,8 @@ A handful of articles from others written about Crayon, thanks guys!
 
 Thanks to all those who donate to the project:
 
+* Wabbit Wanch Design, (http://www.wabbitwanch.com/), Canada
+* Inopox Ltd, (http://inopox.com/), Cyprus
 * Kho Minh Vi, (http://khominhvi.com/), UK
 * Ivan Churakov, Russia
 * Carla Macías González, Mexico
@@ -250,6 +254,16 @@ Contact me at http://twitter.com/crayonsyntax or crayon.syntax@gmail.com.
 5. Theme Editor.
 
 == Changelog ==
+
+= 2.4.1 =
+* ADDED:
+    * Merged two versions of MySQL from different authors into a single language folder
+    * VB.net language
+* FIXED:
+    * Removed dependency on jQuery.browser.msie in popup script
+    * Fixed Colorbox CSS conflicts
+    * CSS improvements for Colorbox to prevent unusable controls
+    * German translation improvements
 
 = 2.4.0 =
 * ADDED:
